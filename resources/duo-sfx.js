@@ -202,6 +202,11 @@ function applyTheme(theme) {
   icons.forEach(icon => {
     icon.innerText = (theme === 'dark') ? '☀️' : '🌙';
   });
+
+  const texts = document.querySelectorAll('.themeToggleText');
+  texts.forEach(text => {
+    text.innerText = (theme === 'dark') ? 'Ativar Modo Claro' : 'Ativar Modo Escuro';
+  });
 }
 
 function toggleTheme() {

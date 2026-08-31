@@ -247,6 +247,19 @@ body {
   font-size: 16px;
 }
 
+.duo-lang-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 800;
+  font-size: 14px;
+  background: var(--duo-gray-100);
+  padding: 6px 12px;
+  border-radius: var(--duo-radius-pill);
+  border: 2px solid var(--duo-gray-200);
+  user-select: none;
+}
+
 .duo-stat-item {
   display: flex;
   align-items: center;
@@ -1474,7 +1487,47 @@ body {
     text-align: center;
     padding: 18px;
   }
+
+  /* Compact Responsive Header on Mobile */
+  .duo-header {
+    height: 56px;
+    padding: 0 12px;
+  }
+
+  .duo-logo-area {
+    font-size: 20px;
+    gap: 6px;
+  }
+
+  .duo-logo-area svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .duo-stats {
+    gap: 10px;
+    font-size: 14px;
+  }
+
+  .duo-lang-badge {
+    padding: 4px 8px;
+    font-size: 13px;
+  }
+
+  .duo-lang-badge .lang-text {
+    display: none; /* Hide 'Inglês' text on mobile, keep flag 🇺🇸 */
+  }
+
+  .duo-stat-item {
+    gap: 3px;
+  }
 }
+
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
 
 
 

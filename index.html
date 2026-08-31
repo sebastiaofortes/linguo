@@ -28,9 +28,9 @@
     </a>
 
     <div class="duo-stats">
-      <div style="display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 15px; background: var(--duo-gray-100); padding: 6px 12px; border-radius: var(--duo-radius-pill); border: 2px solid var(--duo-gray-200);">
+      <div class="duo-lang-badge" title="Idioma em estudo">
         <span>🇺🇸</span>
-        <span style="color: var(--duo-gray-700);">Inglês</span>
+        <span class="lang-text">Inglês</span>
       </div>
 
       <div class="duo-stat-item duo-stat-fire" title="Ofensiva diária" onclick="switchTab('stats')" style="cursor: pointer;">
@@ -45,10 +45,6 @@
         <span>❤️</span>
         <span>5</span>
       </div>
-
-      <button class="duo-theme-toggle" id="themeToggleBtn" onclick="toggleTheme()" title="Alternar modo claro / escuro">
-        <span class="themeToggleIcon">🌙</span>
-      </button>
     </div>
   </header>
 
@@ -291,6 +287,24 @@
             <span style="font-size: 12px; font-weight: 800; color: var(--duo-green-text);">DESBLOQUEADO</span>
           </div>
           <p style="font-size: 13px; font-weight: 600; color: var(--duo-gray-400);">Conclua exercícios sem errar nenhuma questão.</p>
+        </div>
+      </div>
+
+      <!-- Settings & Theme Card -->
+      <h3 style="font-size: 20px; font-weight: 900; color: var(--duo-gray-900); margin: 24px 0 14px;">Preferências & Aparência</h3>
+      <div class="duo-widget" style="margin-bottom: 24px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <div style="font-size: 28px;">🌓</div>
+            <div>
+              <h4 style="font-size: 17px; font-weight: 800; color: var(--duo-gray-900);">Aparência</h4>
+              <p style="font-size: 13px; font-weight: 600; color: var(--duo-gray-400); margin-top: 2px;">Alterne entre o Modo Escuro e o Modo Claro</p>
+            </div>
+          </div>
+          <button class="duo-theme-toggle" onclick="toggleTheme()" title="Alternar tema" style="padding: 10px 18px; font-weight: 800; font-size: 14px;">
+            <span class="themeToggleIcon">🌙</span>
+            <span class="themeToggleText">Alternar Modo</span>
+          </button>
         </div>
       </div>
 
