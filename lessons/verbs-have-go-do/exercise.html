@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Afirmações no Present Simple - Exercícios | Linguo</title>
+  <title>Os Super Verbos: Have, Go e Do - Exercícios | Linguo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
@@ -68,8 +68,8 @@
     <!-- Completion Screen (Shown when done) -->
     <div id="completionScreen" class="duo-completion-screen">
       <div style="font-size: 72px; margin-bottom: 12px;">🎉</div>
-      <h1 class="duo-title" style="font-size: 36px; color: var(--duo-green);">Lição Concluída!</h1>
-      <p class="duo-subtitle">Você dominou as afirmações e conjugações no Present Simple.</p>
+      <h1 class="duo-title" style="font-size: 36px; color: var(--duo-green);">Os Super Verbos Dominados!</h1>
+      <p class="duo-subtitle">Você aprendeu a usar Have, Go e Do com total fluência.</p>
 
       <div class="duo-streak-banner">
         <div>
@@ -111,70 +111,70 @@
   </footer>
 
   <script>
-    // 5 Progressive questions testing Affirmative Present Simple Rules
+    // 5 Engaging questions testing Have (has), Go (goes), and Do (does)
     const questions = [
       {
         id: 1,
         type: 'word_bank',
-        title: 'Monte a frase afirmativa:',
-        promptText: "Monte a frase: <strong>'Eu tomo café da manhã todas as manhãs.'</strong>",
-        bank: ["I", "eat", "breakfast", "every", "morning", "eats", "he", "to"],
-        correctAnswer: "I eat breakfast every morning",
-        correctDisplay: "I eat breakfast every morning.",
-        successTip: "Sensacional! Com o pronome 'I', o verbo fica na forma base sem alteração: 'eat'!"
+        title: 'Monte a frase de rotina (Have):',
+        promptText: "Monte a frase: <strong>'Ela toma café da manhã às sete da manhã.'</strong>",
+        bank: ["She", "has", "breakfast", "at", "seven", "AM", "have", "eats", "to"],
+        correctAnswer: "She has breakfast at seven AM",
+        correctDisplay: "She has breakfast at seven AM.",
+        successTip: "Brilhante! Para 'tomar café da manhã' com She, usamos 'has breakfast'!"
       },
       {
         id: 2,
         type: 'choice',
-        title: 'Complete com a terminação correta:',
-        promptText: "Ela assiste TV depois do jantar:<br><strong>'She _____ TV after dinner.'</strong>",
+        title: 'Deslocamentos (Go) e a regra de "Home":',
+        promptText: "Complete a frase corretamente:<br><strong>'Carlos finishes work and _____ home at 6 PM.'</strong>",
         options: [
-          { id: "1", text: "watches" },
-          { id: "2", text: "watch" },
-          { id: "3", text: "watchs" }
+          { id: "1", text: "goes" },
+          { id: "2", text: "goes to" },
+          { id: "3", text: "go" }
         ],
         correctOptionId: "1",
-        correctDisplay: "watches",
-        successTip: "Muito bem! Verbos terminados em som chiado como '-ch' recebem '-es' com He/She/It: watches!"
+        correctDisplay: "goes",
+        successTip: "Perfeito! Carlos equivale a 'he' (goes), e a palavra 'home' dispensa 'to' (goes home)!"
       },
       {
         id: 3,
         type: 'choice',
-        title: 'Exercício de Audição:',
-        promptText: "Ouça a frase em inglês e selecione o significado correto:",
-        audioText: "He studies English every single day.",
+        title: 'Exercício de Audição (Do):',
+        promptText: "Ouça a frase em inglês e selecione a tradução correta:",
+        audioText: "He does yoga and exercise in the morning.",
         options: [
-          { id: "1", text: "Ele estuda inglês todo santo dia." },
-          { id: "2", text: "Ele ensina inglês aos finais de semana." },
-          { id: "3", text: "Eles estudam inglês todo santo dia." }
+          { id: "1", text: "Ele faz yoga e exercícios de manhã." },
+          { id: "2", text: "Ele faz yoga e caminhada à noite." },
+          { id: "3", text: "Eles fazem yoga e exercícios de manhã." }
         ],
         correctOptionId: "1",
-        correctDisplay: "Ele estuda inglês todo santo dia.",
-        successTip: "Excelente escuta! 'Studies' vem da regra: Consoante + Y ➔ troca por '-ies'!"
+        correctDisplay: "Ele faz yoga e exercícios de manhã.",
+        successTip: "Excelente escuta! 'He does exercise' usa o verbo do conjugado na 3ª pessoa: does (/dʌz/)!"
       },
       {
         id: 4,
         type: 'word_bank',
-        title: 'Monte a frase afirmativa com He/She:',
-        promptText: "Monte a frase: <strong>'Ele mora em uma cidade grande com sua família.'</strong>",
-        bank: ["He", "lives", "in", "a", "big", "city", "with", "his", "family", "live", "is", "they"],
-        correctAnswer: "He lives in a big city with his family",
-        correctDisplay: "He lives in a big city with his family.",
-        successTip: "Sensacional! 'Live' termina em -e, então com He/She adicionamos apenas '-s': lives!"
+        title: 'Expressão de banho com Have:',
+        promptText: "Monte a frase: <strong>'Ele toma banho antes de ir dormir.'</strong>",
+        bank: ["He", "has", "a", "shower", "before", "bed", "take", "haves", "is", "the"],
+        correctAnswer: "He has a shower before bed",
+        correctDisplay: "He has a shower before bed.",
+        successTip: "Muito bem! Em inglês natural, 'tomar banho' com He/She se diz 'has a shower'!"
       },
       {
         id: 5,
         type: 'choice',
-        title: 'Regra do Y (Vogal vs Consoante):',
-        promptText: "Qual opção completa corretamente:<br><strong>'Pedro _____ video games and _____ at night.'</strong>",
+        title: 'O Trio Completo (Have, Go e Do):',
+        promptText: "Qual opção completa na ordem correta?<br><strong>'Lucas _____ to school, _____ his homework and _____ dinner.'</strong>",
         options: [
-          { id: "1", text: "plays / studies" },
-          { id: "2", text: "plaies / studys" },
-          { id: "3", text: "plays / studys" }
+          { id: "1", text: "goes / does / has" },
+          { id: "2", text: "go / do / have" },
+          { id: "3", text: "goes / makes / eats" }
         ],
         correctOptionId: "1",
-        correctDisplay: "plays / studies",
-        successTip: "Incrível! 'Play' tem vogal antes do Y (plays), enquanto 'study' tem consoante antes do Y (studies)!"
+        correctDisplay: "goes / does / has",
+        successTip: "Show de bola! O trio de ouro dominado: Lucas goes (vai), does (faz dever) e has (janta)!"
       }
     ];
 

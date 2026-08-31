@@ -57,6 +57,16 @@
           "icon": "✍️",
           "theoryUrl": "lessons/present-simple-affirmative/explanation.html",
           "exerciseUrl": "lessons/present-simple-affirmative/exercise.html",
+          "status": "completed",
+          "date": "2026-08-31"
+        },
+        {
+          "id": "verbs-have-go-do",
+          "title": "Os Super Verbos: Have, Go & Do",
+          "subtitle": "Has, goes, does e as expressões mais usadas na rotina diária em inglês.",
+          "icon": "⚡",
+          "theoryUrl": "lessons/verbs-have-go-do/explanation.html",
+          "exerciseUrl": "lessons/verbs-have-go-do/exercise.html",
           "status": "active",
           "date": "2026-08-31"
         }
