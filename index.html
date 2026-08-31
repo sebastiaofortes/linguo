@@ -198,9 +198,19 @@
               icon: "👤",
               theoryUrl: "lessons/basic-pronouns/explanation.html",
               exerciseUrl: "lessons/basic-pronouns/exercise.html",
-              status: "active"
+              status: "completed"
             }
           ]
+        },
+        {
+          id: "unit-2",
+          number: 2,
+          section: 1,
+          title: "Present Simple",
+          description: "Prática aprofundada de rotinas, perguntas e conversação diária",
+          color: "blue",
+          badgeText: "EM BREVE",
+          lessons: []
         }
       ]
     };
@@ -244,46 +254,57 @@
         const pathContainer = document.createElement('div');
         pathContainer.className = 'duo-path-container';
 
-        unit.lessons.forEach((lesson, indexInUnit) => {
-          globalLessonCount++;
-          const row = document.createElement('div');
-          const offsetClass = offsets[indexInUnit % offsets.length];
-          row.className = `duo-path-row ${offsetClass}`;
-
-          const isCompleted = lesson.status === 'completed';
-          const isActive = lesson.status === 'active';
-          const nodeClass = isCompleted ? 'duo-node-completed' : (isActive ? `duo-node-active theme-${colorTheme}` : 'duo-node-locked');
-
-          row.innerHTML = `
-            <button class="duo-node-btn ${nodeClass}" onclick="window.openLessonCard(event, '${lesson.id}')" title="${lesson.title}">
-              ${isActive ? '<div class="duo-node-crown">COMEÇAR</div>' : ''}
-              <span class="duo-node-icon">${lesson.icon}</span>
+        if (unit.lessons.length === 0) {
+          const emptyRow = document.createElement('div');
+          emptyRow.className = 'duo-path-row offset-center';
+          emptyRow.innerHTML = `
+            <button class="duo-node-btn duo-node-locked" onclick="alert('Esta unidade ainda não possui lições. Digite /duo-english-tutor no chat para adicionar aulas!')" title="Unidade em Breve">
+              <span class="duo-node-icon">🔒</span>
             </button>
-
-            <!-- Popover Modal -->
-            <div class="duo-popover" id="popover-${lesson.id}" onclick="event.stopPropagation()">
-              <div class="duo-popover-arrow"></div>
-              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-                <span class="duo-badge" style="background: ${isCompleted ? 'var(--duo-yellow)' : `var(--duo-${colorTheme})`};">
-                  ${isCompleted ? '✓ Concluído' : '🔥 Em Andamento'}
-                </span>
-                <span style="font-size: 12px; font-weight: 800; color: var(--duo-gray-400);">Lição ${globalLessonCount}</span>
-              </div>
-              <h4 class="duo-popover-title">${lesson.title}</h4>
-              <p class="duo-popover-desc">${lesson.subtitle}</p>
-              <div class="duo-popover-actions">
-                <a href="${lesson.theoryUrl}" class="btn-duo btn-duo-secondary" onclick="if(window.duoAudio) duoAudio.playTap()">
-                  📖 Teoria
-                </a>
-                <a href="${lesson.exerciseUrl}" class="btn-duo btn-duo-green" onclick="if(window.duoAudio) duoAudio.playTap()">
-                  ⚡ Exercício
-                </a>
-              </div>
-            </div>
           `;
+          pathContainer.appendChild(emptyRow);
+        } else {
+          unit.lessons.forEach((lesson, indexInUnit) => {
+            globalLessonCount++;
+            const row = document.createElement('div');
+            const offsetClass = offsets[indexInUnit % offsets.length];
+            row.className = `duo-path-row ${offsetClass}`;
 
-          pathContainer.appendChild(row);
-        });
+            const isCompleted = lesson.status === 'completed';
+            const isActive = lesson.status === 'active';
+            const nodeClass = isCompleted ? 'duo-node-completed' : (isActive ? `duo-node-active theme-${colorTheme}` : 'duo-node-locked');
+
+            row.innerHTML = `
+              <button class="duo-node-btn ${nodeClass}" onclick="window.openLessonCard(event, '${lesson.id}')" title="${lesson.title}">
+                ${isActive ? '<div class="duo-node-crown">COMEÇAR</div>' : ''}
+                <span class="duo-node-icon">${lesson.icon}</span>
+              </button>
+
+              <!-- Popover Modal -->
+              <div class="duo-popover" id="popover-${lesson.id}" onclick="event.stopPropagation()">
+                <div class="duo-popover-arrow"></div>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                  <span class="duo-badge" style="background: ${isCompleted ? 'var(--duo-yellow)' : `var(--duo-${colorTheme})`};">
+                    ${isCompleted ? '✓ Concluído' : '🔥 Em Andamento'}
+                  </span>
+                  <span style="font-size: 12px; font-weight: 800; color: var(--duo-gray-400);">Lição ${globalLessonCount}</span>
+                </div>
+                <h4 class="duo-popover-title">${lesson.title}</h4>
+                <p class="duo-popover-desc">${lesson.subtitle}</p>
+                <div class="duo-popover-actions">
+                  <a href="${lesson.theoryUrl}" class="btn-duo btn-duo-secondary" onclick="if(window.duoAudio) duoAudio.playTap()">
+                    📖 Teoria
+                  </a>
+                  <a href="${lesson.exerciseUrl}" class="btn-duo btn-duo-green" onclick="if(window.duoAudio) duoAudio.playTap()">
+                    ⚡ Exercício
+                  </a>
+                </div>
+              </div>
+            `;
+
+            pathContainer.appendChild(row);
+          });
+        }
 
         // Add a Locked / Upcoming Next Node at the end of the last unit
         if (isLastUnit) {

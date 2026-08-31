@@ -7,6 +7,7 @@
       "title": "Fundamentos do Inglês",
       "description": "Verbos essenciais, rotina diária e pronomes",
       "color": "green",
+      "badgeText": "✓ CONCLUÍDA",
       "lessons": [
         {
           "id": "basic-verbs",
@@ -35,10 +36,20 @@
           "icon": "👤",
           "theoryUrl": "lessons/basic-pronouns/explanation.html",
           "exerciseUrl": "lessons/basic-pronouns/exercise.html",
-          "status": "active",
+          "status": "completed",
           "date": "2026-08-30"
         }
       ]
+    },
+    {
+      "id": "unit-2",
+      "number": 2,
+      "section": 1,
+      "title": "Present Simple",
+      "description": "Prática aprofundada de rotinas, perguntas e conversação diária",
+      "color": "blue",
+      "badgeText": "EM BREVE",
+      "lessons": []
     }
   ]
 }
