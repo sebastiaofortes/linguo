@@ -50,6 +50,26 @@
   --duo-font: 'Nunito', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
+/* ============================================================
+   Dark Mode Overrides (Estilo Autêntico Duolingo Dark)
+   ============================================================ */
+
+[data-theme="dark"] {
+  --duo-gray-100: #1b2d37;
+  --duo-gray-200: #283d47;
+  --duo-gray-300: #375362;
+  --duo-gray-400: #889fae;
+  --duo-gray-700: #d6e2e9;
+  --duo-gray-900: #ffffff;
+
+  --duo-blue-light: #16364a;
+  --duo-green-light: #183d1c;
+  --duo-orange-light: #3d2613;
+  --duo-purple-light: #38194a;
+  --duo-red-light: #3e191c;
+  --duo-teal-light: #133a32;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -65,6 +85,134 @@ body {
   display: flex;
   flex-direction: column;
   line-height: 1.5;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+[data-theme="dark"] body {
+  background-color: #131f24;
+  color: var(--duo-gray-700);
+}
+
+[data-theme="dark"] .duo-header {
+  background-color: #131f24;
+  border-bottom-color: #283d47;
+}
+
+[data-theme="dark"] .duo-bottom-nav {
+  background-color: #131f24;
+  border-top-color: #283d47;
+}
+
+[data-theme="dark"] .duo-bubble {
+  background: #18272f;
+  border-color: #283d47;
+  color: #ffffff;
+  box-shadow: 0 3px 0 #283d47;
+}
+
+[data-theme="dark"] .duo-bubble::before {
+  border-right-color: #283d47;
+}
+
+[data-theme="dark"] .duo-bubble::after {
+  border-right-color: #18272f;
+}
+
+[data-theme="dark"] .duo-concept-card,
+[data-theme="dark"] .duo-widget,
+[data-theme="dark"] .duo-profile-header,
+[data-theme="dark"] .duo-stat-card,
+[data-theme="dark"] .duo-quest-card,
+[data-theme="dark"] .duo-achievement-item {
+  background: #18272f;
+  border-color: #283d47;
+  box-shadow: 0 4px 0 #283d47;
+}
+
+[data-theme="dark"] .duo-popover {
+  background: #18272f;
+  border-color: #283d47;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 4px 0 #283d47;
+}
+
+[data-theme="dark"] .duo-popover-arrow {
+  border-bottom-color: #283d47;
+}
+
+[data-theme="dark"] .duo-popover-arrow::after {
+  border-bottom-color: #18272f;
+}
+
+[data-theme="dark"] .duo-word-chip {
+  background: #1b2d37;
+  border-color: #283d47;
+  box-shadow: 0 3px 0 #283d47;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .duo-word-chip:hover {
+  background: #233a47;
+}
+
+[data-theme="dark"] .duo-choice-card {
+  background: #18272f;
+  border-color: #283d47;
+  box-shadow: 0 3px 0 #283d47;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .duo-choice-card:hover {
+  background: #16364a;
+  border-color: var(--duo-blue);
+}
+
+[data-theme="dark"] .duo-choice-card.selected {
+  background: #16364a;
+  border-color: var(--duo-blue);
+  color: #ffffff;
+  box-shadow: 0 3px 0 var(--duo-blue);
+}
+
+[data-theme="dark"] .btn-duo-secondary {
+  background-color: #1b2d37;
+  color: #ffffff;
+  border-color: #283d47;
+  box-shadow: 0 4px 0 #283d47;
+}
+
+[data-theme="dark"] .btn-duo-secondary:hover {
+  background-color: #233a47;
+}
+
+[data-theme="dark"] .duo-footer-drawer {
+  background: #18272f;
+  border-top-color: #283d47;
+}
+
+/* Theme Toggle Button */
+.duo-theme-toggle {
+  background: var(--duo-gray-100);
+  border: 2px solid var(--duo-gray-200);
+  border-radius: var(--duo-radius-pill);
+  padding: 6px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 16px;
+  line-height: 1;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.duo-theme-toggle:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.duo-theme-toggle:active {
+  transform: translateY(1px);
 }
 
 /* Header & Navigation */

@@ -187,3 +187,48 @@ class DuoAudioEngine {
 // Global instance ready to use
 const duoAudio = new DuoAudioEngine();
 window.duoAudio = duoAudio;
+
+/**
+ * Global Theme Manager (Dark / Light Mode) with LocalStorage persistence
+ */
+function applyTheme(theme) {
+  if (typeof document === 'undefined') return;
+  document.documentElement.setAttribute('data-theme', theme);
+  try {
+    localStorage.setItem('linguo-theme', theme);
+  } catch (e) {}
+
+  const icons = document.querySelectorAll('.themeToggleIcon');
+  icons.forEach(icon => {
+    icon.innerText = (theme === 'dark') ? '☀️' : '🌙';
+  });
+}
+
+function toggleTheme() {
+  if (window.duoAudio) duoAudio.playTap();
+  const current = document.documentElement.getAttribute('data-theme') || 'light';
+  const newTheme = (current === 'dark') ? 'light' : 'dark';
+  applyTheme(newTheme);
+}
+
+window.toggleTheme = toggleTheme;
+window.applyTheme = applyTheme;
+
+// Initialize theme on script load to prevent flash
+(function() {
+  try {
+    const saved = localStorage.getItem('linguo-theme');
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initial = saved || (prefersDark ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', initial);
+  } catch (e) {}
+})();
+
+// Update icon when DOM is ready
+if (typeof document !== 'undefined') {
+  document.addEventListener('DOMContentLoaded', () => {
+    const current = document.documentElement.getAttribute('data-theme') || 'light';
+    applyTheme(current);
+  });
+}
+
