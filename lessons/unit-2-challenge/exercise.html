@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Desafio Final da Unidade 2 - Exercícios | Linguo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../resources/duo-theme.css">
+  <script src="../../resources/duo-sfx.js"></script>
+</head>
+<body>
+
+  <!-- Top Progress Bar with Lives -->
+  <div class="duo-progress-container">
+    <button class="btn-close" onclick="if(confirm('Deseja sair do Desafio Final?')) window.location.href='../../index.html'" title="Voltar à trilha">✕</button>
+    <div class="duo-progress-track">
+      <div class="duo-progress-fill" id="progressBar" style="width: 4%; background: var(--duo-yellow);"></div>
+    </div>
+    <div style="font-size: 13px; font-weight: 900; color: var(--duo-gray-400); min-width: 45px; text-align: right;" id="questionCounter">1/25</div>
+    <div class="duo-stat-item duo-stat-heart">
+      <span>❤️</span>
+      <span id="heartsCount">5</span>
+    </div>
+  </div>
+
+  <main class="duo-container">
+    
+    <!-- Exercise Area -->
+    <div id="exerciseArea">
+      <!-- Dynamic Question Injector -->
+      <h2 class="duo-title" id="questionPrompt">Carregando desafio...</h2>
+      
+      <!-- Speaker prompt if audio question -->
+      <div id="audioPromptContainer" style="display:none; margin: 14px 0;">
+        <button class="btn-speaker" id="btnAudioSpeak" onclick="duoAudio.speak(window.currentAudioText)">
+          🔊 Ouvir frase
+        </button>
+      </div>
+
+      <!-- Dialogue/Prompt Box -->
+      <div class="duo-dialog-box" id="dialogContainer">
+        <div class="duo-mascot">
+          <svg viewBox="0 0 80 80" width="70" height="70">
+            <ellipse cx="40" cy="42" rx="34" ry="32" fill="#58CC02"/>
+            <circle cx="28" cy="34" r="11" fill="#ffffff"/>
+            <circle cx="52" cy="34" r="11" fill="#ffffff"/>
+            <circle cx="30" cy="34" r="5" fill="#131F24"/>
+            <circle cx="54" cy="34" r="5" fill="#131F24"/>
+            <polygon points="40,38 33,45 47,45" fill="#FF9600"/>
+          </svg>
+        </div>
+        <div class="duo-bubble" id="mascotBubbleText">
+          Complete o exercício:
+        </div>
+      </div>
+
+      <!-- Type 1: Sentence Builder / Word Bank -->
+      <div id="wordBankView" style="display:none;">
+        <div class="duo-slots-area" id="selectedSlots"></div>
+        <div class="duo-word-bank" id="availableWords"></div>
+      </div>
+
+      <!-- Type 2: Multiple Choice -->
+      <div id="multipleChoiceView" class="duo-choices" style="display:none;"></div>
+    </div>
+
+    <!-- Completion Screen (Shown when done) -->
+    <div id="completionScreen" class="duo-completion-screen">
+      <div style="font-size: 80px; margin-bottom: 12px;">🏆</div>
+      <h1 class="duo-title" style="font-size: 34px; color: var(--duo-yellow-shadow);">Unidade 2 Conquistada!</h1>
+      <p class="duo-subtitle">Você concluiu com sucesso os 25 exercícios de revisão e dominou o Present Simple!</p>
+
+      <div class="duo-streak-banner" style="background: linear-gradient(135deg, #ffc800 0%, #e58200 100%);">
+        <div>
+          <div style="font-size: 14px; font-weight: 800; opacity: 0.9;">TOTAL XP</div>
+          <div style="font-size: 32px; font-weight: 900;">+50 XP</div>
+        </div>
+        <div>
+          <div style="font-size: 14px; font-weight: 800; opacity: 0.9;">TROFÉU</div>
+          <div style="font-size: 32px; font-weight: 900;">👑 OURO</div>
+        </div>
+        <div>
+          <div style="font-size: 14px; font-weight: 800; opacity: 0.9;">PRECISÃO</div>
+          <div style="font-size: 32px; font-weight: 900;" id="accuracyStat">100%</div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 16px; justify-content: center; margin-top: 32px; flex-wrap: wrap;">
+        <a href="explanation.html" class="btn-duo btn-duo-secondary">REVER GUIA</a>
+        <a href="../../index.html" class="btn-duo btn-duo-green">VOLTAR À TRILHA ➔</a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Bottom Sheet Feedback Drawer -->
+  <footer class="duo-footer-drawer" id="footerDrawer">
+    <div class="duo-footer-content">
+      <div class="duo-footer-message" id="footerMessage" style="visibility: hidden;">
+        <div class="duo-feedback-icon" id="feedbackIcon">✓</div>
+        <div class="duo-feedback-text">
+          <h4 id="feedbackTitle">Bom trabalho!</h4>
+          <p id="feedbackExplanation"></p>
+        </div>
+      </div>
+      <button id="btnAction" class="btn-duo btn-duo-green btn-duo-disabled" disabled onclick="handleActionClick()">
+        VERIFICAR
+      </button>
+    </div>
+  </footer>
+
+  <script>
+    // 25 Completely brand-new questions covering all Unit 2 topics
+    const questions = [
+      // 1. Affirmative - teach -> teaches (-es rule)
+      {
+        id: 1,
+        type: 'word_bank',
+        title: '1/25 • Afirmação no Present Simple',
+        promptText: "Monte a frase: <strong>'Ela ensina matemática na escola.'</strong>",
+        bank: ["She", "teaches", "math", "at", "school", "teach", "is", "study"],
+        correctAnswer: "She teaches math at school",
+        correctDisplay: "She teaches math at school.",
+        successTip: "Perfeito! Verbos terminados em -ch recebem -es na 3ª pessoa: teach ➔ teaches!"
+      },
+      // 2. Super Verbo - Go -> Goes
+      {
+        id: 2,
+        type: 'choice',
+        title: '2/25 • Super Verbo: Go',
+        promptText: "Meu irmão vai para a academia toda manhã.<br><strong>'My brother _____ to the gym every morning.'</strong>",
+        options: [
+          { id: "1", text: "goes" },
+          { id: "2", text: "go" },
+          { id: "3", text: "is go" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "My brother goes to the gym every morning.",
+        successTip: "Excelente! 'My brother' (he) usa a forma 'goes'!"
+      },
+      // 3. Negative - Don't
+      {
+        id: 3,
+        type: 'choice',
+        title: '3/25 • Negação no Present Simple',
+        promptText: "Eles não bebem café à noite.<br><strong>'They _____ drink coffee at night.'</strong>",
+        options: [
+          { id: "1", text: "don't" },
+          { id: "2", text: "doesn't" },
+          { id: "3", text: "no" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "They don't drink coffee at night.",
+        successTip: "Muito bem! Para 'They', usamos 'don't' para negar!"
+      },
+      // 4. Question with Does
+      {
+        id: 4,
+        type: 'word_bank',
+        title: '4/25 • Pergunta com Does',
+        promptText: "Monte a pergunta: <strong>'O seu pai trabalha em um banco?'</strong>",
+        bank: ["Does", "your", "father", "work", "at", "a", "bank", "Do", "works", "is"],
+        correctAnswer: "Does your father work at a bank",
+        correctDisplay: "Does your father work at a bank?",
+        successTip: "Sensacional! 'Your father' (he) pede 'Does', e o verbo 'work' volta para a forma base!"
+      },
+      // 5. To Be Question - Are you
+      {
+        id: 5,
+        type: 'choice',
+        title: '5/25 • Pergunta com o Verbo To Be',
+        promptText: "Você está pronto para o exame?<br><strong>'_____ you ready for the exam?'</strong>",
+        options: [
+          { id: "1", text: "Are" },
+          { id: "2", text: "Do" },
+          { id: "3", text: "Is" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Are you ready for the exam?",
+        successTip: "Correto! O verbo To Be faz pergunta invertendo: 'Are you ready?' (sem Do!)."
+      },
+      // 6. Listening - Super Verbo Have
+      {
+        id: 6,
+        type: 'choice',
+        title: '6/25 • Exercício de Audição',
+        promptText: "Ouça o áudio em inglês e escolha o significado correto:",
+        audioText: "Carlos has a cup of tea in the morning.",
+        options: [
+          { id: "1", text: "Carlos toma uma xícara de chá pela manhã." },
+          { id: "2", text: "Carlos compra chá pela manhã." },
+          { id: "3", text: "Carlos prepara café pela manhã." }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Carlos toma uma xícara de chá pela manhã.",
+        successTip: "Ótima escuta! 'Has a cup of tea' é a forma natural de dizer tomar/beber chá!"
+      },
+      // 7. Affirmative - study -> studies (-ies rule)
+      {
+        id: 7,
+        type: 'choice',
+        title: '7/25 • Regra de Ortografia (-IES)',
+        promptText: "Lucas estuda espanhol aos sábados.<br><strong>'Lucas _____ Spanish on Saturdays.'</strong>",
+        options: [
+          { id: "1", text: "studies" },
+          { id: "2", text: "studys" },
+          { id: "3", text: "study" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Lucas studies Spanish on Saturdays.",
+        successTip: "Perfeito! 'Study' termina em consoante + Y, então troca-se o Y por -IES (studies)!"
+      },
+      // 8. Super Verbo - Do
+      {
+        id: 8,
+        type: 'word_bank',
+        title: '8/25 • Super Verbo: Do',
+        promptText: "Monte a frase: <strong>'Nós fazemos ioga no parque aos domingos.'</strong>",
+        bank: ["We", "do", "yoga", "in", "the", "park", "on", "Sundays", "does", "make"],
+        correctAnswer: "We do yoga in the park on Sundays",
+        correctDisplay: "We do yoga in the park on Sundays.",
+        successTip: "Excelente! Para atividades e exercícios físicos como yoga, usamos o verbo 'do'!"
+      },
+      // 9. Negative - Doesn't
+      {
+        id: 9,
+        type: 'choice',
+        title: '9/25 • Negação com She',
+        promptText: "Ela não come carne vermelha.<br><strong>'She _____ eat red meat.'</strong>",
+        options: [
+          { id: "1", text: "doesn't" },
+          { id: "2", text: "don't" },
+          { id: "3", text: "isn't" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "She doesn't eat red meat.",
+        successTip: "Brilhante! 'She' usa 'doesn't' para negar ações no presente!"
+      },
+      // 10. To Be Short Answer
+      {
+        id: 10,
+        type: 'choice',
+        title: '10/25 • Resposta Curta com To Be',
+        promptText: "Como responder afirmativamente a:<br><strong>'Is your sister at home right now?'</strong>",
+        options: [
+          { id: "1", text: "Yes, she is." },
+          { id: "2", text: "Yes, she does." },
+          { id: "3", text: "Yes, she's." }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Yes, she is.",
+        successTip: "Muito bem! Resposta curta afirmativa com To Be é 'Yes, she is' (sem contrair no fim!)."
+      },
+      // 11. Question with Do
+      {
+        id: 11,
+        type: 'word_bank',
+        title: '11/25 • Pergunta com Do',
+        promptText: "Monte a pergunta: <strong>'Você toca violão nos fins de semana?'</strong>",
+        bank: ["Do", "you", "play", "the", "guitar", "on", "weekends", "Does", "plays", "are"],
+        correctAnswer: "Do you play the guitar on weekends",
+        correctDisplay: "Do you play the guitar on weekends?",
+        successTip: "Show de bola! Perguntas para 'you' começam com o auxiliar 'Do'!"
+      },
+      // 12. Listening - Negative
+      {
+        id: 12,
+        type: 'choice',
+        title: '12/25 • Exercício de Audição',
+        promptText: "Ouça o áudio e selecione a tradução correta:",
+        audioText: "My parents don't watch TV in the afternoon.",
+        options: [
+          { id: "1", text: "Meus pais não assistem TV à tarde." },
+          { id: "2", text: "Meus pais assistem TV no quarto." },
+          { id: "3", text: "Meus pais não têm televisão." }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Meus pais não assistem TV à tarde.",
+        successTip: "Excelente compreensão auditiva! 'Don't watch' nega a ação de assistir!"
+      },
+      // 13. Super Verbo - Go Home (exceção sem 'to')
+      {
+        id: 13,
+        type: 'choice',
+        title: '13/25 • A Exceção do Go Home',
+        promptText: "Ele vai para casa às seis horas.<br><strong>'He goes _____ at six o'clock.'</strong>",
+        options: [
+          { id: "1", text: "home" },
+          { id: "2", text: "to home" },
+          { id: "3", text: "to the home" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "He goes home at six o'clock.",
+        successTip: "Você lembrou da regra de ouro! Com 'home', nunca usamos a preposição 'to'!"
+      },
+      // 14. To Be WH Question
+      {
+        id: 14,
+        type: 'word_bank',
+        title: '14/25 • Pergunta com Where e To Be',
+        promptText: "Monte a pergunta: <strong>'Onde estão os seus amigos agora?'</strong>",
+        bank: ["Where", "are", "your", "friends", "now", "is", "do", "they"],
+        correctAnswer: "Where are your friends now",
+        correctDisplay: "Where are your friends now?",
+        successTip: "Perfeito! 'Your friends' é plural (they), então usamos 'Where are'!"
+      },
+      // 15. Action Short Answer with Does
+      {
+        id: 15,
+        type: 'choice',
+        title: '15/25 • Resposta Curta com Does',
+        promptText: "Como responder afirmativamente a:<br><strong>'Does Michael drive to work?'</strong>",
+        options: [
+          { id: "1", text: "Yes, he does." },
+          { id: "2", text: "Yes, he drives." },
+          { id: "3", text: "Yes, he is." }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Yes, he does.",
+        successTip: "Correto! Perguntas com 'Does' têm resposta curta terminando com 'does'!"
+      },
+      // 16. Affirmative - finish -> finishes
+      {
+        id: 16,
+        type: 'word_bank',
+        title: '16/25 • Afirmação (-ES)',
+        promptText: "Monte a frase: <strong>'O filme termina às dez da noite.'</strong>",
+        bank: ["The", "movie", "finishes", "at", "ten", "at", "night", "finish", "finishs"],
+        correctAnswer: "The movie finishes at ten at night",
+        correctDisplay: "The movie finishes at ten at night.",
+        successTip: "Muito bem! Verbos terminados em -sh recebem -es: finish ➔ finishes!"
+      },
+      // 17. Super Verbo - Does laundry
+      {
+        id: 17,
+        type: 'choice',
+        title: '17/25 • Expressão com Do',
+        promptText: "Amanda lava a roupa suja aos sábados.<br><strong>'Amanda _____ laundry on Saturdays.'</strong>",
+        options: [
+          { id: "1", text: "does" },
+          { id: "2", text: "do" },
+          { id: "3", text: "makes" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Amanda does laundry on Saturdays.",
+        successTip: "Perfeito! Lavar roupa em inglês é 'do laundry', e Amanda (she) usa 'does'!"
+      },
+      // 18. Listening - To Be Question
+      {
+        id: 18,
+        type: 'choice',
+        title: '18/25 • Audição com To Be',
+        promptText: "Ouça o áudio e selecione a tradução exata:",
+        audioText: "Why is the store closed today?",
+        options: [
+          { id: "1", text: "Por que a loja está fechada hoje?" },
+          { id: "2", text: "Quando a loja abre hoje?" },
+          { id: "3", text: "Onde fica a loja aberta?" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Por que a loja está fechada hoje?",
+        successTip: "Excelente escuta! 'Why is the store closed?' pergunta o motivo do fechamento!"
+      },
+      // 19. Negative - Base verb retention
+      {
+        id: 19,
+        type: 'choice',
+        title: '19/25 • O Ladrão de S',
+        promptText: "Ele não viaja no inverno.<br><strong>'He doesn't _____ in the winter.'</strong>",
+        options: [
+          { id: "1", text: "travel" },
+          { id: "2", text: "travels" },
+          { id: "3", text: "traveling" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "He doesn't travel in the winter.",
+        successTip: "Exato! Como o 'doesn't' já está na frase, o verbo fica na forma base (travel)!"
+      },
+      // 20. Question with What do you
+      {
+        id: 20,
+        type: 'word_bank',
+        title: '20/25 • WH Question com Do',
+        promptText: "Monte a pergunta: <strong>'O que você come no almoço?'</strong>",
+        bank: ["What", "do", "you", "eat", "for", "lunch", "does", "eats", "are"],
+        correctAnswer: "What do you eat for lunch",
+        correctDisplay: "What do you eat for lunch?",
+        successTip: "Sensacional! Estrutura: What + do + you + eat + for lunch?"
+      },
+      // 21. To Be vs Do Distinction
+      {
+        id: 21,
+        type: 'choice',
+        title: '21/25 • Duelo To Be vs Do',
+        promptText: "Como se pergunta corretamente: <strong>'Você está com fome agora?'</strong>",
+        options: [
+          { id: "1", text: "Are you hungry now?" },
+          { id: "2", text: "Do you hungry now?" },
+          { id: "3", text: "Do you be hungry now?" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Are you hungry now?",
+        successTip: "Perfeito! 'Hungry' é um estado/adjetivo, então perguntamos com 'Are you'!"
+      },
+      // 22. Super Verbo - Have breakfast
+      {
+        id: 22,
+        type: 'word_bank',
+        title: '22/25 • Expressão com Have',
+        promptText: "Monte a frase: <strong>'Eu tomo café da manhã com a minha família.'</strong>",
+        bank: ["I", "have", "breakfast", "with", "my", "family", "has", "eat", "the"],
+        correctAnswer: "I have breakfast with my family",
+        correctDisplay: "I have breakfast with my family.",
+        successTip: "Muito bem! 'Have breakfast' é a forma mais autêntica em inglês para tomar café da manhã!"
+      },
+      // 23. Listening - Question with Does
+      {
+        id: 23,
+        type: 'choice',
+        title: '23/25 • Exercício de Audição',
+        promptText: "Ouça a pergunta em inglês e identifique o significado:",
+        audioText: "Does your manager speak French?",
+        options: [
+          { id: "1", text: "O seu gerente fala francês?" },
+          { id: "2", text: "O seu gerente estuda na França?" },
+          { id: "3", text: "O seu amigo mora na França?" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "O seu gerente fala francês?",
+        successTip: "Excelente! 'Does your manager speak...?' pergunta se a 3ª pessoa fala o idioma!"
+      },
+      // 24. Negative - Don't
+      {
+        id: 24,
+        type: 'choice',
+        title: '24/25 • Negação com We',
+        promptText: "Nós não moramos perto do aeroporto.<br><strong>'We _____ live near the airport.'</strong>",
+        options: [
+          { id: "1", text: "don't" },
+          { id: "2", text: "doesn't" },
+          { id: "3", text: "aren't" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "We don't live near the airport.",
+        successTip: "Correto! 'We' usa o auxiliar negativo 'don't' com verbos de ação como 'live'!"
+      },
+      // 25. Grand Finale - Word Bank
+      {
+        id: 25,
+        type: 'word_bank',
+        title: '25/25 • O Grande Desafio Final',
+        promptText: "Monte a frase completa: <strong>'Ela acorda cedo e corre no parque todos os dias.'</strong>",
+        bank: ["She", "wakes", "up", "early", "and", "runs", "in", "the", "park", "every", "day", "wake", "run"],
+        correctAnswer: "She wakes up early and runs in the park every day",
+        correctDisplay: "She wakes up early and runs in the park every day.",
+        successTip: "Sensacional e brilhante! Os dois verbos receberam -s (wakes e runs) para 'She'!"
+      }
+    ];
+
+    let currentIndex = 0;
+    let selectedAnswer = null;
+    let selectedWordTokens = [];
+    let state = 'answering'; // 'answering' | 'evaluated'
+    let correctCount = 0;
+    let hearts = 5;
+
+    const progressBar = document.getElementById('progressBar');
+    const questionCounter = document.getElementById('questionCounter');
+    const questionPrompt = document.getElementById('questionPrompt');
+    const mascotBubbleText = document.getElementById('mascotBubbleText');
+    const wordBankView = document.getElementById('wordBankView');
+    const selectedSlots = document.getElementById('selectedSlots');
+    const availableWords = document.getElementById('availableWords');
+    const multipleChoiceView = document.getElementById('multipleChoiceView');
+    const footerDrawer = document.getElementById('footerDrawer');
+    const footerMessage = document.getElementById('footerMessage');
+    const feedbackIcon = document.getElementById('feedbackIcon');
+    const feedbackTitle = document.getElementById('feedbackTitle');
+    const feedbackExplanation = document.getElementById('feedbackExplanation');
+    const btnAction = document.getElementById('btnAction');
+    const audioPromptContainer = document.getElementById('audioPromptContainer');
+
+    function renderQuestion() {
+      state = 'answering';
+      selectedAnswer = null;
+      selectedWordTokens = [];
+
+      // Reset UI drawer
+      footerDrawer.className = 'duo-footer-drawer';
+      footerMessage.style.visibility = 'hidden';
+      btnAction.className = 'btn-duo btn-duo-green btn-duo-disabled';
+      btnAction.disabled = true;
+      btnAction.innerText = 'VERIFICAR';
+
+      const q = questions[currentIndex];
+      const progressPercent = Math.round(((currentIndex + 1) / questions.length) * 100);
+      progressBar.style.width = Math.max(4, progressPercent) + '%';
+      questionCounter.innerText = `${currentIndex + 1}/${questions.length}`;
+
+      questionPrompt.innerText = q.title || `Questão ${currentIndex + 1} de 25:`;
+      mascotBubbleText.innerHTML = q.promptText;
+
+      // Audio setup
+      if (q.audioText) {
+        audioPromptContainer.style.display = 'block';
+        window.currentAudioText = q.audioText;
+        setTimeout(() => {
+          if (window.duoAudio) duoAudio.speak(q.audioText);
+        }, 300);
+      } else {
+        audioPromptContainer.style.display = 'none';
+      }
+
+      if (q.type === 'word_bank') {
+        renderWordBank(q);
+      } else {
+        renderMultipleChoice(q);
+      }
+    }
+
+    function renderMultipleChoice(q) {
+      wordBankView.style.display = 'none';
+      multipleChoiceView.style.display = 'flex';
+      multipleChoiceView.innerHTML = '';
+
+      q.options.forEach((opt, idx) => {
+        const card = document.createElement('div');
+        card.className = 'duo-choice-card';
+        card.innerHTML = `
+          <div class="duo-choice-number">${idx + 1}</div>
+          <div>${opt.text}</div>
+        `;
+        card.onclick = () => {
+          if (state !== 'answering') return;
+          duoAudio.playTap();
+          document.querySelectorAll('.duo-choice-card').forEach(c => c.classList.remove('selected'));
+          card.classList.add('selected');
+          selectedAnswer = opt.id;
+          enableCheckButton();
+        };
+        multipleChoiceView.appendChild(card);
+      });
+    }
+
+    function renderWordBank(q) {
+      multipleChoiceView.style.display = 'none';
+      wordBankView.style.display = 'block';
+      selectedSlots.innerHTML = '';
+      availableWords.innerHTML = '';
+
+      q.bank.forEach((word, idx) => {
+        const chip = document.createElement('button');
+        chip.className = 'duo-word-chip';
+        chip.innerText = word;
+        chip.id = 'word-token-' + idx;
+
+        chip.onclick = () => {
+          if (state !== 'answering') return;
+          duoAudio.playTap();
+          chip.classList.add('used');
+
+          const slotChip = document.createElement('button');
+          slotChip.className = 'duo-word-chip';
+          slotChip.innerText = word;
+          slotChip.onclick = () => {
+            if (state !== 'answering') return;
+            duoAudio.playTap();
+            slotChip.remove();
+            chip.classList.remove('used');
+            selectedWordTokens = selectedWordTokens.filter(t => t.id !== chip.id);
+            checkWordBankState();
+          };
+
+          selectedSlots.appendChild(slotChip);
+          selectedWordTokens.push({ id: chip.id, text: word });
+          checkWordBankState();
+        };
+
+        availableWords.appendChild(chip);
+      });
+    }
+
+    function checkWordBankState() {
+      if (selectedWordTokens.length > 0) {
+        enableCheckButton();
+      } else {
+        disableCheckButton();
+      }
+    }
+
+    function enableCheckButton() {
+      btnAction.classList.remove('btn-duo-disabled');
+      btnAction.disabled = false;
+    }
+
+    function disableCheckButton() {
+      btnAction.classList.add('btn-duo-disabled');
+      btnAction.disabled = true;
+    }
+
+    function handleActionClick() {
+      if (state === 'answering') {
+        evaluateAnswer();
+      } else if (state === 'evaluated') {
+        nextQuestion();
+      }
+    }
+
+    function evaluateAnswer() {
+      state = 'evaluated';
+      const q = questions[currentIndex];
+      let isCorrect = false;
+
+      if (q.type === 'word_bank') {
+        const userPhrase = selectedWordTokens.map(t => t.text).join(' ').trim();
+        isCorrect = (userPhrase.toLowerCase() === q.correctAnswer.toLowerCase());
+      } else {
+        isCorrect = (selectedAnswer === q.correctOptionId);
+      }
+
+      footerMessage.style.visibility = 'visible';
+
+      if (isCorrect) {
+        correctCount++;
+        duoAudio.playSuccess();
+        footerDrawer.className = 'duo-footer-drawer correct';
+        feedbackIcon.innerText = '✓';
+        feedbackTitle.innerText = 'Excelente!';
+        feedbackExplanation.innerText = q.successTip || 'Você acertou na mosca!';
+        btnAction.innerText = 'CONTINUAR';
+        btnAction.className = 'btn-duo btn-duo-green';
+      } else {
+        duoAudio.playError();
+        hearts = Math.max(0, hearts - 1);
+        document.getElementById('heartsCount').innerText = hearts;
+        footerDrawer.className = 'duo-footer-drawer incorrect';
+        feedbackIcon.innerText = '✕';
+        feedbackTitle.innerText = 'Resposta correta:';
+        feedbackExplanation.innerText = q.correctDisplay || q.correctAnswer;
+        btnAction.innerText = 'CONTINUAR';
+        btnAction.className = 'btn-duo btn-duo-green';
+      }
+    }
+
+    function nextQuestion() {
+      currentIndex++;
+      if (currentIndex < questions.length) {
+        renderQuestion();
+      } else {
+        showCompletion();
+      }
+    }
+
+    function showCompletion() {
+      progressBar.style.width = '100%';
+      document.getElementById('exerciseArea').style.display = 'none';
+      footerDrawer.style.display = 'none';
+      
+      const accuracy = Math.round((correctCount / questions.length) * 100);
+      document.getElementById('accuracyStat').innerText = accuracy + '%';
+      document.getElementById('completionScreen').style.display = 'block';
+      duoAudio.playSuccess();
+    }
+
+    // Start with the first question
+    renderQuestion();
+  </script>
+</body>
+</html>
