@@ -34,7 +34,7 @@ Sempre que esta skill for ativada ou quando o usuário expressar desejo de prati
 Assim que o usuário responder com o tema, crie a pasta `lessons/<slug>/` e o arquivo `explanation.html`.
 
 **Requisitos da página de explicação:**
-1. Importar a folha de estilo `../../.agents/skills/duo-english-tutor/resources/duo-theme.css` e os scripts de áudio `../../.agents/skills/duo-english-tutor/resources/duo-sfx.js`.
+1. Importar a folha de estilo `../../resources/duo-theme.css` e os scripts de áudio `../../resources/duo-sfx.js`.
 2. Exibir o cabeçalho do Duolingo com o logo do Linguo, contador de ofensiva (🔥) e gemas (💎).
 3. Balão de fala com o mascote Duo apresentando a regra de ouro do tema em poucas palavras.
 4. **Cards visuais conceituais (`duo-concept-card`)**:
