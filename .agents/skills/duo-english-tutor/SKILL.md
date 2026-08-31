@@ -47,7 +47,23 @@ Assim que o usuário responder com o tema, crie a pasta `lessons/<slug>/` e o ar
 
 ### Passo 3: Gerar a Página de Exercícios (`lessons/<slug>/exercise.html`)
 
-Criar o arquivo `exercise.html` com pelo menos **4 a 5 exercícios variados e progressivos**, estruturados no array `questions` em JavaScript:
+Criar o arquivo `exercise.html` com os exercícios estruturados no array `questions` em JavaScript:
+- **Lições Regulares:** 5 exercícios progressivos e balanceados (+25 XP).
+- **Lições Finais de Unidade (Desafios de Troféu 🏆):** Bateria de **50 exercícios de revisão geral** cobrindo todos os tópicos da unidade (+50 XP).
+
+**Regra de Aleatorização (Shuffle Obrigatório em Lições Finais):**
+Em lições de revisão ou desafios de unidade, a ordem das questões, opções e tokens do Word Bank DEVE ser embaralhada a cada execução usando o algoritmo Fisher-Yates para garantir fator replay e impedir memorização mecânica:
+```javascript
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+// Embaralhar o array questions antes de renderizar
+shuffleArray(questions);
+```
 
 **Tipos de Exercícios Suportados:**
 1. **Banco de Palavras (`type: 'word_bank'`):**
@@ -65,7 +81,7 @@ Criar o arquivo `exercise.html` com pelo menos **4 a 5 exercícios variados e pr
 - Ao clicar em `VERIFICAR`:
   - **Se correto:** Toca o acorde alegre (`duoAudio.playSuccess()`), gaveta inferior fica verde (`correct`), título "Excelente!" com dica de reforço, botão muda para `CONTINUAR`.
   - **Se incorreto:** Toca o som abafado (`duoAudio.playError()`), perde 1 vida (❤️), gaveta fica vermelha (`incorrect`), exibe a resposta certa e botão muda para `CONTINUAR`.
-- Ao terminar a última questão: exibe a tela de celebração (`duo-completion-screen`) com XP ganho (+25 XP), ofensiva de dias (🔥) e taxa de precisão.
+- Ao terminar a última questão: exibe a tela de celebração (`duo-completion-screen`) com XP ganho (+25 XP ou +50 XP em finais), ofensiva de dias (🔥) e taxa de precisão.
 
 ---
 
