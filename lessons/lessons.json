@@ -67,6 +67,16 @@
           "icon": "⚡",
           "theoryUrl": "lessons/verbs-have-go-do/explanation.html",
           "exerciseUrl": "lessons/verbs-have-go-do/exercise.html",
+          "status": "completed",
+          "date": "2026-08-31"
+        },
+        {
+          "id": "present-simple-negative",
+          "title": "Negações no Present Simple",
+          "subtitle": "Como negar hábitos e rotinas usando Don't e Doesn't sem medo de errar.",
+          "icon": "🚫",
+          "theoryUrl": "lessons/present-simple-negative/explanation.html",
+          "exerciseUrl": "lessons/present-simple-negative/exercise.html",
           "status": "active",
           "date": "2026-08-31"
         }
