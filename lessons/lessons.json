@@ -21,8 +21,8 @@
         },
         {
           "id": "present-simple",
-          "title": "Present Simple",
-          "subtitle": "Afirmação, Negação (Don't / Doesn't) e Perguntas (Do / Does).",
+          "title": "Present Simple Geral",
+          "subtitle": "Visão geral: Afirmação, Negação (Don't / Doesn't) e Perguntas (Do / Does).",
           "icon": "⚡",
           "theoryUrl": "lessons/present-simple/explanation.html",
           "exerciseUrl": "lessons/present-simple/exercise.html",
@@ -45,11 +45,22 @@
       "id": "unit-2",
       "number": 2,
       "section": 1,
-      "title": "Present Simple",
-      "description": "Prática aprofundada de rotinas, perguntas e conversação diária",
+      "title": "Present Simple & Rotinas",
+      "description": "Prática aprofundada de rotinas, hábitos e conjugação afirmativa",
       "color": "blue",
-      "badgeText": "EM BREVE",
-      "lessons": []
+      "badgeText": "TRILHA ATIVA",
+      "lessons": [
+        {
+          "id": "present-simple-affirmative",
+          "title": "Afirmações no Present Simple",
+          "subtitle": "Rotina diária, ações habituais e as regras de -s, -es e -ies para He/She/It.",
+          "icon": "✍️",
+          "theoryUrl": "lessons/present-simple-affirmative/explanation.html",
+          "exerciseUrl": "lessons/present-simple-affirmative/exercise.html",
+          "status": "active",
+          "date": "2026-08-31"
+        }
+      ]
     }
   ]
 }
