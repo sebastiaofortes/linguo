@@ -52,28 +52,8 @@
   <div class="duo-home-layout">
     
     <!-- Left Column: The Learning Snake Path -->
-    <main class="duo-main-path">
-
-      <!-- Unit Banner -->
-      <div class="duo-unit-banner">
-        <div class="duo-unit-info">
-          <h2>Seção 1 • Unidade 1</h2>
-          <h3>Fundamentos do Inglês</h3>
-          <p style="font-size: 14px; opacity: 0.95; font-weight: 600; margin-top: 4px;">
-            Verbos essenciais, rotina diária, perguntas e pronomes
-          </p>
-        </div>
-        <div class="duo-unit-badge">
-          <span>📖</span>
-          <span>TRILHA ATIVA</span>
-        </div>
-      </div>
-
-      <!-- Snake Trail Container -->
-      <div class="duo-path-container" id="pathContainer">
-        <!-- Rendered dynamically by JavaScript from LESSONS_DATA -->
-      </div>
-
+    <main class="duo-main-path" id="unitsContainer">
+      <!-- Rendered dynamically by JavaScript from UNITS_DATA -->
     </main>
 
     <!-- Right Column: Sidebar Widgets -->
@@ -178,102 +158,150 @@
 
   <script>
     /**
-     * LESSONS REGISTRY DATA
+     * UNITS & LESSONS REGISTRY DATA
      * Esta lista é atualizada automaticamente pela skill duo-english-tutor
      * sempre que uma nova aula é gerada!
      */
-    const LESSONS_DATA = [
-      {
-        id: "basic-verbs",
-        title: "O Básico dos Verbos",
-        subtitle: "Verbo To Be, ações da rotina diária e a regra de ouro do 'S' na 3ª pessoa.",
-        unit: "Seção 1: Fundamentos",
-        icon: "⭐",
-        theoryUrl: "lessons/basic-verbs/explanation.html",
-        exerciseUrl: "lessons/basic-verbs/exercise.html",
-        status: "completed"
-      },
-      {
-        id: "present-simple",
-        title: "Present Simple",
-        subtitle: "Afirmação (+), Negação com Don't/Doesn't (-) e Perguntas com Do/Does (?).",
-        unit: "Seção 1: Fundamentos",
-        icon: "⚡",
-        theoryUrl: "lessons/present-simple/explanation.html",
-        exerciseUrl: "lessons/present-simple/exercise.html",
-        status: "completed"
-      },
-      {
-        id: "basic-pronouns",
-        title: "O Básico dos Pronomes",
-        subtitle: "Pronomes Sujeito (I, He), Objeto (me, him) e Possessivos (my, his).",
-        unit: "Seção 1: Fundamentos",
-        icon: "👤",
-        theoryUrl: "lessons/basic-pronouns/explanation.html",
-        exerciseUrl: "lessons/basic-pronouns/exercise.html",
-        status: "active"
-      }
-    ];
+    const UNITS_DATA = {
+      units: [
+        {
+          id: "unit-1",
+          number: 1,
+          section: 1,
+          title: "Fundamentos do Inglês",
+          description: "Verbos essenciais, rotina diária e pronomes",
+          color: "green",
+          badgeText: "TRILHA ATIVA",
+          lessons: [
+            {
+              id: "basic-verbs",
+              title: "O Básico dos Verbos",
+              subtitle: "Verbo To Be, ações da rotina diária e a regra de ouro do 'S' na 3ª pessoa.",
+              icon: "⭐",
+              theoryUrl: "lessons/basic-verbs/explanation.html",
+              exerciseUrl: "lessons/basic-verbs/exercise.html",
+              status: "completed"
+            },
+            {
+              id: "present-simple",
+              title: "Present Simple",
+              subtitle: "Afirmação (+), Negação com Don't/Doesn't (-) e Perguntas com Do/Does (?).",
+              icon: "⚡",
+              theoryUrl: "lessons/present-simple/explanation.html",
+              exerciseUrl: "lessons/present-simple/exercise.html",
+              status: "completed"
+            },
+            {
+              id: "basic-pronouns",
+              title: "O Básico dos Pronomes",
+              subtitle: "Pronomes Sujeito (I, He), Objeto (me, him) e Possessivos (my, his).",
+              icon: "👤",
+              theoryUrl: "lessons/basic-pronouns/explanation.html",
+              exerciseUrl: "lessons/basic-pronouns/exercise.html",
+              status: "active"
+            }
+          ]
+        }
+      ]
+    };
 
     // Offsets for the zigzag snake trail: Center -> Left -> Center -> Right -> Center...
     const offsets = ['offset-center', 'offset-left', 'offset-center', 'offset-right'];
 
-    const pathContainer = document.getElementById('pathContainer');
-
     function renderPath() {
-      pathContainer.innerHTML = '';
+      const unitsContainer = document.getElementById('unitsContainer');
+      unitsContainer.innerHTML = '';
 
-      LESSONS_DATA.forEach((lesson, index) => {
-        const row = document.createElement('div');
-        const offsetClass = offsets[index % offsets.length];
-        row.className = `duo-path-row ${offsetClass}`;
+      let globalLessonCount = 0;
 
-        const isCompleted = lesson.status === 'completed';
-        const isActive = lesson.status === 'active';
-        const nodeClass = isCompleted ? 'duo-node-completed' : (isActive ? 'duo-node-active' : 'duo-node-locked');
+      UNITS_DATA.units.forEach((unit, unitIndex) => {
+        const unitSection = document.createElement('section');
+        unitSection.className = 'duo-unit-section';
+        unitSection.id = 'unit-' + unit.id;
 
-        row.innerHTML = `
-          <button class="duo-node-btn ${nodeClass}" onclick="window.openLessonCard(event, '${lesson.id}')" title="${lesson.title}">
-            ${isActive ? '<div class="duo-node-crown">COMEÇAR</div>' : ''}
-            <span class="duo-node-icon">${lesson.icon}</span>
-          </button>
+        const colorTheme = unit.color || 'green';
+        const isLastUnit = (unitIndex === UNITS_DATA.units.length - 1);
 
-          <!-- Popover Modal -->
-          <div class="duo-popover" id="popover-${lesson.id}" onclick="event.stopPropagation()">
-            <div class="duo-popover-arrow"></div>
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-              <span class="duo-badge" style="background: ${isCompleted ? 'var(--duo-yellow)' : 'var(--duo-green)'};">
-                ${isCompleted ? '✓ Concluído' : '🔥 Em Andamento'}
-              </span>
-              <span style="font-size: 12px; font-weight: 800; color: var(--duo-gray-400);">Lição ${index + 1}</span>
-            </div>
-            <h4 class="duo-popover-title">${lesson.title}</h4>
-            <p class="duo-popover-desc">${lesson.subtitle}</p>
-            <div class="duo-popover-actions">
-              <a href="${lesson.theoryUrl}" class="btn-duo btn-duo-secondary" onclick="if(window.duoAudio) duoAudio.playTap()">
-                📖 Teoria
-              </a>
-              <a href="${lesson.exerciseUrl}" class="btn-duo btn-duo-green" onclick="if(window.duoAudio) duoAudio.playTap()">
-                ⚡ Exercício
-              </a>
-            </div>
+        // Unit Banner
+        const banner = document.createElement('div');
+        banner.className = `duo-unit-banner theme-${colorTheme}`;
+        banner.innerHTML = `
+          <div class="duo-unit-info">
+            <h2>Seção ${unit.section || 1} • Unidade ${unit.number || (unitIndex + 1)}</h2>
+            <h3>${unit.title}</h3>
+            <p style="font-size: 14px; opacity: 0.95; font-weight: 600; margin-top: 4px;">
+              ${unit.description || ''}
+            </p>
+          </div>
+          <div class="duo-unit-badge">
+            <span>📖</span>
+            <span>${unit.badgeText || 'TRILHA ATIVA'}</span>
           </div>
         `;
+        unitSection.appendChild(banner);
 
-        pathContainer.appendChild(row);
+        // Path Container for this unit
+        const pathContainer = document.createElement('div');
+        pathContainer.className = 'duo-path-container';
+
+        unit.lessons.forEach((lesson, indexInUnit) => {
+          globalLessonCount++;
+          const row = document.createElement('div');
+          const offsetClass = offsets[indexInUnit % offsets.length];
+          row.className = `duo-path-row ${offsetClass}`;
+
+          const isCompleted = lesson.status === 'completed';
+          const isActive = lesson.status === 'active';
+          const nodeClass = isCompleted ? 'duo-node-completed' : (isActive ? `duo-node-active theme-${colorTheme}` : 'duo-node-locked');
+
+          row.innerHTML = `
+            <button class="duo-node-btn ${nodeClass}" onclick="window.openLessonCard(event, '${lesson.id}')" title="${lesson.title}">
+              ${isActive ? '<div class="duo-node-crown">COMEÇAR</div>' : ''}
+              <span class="duo-node-icon">${lesson.icon}</span>
+            </button>
+
+            <!-- Popover Modal -->
+            <div class="duo-popover" id="popover-${lesson.id}" onclick="event.stopPropagation()">
+              <div class="duo-popover-arrow"></div>
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                <span class="duo-badge" style="background: ${isCompleted ? 'var(--duo-yellow)' : `var(--duo-${colorTheme})`};">
+                  ${isCompleted ? '✓ Concluído' : '🔥 Em Andamento'}
+                </span>
+                <span style="font-size: 12px; font-weight: 800; color: var(--duo-gray-400);">Lição ${globalLessonCount}</span>
+              </div>
+              <h4 class="duo-popover-title">${lesson.title}</h4>
+              <p class="duo-popover-desc">${lesson.subtitle}</p>
+              <div class="duo-popover-actions">
+                <a href="${lesson.theoryUrl}" class="btn-duo btn-duo-secondary" onclick="if(window.duoAudio) duoAudio.playTap()">
+                  📖 Teoria
+                </a>
+                <a href="${lesson.exerciseUrl}" class="btn-duo btn-duo-green" onclick="if(window.duoAudio) duoAudio.playTap()">
+                  ⚡ Exercício
+                </a>
+              </div>
+            </div>
+          `;
+
+          pathContainer.appendChild(row);
+        });
+
+        // Add a Locked / Upcoming Next Node at the end of the last unit
+        if (isLastUnit) {
+          const nextIndex = unit.lessons.length;
+          const nextOffset = offsets[nextIndex % offsets.length];
+          const nextRow = document.createElement('div');
+          nextRow.className = `duo-path-row ${nextOffset}`;
+          nextRow.innerHTML = `
+            <button class="duo-node-btn duo-node-locked" onclick="alert('Esta lição será desbloqueada na próxima prática! Use /duo-english-tutor para criar.')" title="Próxima Missão">
+              <span class="duo-node-icon">🔒</span>
+            </button>
+          `;
+          pathContainer.appendChild(nextRow);
+        }
+
+        unitSection.appendChild(pathContainer);
+        unitsContainer.appendChild(unitSection);
       });
-
-      // Add a Locked / Upcoming Next Node
-      const nextIndex = LESSONS_DATA.length;
-      const nextOffset = offsets[nextIndex % offsets.length];
-      const nextRow = document.createElement('div');
-      nextRow.className = `duo-path-row ${nextOffset}`;
-      nextRow.innerHTML = `
-        <button class="duo-node-btn duo-node-locked" onclick="alert('Esta lição será desbloqueada na próxima prática! Use /duo-english-tutor para criar.')" title="Próxima Missão">
-          <span class="duo-node-icon">🔒</span>
-        </button>
-      `;
-      pathContainer.appendChild(nextRow);
     }
 
     let activePopoverId = null;

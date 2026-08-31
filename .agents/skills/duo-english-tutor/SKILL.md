@@ -72,21 +72,36 @@ Criar o arquivo `exercise.html` com pelo menos **4 a 5 exercícios variados e pr
 ### Passo 4: Atualizar o Índice Geral (`index.html` e `lessons/lessons.json`)
 
 **Obrigatório a cada nova aula criada:**
-1. Adicionar a nova lição no arquivo `lessons/lessons.json`:
+1. Adicionar a nova lição no arquivo `lessons/lessons.json` dentro da respectiva unidade (ou criando uma nova unidade temática se o tema pertencer a um novo módulo):
+   - **Paletas de Cores Disponíveis:** `green` (Fundamentos), `blue` (Viagens & Aeroporto), `purple` (Rotina & Hobbies), `orange` (Business English), `teal` (Gramática & Phrasal Verbs), `rose` (Cultura).
    ```json
    {
-     "id": "<slug>",
-     "title": "<Título da Aula>",
-     "subtitle": "<Breve resumo dos conceitos>",
-     "unit": "<Seção/Unidade correspondente>",
-     "icon": "⭐", // ou ⚡, ☕, ✈️, 💼, 🧠 etc.
-     "theoryUrl": "lessons/<slug>/explanation.html",
-     "exerciseUrl": "lessons/<slug>/exercise.html",
-     "status": "active",
-     "date": "AAAA-MM-DD"
+     "units": [
+       {
+         "id": "unit-X",
+         "number": X,
+         "section": 1,
+         "title": "<Nome da Unidade>",
+         "description": "<Descrição curta>",
+         "color": "green", // ou "blue", "purple", "orange", "teal", "rose"
+         "badgeText": "TRILHA ATIVA",
+         "lessons": [
+           {
+             "id": "<slug>",
+             "title": "<Título da Aula>",
+             "subtitle": "<Resumo>",
+             "icon": "⭐",
+             "theoryUrl": "lessons/<slug>/explanation.html",
+             "exerciseUrl": "lessons/<slug>/exercise.html",
+             "status": "active",
+             "date": "AAAA-MM-DD"
+           }
+         ]
+       }
+     ]
    }
    ```
-2. Atualizar o array `LESSONS_DATA` no arquivo `index.html` na raiz do projeto, para que o novo nó circular 3D apareça dinamicamente na trilha (Snake Learning Path) do Duolingo com seu popover interativo, status ativo e botões para `📖 Teoria` e `⚡ Exercício`.
+2. Sincronizar o objeto `UNITS_DATA` no arquivo `index.html` na raiz do projeto, para que cada unidade seja renderizada dinamicamente com seu banner colorido, subtítulo e os nós da sua trilha em zigue-zague com popovers interativos.
 
 ---
 

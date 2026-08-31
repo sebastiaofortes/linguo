@@ -20,6 +20,19 @@
 
   --duo-orange: #ff9600;
   --duo-orange-shadow: #e58200;
+  --duo-orange-light: #ffe8cc;
+
+  --duo-purple: #ce82ff;
+  --duo-purple-shadow: #a559e0;
+  --duo-purple-light: #f4e5ff;
+
+  --duo-teal: #00cd9c;
+  --duo-teal-shadow: #00a67d;
+  --duo-teal-light: #d2f9ef;
+
+  --duo-rose: #ff4b8b;
+  --duo-rose-shadow: #d6326e;
+  --duo-rose-light: #ffe0ec;
 
   --duo-gray-100: #f7f7f7;
   --duo-gray-200: #e5e5e5;
@@ -608,6 +621,17 @@ body {
   }
 }
 
+/* Unit Section Wrapper */
+.duo-unit-section {
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.duo-unit-section:not(:last-child) {
+  border-bottom: 2px dashed var(--duo-gray-200);
+  padding-bottom: 24px;
+}
+
 /* Unit Banner Header */
 .duo-unit-banner {
   background: var(--duo-green);
@@ -621,6 +645,31 @@ body {
   margin-bottom: 36px;
   position: relative;
   overflow: hidden;
+}
+
+.duo-unit-banner.theme-green {
+  background: var(--duo-green);
+  box-shadow: 0 5px 0 var(--duo-green-shadow);
+}
+.duo-unit-banner.theme-blue {
+  background: var(--duo-blue);
+  box-shadow: 0 5px 0 var(--duo-blue-shadow);
+}
+.duo-unit-banner.theme-purple {
+  background: var(--duo-purple);
+  box-shadow: 0 5px 0 var(--duo-purple-shadow);
+}
+.duo-unit-banner.theme-orange {
+  background: var(--duo-orange);
+  box-shadow: 0 5px 0 var(--duo-orange-shadow);
+}
+.duo-unit-banner.theme-teal {
+  background: var(--duo-teal);
+  box-shadow: 0 5px 0 var(--duo-teal-shadow);
+}
+.duo-unit-banner.theme-rose {
+  background: var(--duo-rose);
+  box-shadow: 0 5px 0 var(--duo-rose-shadow);
 }
 
 .duo-unit-banner::after {

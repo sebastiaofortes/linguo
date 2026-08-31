@@ -1,35 +1,44 @@
-[
-  {
-    "id": "basic-verbs",
-    "title": "O Básico dos Verbos em Inglês",
-    "subtitle": "Verbo To Be, rotina e a regra de ouro do 'S' na 3ª pessoa.",
-    "unit": "Seção 1: Fundamentos do Inglês",
-    "icon": "⭐",
-    "theoryUrl": "lessons/basic-verbs/explanation.html",
-    "exerciseUrl": "lessons/basic-verbs/exercise.html",
-    "status": "completed",
-    "date": "2026-08-30"
-  },
-  {
-    "id": "present-simple",
-    "title": "Present Simple",
-    "subtitle": "Afirmação, Negação (Don't / Doesn't) e Perguntas (Do / Does).",
-    "unit": "Seção 1: Fundamentos do Inglês",
-    "icon": "⚡",
-    "theoryUrl": "lessons/present-simple/explanation.html",
-    "exerciseUrl": "lessons/present-simple/exercise.html",
-    "status": "completed",
-    "date": "2026-08-30"
-  },
-  {
-    "id": "basic-pronouns",
-    "title": "O Básico dos Pronomes",
-    "subtitle": "Pronomes Sujeito (I, He), Objeto (me, him) e Possessivos (my, his).",
-    "unit": "Seção 1: Fundamentos do Inglês",
-    "icon": "👤",
-    "theoryUrl": "lessons/basic-pronouns/explanation.html",
-    "exerciseUrl": "lessons/basic-pronouns/exercise.html",
-    "status": "active",
-    "date": "2026-08-30"
-  }
-]
+{
+  "units": [
+    {
+      "id": "unit-1",
+      "number": 1,
+      "section": 1,
+      "title": "Fundamentos do Inglês",
+      "description": "Verbos essenciais, rotina diária e pronomes",
+      "color": "green",
+      "lessons": [
+        {
+          "id": "basic-verbs",
+          "title": "O Básico dos Verbos",
+          "subtitle": "Verbo To Be, rotina e a regra de ouro do 'S' na 3ª pessoa.",
+          "icon": "⭐",
+          "theoryUrl": "lessons/basic-verbs/explanation.html",
+          "exerciseUrl": "lessons/basic-verbs/exercise.html",
+          "status": "completed",
+          "date": "2026-08-30"
+        },
+        {
+          "id": "present-simple",
+          "title": "Present Simple",
+          "subtitle": "Afirmação, Negação (Don't / Doesn't) e Perguntas (Do / Does).",
+          "icon": "⚡",
+          "theoryUrl": "lessons/present-simple/explanation.html",
+          "exerciseUrl": "lessons/present-simple/exercise.html",
+          "status": "completed",
+          "date": "2026-08-30"
+        },
+        {
+          "id": "basic-pronouns",
+          "title": "O Básico dos Pronomes",
+          "subtitle": "Pronomes Sujeito (I, He), Objeto (me, him) e Possessivos (my, his).",
+          "icon": "👤",
+          "theoryUrl": "lessons/basic-pronouns/explanation.html",
+          "exerciseUrl": "lessons/basic-pronouns/exercise.html",
+          "status": "active",
+          "date": "2026-08-30"
+        }
+      ]
+    }
+  ]
+}
