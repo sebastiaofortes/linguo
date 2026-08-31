@@ -20,5 +20,16 @@
     "exerciseUrl": "lessons/present-simple/exercise.html",
     "status": "completed",
     "date": "2026-08-30"
+  },
+  {
+    "id": "basic-pronouns",
+    "title": "O Básico dos Pronomes",
+    "subtitle": "Pronomes Sujeito (I, He), Objeto (me, him) e Possessivos (my, his).",
+    "unit": "Seção 1: Fundamentos do Inglês",
+    "icon": "👤",
+    "theoryUrl": "lessons/basic-pronouns/explanation.html",
+    "exerciseUrl": "lessons/basic-pronouns/exercise.html",
+    "status": "active",
+    "date": "2026-08-30"
   }
 ]
