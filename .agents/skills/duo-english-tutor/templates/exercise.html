@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{TOPIC_TITLE}} - Exercícios | Linguo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../.agents/skills/duo-english-tutor/resources/duo-theme.css">
+  <script src="../../.agents/skills/duo-english-tutor/resources/duo-sfx.js"></script>
+</head>
+<body>
+
+  <!-- Top Progress Bar with Lives -->
+  <div class="duo-progress-container">
+    <button class="btn-close" onclick="if(confirm('Deseja sair da lição?')) window.location.href='explanation.html'">✕</button>
+    <div class="duo-progress-track">
+      <div class="duo-progress-fill" id="progressBar" style="width: 10%;"></div>
+    </div>
+    <div class="duo-stat-item duo-stat-heart">
+      <span>❤️</span>
+      <span id="heartsCount">5</span>
+    </div>
+  </div>
+
+  <main class="duo-container">
+    
+    <!-- Exercise Area -->
+    <div id="exerciseArea">
+      <!-- Dynamic Question Injector -->
+      <h2 class="duo-title" id="questionPrompt">Carregando pergunta...</h2>
+      
+      <!-- Speaker prompt if audio question -->
+      <div id="audioPromptContainer" style="display:none; margin: 16px 0;">
+        <button class="btn-speaker" id="btnAudioSpeak" onclick="duoAudio.speak(window.currentAudioText)">
+          🔊 Ouvir frase
+        </button>
+      </div>
+
+      <!-- Dialogue/Prompt Box -->
+      <div class="duo-dialog-box" id="dialogContainer">
+        <div class="duo-mascot">
+          <svg viewBox="0 0 80 80" width="70" height="70">
+            <ellipse cx="40" cy="42" rx="34" ry="32" fill="#58CC02"/>
+            <circle cx="28" cy="34" r="11" fill="#ffffff"/>
+            <circle cx="52" cy="34" r="11" fill="#ffffff"/>
+            <circle cx="30" cy="34" r="5" fill="#131F24"/>
+            <circle cx="54" cy="34" r="5" fill="#131F24"/>
+            <polygon points="40,38 33,45 47,45" fill="#FF9600"/>
+          </svg>
+        </div>
+        <div class="duo-bubble" id="mascotBubbleText">
+          Traduza esta frase:
+        </div>
+      </div>
+
+      <!-- Type 1: Sentence Builder / Word Bank -->
+      <div id="wordBankView" style="display:none;">
+        <div class="duo-slots-area" id="selectedSlots"></div>
+        <div class="duo-word-bank" id="availableWords"></div>
+      </div>
+
+      <!-- Type 2: Multiple Choice -->
+      <div id="multipleChoiceView" class="duo-choices" style="display:none;"></div>
+    </div>
+
+    <!-- Completion Screen (Shown when done) -->
+    <div id="completionScreen" class="duo-completion-screen">
+      <div style="font-size: 72px; margin-bottom: 12px;">🎉</div>
+      <h1 class="duo-title" style="font-size: 36px; color: var(--duo-green);">Lição Concluída!</h1>
+      <p class="duo-subtitle">Você mandou muito bem e fixou o conteúdo de hoje.</p>
+
+      <div class="duo-streak-banner">
+        <div>
+          <div style="font-size: 14px; font-weight: 800; opacity: 0.9;">TOTAL XP</div>
+          <div style="font-size: 32px; font-weight: 900;">+25 XP</div>
+        </div>
+        <div>
+          <div style="font-size: 14px; font-weight: 800; opacity: 0.9;">OFENSIVA</div>
+          <div style="font-size: 32px; font-weight: 900;">🔥 1 DIA</div>
+        </div>
+        <div>
+          <div style="font-size: 14px; font-weight: 800; opacity: 0.9;">PRECISÃO</div>
+          <div style="font-size: 32px; font-weight: 900;" id="accuracyStat">100%</div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 16px; justify-content: center; margin-top: 32px;">
+        <a href="explanation.html" class="btn-duo btn-duo-secondary">REVISAR TEORIA</a>
+        <button class="btn-duo btn-duo-green" onclick="window.location.reload()">PRATICAR NOVAMENTE</button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Bottom Sheet Feedback Drawer -->
+  <footer class="duo-footer-drawer" id="footerDrawer">
+    <div class="duo-footer-content">
+      <div class="duo-footer-message" id="footerMessage" style="visibility: hidden;">
+        <div class="duo-feedback-icon" id="feedbackIcon">✓</div>
+        <div class="duo-feedback-text">
+          <h4 id="feedbackTitle">Bom trabalho!</h4>
+          <p id="feedbackExplanation"></p>
+        </div>
+      </div>
+      <button id="btnAction" class="btn-duo btn-duo-green btn-duo-disabled" disabled onclick="handleActionClick()">
+        VERIFICAR
+      </button>
+    </div>
+  </footer>
+
+  <script>
+    // Injected questions data
+    const questions = {{QUESTIONS_JSON}};
+
+    let currentIndex = 0;
+    let selectedAnswer = null;
+    let selectedWordTokens = [];
+    let state = 'answering'; // 'answering' | 'evaluated'
+    let correctCount = 0;
+    let hearts = 5;
+
+    const progressBar = document.getElementById('progressBar');
+    const questionPrompt = document.getElementById('questionPrompt');
+    const mascotBubbleText = document.getElementById('mascotBubbleText');
+    const wordBankView = document.getElementById('wordBankView');
+    const selectedSlots = document.getElementById('selectedSlots');
+    const availableWords = document.getElementById('availableWords');
+    const multipleChoiceView = document.getElementById('multipleChoiceView');
+    const footerDrawer = document.getElementById('footerDrawer');
+    const footerMessage = document.getElementById('footerMessage');
+    const feedbackIcon = document.getElementById('feedbackIcon');
+    const feedbackTitle = document.getElementById('feedbackTitle');
+    const feedbackExplanation = document.getElementById('feedbackExplanation');
+    const btnAction = document.getElementById('btnAction');
+    const audioPromptContainer = document.getElementById('audioPromptContainer');
+
+    function renderQuestion() {
+      state = 'answering';
+      selectedAnswer = null;
+      selectedWordTokens = [];
+
+      // Reset UI drawer
+      footerDrawer.className = 'duo-footer-drawer';
+      footerMessage.style.visibility = 'hidden';
+      btnAction.className = 'btn-duo btn-duo-green btn-duo-disabled';
+      btnAction.disabled = true;
+      btnAction.innerText = 'VERIFICAR';
+
+      const q = questions[currentIndex];
+      const progressPercent = Math.round(((currentIndex) / questions.length) * 100);
+      progressBar.style.width = Math.max(8, progressPercent) + '%';
+
+      questionPrompt.innerText = q.title || 'Complete a atividade:';
+      mascotBubbleText.innerHTML = q.promptText;
+
+      // Audio setup
+      if (q.audioText) {
+        audioPromptContainer.style.display = 'block';
+        window.currentAudioText = q.audioText;
+        // Pronounce automatically on start
+        setTimeout(() => duoAudio.speak(q.audioText), 400);
+      } else {
+        audioPromptContainer.style.display = 'none';
+      }
+
+      if (q.type === 'word_bank') {
+        renderWordBank(q);
+      } else {
+        renderMultipleChoice(q);
+      }
+    }
+
+    function renderMultipleChoice(q) {
+      wordBankView.style.display = 'none';
+      multipleChoiceView.style.display = 'flex';
+      multipleChoiceView.innerHTML = '';
+
+      q.options.forEach((opt, idx) => {
+        const card = document.createElement('div');
+        card.className = 'duo-choice-card';
+        card.innerHTML = `
+          <div class="duo-choice-number">${idx + 1}</div>
+          <div>${opt.text}</div>
+        `;
+        card.onclick = () => {
+          if (state !== 'answering') return;
+          duoAudio.playTap();
+          document.querySelectorAll('.duo-choice-card').forEach(c => c.classList.remove('selected'));
+          card.classList.add('selected');
+          selectedAnswer = opt.id;
+          enableCheckButton();
+        };
+        multipleChoiceView.appendChild(card);
+      });
+    }
+
+    function renderWordBank(q) {
+      multipleChoiceView.style.display = 'none';
+      wordBankView.style.display = 'block';
+      selectedSlots.innerHTML = '';
+      availableWords.innerHTML = '';
+
+      q.bank.forEach((word, idx) => {
+        const chip = document.createElement('button');
+        chip.className = 'duo-word-chip';
+        chip.innerText = word;
+        chip.id = 'word-token-' + idx;
+
+        chip.onclick = () => {
+          if (state !== 'answering') return;
+          duoAudio.playTap();
+          chip.classList.add('used');
+
+          const slotChip = document.createElement('button');
+          slotChip.className = 'duo-word-chip';
+          slotChip.innerText = word;
+          slotChip.onclick = () => {
+            if (state !== 'answering') return;
+            duoAudio.playTap();
+            slotChip.remove();
+            chip.classList.remove('used');
+            selectedWordTokens = selectedWordTokens.filter(t => t.id !== chip.id);
+            checkWordBankState();
+          };
+
+          selectedSlots.appendChild(slotChip);
+          selectedWordTokens.push({ id: chip.id, text: word });
+          checkWordBankState();
+        };
+
+        availableWords.appendChild(chip);
+      });
+    }
+
+    function checkWordBankState() {
+      if (selectedWordTokens.length > 0) {
+        enableCheckButton();
+      } else {
+        disableCheckButton();
+      }
+    }
+
+    function enableCheckButton() {
+      btnAction.classList.remove('btn-duo-disabled');
+      btnAction.disabled = false;
+    }
+
+    function disableCheckButton() {
+      btnAction.classList.add('btn-duo-disabled');
+      btnAction.disabled = true;
+    }
+
+    function handleActionClick() {
+      if (state === 'answering') {
+        evaluateAnswer();
+      } else if (state === 'evaluated') {
+        nextQuestion();
+      }
+    }
+
+    function evaluateAnswer() {
+      state = 'evaluated';
+      const q = questions[currentIndex];
+      let isCorrect = false;
+
+      if (q.type === 'word_bank') {
+        const userPhrase = selectedWordTokens.map(t => t.text).join(' ').trim();
+        isCorrect = (userPhrase.toLowerCase() === q.correctAnswer.toLowerCase());
+      } else {
+        isCorrect = (selectedAnswer === q.correctOptionId);
+      }
+
+      footerMessage.style.visibility = 'visible';
+
+      if (isCorrect) {
+        correctCount++;
+        duoAudio.playSuccess();
+        footerDrawer.className = 'duo-footer-drawer correct';
+        feedbackIcon.innerText = '✓';
+        feedbackTitle.innerText = 'Excelente!';
+        feedbackExplanation.innerText = q.successTip || 'Você acertou na mosca!';
+        btnAction.innerText = 'CONTINUAR';
+        btnAction.className = 'btn-duo btn-duo-green';
+      } else {
+        duoAudio.playError();
+        hearts = Math.max(0, hearts - 1);
+        document.getElementById('heartsCount').innerText = hearts;
+        footerDrawer.className = 'duo-footer-drawer incorrect';
+        feedbackIcon.innerText = '✕';
+        feedbackTitle.innerText = 'Resposta correta:';
+        feedbackExplanation.innerText = q.correctDisplay || q.correctAnswer;
+        btnAction.innerText = 'CONTINUAR';
+        btnAction.className = 'btn-duo btn-duo-green';
+      }
+    }
+
+    function nextQuestion() {
+      currentIndex++;
+      if (currentIndex < questions.length) {
+        renderQuestion();
+      } else {
+        showCompletion();
+      }
+    }
+
+    function showCompletion() {
+      progressBar.style.width = '100%';
+      document.getElementById('exerciseArea').style.display = 'none';
+      footerDrawer.style.display = 'none';
+      
+      const accuracy = Math.round((correctCount / questions.length) * 100);
+      document.getElementById('accuracyStat').innerText = accuracy + '%';
+      document.getElementById('completionScreen').style.display = 'block';
+      duoAudio.playSuccess();
+    }
+
+    // Initialize first question
+    renderQuestion();
+  </script>
+</body>
+</html>
