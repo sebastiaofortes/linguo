@@ -1578,6 +1578,134 @@ html, body {
   max-width: 100vw;
 }
 
+/* ============================================================
+   Explain Answer Modal (💡 Explicação da Resposta Estilo Duolingo)
+   ============================================================ */
+
+.btn-explain-answer {
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: underline;
+  margin-top: 4px;
+  transition: opacity 0.15s ease;
+  user-select: none;
+  padding: 2px 0;
+}
+
+.btn-explain-answer:hover {
+  opacity: 0.8;
+}
+
+.duo-footer-drawer.correct .btn-explain-answer {
+  color: var(--duo-green-text);
+}
+
+.duo-footer-drawer.incorrect .btn-explain-answer {
+  color: var(--duo-red-text);
+}
+
+/* Modal Overlay (Backdrop) */
+.duo-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.duo-modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Slide-up Bottom Sheet */
+.duo-explanation-sheet {
+  background: #ffffff;
+  width: 100%;
+  max-width: 640px;
+  border-radius: var(--duo-radius-xl) var(--duo-radius-xl) 0 0;
+  padding: 24px 24px calc(24px + env(safe-area-inset-bottom, 0px));
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.25);
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.duo-modal-overlay.active .duo-explanation-sheet {
+  transform: translateY(0);
+}
+
+.duo-sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.duo-sheet-header h3 {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--duo-gray-900);
+}
+
+.duo-sheet-rule {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.55;
+  color: var(--duo-gray-700);
+  margin-bottom: 16px;
+}
+
+.duo-sheet-contrast-box {
+  background: var(--duo-gray-100);
+  border: 2px solid var(--duo-gray-200);
+  border-radius: var(--duo-radius-md);
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.6;
+  color: var(--duo-gray-900);
+}
+
+.duo-sheet-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+/* Dark Mode Overrides for Explanation Sheet */
+[data-theme="dark"] .duo-explanation-sheet {
+  background: #18272f;
+  border-top: 2px solid #283d47;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .duo-sheet-contrast-box {
+  background: #1b2d37;
+  border-color: #283d47;
+  color: #ffffff;
+}
+
+
 
 
 

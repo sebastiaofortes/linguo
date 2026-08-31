@@ -75,6 +75,16 @@ shuffleArray(questions);
 3. **Escuta / Audição:**
    - Exercício com `audioText` definido para o navegador pronunciar a frase em inglês nativo e o aluno escolher a tradução ou completar a lacuna.
 
+**Regra de Explicação da Resposta (Modal '💡 Ver explicação da resposta'):**
+Em desafios finais de unidade, cada pergunta deve conter um objeto `explanation` com:
+- `topic`: Título resumido da regra (ex: *"Regra do -ES para He/She/It"*).
+- `rule`: Explicação pedagógica clara e direta do porquê aquela resposta é a correta.
+- `comparison`: Exemplo visual de contraste (*✅ Correto vs. ❌ Incorreto*).
+- `audioPhrase`: Frase de áudio para pronúncia nativa no modal.
+- `theoryUrl`: Link relativo para a lição de teoria completa (ex: `../present-simple-affirmative/explanation.html`).
+
+No rodapé de feedback (`.duo-footer-drawer`), incluir o botão interativo `<button class="btn-explain-answer" onclick="openExplanationModal()">💡 Ver explicação da resposta</button>` e a gaveta modal deslizante `.duo-explanation-sheet` com suporte aos modos claro e escuro.
+
 **Feedback e Gamificação Obrigatórios:**
 - Barra de progresso incrementando suavemente a cada questão.
 - O botão `VERIFICAR` só fica ativo quando o aluno seleciona uma opção ou monta uma frase.
