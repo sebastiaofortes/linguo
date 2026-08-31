@@ -900,15 +900,37 @@ body {
 }
 
 .duo-path-row.offset-left {
-  transform: translateX(-48px);
+  transform: translateX(-40px);
 }
 
 .duo-path-row.offset-right {
-  transform: translateX(48px);
+  transform: translateX(40px);
 }
 
 .duo-path-row.offset-center {
   transform: translateX(0);
+}
+
+/* Counter-translation so popover is always centered on screen */
+.duo-path-row.offset-left .duo-popover {
+  transform: translateX(40px);
+}
+.duo-path-row.offset-left .duo-popover-arrow {
+  left: calc(50% - 40px);
+}
+
+.duo-path-row.offset-right .duo-popover {
+  transform: translateX(-40px);
+}
+.duo-path-row.offset-right .duo-popover-arrow {
+  left: calc(50% + 40px);
+}
+
+.duo-path-row.offset-center .duo-popover {
+  transform: translateX(0);
+}
+.duo-path-row.offset-center .duo-popover-arrow {
+  left: 50%;
 }
 
 /* Circular 3D Step Node */
@@ -1520,6 +1542,34 @@ body {
 
   .duo-stat-item {
     gap: 3px;
+  }
+
+  /* Mobile Popover Modal Alignment */
+  .duo-popover {
+    width: calc(100vw - 32px);
+    max-width: 320px;
+    padding: 16px 18px;
+  }
+
+  .duo-path-row.offset-left {
+    transform: translateX(-32px);
+  }
+  .duo-path-row.offset-right {
+    transform: translateX(32px);
+  }
+
+  .duo-path-row.offset-left .duo-popover {
+    transform: translateX(32px);
+  }
+  .duo-path-row.offset-left .duo-popover-arrow {
+    left: calc(50% - 32px);
+  }
+
+  .duo-path-row.offset-right .duo-popover {
+    transform: translateX(-32px);
+  }
+  .duo-path-row.offset-right .duo-popover-arrow {
+    left: calc(50% + 32px);
   }
 }
 
