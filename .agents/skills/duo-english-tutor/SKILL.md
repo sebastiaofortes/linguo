@@ -69,11 +69,34 @@ Criar o arquivo `exercise.html` com pelo menos **4 a 5 exercícios variados e pr
 
 ---
 
-### Passo 4: Concluir e Entregar ao Usuário
+### Passo 4: Atualizar o Índice Geral (`index.html` e `lessons/lessons.json`)
 
-Após gerar ambos os arquivos:
+**Obrigatório a cada nova aula criada:**
+1. Adicionar a nova lição no arquivo `lessons/lessons.json`:
+   ```json
+   {
+     "id": "<slug>",
+     "title": "<Título da Aula>",
+     "subtitle": "<Breve resumo dos conceitos>",
+     "unit": "<Seção/Unidade correspondente>",
+     "icon": "⭐", // ou ⚡, ☕, ✈️, 💼, 🧠 etc.
+     "theoryUrl": "lessons/<slug>/explanation.html",
+     "exerciseUrl": "lessons/<slug>/exercise.html",
+     "status": "active",
+     "date": "AAAA-MM-DD"
+   }
+   ```
+2. Atualizar o array `LESSONS_DATA` no arquivo `index.html` na raiz do projeto, para que o novo nó circular 3D apareça dinamicamente na trilha (Snake Learning Path) do Duolingo com seu popover interativo, status ativo e botões para `📖 Teoria` e `⚡ Exercício`.
+
+---
+
+### Passo 5: Concluir e Entregar ao Usuário
+
+Após gerar ambos os arquivos e atualizar o índice:
 1. Apresentar um resumo simpático do que foi preparado.
-2. Fornecer os links diretos para os arquivos criados:
-   - [explanation.html](file:///path/to/explanation.html)
-   - [exercise.html](file:///path/to/exercise.html)
-3. Instruir o usuário de que basta dar duplo clique no arquivo ou abri-lo em qualquer navegador para começar a estudar e praticar com áudio e interatividade!
+2. Fornecer os links diretos e clicáveis:
+   - 🏠 [index.html](file:///path/to/index.html) (Trilha Geral estilo Duolingo)
+   - 📖 [explanation.html](file:///path/to/lessons/<slug>/explanation.html)
+   - 🎯 [exercise.html](file:///path/to/lessons/<slug>/exercise.html)
+3. Instruir o usuário de que basta dar duplo clique em `index.html` ou em qualquer lição no navegador para estudar e praticar com áudio e efeitos interativos!
+

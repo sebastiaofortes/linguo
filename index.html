@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linguo - Trilha de Aprendizado</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href=".agents/skills/duo-english-tutor/resources/duo-theme.css">
+  <script src=".agents/skills/duo-english-tutor/resources/duo-sfx.js"></script>
+</head>
+<body>
+
+  <!-- Top Header Navigation -->
+  <header class="duo-header">
+    <a href="index.html" class="duo-logo-area">
+      <svg width="36" height="36" viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="15" fill="#58CC02"/>
+        <circle cx="11" cy="13" r="5" fill="#ffffff"/>
+        <circle cx="21" cy="13" r="5" fill="#ffffff"/>
+        <circle cx="11" cy="13" r="2.5" fill="#4B4B4B"/>
+        <circle cx="21" cy="13" r="2.5" fill="#4B4B4B"/>
+        <polygon points="16,16 13,20 19,20" fill="#FFC800"/>
+        <path d="M7 23 C11 26, 21 26, 25 23" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      linguo
+    </a>
+
+    <div class="duo-stats">
+      <div style="display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 15px; background: var(--duo-gray-100); padding: 6px 12px; border-radius: var(--duo-radius-pill); border: 2px solid var(--duo-gray-200);">
+        <span>🇺🇸</span>
+        <span style="color: var(--duo-gray-700);">Inglês</span>
+      </div>
+
+      <div class="duo-stat-item duo-stat-fire" title="Ofensiva diária">
+        <span>🔥</span>
+        <span id="streakDisplay">2</span>
+      </div>
+      <div class="duo-stat-item duo-stat-gem" title="Gemas">
+        <span>💎</span>
+        <span>175</span>
+      </div>
+      <div class="duo-stat-item duo-stat-heart" title="Vidas">
+        <span>❤️</span>
+        <span>5</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Home Layout -->
+  <div class="duo-home-layout">
+    
+    <!-- Left Column: The Learning Snake Path -->
+    <main class="duo-main-path">
+
+      <!-- Unit Banner -->
+      <div class="duo-unit-banner">
+        <div class="duo-unit-info">
+          <h2>Seção 1 • Unidade 1</h2>
+          <h3>Fundamentos do Inglês</h3>
+          <p style="font-size: 14px; opacity: 0.95; font-weight: 600; margin-top: 4px;">
+            Verbos essenciais, rotina diária e perguntas com Do & Does
+          </p>
+        </div>
+        <div class="duo-unit-badge">
+          <span>📖</span>
+          <span>TRILHA ATIVA</span>
+        </div>
+      </div>
+
+      <!-- Snake Trail Container -->
+      <div class="duo-path-container" id="pathContainer">
+        <!-- Rendered dynamically by JavaScript from LESSONS_DATA -->
+      </div>
+
+    </main>
+
+    <!-- Right Column: Sidebar Widgets -->
+    <aside class="duo-sidebar">
+      
+      <!-- Streak Widget -->
+      <div class="duo-widget">
+        <div class="duo-widget-header">
+          <div class="duo-widget-title">
+            <span style="font-size: 20px;">🔥</span>
+            <span>2 Dias de Ofensiva</span>
+          </div>
+          <span style="font-size: 12px; font-weight: 800; color: var(--duo-orange);">MUITO BEM!</span>
+        </div>
+        <p style="font-size: 13px; font-weight: 600; color: var(--duo-gray-700); margin-bottom: 12px;">
+          Pratique todos os dias para não perder a sua sequência!
+        </p>
+        <div class="duo-streak-days">
+          <div class="duo-streak-day-item">
+            <div class="duo-streak-day-circle">D</div>
+            <span>DOM</span>
+          </div>
+          <div class="duo-streak-day-item active">
+            <div class="duo-streak-day-circle">🔥</div>
+            <span>SEG</span>
+          </div>
+          <div class="duo-streak-day-item active">
+            <div class="duo-streak-day-circle">🔥</div>
+            <span>TER</span>
+          </div>
+          <div class="duo-streak-day-item">
+            <div class="duo-streak-day-circle">Q</div>
+            <span>QUA</span>
+          </div>
+          <div class="duo-streak-day-item">
+            <div class="duo-streak-day-circle">Q</div>
+            <span>QUI</span>
+          </div>
+          <div class="duo-streak-day-item">
+            <div class="duo-streak-day-circle">S</div>
+            <span>SEX</span>
+          </div>
+          <div class="duo-streak-day-item">
+            <div class="duo-streak-day-circle">S</div>
+            <span>SÁB</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Daily Quest Widget -->
+      <div class="duo-widget">
+        <div class="duo-widget-header">
+          <div class="duo-widget-title">
+            <span style="font-size: 20px;">🎯</span>
+            <span>Missões Diárias</span>
+          </div>
+          <span style="font-size: 20px;">🎁</span>
+        </div>
+        
+        <div style="margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 800; margin-bottom: 6px;">
+            <span>Complete 2 lições</span>
+            <span style="color: var(--duo-green-text);" id="questCounter">2 / 2</span>
+          </div>
+          <div class="duo-progress-track" style="height: 12px;">
+            <div class="duo-progress-fill" style="width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- New Lesson Tutor Prompt -->
+      <div class="duo-add-card">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+          <div class="duo-mascot" style="width: 50px; height: 50px;">
+            <svg viewBox="0 0 80 80" width="50" height="50">
+              <ellipse cx="40" cy="42" rx="34" ry="32" fill="#58CC02"/>
+              <circle cx="28" cy="34" r="11" fill="#ffffff"/>
+              <circle cx="52" cy="34" r="11" fill="#ffffff"/>
+              <circle cx="30" cy="34" r="5" fill="#131F24"/>
+              <circle cx="54" cy="34" r="5" fill="#131F24"/>
+              <polygon points="40,38 33,45 47,45" fill="#FF9600"/>
+            </svg>
+          </div>
+          <div>
+            <h4>Quer uma nova lição?</h4>
+            <div style="font-size: 12px; font-weight: 700; color: var(--duo-blue-shadow);">Fale com o Duo Tutor!</div>
+          </div>
+        </div>
+        <p>
+          Basta digitar no chat do Antigravity:
+          <br>
+          <span class="duo-code-badge">/duo-english-tutor</span>
+        </p>
+        <p style="font-size: 12px; color: var(--duo-gray-700); margin-bottom: 0;">
+          Escolha qualquer tema (viagem, entrevistas, gramática) e a nova aula será automaticamente adicionada à sua trilha!
+        </p>
+      </div>
+
+    </aside>
+
+  </div>
+
+  <script>
+    /**
+     * LESSONS REGISTRY DATA
+     * Esta lista é atualizada automaticamente pela skill duo-english-tutor
+     * sempre que uma nova aula é gerada!
+     */
+    const LESSONS_DATA = [
+      {
+        id: "basic-verbs",
+        title: "O Básico dos Verbos",
+        subtitle: "Verbo To Be, ações da rotina diária e a regra de ouro do 'S' na 3ª pessoa.",
+        unit: "Seção 1: Fundamentos",
+        icon: "⭐",
+        theoryUrl: "lessons/basic-verbs/explanation.html",
+        exerciseUrl: "lessons/basic-verbs/exercise.html",
+        status: "completed"
+      },
+      {
+        id: "present-simple",
+        title: "Present Simple",
+        subtitle: "Afirmação (+), Negação com Don't/Doesn't (-) e Perguntas com Do/Does (?).",
+        unit: "Seção 1: Fundamentos",
+        icon: "⚡",
+        theoryUrl: "lessons/present-simple/explanation.html",
+        exerciseUrl: "lessons/present-simple/exercise.html",
+        status: "active"
+      }
+    ];
+
+    // Offsets for the zigzag snake trail: Center -> Left -> Center -> Right -> Center...
+    const offsets = ['offset-center', 'offset-left', 'offset-center', 'offset-right'];
+
+    const pathContainer = document.getElementById('pathContainer');
+
+    function renderPath() {
+      pathContainer.innerHTML = '';
+
+      LESSONS_DATA.forEach((lesson, index) => {
+        const row = document.createElement('div');
+        const offsetClass = offsets[index % offsets.length];
+        row.className = `duo-path-row ${offsetClass}`;
+
+        const isCompleted = lesson.status === 'completed';
+        const isActive = lesson.status === 'active';
+        const nodeClass = isCompleted ? 'duo-node-completed' : (isActive ? 'duo-node-active' : 'duo-node-locked');
+
+        row.innerHTML = `
+          <button class="duo-node-btn ${nodeClass}" onclick="window.openLessonCard(event, '${lesson.id}')" title="${lesson.title}">
+            ${isActive ? '<div class="duo-node-crown">COMEÇAR</div>' : ''}
+            <span class="duo-node-icon">${lesson.icon}</span>
+          </button>
+
+          <!-- Popover Modal -->
+          <div class="duo-popover" id="popover-${lesson.id}" onclick="event.stopPropagation()">
+            <div class="duo-popover-arrow"></div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+              <span class="duo-badge" style="background: ${isCompleted ? 'var(--duo-yellow)' : 'var(--duo-green)'};">
+                ${isCompleted ? '✓ Concluído' : '🔥 Em Andamento'}
+              </span>
+              <span style="font-size: 12px; font-weight: 800; color: var(--duo-gray-400);">Lição ${index + 1}</span>
+            </div>
+            <h4 class="duo-popover-title">${lesson.title}</h4>
+            <p class="duo-popover-desc">${lesson.subtitle}</p>
+            <div class="duo-popover-actions">
+              <a href="${lesson.theoryUrl}" class="btn-duo btn-duo-secondary" onclick="if(window.duoAudio) duoAudio.playTap()">
+                📖 Teoria
+              </a>
+              <a href="${lesson.exerciseUrl}" class="btn-duo btn-duo-green" onclick="if(window.duoAudio) duoAudio.playTap()">
+                ⚡ Exercício
+              </a>
+            </div>
+          </div>
+        `;
+
+        pathContainer.appendChild(row);
+      });
+
+      // Add a Locked / Upcoming Next Node
+      const nextIndex = LESSONS_DATA.length;
+      const nextOffset = offsets[nextIndex % offsets.length];
+      const nextRow = document.createElement('div');
+      nextRow.className = `duo-path-row ${nextOffset}`;
+      nextRow.innerHTML = `
+        <button class="duo-node-btn duo-node-locked" onclick="alert('Esta lição será desbloqueada na próxima prática! Use /duo-english-tutor para criar.')" title="Próxima Missão">
+          <span class="duo-node-icon">🔒</span>
+        </button>
+      `;
+      pathContainer.appendChild(nextRow);
+    }
+
+    let activePopoverId = null;
+
+    window.openLessonCard = function(event, id) {
+      if (event) event.stopPropagation();
+      if (window.duoAudio) duoAudio.playTap();
+
+      const targetPopover = document.getElementById('popover-' + id);
+      if (!targetPopover) return;
+      
+      const isAlreadyActive = targetPopover.classList.contains('active');
+
+      // Close any open popovers and reset row z-indexes
+      document.querySelectorAll('.duo-popover').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.duo-path-row').forEach(r => r.classList.remove('has-active-popover'));
+
+      if (!isAlreadyActive) {
+        targetPopover.classList.add('active');
+        const parentRow = targetPopover.closest('.duo-path-row');
+        if (parentRow) parentRow.classList.add('has-active-popover');
+        activePopoverId = id;
+      } else {
+        activePopoverId = null;
+      }
+    };
+
+    // Close popover when clicking anywhere else
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.duo-popover') && !e.target.closest('.duo-node-btn')) {
+        document.querySelectorAll('.duo-popover').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.duo-path-row').forEach(r => r.classList.remove('has-active-popover'));
+        activePopoverId = null;
+      }
+    });
+
+    // Render on load
+    renderPath();
+  </script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+[
+  {
+    "id": "basic-verbs",
+    "title": "O Básico dos Verbos em Inglês",
+    "subtitle": "Verbo To Be, rotina e a regra de ouro do 'S' na 3ª pessoa.",
+    "unit": "Seção 1: Fundamentos do Inglês",
+    "icon": "⭐",
+    "theoryUrl": "lessons/basic-verbs/explanation.html",
+    "exerciseUrl": "lessons/basic-verbs/exercise.html",
+    "status": "completed",
+    "date": "2026-08-30"
+  },
+  {
+    "id": "present-simple",
+    "title": "Present Simple",
+    "subtitle": "Afirmação, Negação (Don't / Doesn't) e Perguntas (Do / Does).",
+    "unit": "Seção 1: Fundamentos do Inglês",
+    "icon": "⚡",
+    "theoryUrl": "lessons/present-simple/explanation.html",
+    "exerciseUrl": "lessons/present-simple/exercise.html",
+    "status": "completed",
+    "date": "2026-08-30"
+  }
+]
