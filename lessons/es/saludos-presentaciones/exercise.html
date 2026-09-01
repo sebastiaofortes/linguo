@@ -14,7 +14,7 @@
 
   <!-- Top Exercise Navigation Bar -->
   <div class="duo-progress-container">
-    <button class="btn-close" onclick="if(confirm('¿Deseas salir de la lección?')) window.location.href='../../../index.html'" title="Volver a la ruta">✕</button>
+    <button class="btn-close" onclick="if(confirm('Deseja sair da lição?')) window.location.href='../../../index.html'" title="Voltar para a trilha">✕</button>
     <div class="duo-progress-track">
       <div class="duo-progress-fill" id="progressBar" style="width: 0%;"></div>
     </div>
@@ -42,10 +42,10 @@
         </div>
       </div>
       <div id="footerPlaceholder" style="font-weight: 700; color: var(--duo-gray-400);">
-        Selecciona o arma tu respuesta
+        Selecione ou monte sua resposta
       </div>
       <button class="btn-duo btn-duo-green" id="btnAction" disabled onclick="handleAction()">
-        COMPROBAR
+        VERIFICAR
       </button>
     </div>
   </div>
@@ -55,32 +55,32 @@
     <div class="duo-completion-card">
       <div style="font-size: 64px; margin-bottom: 12px;">🎉</div>
       <h2 style="font-size: 32px; font-weight: 900; color: var(--duo-gray-900); margin-bottom: 8px;">
-        ¡Lección Completada!
+        Lição Concluída!
       </h2>
       <p style="font-size: 16px; font-weight: 700; color: var(--duo-gray-400); margin-bottom: 24px;">
-        Has dominado los saludos y presentaciones en español.
+        Você dominou as saudações e apresentações básicas em espanhol.
       </p>
 
       <div class="duo-completion-stats">
         <div class="duo-stat-box">
           <span style="font-size: 24px;">⚡</span>
           <span class="duo-stat-box-val">+25 XP</span>
-          <span class="duo-stat-box-lbl">TOTAL GANADO</span>
+          <span class="duo-stat-box-lbl">TOTAL GANHO</span>
         </div>
         <div class="duo-stat-box">
           <span style="font-size: 24px;">🎯</span>
           <span class="duo-stat-box-val" id="accuracyVal">100%</span>
-          <span class="duo-stat-box-lbl">PRECISIÓN</span>
+          <span class="duo-stat-box-lbl">PRECISÃO</span>
         </div>
         <div class="duo-stat-box">
           <span style="font-size: 24px;">🔥</span>
-          <span class="duo-stat-box-val">3 DÍAS</span>
-          <span class="duo-stat-box-lbl">RACHA</span>
+          <span class="duo-stat-box-val">3 DIAS</span>
+          <span class="duo-stat-box-lbl">OFENSIVA</span>
         </div>
       </div>
 
       <div style="margin-top: 32px;">
-        <a href="../../../index.html" class="btn-duo btn-duo-green">CONTINUAR RUTA ➔</a>
+        <a href="../../../index.html" class="btn-duo btn-duo-green">CONTINUAR TRILHA ➔</a>
       </div>
     </div>
   </div>
@@ -89,7 +89,7 @@
     const questions = [
       {
         type: "choice",
-        prompt: "Selecciona la traducción correcta para: \"Bom dia, prazer em conhecê-lo\"",
+        prompt: "Selecione a tradução correta para: \"Bom dia, prazer em conhecê-lo\"",
         audioPhrase: "Buenos días, mucho gusto en conocerte.",
         options: [
           "Buenas noches, hasta luego.",
@@ -100,7 +100,7 @@
       },
       {
         type: "word_bank",
-        prompt: "Traduce esta frase al español:",
+        prompt: "Traduza esta frase para o espanhol:",
         originalPhrase: "Olá, meu nome é Maria.",
         audioPhrase: "Hola, me llamo María.",
         words: ["Hola,", "me", "llamo", "María.", "tú", "cómo", "días", "gracias"],
@@ -108,7 +108,7 @@
       },
       {
         type: "choice",
-        prompt: "¿Cómo se pregunta \"Qual é o seu nome?\" en español?",
+        prompt: "Como se pergunta \"Qual é o seu nome?\" em espanhol?",
         audioPhrase: "¿Cómo te llamas?",
         options: [
           "¿Cómo te llamas?",
@@ -119,7 +119,7 @@
       },
       {
         type: "word_bank",
-        prompt: "Arma la frase correcta:",
+        prompt: "Monte a frase correta em espanhol:",
         originalPhrase: "Boa tarde, como você está?",
         audioPhrase: "Buenas tardes, ¿cómo estás?",
         words: ["Buenas", "tardes,", "¿cómo", "estás?", "noches", "me", "llamo"],
@@ -127,10 +127,10 @@
       },
       {
         type: "choice",
-        prompt: "Si alguien te dice \"¡Mucho gusto!\", ¿cuál es la mejor respuesta?",
+        prompt: "Se alguém disser \"¡Mucho gusto!\", qual é a melhor resposta?",
         audioPhrase: "El gusto es mío.",
         options: [
-          "El gusto es mío.",
+          "El gusto es mío. (O prazer é meu)",
           "Buenas noches.",
           "No tengo hambre."
         ],
@@ -162,7 +162,7 @@
       document.getElementById('feedbackMessage').style.display = 'none';
       document.getElementById('footerPlaceholder').style.display = 'block';
       const btnAction = document.getElementById('btnAction');
-      btnAction.innerText = 'COMPROBAR';
+      btnAction.innerText = 'VERIFICAR';
       btnAction.disabled = true;
       btnAction.className = 'btn-duo btn-duo-green';
 
@@ -172,7 +172,7 @@
           ${q.audioPhrase ? `
             <div style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
               <button class="btn-speaker" onclick="duoAudio.speak('${q.audioPhrase}', 'es-ES')">🔊</button>
-              <span style="font-size: 16px; font-weight: 700; color: var(--duo-gray-700);">Escuchar pronunciación</span>
+              <span style="font-size: 16px; font-weight: 700; color: var(--duo-gray-700);">Ouvir pronúncia</span>
             </div>
           ` : ''}
           <div class="duo-choices-grid">
@@ -194,7 +194,7 @@
 
           <!-- Answer Slot Area -->
           <div class="duo-word-slots" id="slotArea">
-            <span class="duo-slot-hint">Toca las palabras para armar la frase</span>
+            <span class="duo-slot-hint">Toque nas palavras para montar a frase</span>
           </div>
 
           <!-- Available Word Bank -->
@@ -247,7 +247,7 @@
     function renderSlots() {
       const slotArea = document.getElementById('slotArea');
       if (selectedTokens.length === 0) {
-        slotArea.innerHTML = '<span class="duo-slot-hint">Toca las palabras para armar la frase</span>';
+        slotArea.innerHTML = '<span class="duo-slot-hint">Toque nas palavras para montar a frase</span>';
         document.getElementById('btnAction').disabled = true;
       } else {
         slotArea.innerHTML = selectedTokens.map((item, idx) => `
@@ -291,9 +291,9 @@
         if (window.duoAudio) duoAudio.playSuccess();
         footerDrawer.className = 'duo-footer-drawer correct';
         feedbackIcon.innerText = '✅';
-        feedbackTitle.innerText = '¡Excelente!';
+        feedbackTitle.innerText = 'Incrível!';
         feedbackTitle.style.color = 'var(--duo-green-text)';
-        feedbackDesc.innerText = '¡Has respondido a la perfección!';
+        feedbackDesc.innerText = 'Resposta perfeita!';
         btnAction.innerText = 'CONTINUAR';
         btnAction.className = 'btn-duo btn-duo-green';
       } else {
@@ -304,8 +304,8 @@
 
         footerDrawer.className = 'duo-footer-drawer incorrect';
         feedbackIcon.innerText = '❌';
-        feedbackTitle.innerText = 'Solución correcta:';
-        feedbackTitle.style.color = 'var(--duo-red-dark)';
+        feedbackTitle.innerText = 'Resposta correta:';
+        feedbackTitle.style.color = 'var(--duo-red-text)';
         const correctText = (q.type === 'choice') ? q.options[q.correctIndex] : q.correctSentence;
         feedbackDesc.innerText = correctText;
         btnAction.innerText = 'CONTINUAR';

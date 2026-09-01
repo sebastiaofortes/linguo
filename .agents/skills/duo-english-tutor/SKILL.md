@@ -43,6 +43,17 @@ Sempre que esta skill for ativada ou quando o usuário expressar desejo de criar
 
 ---
 
+### Regra Pedagógica Fundamental: Idioma de Instrução vs. Idioma Alvo
+
+O **Linguo** é um aplicativo de ensino de idiomas para falantes de português. Portanto:
+- **Idioma de Instrução (Metalinguagem / Base):** Sempre em **Português (PT-BR)**.
+  - Títulos da lição, explicações de gramática, balões do mascote Duo, enunciados de exercícios (*"Traduza para o espanhol:"*, *"Complete a frase:"*, *"Qual é a opção correta?"*), mensagens de feedback (*"Incrível! Resposta perfeita."*, *"Atenção à regra..."*) e botões de interface (`VERIFICAR`, `CONTINUAR`, `COMEÇAR PRÁTICA ➔`, `CONTINUAR TRILHA ➔`) devem ser **sempre em Português**.
+- **Idioma Alvo (Prática, Vocabulário & Áudio):** O idioma selecionado no Passo 1:
+  - **Inglês (🇺🇸):** Frases em inglês, banco de palavras em inglês, áudio `duoAudio.speak(phrase, 'en-US')`.
+  - **Espanhol (🇪🇸):** Frases em espanhol, banco de palavras em espanhol, áudio `duoAudio.speak(phrase, 'es-ES')`.
+
+---
+
 ### Passo 2: Gerar a Página de Explicação
 
 Salvar o arquivo na pasta correspondente ao idioma:
@@ -53,14 +64,15 @@ Salvar o arquivo na pasta correspondente ao idioma:
 1. Importar a folha de estilo `../../../resources/duo-theme.css` e o script de áudio `../../../resources/duo-sfx.js`.
 2. Exibir o cabeçalho do Duolingo com o logo do Linguo, badge do idioma ativo (`🇺🇸 Inglês` ou `🇪🇸 Espanhol`), contador de ofensiva (🔥) e gemas (💎).
 3. Botão de fechar (✕) com `onclick="window.location.href='../../../index.html'"`.
-4. Balão de fala com o mascote Duo apresentando a regra de ouro do tema em poucas palavras.
+4. Balão de fala com o mascote Duo apresentando a regra de ouro do tema em português de forma concisa e amigável.
 5. **Cards visuais conceituais (`duo-concept-card`)**:
+   - Explicações teóricas claras em português.
    - Destaques com `duo-highlight` para termos-chave.
-   - Caixas de exemplo com o botão de pronúncia `btn-speaker` chamando:
+   - Caixas de exemplo (`duo-example-box`) com frase no idioma alvo, tradução para português e botão de pronúncia `btn-speaker` chamando:
      - `duoAudio.speak('...', 'en-US')` para inglês.
      - `duoAudio.speak('...', 'es-ES')` para espanhol.
-   - Comparação "Como dizer vs. O que evitar" (Common Pitfalls / Dica do Duo).
-6. Rodapé fixo com botão 3D verde (`btn-duo btn-duo-green`) com link direto para `exercise.html`.
+   - Comparação "Como dizer vs. O que evitar" (`duo-tip-box` ou `duo-comparison-card`).
+6. Rodapé fixo com botão 3D verde (`btn-duo btn-duo-green`) com o texto `COMEÇAR PRÁTICA ➔` e link direto para `exercise.html`.
 
 ---
 
@@ -71,20 +83,22 @@ Salvar o arquivo na pasta correspondente ao idioma:
 - **Espanhol:** `lessons/es/<slug>/exercise.html`
 
 **Requisitos do arquivo de exercícios:**
-1. Estruturar os exercícios no array `questions` em JavaScript:
+1. Enunciados de todas as questões em português (*"Traduza para o espanhol:"*, *"Complete a frase:"*).
+2. Estruturar os exercícios no array `questions` em JavaScript:
    - **Lições Regulares:** 5 exercícios progressivos e balanceados (+25 XP).
    - **Desafios Finais de Unidade (🏆):** Bateria de **50 exercícios de revisão geral** com shuffle Fisher-Yates (+50 XP).
-2. **Tipos de Exercícios Suportados:**
+3. **Tipos de Exercícios Suportados:**
    - **Banco de Palavras (`type: 'word_bank'`):** O aluno clica nas palavras espalhadas (`duo-word-chip`) para construir a frase na ordem certa com som tátil `duoAudio.playTap()`.
    - **Múltipla Escolha (`type: 'choice'`):** Cartões clicáveis (`duo-choice-card`) com 3 opções contextualizadas.
    - **Audição / Pronúncia:** Chamada com áudio nativo `duoAudio.speak(phrase, langCode)`.
-3. **Feedback e Gamificação Obrigatórios:**
+4. **Feedback e Gamificação Obrigatórios:**
    - Barra de progresso suave no topo.
    - Contador de vidas (❤️ 5).
-   - Ao verificar resposta:
-     - Se correto: `duoAudio.playSuccess()`, gaveta inferior verde (`correct`), botão muda para `CONTINUAR`.
-     - Se incorreto: `duoAudio.playError()`, perde 1 vida, gaveta inferior vermelha (`incorrect`) mostrando a resposta certa.
-   - Ao concluir: tela de celebração (`duo-completion-screen`) com XP ganho, precisão e botão para voltar à trilha (`../../../index.html`).
+   - Gaveta inferior de feedback (`duo-footer-drawer`):
+     - Botão inicial: `VERIFICAR` (desabilitado até o aluno selecionar/montar uma resposta).
+     - Se correto: `duoAudio.playSuccess()`, gaveta verde (`correct`), título *"Excelente!"*, botão muda para `CONTINUAR`.
+     - Se incorreto: `duoAudio.playError()`, perde 1 vida, gaveta vermelha (`incorrect`) com explicação em português e botão `CONTINUAR`.
+   - Ao concluir: tela de celebração (`duo-completion-screen`) com XP ganho, precisão e botão para voltar à trilha (`CONTINUAR TRILHA ➔` para `../../../index.html`).
 
 ---
 
