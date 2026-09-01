@@ -171,7 +171,7 @@
           <h2 class="duo-question-prompt">${q.prompt}</h2>
           ${q.audioPhrase ? `
             <div style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-              <button class="btn-speaker" onclick="duoAudio.speak('${q.audioPhrase}', 'es-ES')">🔊</button>
+              <button class="btn-speaker" onclick="speakCurrentQuestion()">🔊</button>
               <span style="font-size: 16px; font-weight: 700; color: var(--duo-gray-700);">Ouvir frase</span>
             </div>
           ` : ''}
@@ -188,7 +188,7 @@
         quizArea.innerHTML = `
           <h2 class="duo-question-prompt">${q.prompt}</h2>
           <div class="duo-bubble-phrase">
-            <button class="btn-speaker" onclick="duoAudio.speak('${q.audioPhrase}', 'es-ES')">🔊</button>
+            <button class="btn-speaker" onclick="speakCurrentQuestion()">🔊</button>
             <span style="font-size: 18px; font-weight: 800;">${q.originalPhrase}</span>
           </div>
 
@@ -200,12 +200,19 @@
           <!-- Available Word Bank -->
           <div class="duo-word-bank" id="bankArea">
             ${q.words.map((w, i) => `
-              <button class="duo-word-chip" id="chip-${i}" onclick="pushWord('${w}', ${i})">${w}</button>
+              <button class="duo-word-chip" id="chip-${i}" onclick="pushWord(${i})">${w}</button>
             `).join('')}
           </div>
         `;
       }
     }
+
+    window.speakCurrentQuestion = function() {
+      const q = questions[currentIdx];
+      if (q && q.audioPhrase && window.duoAudio) {
+        duoAudio.speak(q.audioPhrase, 'es-ES');
+      }
+    };
 
     window.selectChoice = function(index) {
       if (!isChecking) return;
@@ -220,14 +227,16 @@
       document.getElementById('footerPlaceholder').style.display = 'none';
     };
 
-    window.pushWord = function(word, chipId) {
+    window.pushWord = function(chipId) {
       if (!isChecking) return;
       if (window.duoAudio) duoAudio.playTap();
 
       const chip = document.getElementById('chip-' + chipId);
-      if (chip.classList.contains('used')) return;
+      if (!chip || chip.classList.contains('used')) return;
       chip.classList.add('used');
 
+      const q = questions[currentIdx];
+      const word = q.words[chipId];
       selectedTokens.push({ word, chipId });
       renderSlots();
     };
