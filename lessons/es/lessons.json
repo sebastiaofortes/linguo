@@ -46,6 +46,16 @@
           "icon": "🔗",
           "theoryUrl": "lessons/es/preposiciones-espanol/explanation.html",
           "exerciseUrl": "lessons/es/preposiciones-espanol/exercise.html",
+          "status": "completed",
+          "date": "2026-09-01"
+        },
+        {
+          "id": "sustantivacion-adjetivos",
+          "title": "Substantivação de Adjetivos",
+          "subtitle": "Como transformar qualidades em conceitos com LO e objetos específicos com EL/LA.",
+          "icon": "✨",
+          "theoryUrl": "lessons/es/sustantivacion-adjetivos/explanation.html",
+          "exerciseUrl": "lessons/es/sustantivacion-adjetivos/exercise.html",
           "status": "active",
           "date": "2026-09-01"
         }
