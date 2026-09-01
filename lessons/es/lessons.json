@@ -26,6 +26,16 @@
           "icon": "🧠",
           "theoryUrl": "lessons/es/ser-estar-basico/explanation.html",
           "exerciseUrl": "lessons/es/ser-estar-basico/exercise.html",
+          "status": "completed",
+          "date": "2026-09-01"
+        },
+        {
+          "id": "articulos-definidos-indefinidos",
+          "title": "Artigos em Espanhol",
+          "subtitle": "Artigos definidos (el, la, los, las), indefinidos (un, una), contrações (al, del) e o neutro lo.",
+          "icon": "📦",
+          "theoryUrl": "lessons/es/articulos-definidos-indefinidos/explanation.html",
+          "exerciseUrl": "lessons/es/articulos-definidos-indefinidos/exercise.html",
           "status": "active",
           "date": "2026-09-01"
         }
