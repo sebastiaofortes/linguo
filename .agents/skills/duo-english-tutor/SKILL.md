@@ -89,7 +89,8 @@ Salvar o arquivo na pasta correspondente ao idioma:
    - **Desafios Finais de Unidade (🏆):** Bateria de **50 exercícios de revisão geral** com shuffle Fisher-Yates (+50 XP).
 3. **Tipos de Exercícios Suportados:**
    - **Banco de Palavras (`type: 'word_bank'`):** O aluno clica nas palavras espalhadas (`duo-word-chip`) para construir a frase na ordem certa com som tátil `duoAudio.playTap()`.
-   - **Múltipla Escolha (`type: 'choice'`):** Cartões clicáveis (`duo-choice-card`) com 3 opções contextualizadas.
+   - **Múltipla Escolha & Tradução (`type: 'choice'`):** Cartões clicáveis (`duo-choice-card`) com 3 opções contextualizadas.
+   - **Perguntas Conceituais & Metalinguísticas (`type: 'choice'` - Compreensão da Regra):** Questões que avaliam o *porquê* de uma regra ou estrutura (ex: *"Por que usamos 'lo' na frase 'Lo importante es praticar'?"*, *"Por que usamos 'por' e não 'para' nesta frase?"*, *"Qual é a função do 'A pessoal' aqui?"*). Esse formato fixa a lógica do idioma e previne erros comuns decorrentes da tradução literal do português.
    - **Audição / Pronúncia:** Chamada com áudio nativo `duoAudio.speak(phrase, langCode)`.
 4. **Feedback e Gamificação Obrigatórios:**
    - Barra de progresso suave no topo.
