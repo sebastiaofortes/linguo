@@ -48,7 +48,7 @@
       "title": "Present Simple & Rotinas",
       "description": "Prática aprofundada de rotinas, hábitos e conjugação afirmativa",
       "color": "blue",
-      "badgeText": "TRILHA ATIVA",
+      "badgeText": "✓ CONCLUÍDA",
       "lessons": [
         {
           "id": "present-simple-affirmative",
@@ -107,8 +107,49 @@
           "icon": "🏆",
           "theoryUrl": "lessons/en/unit-2-challenge/explanation.html",
           "exerciseUrl": "lessons/en/unit-2-challenge/exercise.html",
-          "status": "active",
+          "status": "completed",
           "date": "2026-08-31"
+        }
+      ]
+    },
+    {
+      "id": "unit-3",
+      "number": 3,
+      "section": 1,
+      "title": "Simple Past: Histórias & Memórias",
+      "description": "Ações concluídas, verbos regulares (-ed), irregulares essenciais, negações com Didn't e perguntas com Did",
+      "color": "purple",
+      "badgeText": "TRILHA ATIVA",
+      "lessons": [
+        {
+          "id": "past-simple-affirmative",
+          "title": "Afirmações no Simple Past",
+          "subtitle": "Verbos regulares (-ed, -ied), verbos irregulares comuns (went, bought, ate) e marcadores de tempo.",
+          "icon": "🕰️",
+          "theoryUrl": "lessons/en/past-simple-affirmative/explanation.html",
+          "exerciseUrl": "lessons/en/past-simple-affirmative/exercise.html",
+          "status": "completed",
+          "date": "2026-09-01"
+        },
+        {
+          "id": "past-simple-negative",
+          "title": "Negações com Didn't",
+          "subtitle": "Como negar no passado e a regra de ouro: o verbo principal volta para a forma base.",
+          "icon": "🚫",
+          "theoryUrl": "lessons/en/past-simple-negative/explanation.html",
+          "exerciseUrl": "lessons/en/past-simple-negative/exercise.html",
+          "status": "completed",
+          "date": "2026-09-01"
+        },
+        {
+          "id": "past-simple-questions",
+          "title": "Perguntas com Did",
+          "subtitle": "Estrutura interrogativa no passado, Wh- questions (Where, What, When) e Short Answers.",
+          "icon": "❓",
+          "theoryUrl": "lessons/en/past-simple-questions/explanation.html",
+          "exerciseUrl": "lessons/en/past-simple-questions/exercise.html",
+          "status": "active",
+          "date": "2026-09-01"
         }
       ]
     }
