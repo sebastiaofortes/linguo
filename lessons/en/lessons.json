@@ -148,6 +148,16 @@
           "icon": "❓",
           "theoryUrl": "lessons/en/past-simple-questions/explanation.html",
           "exerciseUrl": "lessons/en/past-simple-questions/exercise.html",
+          "status": "completed",
+          "date": "2026-09-01"
+        },
+        {
+          "id": "past-simple-to-be",
+          "title": "Verbo To Be: Was & Were",
+          "subtitle": "A grande exceção do passado: Was, Were, Wasn't, Weren't e perguntas por inversão sem Did.",
+          "icon": "👑",
+          "theoryUrl": "lessons/en/past-simple-to-be/explanation.html",
+          "exerciseUrl": "lessons/en/past-simple-to-be/exercise.html",
           "status": "active",
           "date": "2026-09-01"
         }
