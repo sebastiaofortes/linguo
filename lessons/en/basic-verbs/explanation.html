@@ -99,9 +99,9 @@
           <div style="font-size: 20px; font-weight: 900; color: var(--duo-green);">He / She / It is</div>
           <div style="font-size: 12px; color: var(--duo-gray-700);">Ele(a) é / está</div>
         </div>
-        <div style="background: #fff4d3; padding: 12px; border-radius: var(--duo-radius-md); text-align: center;">
-          <div style="font-size: 14px; font-weight: 800; color: var(--duo-yellow-shadow);">VOCÊ / NÓS / ELES</div>
-          <div style="font-size: 20px; font-weight: 900; color: var(--duo-orange);">You / We / They are</div>
+        <div style="background: var(--duo-yellow-light); padding: 12px; border-radius: var(--duo-radius-md); text-align: center;">
+          <div style="font-size: 14px; font-weight: 800; color: var(--duo-yellow-text);">VOCÊ / NÓS / ELES</div>
+          <div style="font-size: 20px; font-weight: 900; color: var(--duo-yellow-text);">You / We / They are</div>
           <div style="font-size: 12px; color: var(--duo-gray-700);">Você é / somos / são</div>
         </div>
       </div>
@@ -153,32 +153,32 @@
     </div>
 
     <!-- Card 3: A Regra de Ouro do "S" -->
-    <div class="duo-concept-card" style="border: 2px solid var(--duo-green-border); background: #fafff5;">
+    <div class="duo-concept-card" style="border-left: 6px solid var(--duo-green);">
       <div class="duo-concept-header">
         <span class="duo-badge" style="background: var(--duo-green); box-shadow: 0 2px 0 var(--duo-green-shadow);">3. REGRA DE OURO</span>
-        <h3 style="font-size: 20px; font-weight: 800; color: var(--duo-green-text);">A 3ª Pessoa: Ele / Ela (He, She, It) + S</h3>
+        <h3 style="font-size: 20px; font-weight: 800; color: var(--duo-gray-900);">A 3ª Pessoa: Ele / Ela (He, She, It) + S</h3>
       </div>
-      <p style="margin-bottom: 12px; font-weight: 700; color: var(--duo-gray-900);">
+      <p style="margin-bottom: 12px; font-weight: 700;">
         Esta é a regra mais importante do inglês básico: Quando você fala de <span class="duo-highlight">He</span> (ele), <span class="duo-highlight">She</span> (ela) ou <span class="duo-highlight">It</span> (objeto/animal), adicione um <strong>-S</strong> ao final do verbo!
       </p>
 
       <div style="display: flex; gap: 12px; margin: 16px 0; flex-wrap: wrap;">
-        <div style="flex: 1; min-width: 140px; background: white; padding: 12px; border-radius: var(--duo-radius-md); border: 2px solid var(--duo-gray-200); text-align: center;">
+        <div class="duo-comparison-card" style="flex: 1; min-width: 140px; text-align: center;">
           <div style="color: var(--duo-gray-400); font-weight: 800; font-size: 13px;">I / YOU / WE / THEY</div>
           <div style="font-size: 18px; font-weight: 900; color: var(--duo-gray-900);">work</div>
           <div style="font-size: 18px; font-weight: 900; color: var(--duo-gray-900);">speak</div>
           <div style="font-size: 18px; font-weight: 900; color: var(--duo-gray-900);">like</div>
         </div>
         <div style="display: flex; align-items: center; font-size: 24px; font-weight: 900; color: var(--duo-green);">➔</div>
-        <div style="flex: 1; min-width: 140px; background: white; padding: 12px; border-radius: var(--duo-radius-md); border: 2px solid var(--duo-green); text-align: center; box-shadow: 0 3px 0 var(--duo-green-border);">
-          <div style="color: var(--duo-green); font-weight: 800; font-size: 13px;">HE / SHE / IT</div>
+        <div class="duo-comparison-card" style="flex: 1; min-width: 140px; text-align: center; border-color: var(--duo-green);">
+          <div style="color: var(--duo-green-text); font-weight: 800; font-size: 13px;">HE / SHE / IT</div>
           <div style="font-size: 18px; font-weight: 900; color: var(--duo-green-text);">work<span style="color: var(--duo-red);">s</span></div>
           <div style="font-size: 18px; font-weight: 900; color: var(--duo-green-text);">speak<span style="color: var(--duo-red);">s</span></div>
           <div style="font-size: 18px; font-weight: 900; color: var(--duo-green-text);">like<span style="color: var(--duo-red);">s</span></div>
         </div>
       </div>
 
-      <div class="duo-example-box" style="background: white; border: 1px solid var(--duo-green-border);">
+      <div class="duo-example-box">
         <div>
           <span style="font-size: 17px; font-weight: 800; color: var(--duo-gray-900);">"She speaks English very well."</span>
           <div style="font-size: 13px; color: var(--duo-gray-400); font-weight: 700;">Ela fala inglês muito bem.</div>
@@ -186,7 +186,7 @@
         <button class="btn-speaker" onclick="duoAudio.speak('She speaks English very well.')">🔊</button>
       </div>
 
-      <div class="duo-example-box" style="background: white; border: 1px solid var(--duo-green-border);">
+      <div class="duo-example-box">
         <div>
           <span style="font-size: 17px; font-weight: 800; color: var(--duo-gray-900);">"He works at a hospital."</span>
           <div style="font-size: 13px; color: var(--duo-gray-400); font-weight: 700;">Ele trabalha em um hospital.</div>

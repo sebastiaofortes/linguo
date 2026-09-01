@@ -17,6 +17,8 @@
 
   --duo-yellow: #ffc800;
   --duo-yellow-shadow: #e5a400;
+  --duo-yellow-light: #fff8d6;
+  --duo-yellow-text: #b88600;
 
   --duo-orange: #ff9600;
   --duo-orange-shadow: #e58200;
@@ -68,6 +70,8 @@
   --duo-purple-light: #38194a;
   --duo-red-light: #3e191c;
   --duo-teal-light: #133a32;
+  --duo-yellow-light: #3d3413;
+  --duo-yellow-text: #ffd533;
 }
 
 * {
@@ -124,18 +128,32 @@ body {
 [data-theme="dark"] .duo-stat-card,
 [data-theme="dark"] .duo-quest-card,
 [data-theme="dark"] .duo-achievement-item {
-  background: #18272f;
-  border-color: #283d47;
+  background: #18272f !important;
+  border-color: #283d47 !important;
   box-shadow: 0 4px 0 #283d47;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .duo-concept-card h3 {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .duo-concept-card p {
+  color: var(--duo-gray-700) !important;
 }
 
 [data-theme="dark"] .duo-example-box {
-  background: #131f24;
-  border-color: #283d47;
+  background: #131f24 !important;
+  border-color: #283d47 !important;
 }
 
+[data-theme="dark"] .duo-example-box span,
 [data-theme="dark"] .duo-example-box strong {
   color: #ffffff !important;
+}
+
+[data-theme="dark"] .duo-example-box .duo-translation {
+  color: var(--duo-gray-400) !important;
 }
 
 [data-theme="dark"] .duo-contrast-item.theme-green {
@@ -146,6 +164,30 @@ body {
 [data-theme="dark"] .duo-contrast-item.theme-blue {
   background: rgba(28, 176, 246, 0.15);
   color: #49c0f8;
+}
+
+[data-theme="dark"] .duo-tip-box {
+  background: rgba(255, 200, 0, 0.12) !important;
+  border-left-color: var(--duo-yellow) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .duo-tip-box strong {
+  color: #ffd533 !important;
+}
+
+[data-theme="dark"] .duo-comparison-card {
+  background: #131f24 !important;
+  border-color: #283d47 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .duo-comparison-card div {
+  color: var(--duo-gray-700) !important;
+}
+
+[data-theme="dark"] .duo-comparison-card strong {
+  color: #ffffff !important;
 }
 
 [data-theme="dark"] .duo-popover {
@@ -713,6 +755,25 @@ body {
 .duo-contrast-item.theme-blue {
   background: var(--duo-blue-light);
   color: var(--duo-blue-shadow);
+}
+
+.duo-tip-box {
+  background: var(--duo-yellow-light);
+  border-left: 4px solid var(--duo-yellow);
+  padding: 12px 16px;
+  border-radius: 0 var(--duo-radius-md) var(--duo-radius-md) 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--duo-gray-900);
+  margin-top: 14px;
+}
+
+.duo-comparison-card {
+  background: #ffffff;
+  border: 2px solid var(--duo-gray-200);
+  padding: 14px;
+  border-radius: var(--duo-radius-md);
+  box-sizing: border-box;
 }
 
 .duo-highlight {

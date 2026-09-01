@@ -779,7 +779,7 @@
       const topicsContainer = document.getElementById('tutorTopicsContainer');
       if (topicsContainer && course.tutorTopics) {
         topicsContainer.innerHTML = course.tutorTopics.map(t => `
-          <div style="background: #ffffff; border: 2px solid var(--duo-gray-200); border-radius: var(--duo-radius-lg); padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 3px 0 var(--duo-gray-200);">
+          <div class="duo-widget" style="padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
             <div style="display: flex; align-items: center; gap: 14px;">
               <span style="font-size: 28px;">${t.icon}</span>
               <div>
