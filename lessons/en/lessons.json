@@ -158,6 +158,16 @@
           "icon": "👑",
           "theoryUrl": "lessons/en/past-simple-to-be/explanation.html",
           "exerciseUrl": "lessons/en/past-simple-to-be/exercise.html",
+          "status": "completed",
+          "date": "2026-09-01"
+        },
+        {
+          "id": "unit-3-challenge",
+          "title": "Desafio de Ouro: Simple Past",
+          "subtitle": "20 exercícios aleatorizados com Fisher-Yates cobrindo toda a Unidade 3 (+50 XP).",
+          "icon": "🏆",
+          "theoryUrl": "lessons/en/unit-3-challenge/explanation.html",
+          "exerciseUrl": "lessons/en/unit-3-challenge/exercise.html",
           "status": "active",
           "date": "2026-09-01"
         }
