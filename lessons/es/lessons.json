@@ -36,6 +36,16 @@
           "icon": "📦",
           "theoryUrl": "lessons/es/articulos-definidos-indefinidos/explanation.html",
           "exerciseUrl": "lessons/es/articulos-definidos-indefinidos/exercise.html",
+          "status": "completed",
+          "date": "2026-09-01"
+        },
+        {
+          "id": "preposiciones-espanol",
+          "title": "Preposições em Espanhol",
+          "subtitle": "Por vs. Para, localização estática (en), o 'A pessoal' e formas especiais (conmigo/contigo).",
+          "icon": "🔗",
+          "theoryUrl": "lessons/es/preposiciones-espanol/explanation.html",
+          "exerciseUrl": "lessons/es/preposiciones-espanol/exercise.html",
           "status": "active",
           "date": "2026-09-01"
         }
