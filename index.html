@@ -829,20 +829,20 @@
               <div class="duo-course-flag-wrapper">
                 <span>${c.flag}</span>
               </div>
-              <div>
-                <div class="duo-course-title">${c.name} (${c.nativeName})</div>
-                <div class="duo-course-sub">${c.units.length} ${c.units.length === 1 ? 'unidade' : 'unidades'} • ${totalLessons} ${totalLessons === 1 ? 'lição' : 'lições'}</div>
+              <div style="min-width: 0;">
+                <div class="duo-course-title">${c.name}</div>
+                <div class="duo-course-sub">${c.nativeName} • ${c.units.length} ${c.units.length === 1 ? 'unidade' : 'unidades'} • ${totalLessons} ${totalLessons === 1 ? 'lição' : 'lições'}</div>
               </div>
             </div>
-            <div>
+            <div style="flex-shrink: 0;">
               ${isCurrent ? `
                 <div class="duo-course-badge">
                   ✓ ATIVO
                 </div>
               ` : `
-                <button class="btn-duo btn-duo-secondary" style="padding: 8px 14px; font-size: 12px;" onclick="event.stopPropagation(); selectLanguage('${key}')">
-                  SELECIONAR
-                </button>
+                <div class="duo-course-action-icon" title="Trocar para ${c.name}">
+                  ➔
+                </div>
               `}
             </div>
           </div>
