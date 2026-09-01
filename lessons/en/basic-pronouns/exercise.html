@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{TOPIC_TITLE}} - Exercícios | Linguo</title>
+  <title>O Básico dos Pronomes em Inglês - Exercícios | Linguo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
@@ -14,7 +14,7 @@
 
   <!-- Top Progress Bar with Lives -->
   <div class="duo-progress-container">
-    <button class="btn-close" onclick="if(confirm('Deseja sair da lição?')) window.location.href='explanation.html'">✕</button>
+    <button class="btn-close" onclick="if(confirm('Deseja sair da lição?')) window.location.href='../../../index.html'" title="Voltar à trilha">✕</button>
     <div class="duo-progress-track">
       <div class="duo-progress-fill" id="progressBar" style="width: 10%;"></div>
     </div>
@@ -51,7 +51,7 @@
           </svg>
         </div>
         <div class="duo-bubble" id="mascotBubbleText">
-          Traduza esta frase:
+          Complete o exercício:
         </div>
       </div>
 
@@ -68,8 +68,8 @@
     <!-- Completion Screen (Shown when done) -->
     <div id="completionScreen" class="duo-completion-screen">
       <div style="font-size: 72px; margin-bottom: 12px;">🎉</div>
-      <h1 class="duo-title" style="font-size: 36px; color: var(--duo-green);">Lição Concluída!</h1>
-      <p class="duo-subtitle">Você mandou muito bem e fixou o conteúdo de hoje.</p>
+      <h1 class="duo-title" style="font-size: 36px; color: var(--duo-green);">Pronomes Dominados!</h1>
+      <p class="duo-subtitle">Você diferenciou sujeito, objeto e posse perfeitamente.</p>
 
       <div class="duo-streak-banner">
         <div>
@@ -78,7 +78,7 @@
         </div>
         <div>
           <div style="font-size: 14px; font-weight: 800; opacity: 0.9;">OFENSIVA</div>
-          <div style="font-size: 32px; font-weight: 900;">🔥 1 DIA</div>
+          <div style="font-size: 32px; font-weight: 900;">🔥 3 DIAS</div>
         </div>
         <div>
           <div style="font-size: 14px; font-weight: 800; opacity: 0.9;">PRECISÃO</div>
@@ -86,9 +86,9 @@
         </div>
       </div>
 
-      <div style="display: flex; gap: 16px; justify-content: center; margin-top: 32px;">
+      <div style="display: flex; gap: 16px; justify-content: center; margin-top: 32px; flex-wrap: wrap;">
         <a href="explanation.html" class="btn-duo btn-duo-secondary">REVISAR TEORIA</a>
-        <button class="btn-duo btn-duo-green" onclick="window.location.reload()">PRATICAR NOVAMENTE</button>
+        <a href="../../../index.html" class="btn-duo btn-duo-green">CONTINUAR TRILHA ➔</a>
       </div>
     </div>
 
@@ -111,8 +111,71 @@
   </footer>
 
   <script>
-    // Injected questions data
-    const questions = {{QUESTIONS_JSON}};
+    const questions = [
+      {
+        id: 1,
+        type: 'word_bank',
+        title: 'Monte a frase com o pronome objeto:',
+        promptText: "Monte a frase: <strong>'Você pode me ajudar?'</strong>",
+        bank: ["Can", "you", "help", "me", "I", "him", "please", "she"],
+        correctAnswer: "Can you help me",
+        correctDisplay: "Can you help me?",
+        successTip: "Perfeito! 'Help' é verbo, logo usamos o pronome objeto 'me' (e não 'I')!"
+      },
+      {
+        id: 2,
+        type: 'choice',
+        title: 'Complete com o pronome certo:',
+        promptText: "Eu amo minha irmã. Eu ligo para ela todos os dias:<br><strong>'I love my sister. I call _____ every day.'</strong>",
+        options: [
+          { id: "1", text: "her" },
+          { id: "2", text: "she" },
+          { id: "3", text: "his" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "her",
+        successTip: "Mandou bem! Para ela recebendo a ação (depois do verbo call), usamos 'her'!"
+      },
+      {
+        id: 3,
+        type: 'choice',
+        title: 'Exercício de Audição:',
+        promptText: "Ouça a frase em inglês e escolha o significado correto:",
+        audioText: "This is our new house.",
+        options: [
+          { id: "1", text: "Esta é a nossa nova casa." },
+          { id: "2", text: "Esta é a casa deles." },
+          { id: "3", text: "Esta é a minha casa nova." }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Esta é a nossa nova casa.",
+        successTip: "Excelente escuta! 'Our' é o possessivo correspondente a 'nós' (nossa)!"
+      },
+      {
+        id: 4,
+        type: 'word_bank',
+        title: 'Monte a frase com pronome após preposição:',
+        promptText: "Monte a frase: <strong>'Ele mora com eles.'</strong>",
+        bank: ["He", "lives", "with", "them", "they", "she", "us", "together"],
+        correctAnswer: "He lives with them",
+        correctDisplay: "He lives with them",
+        successTip: "Sensacional! Depois da preposição 'with', usamos o pronome objeto 'them' (e nunca 'they')!"
+      },
+      {
+        id: 5,
+        type: 'choice',
+        title: 'Desafio de Possessivos:',
+        promptText: "Complete a frase: <strong>'_____ car is red, but _____ car is blue.'</strong><br>(O carro <em>dele</em> é vermelho, mas o <em>meu</em> carro é azul.)",
+        options: [
+          { id: "1", text: "His / my" },
+          { id: "2", text: "He / me" },
+          { id: "3", text: "Him / I" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "His / my",
+        successTip: "Show de bola! 'His' (dele) e 'My' (meu) são os adjetivos possessivos antes do substantivo!"
+      }
+    ];
 
     let currentIndex = 0;
     let selectedAnswer = null;
@@ -150,7 +213,7 @@
 
       const q = questions[currentIndex];
       const progressPercent = Math.round(((currentIndex) / questions.length) * 100);
-      progressBar.style.width = Math.max(8, progressPercent) + '%';
+      progressBar.style.width = Math.max(10, progressPercent) + '%';
 
       questionPrompt.innerText = q.title || 'Complete a atividade:';
       mascotBubbleText.innerHTML = q.promptText;
@@ -159,8 +222,9 @@
       if (q.audioText) {
         audioPromptContainer.style.display = 'block';
         window.currentAudioText = q.audioText;
-        // Pronounce automatically on start
-        setTimeout(() => duoAudio.speak(q.audioText), 400);
+        setTimeout(() => {
+          if (window.duoAudio) duoAudio.speak(q.audioText);
+        }, 300);
       } else {
         audioPromptContainer.style.display = 'none';
       }
@@ -316,7 +380,7 @@
       duoAudio.playSuccess();
     }
 
-    // Initialize first question
+    // Start with the first question
     renderQuestion();
   </script>
 </body>

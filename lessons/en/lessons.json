@@ -1,0 +1,116 @@
+{
+  "units": [
+    {
+      "id": "unit-1",
+      "number": 1,
+      "section": 1,
+      "title": "Fundamentos do Inglês",
+      "description": "Verbos essenciais, rotina diária e pronomes",
+      "color": "green",
+      "badgeText": "✓ CONCLUÍDA",
+      "lessons": [
+        {
+          "id": "basic-verbs",
+          "title": "O Básico dos Verbos",
+          "subtitle": "Verbo To Be, rotina e a regra de ouro do 'S' na 3ª pessoa.",
+          "icon": "⭐",
+          "theoryUrl": "lessons/en/basic-verbs/explanation.html",
+          "exerciseUrl": "lessons/en/basic-verbs/exercise.html",
+          "status": "completed",
+          "date": "2026-08-30"
+        },
+        {
+          "id": "present-simple",
+          "title": "Present Simple Geral",
+          "subtitle": "Visão geral: Afirmação, Negação (Don't / Doesn't) e Perguntas (Do / Does).",
+          "icon": "⚡",
+          "theoryUrl": "lessons/en/present-simple/explanation.html",
+          "exerciseUrl": "lessons/en/present-simple/exercise.html",
+          "status": "completed",
+          "date": "2026-08-30"
+        },
+        {
+          "id": "basic-pronouns",
+          "title": "O Básico dos Pronomes",
+          "subtitle": "Pronomes Sujeito (I, He), Objeto (me, him) e Possessivos (my, his).",
+          "icon": "👤",
+          "theoryUrl": "lessons/en/basic-pronouns/explanation.html",
+          "exerciseUrl": "lessons/en/basic-pronouns/exercise.html",
+          "status": "completed",
+          "date": "2026-08-30"
+        }
+      ]
+    },
+    {
+      "id": "unit-2",
+      "number": 2,
+      "section": 1,
+      "title": "Present Simple & Rotinas",
+      "description": "Prática aprofundada de rotinas, hábitos e conjugação afirmativa",
+      "color": "blue",
+      "badgeText": "TRILHA ATIVA",
+      "lessons": [
+        {
+          "id": "present-simple-affirmative",
+          "title": "Afirmações no Present Simple",
+          "subtitle": "Rotina diária, ações habituais e as regras de -s, -es e -ies para He/She/It.",
+          "icon": "✍️",
+          "theoryUrl": "lessons/en/present-simple-affirmative/explanation.html",
+          "exerciseUrl": "lessons/en/present-simple-affirmative/exercise.html",
+          "status": "completed",
+          "date": "2026-08-31"
+        },
+        {
+          "id": "verbs-have-go-do",
+          "title": "Os Super Verbos: Have, Go & Do",
+          "subtitle": "Has, goes, does e as expressões mais usadas na rotina diária em inglês.",
+          "icon": "⚡",
+          "theoryUrl": "lessons/en/verbs-have-go-do/explanation.html",
+          "exerciseUrl": "lessons/en/verbs-have-go-do/exercise.html",
+          "status": "completed",
+          "date": "2026-08-31"
+        },
+        {
+          "id": "present-simple-negative",
+          "title": "Negações no Present Simple",
+          "subtitle": "Como negar hábitos e rotinas usando Don't e Doesn't sem medo de errar.",
+          "icon": "🚫",
+          "theoryUrl": "lessons/en/present-simple-negative/explanation.html",
+          "exerciseUrl": "lessons/en/present-simple-negative/exercise.html",
+          "status": "completed",
+          "date": "2026-08-31"
+        },
+        {
+          "id": "present-simple-questions",
+          "title": "Perguntas no Present Simple",
+          "subtitle": "Como fazer perguntas usando Do e Does, e dar respostas curtas (Short Answers).",
+          "icon": "❓",
+          "theoryUrl": "lessons/en/present-simple-questions/explanation.html",
+          "exerciseUrl": "lessons/en/present-simple-questions/exercise.html",
+          "status": "completed",
+          "date": "2026-08-31"
+        },
+        {
+          "id": "to-be-questions",
+          "title": "Perguntas com o Verbo To Be",
+          "subtitle": "Inversão direta com Am, Is e Are, perguntas de viagem e Short Answers.",
+          "icon": "👑",
+          "theoryUrl": "lessons/en/to-be-questions/explanation.html",
+          "exerciseUrl": "lessons/en/to-be-questions/exercise.html",
+          "status": "completed",
+          "date": "2026-08-31"
+        },
+        {
+          "id": "unit-2-challenge",
+          "title": "Desafio Final: 50 Questões",
+          "subtitle": "Super bateria aleatória de 50 exercícios de revisão geral para coroar a Unidade 2.",
+          "icon": "🏆",
+          "theoryUrl": "lessons/en/unit-2-challenge/explanation.html",
+          "exerciseUrl": "lessons/en/unit-2-challenge/exercise.html",
+          "status": "active",
+          "date": "2026-08-31"
+        }
+      ]
+    }
+  ]
+}

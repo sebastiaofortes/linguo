@@ -28,9 +28,10 @@
     </a>
 
     <div class="duo-stats">
-      <div class="duo-lang-badge" title="Idioma em estudo">
-        <span>🇺🇸</span>
-        <span class="lang-text">Inglês</span>
+      <div class="duo-lang-badge" id="headerLangBadge" onclick="openCourseModal()" title="Trocar curso / idioma (Inglês ou Espanhol)">
+        <span id="headerLangFlag">🇺🇸</span>
+        <span class="lang-text" id="headerLangName">Inglês</span>
+        <span style="font-size: 10px; opacity: 0.65; margin-left: 2px;">▼</span>
       </div>
 
       <div class="duo-stat-item duo-stat-fire" title="Ofensiva diária" onclick="switchTab('stats')" style="cursor: pointer;">
@@ -163,10 +164,10 @@
         </div>
         <div style="flex: 1;">
           <div style="display: flex; align-items: center; justify-content: space-between;">
-            <h2 style="font-size: 24px; font-weight: 900; color: var(--duo-gray-900);">Estudante de Inglês</h2>
-            <span class="duo-badge" style="background: var(--duo-green);">NÍVEL BÁSICO A1-A2</span>
+            <h2 id="profileStudentTitle" style="font-size: 24px; font-weight: 900; color: var(--duo-gray-900);">Estudante de Inglês</h2>
+            <span id="profileLevelBadge" class="duo-badge" style="background: var(--duo-green);">NÍVEL BÁSICO A1-A2</span>
           </div>
-          <p style="font-size: 14px; font-weight: 700; color: var(--duo-gray-400); margin-top: 2px;">
+          <p id="profileSubtitle" style="font-size: 14px; font-weight: 700; color: var(--duo-gray-400); margin-top: 2px;">
             🇺🇸 Aprendendo Inglês • No Linguo desde Agosto 2026
           </p>
         </div>
@@ -240,7 +241,7 @@
         <div class="duo-stat-card">
           <div class="duo-stat-card-icon" style="color: var(--duo-blue);">📚</div>
           <div>
-            <div class="duo-stat-card-value">8</div>
+            <div class="duo-stat-card-value" id="profileLessonsCount">9</div>
             <div class="duo-stat-card-label">Lições Criadas</div>
           </div>
         </div>
@@ -329,7 +330,7 @@
             <polygon points="40,38 33,45 47,45" fill="#FF9600"/>
           </svg>
         </div>
-        <div class="duo-bubble">
+        <div class="duo-bubble" id="tutorBubbleMessage">
           Olá! Eu sou o seu <strong>Duo Tutor</strong> de inglês! 🦉💬<br>
           Qualquer assunto que você quiser aprender, basta me pedir no chat e eu crio a lição completa com áudios e exercícios diretamente na sua trilha!
         </div>
@@ -344,53 +345,15 @@
           <span class="duo-code-badge" style="font-size: 14px; display: inline-block; margin-top: 6px;">/duo-english-tutor</span>
         </p>
         <p style="font-size: 13px; color: var(--duo-gray-700); margin-bottom: 0;">
-          Diga o tema que deseja praticar e a nova aula será automaticamente adicionada à sua trilha!
+          Diga se deseja a aula em <strong>Inglês</strong> ou <strong>Espanhol</strong> e o tema de foco!
         </p>
       </div>
 
       <!-- Suggested Next Topics -->
       <h3 style="font-size: 20px; font-weight: 900; color: var(--duo-gray-900); margin-bottom: 14px;">Sugestões de Tópicos para Praticar:</h3>
       
-      <div style="display: flex; flex-direction: column; gap: 12px;">
-        <div style="background: #ffffff; border: 2px solid var(--duo-gray-200); border-radius: var(--duo-radius-lg); padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 3px 0 var(--duo-gray-200);">
-          <div style="display: flex; align-items: center; gap: 14px;">
-            <span style="font-size: 28px;">☕</span>
-            <div>
-              <h4 style="font-size: 16px; font-weight: 800; color: var(--duo-gray-900);">Conversação & Cafeteria</h4>
-              <p style="font-size: 13px; font-weight: 600; color: var(--duo-gray-400);">Como fazer pedidos e pagamentos em restaurantes</p>
-            </div>
-          </div>
-        </div>
-
-        <div style="background: #ffffff; border: 2px solid var(--duo-gray-200); border-radius: var(--duo-radius-lg); padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 3px 0 var(--duo-gray-200);">
-          <div style="display: flex; align-items: center; gap: 14px;">
-            <span style="font-size: 28px;">✈️</span>
-            <div>
-              <h4 style="font-size: 16px; font-weight: 800; color: var(--duo-gray-900);">Viagem & Aeroporto</h4>
-              <p style="font-size: 13px; font-weight: 600; color: var(--duo-gray-400);">Check-in, bagagens, hotel e pedir direções</p>
-            </div>
-          </div>
-        </div>
-
-        <div style="background: #ffffff; border: 2px solid var(--duo-gray-200); border-radius: var(--duo-radius-lg); padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 3px 0 var(--duo-gray-200);">
-          <div style="display: flex; align-items: center; gap: 14px;">
-            <span style="font-size: 28px;">💼</span>
-            <div>
-              <h4 style="font-size: 16px; font-weight: 800; color: var(--duo-gray-900);">Business English</h4>
-              <p style="font-size: 13px; font-weight: 600; color: var(--duo-gray-400);">Apresentação pessoal em entrevistas e reuniões</p>
-            </div>
-          </div>
-        </div>
-
-        <div style="background: #ffffff; border: 2px solid var(--duo-gray-200); border-radius: var(--duo-radius-lg); padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 3px 0 var(--duo-gray-200);">
-          <div style="display: flex; align-items: center; gap: 14px;">
-            <span style="font-size: 28px;">🧠</span>
-            <div>
-              <h4 style="font-size: 16px; font-weight: 800; color: var(--duo-gray-900);">Simple Past</h4>
-              <p style="font-size: 13px; font-weight: 600; color: var(--duo-gray-400);">Verbos regulares (-ed) e os primeiros verbos irregulares no passado</p>
-            </div>
-          </div>
-        </div>
+      <div id="tutorTopicsContainer" style="display: flex; flex-direction: column; gap: 12px;">
+        <!-- Rendered dynamically by updateTutorTab() -->
       </div>
 
     </div>
@@ -449,136 +412,235 @@
 
   </nav>
 
+  <!-- ============================================================
+       COURSE SELECTION MODAL (SELECTOR DE CURSOS E IDIOMAS)
+       ============================================================ -->
+  <div id="courseModalOverlay" class="duo-modal-overlay" onclick="closeCourseModal(event)">
+    <div class="duo-course-modal-box" onclick="event.stopPropagation()">
+      <div class="duo-course-modal-header">
+        <div>
+          <h2>Meus Cursos</h2>
+          <p style="font-size: 14px; font-weight: 700; color: var(--duo-gray-400); margin-top: 4px;">
+            Escolha o idioma que deseja praticar hoje:
+          </p>
+        </div>
+        <button class="btn-close" onclick="closeCourseModal()" title="Fechar">✕</button>
+      </div>
+
+      <div class="duo-course-list" id="courseListContainer">
+        <!-- Rendered dynamically by renderCourseModal() -->
+      </div>
+    </div>
+  </div>
+
   <script>
     /**
-     * UNITS & LESSONS REGISTRY DATA
-     * Sincronizado automaticamente com lessons/lessons.json
+     * MULTI-COURSE & LESSONS REGISTRY DATA
+     * Sincronizado automaticamente com lessons/en/lessons.json e lessons/es/lessons.json
      */
-    const UNITS_DATA = {
-      units: [
-        {
-          id: "unit-1",
-          number: 1,
-          section: 1,
-          title: "Fundamentos do Inglês",
-          description: "Verbos essenciais, rotina diária e pronomes",
-          color: "green",
-          badgeText: "✓ CONCLUÍDA",
-          lessons: [
-            {
-              id: "basic-verbs",
-              title: "O Básico dos Verbos",
-              subtitle: "Verbo To Be, ações da rotina diária e a regra de ouro do 'S' na 3ª pessoa.",
-              icon: "⭐",
-              theoryUrl: "lessons/basic-verbs/explanation.html",
-              exerciseUrl: "lessons/basic-verbs/exercise.html",
-              status: "completed"
-            },
-            {
-              id: "present-simple",
-              title: "Present Simple Geral",
-              subtitle: "Visão geral: Afirmação (+), Negação com Don't/Doesn't (-) e Perguntas com Do/Does (?).",
-              icon: "⚡",
-              theoryUrl: "lessons/present-simple/explanation.html",
-              exerciseUrl: "lessons/present-simple/exercise.html",
-              status: "completed"
-            },
-            {
-              id: "basic-pronouns",
-              title: "O Básico dos Pronomes",
-              subtitle: "Pronomes Sujeito (I, He), Objeto (me, him) e Possessivos (my, his).",
-              icon: "👤",
-              theoryUrl: "lessons/basic-pronouns/explanation.html",
-              exerciseUrl: "lessons/basic-pronouns/exercise.html",
-              status: "completed"
-            }
-          ]
-        },
-        {
-          id: "unit-2",
-          number: 2,
-          section: 1,
-          title: "Present Simple & Rotinas",
-          description: "Prática aprofundada de rotinas, hábitos e conjugação afirmativa",
-          color: "blue",
-          badgeText: "TRILHA ATIVA",
-          lessons: [
-            {
-              id: "present-simple-affirmative",
-              title: "Afirmações no Present Simple",
-              subtitle: "Rotina diária, ações habituais e as regras de -s, -es e -ies para He/She/It.",
-              icon: "✍️",
-              theoryUrl: "lessons/present-simple-affirmative/explanation.html",
-              exerciseUrl: "lessons/present-simple-affirmative/exercise.html",
-              status: "completed"
-            },
-            {
-              id: "verbs-have-go-do",
-              title: "Os Super Verbos: Have, Go & Do",
-              subtitle: "Has, goes, does e as expressões mais usadas na rotina diária em inglês.",
-              icon: "⚡",
-              theoryUrl: "lessons/verbs-have-go-do/explanation.html",
-              exerciseUrl: "lessons/verbs-have-go-do/exercise.html",
-              status: "completed"
-            },
-            {
-              id: "present-simple-negative",
-              title: "Negações no Present Simple",
-              subtitle: "Como negar hábitos e rotinas usando Don't e Doesn't sem medo de errar.",
-              icon: "🚫",
-              theoryUrl: "lessons/present-simple-negative/explanation.html",
-              exerciseUrl: "lessons/present-simple-negative/exercise.html",
-              status: "completed"
-            },
-            {
-              id: "present-simple-questions",
-              title: "Perguntas no Present Simple",
-              subtitle: "Como fazer perguntas usando Do e Does, e dar respostas curtas (Short Answers).",
-              icon: "❓",
-              theoryUrl: "lessons/present-simple-questions/explanation.html",
-              exerciseUrl: "lessons/present-simple-questions/exercise.html",
-              status: "completed"
-            },
-            {
-              id: "to-be-questions",
-              title: "Perguntas com o Verbo To Be",
-              subtitle: "Inversão direta com Am, Is e Are, perguntas de viagem e Short Answers.",
-              icon: "👑",
-              theoryUrl: "lessons/to-be-questions/explanation.html",
-              exerciseUrl: "lessons/to-be-questions/exercise.html",
-              status: "completed"
-            },
-            {
-              id: "unit-2-challenge",
-              title: "Desafio Final: 50 Questões",
-              subtitle: "Super bateria aleatória de 50 exercícios de revisão geral para coroar a Unidade 2.",
-              icon: "🏆",
-              theoryUrl: "lessons/unit-2-challenge/explanation.html",
-              exerciseUrl: "lessons/unit-2-challenge/exercise.html",
-              status: "active"
-            }
-          ]
-        }
-      ]
+    const COURSES_DATA = {
+      en: {
+        id: "en",
+        name: "Inglês",
+        nativeName: "English",
+        flag: "🇺🇸",
+        studentTitle: "Estudante de Inglês",
+        level: "NÍVEL BÁSICO A1-A2",
+        badgeColor: "var(--duo-green)",
+        profileSubtitle: "🇺🇸 Aprendendo Inglês • No Linguo desde Agosto 2026",
+        tutorGreeting: "Olá! Eu sou o seu <strong>Duo Tutor</strong> de inglês! 🦉💬<br>Qualquer assunto que você quiser aprender em inglês, basta me pedir no chat e eu crio a lição completa com áudios e exercícios diretamente na sua trilha!",
+        tutorTopics: [
+          { icon: "☕", title: "Conversação & Cafeteria", desc: "Como fazer pedidos e pagamentos em restaurantes" },
+          { icon: "✈️", title: "Viagem & Aeroporto", desc: "Check-in, bagagens, hotel e pedir direções" },
+          { icon: "💼", title: "Business English", desc: "Apresentação pessoal em entrevistas e reuniões" },
+          { icon: "🧠", title: "Simple Past", desc: "Verbos regulares (-ed) e os primeiros verbos irregulares no passado" }
+        ],
+        units: [
+          {
+            id: "unit-1",
+            number: 1,
+            section: 1,
+            title: "Fundamentos do Inglês",
+            description: "Verbos essenciais, rotina diária e pronomes",
+            color: "green",
+            badgeText: "✓ CONCLUÍDA",
+            lessons: [
+              {
+                id: "basic-verbs",
+                title: "O Básico dos Verbos",
+                subtitle: "Verbo To Be, rotina e a regra de ouro do 'S' na 3ª pessoa.",
+                icon: "⭐",
+                theoryUrl: "lessons/en/basic-verbs/explanation.html",
+                exerciseUrl: "lessons/en/basic-verbs/exercise.html",
+                status: "completed"
+              },
+              {
+                id: "present-simple",
+                title: "Present Simple Geral",
+                subtitle: "Visão geral: Afirmação, Negação com Don't/Doesn't e Perguntas com Do/Does.",
+                icon: "⚡",
+                theoryUrl: "lessons/en/present-simple/explanation.html",
+                exerciseUrl: "lessons/en/present-simple/exercise.html",
+                status: "completed"
+              },
+              {
+                id: "basic-pronouns",
+                title: "O Básico dos Pronomes",
+                subtitle: "Pronomes Sujeito (I, He), Objeto (me, him) e Possessivos (my, his).",
+                icon: "👤",
+                theoryUrl: "lessons/en/basic-pronouns/explanation.html",
+                exerciseUrl: "lessons/en/basic-pronouns/exercise.html",
+                status: "completed"
+              }
+            ]
+          },
+          {
+            id: "unit-2",
+            number: 2,
+            section: 1,
+            title: "Present Simple & Rotinas",
+            description: "Prática aprofundada de rotinas, hábitos e conjugação afirmativa",
+            color: "blue",
+            badgeText: "TRILHA ATIVA",
+            lessons: [
+              {
+                id: "present-simple-affirmative",
+                title: "Afirmações no Present Simple",
+                subtitle: "Rotina diária, ações habituais e as regras de -s, -es e -ies para He/She/It.",
+                icon: "✍️",
+                theoryUrl: "lessons/en/present-simple-affirmative/explanation.html",
+                exerciseUrl: "lessons/en/present-simple-affirmative/exercise.html",
+                status: "completed"
+              },
+              {
+                id: "verbs-have-go-do",
+                title: "Os Super Verbos: Have, Go & Do",
+                subtitle: "Has, goes, does e as expressões mais usadas na rotina diária em inglês.",
+                icon: "⚡",
+                theoryUrl: "lessons/en/verbs-have-go-do/explanation.html",
+                exerciseUrl: "lessons/en/verbs-have-go-do/exercise.html",
+                status: "completed"
+              },
+              {
+                id: "present-simple-negative",
+                title: "Negações no Present Simple",
+                subtitle: "Como negar hábitos e rotinas usando Don't e Doesn't sem medo de errar.",
+                icon: "🚫",
+                theoryUrl: "lessons/en/present-simple-negative/explanation.html",
+                exerciseUrl: "lessons/en/present-simple-negative/exercise.html",
+                status: "completed"
+              },
+              {
+                id: "present-simple-questions",
+                title: "Perguntas no Present Simple",
+                subtitle: "Como fazer perguntas usando Do e Does, e dar respostas curtas (Short Answers).",
+                icon: "❓",
+                theoryUrl: "lessons/en/present-simple-questions/explanation.html",
+                exerciseUrl: "lessons/en/present-simple-questions/exercise.html",
+                status: "completed"
+              },
+              {
+                id: "to-be-questions",
+                title: "Perguntas com o Verbo To Be",
+                subtitle: "Inversão direta com Am, Is e Are, perguntas de viagem e Short Answers.",
+                icon: "👑",
+                theoryUrl: "lessons/en/to-be-questions/explanation.html",
+                exerciseUrl: "lessons/en/to-be-questions/exercise.html",
+                status: "completed"
+              },
+              {
+                id: "unit-2-challenge",
+                title: "Desafio Final: 50 Questões",
+                subtitle: "Super bateria aleatória de 50 exercícios de revisão geral para coroar a Unidade 2.",
+                icon: "🏆",
+                theoryUrl: "lessons/en/unit-2-challenge/explanation.html",
+                exerciseUrl: "lessons/en/unit-2-challenge/exercise.html",
+                status: "active"
+              }
+            ]
+          }
+        ]
+      },
+      es: {
+        id: "es",
+        name: "Espanhol",
+        nativeName: "Español",
+        flag: "🇪🇸",
+        studentTitle: "Estudante de Espanhol",
+        level: "NÍVEL INICIAL A1",
+        badgeColor: "var(--duo-yellow)",
+        profileSubtitle: "🇪🇸 Aprendendo Espanhol • No Linguo desde Setembro 2026",
+        tutorGreeting: "¡Hola! Eu sou o seu <strong>Duo Tutor</strong> de espanhol! 🦉💬<br>Qualquer tema que você queira praticar em espanhol, basta me pedir no chat e eu crio a lição completa com áudios em espanhol nativo e exercícios interativos!",
+        tutorTopics: [
+          { icon: "👋", title: "Saludos & Presentaciones", desc: "Aprenda a cumprimentar, despedir e se apresentar" },
+          { icon: "🧠", title: "Ser vs. Estar", desc: "Identidade x estados passageiros sem confusão" },
+          { icon: "🍽️", title: "Restaurante & Tapas", desc: "Como fazer pedidos em bares e restaurantes na Espanha e América Latina" },
+          { icon: "✈️", title: "Viagens & Direções", desc: "Pedir informações na rua, hotel e aeroporto" }
+        ],
+        units: [
+          {
+            id: "unit-1",
+            number: 1,
+            section: 1,
+            title: "Fundamentos del Español",
+            description: "Saludos, presentaciones y la diferencia esencial entre Ser y Estar",
+            color: "green",
+            badgeText: "TRILHA ATIVA",
+            lessons: [
+              {
+                id: "saludos-presentaciones",
+                title: "Saludos & Presentaciones",
+                subtitle: "Hola, ¿cómo estás?, presentaciones personales y fórmulas de cortesía.",
+                icon: "👋",
+                theoryUrl: "lessons/es/saludos-presentaciones/explanation.html",
+                exerciseUrl: "lessons/es/saludos-presentaciones/exercise.html",
+                status: "completed"
+              },
+              {
+                id: "ser-estar-basico",
+                title: "Ser vs. Estar",
+                subtitle: "Identidad, origen y profesión (Ser) vs. ubicación, emociones y estados (Estar).",
+                icon: "🧠",
+                theoryUrl: "lessons/es/ser-estar-basico/explanation.html",
+                exerciseUrl: "lessons/es/ser-estar-basico/exercise.html",
+                status: "active"
+              }
+            ]
+          }
+        ]
+      }
     };
+
+    // Active Language State (persisted in localStorage)
+    let currentLanguage = 'en';
+    try {
+      const savedLang = localStorage.getItem('linguo-current-language');
+      if (savedLang && COURSES_DATA[savedLang]) {
+        currentLanguage = savedLang;
+      }
+    } catch(e) {}
 
     // Offsets for the zigzag snake trail: Center -> Left -> Center -> Right -> Center...
     const offsets = ['offset-center', 'offset-left', 'offset-center', 'offset-right'];
 
+    /**
+     * RENDER THE LEARNING PATH FOR ACTIVE LANGUAGE
+     */
     function renderPath() {
       const unitsContainer = document.getElementById('unitsContainer');
       if (!unitsContainer) return;
       unitsContainer.innerHTML = '';
 
+      const course = COURSES_DATA[currentLanguage] || COURSES_DATA.en;
       let globalLessonCount = 0;
 
-      UNITS_DATA.units.forEach((unit, unitIndex) => {
+      course.units.forEach((unit, unitIndex) => {
         const unitSection = document.createElement('section');
         unitSection.className = 'duo-unit-section';
         unitSection.id = 'unit-' + unit.id;
 
         const colorTheme = unit.color || 'green';
-        const isLastUnit = (unitIndex === UNITS_DATA.units.length - 1);
+        const isLastUnit = (unitIndex === course.units.length - 1);
 
         // Unit Banner
         const banner = document.createElement('div');
@@ -673,6 +735,135 @@
       });
     }
 
+    /**
+     * UPDATE UI ELEMENTS FOR ACTIVE LANGUAGE (Header, Profile, Tutor)
+     */
+    function updateLanguageUI() {
+      const course = COURSES_DATA[currentLanguage] || COURSES_DATA.en;
+
+      // Update Header Badge
+      const flagEl = document.getElementById('headerLangFlag');
+      const nameEl = document.getElementById('headerLangName');
+      if (flagEl) flagEl.innerText = course.flag;
+      if (nameEl) nameEl.innerText = course.name;
+
+      // Update Profile Tab
+      const profTitle = document.getElementById('profileStudentTitle');
+      const profBadge = document.getElementById('profileLevelBadge');
+      const profSub = document.getElementById('profileSubtitle');
+      const profLessons = document.getElementById('profileLessonsCount');
+
+      if (profTitle) profTitle.innerText = course.studentTitle;
+      if (profBadge) {
+        profBadge.innerText = course.level;
+        profBadge.style.background = course.badgeColor;
+      }
+      if (profSub) profSub.innerText = course.profileSubtitle;
+
+      // Count lessons
+      let totalLessons = 0;
+      course.units.forEach(u => totalLessons += u.lessons.length);
+      if (profLessons) profLessons.innerText = totalLessons;
+
+      // Update Tutor Tab
+      updateTutorTab(course);
+    }
+
+    /**
+     * UPDATE TUTOR TAB CONTENT
+     */
+    function updateTutorTab(course) {
+      const bubbleEl = document.getElementById('tutorBubbleMessage');
+      if (bubbleEl) bubbleEl.innerHTML = course.tutorGreeting;
+
+      const topicsContainer = document.getElementById('tutorTopicsContainer');
+      if (topicsContainer && course.tutorTopics) {
+        topicsContainer.innerHTML = course.tutorTopics.map(t => `
+          <div style="background: #ffffff; border: 2px solid var(--duo-gray-200); border-radius: var(--duo-radius-lg); padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 3px 0 var(--duo-gray-200);">
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <span style="font-size: 28px;">${t.icon}</span>
+              <div>
+                <h4 style="font-size: 16px; font-weight: 800; color: var(--duo-gray-900);">${t.title}</h4>
+                <p style="font-size: 13px; font-weight: 600; color: var(--duo-gray-400);">${t.desc}</p>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    /**
+     * COURSE SELECTION MODAL CONTROLLER
+     */
+    window.openCourseModal = function() {
+      if (window.duoAudio) duoAudio.playTap();
+      renderCourseModal();
+      const modal = document.getElementById('courseModalOverlay');
+      if (modal) modal.classList.add('active');
+    };
+
+    window.closeCourseModal = function(event) {
+      if (event && event.target !== event.currentTarget && !event.target.classList.contains('btn-close')) {
+        return;
+      }
+      if (window.duoAudio) duoAudio.playTap();
+      const modal = document.getElementById('courseModalOverlay');
+      if (modal) modal.classList.remove('active');
+    };
+
+    function renderCourseModal() {
+      const container = document.getElementById('courseListContainer');
+      if (!container) return;
+
+      const courseKeys = Object.keys(COURSES_DATA);
+      container.innerHTML = courseKeys.map(key => {
+        const c = COURSES_DATA[key];
+        const isCurrent = (key === currentLanguage);
+
+        let totalLessons = 0;
+        c.units.forEach(u => totalLessons += u.lessons.length);
+
+        return `
+          <div class="duo-course-card ${isCurrent ? 'active' : ''}" onclick="selectLanguage('${key}')">
+            <div class="duo-course-card-left">
+              <div class="duo-course-flag-wrapper">
+                <span>${c.flag}</span>
+              </div>
+              <div>
+                <div class="duo-course-title">${c.name} (${c.nativeName})</div>
+                <div class="duo-course-sub">${c.units.length} ${c.units.length === 1 ? 'unidade' : 'unidades'} • ${totalLessons} ${totalLessons === 1 ? 'lição' : 'lições'}</div>
+              </div>
+            </div>
+            <div>
+              ${isCurrent ? `
+                <div class="duo-badge" style="background: var(--duo-green); font-size: 12px; padding: 6px 12px;">
+                  ✓ ATIVO
+                </div>
+              ` : `
+                <button class="btn-duo btn-duo-secondary" style="padding: 8px 16px; font-size: 13px;" onclick="event.stopPropagation(); selectLanguage('${key}')">
+                  SELECIONAR
+                </button>
+              `}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.selectLanguage = function(langCode) {
+      if (!COURSES_DATA[langCode]) return;
+      if (window.duoAudio) duoAudio.playSuccess();
+
+      currentLanguage = langCode;
+      try {
+        localStorage.setItem('linguo-current-language', langCode);
+      } catch(e) {}
+
+      updateLanguageUI();
+      renderPath();
+      closeCourseModal();
+    };
+
     let activePopoverId = null;
 
     window.openLessonCard = function(event, id) {
@@ -704,6 +895,16 @@
         document.querySelectorAll('.duo-popover').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.duo-path-row').forEach(r => r.classList.remove('has-active-popover'));
         activePopoverId = null;
+      }
+    });
+
+    // Close modals on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('courseModalOverlay');
+        if (modal && modal.classList.contains('active')) {
+          closeCourseModal();
+        }
       }
     });
 
@@ -741,8 +942,9 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    // Handle initial hash on page load
+    // Handle initial load
     window.addEventListener('DOMContentLoaded', () => {
+      updateLanguageUI();
       renderPath();
       const initialHash = window.location.hash.replace('#', '');
       if (['home', 'quests', 'stats', 'tutor'].includes(initialHash)) {

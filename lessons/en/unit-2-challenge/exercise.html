@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Desafio Final da Unidade 2 (50 Questões) - Exercícios | Linguo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../resources/duo-theme.css">
+  <script src="../../../resources/duo-sfx.js"></script>
+</head>
+<body>
+
+  <!-- Top Progress Bar with Lives -->
+  <div class="duo-progress-container">
+    <button class="btn-close" onclick="if(confirm('Deseja sair do Desafio Final?')) window.location.href='../../../index.html'" title="Voltar à trilha">✕</button>
+    <div class="duo-progress-track">
+      <div class="duo-progress-fill" id="progressBar" style="width: 2%; background: var(--duo-yellow);"></div>
+    </div>
+    <div style="font-size: 13px; font-weight: 900; color: var(--duo-gray-400); min-width: 50px; text-align: right;" id="questionCounter">1/50</div>
+    <div class="duo-stat-item duo-stat-heart">
+      <span>❤️</span>
+      <span id="heartsCount">5</span>
+    </div>
+  </div>
+
+  <main class="duo-container">
+    
+    <!-- Exercise Area -->
+    <div id="exerciseArea">
+      <!-- Dynamic Question Injector -->
+      <h2 class="duo-title" id="questionPrompt">Carregando desafio...</h2>
+      
+      <!-- Speaker prompt if audio question -->
+      <div id="audioPromptContainer" style="display:none; margin: 14px 0;">
+        <button class="btn-speaker" id="btnAudioSpeak" onclick="duoAudio.speak(window.currentAudioText)">
+          🔊 Ouvir frase
+        </button>
+      </div>
+
+      <!-- Dialogue/Prompt Box -->
+      <div class="duo-dialog-box" id="dialogContainer">
+        <div class="duo-mascot">
+          <svg viewBox="0 0 80 80" width="70" height="70">
+            <ellipse cx="40" cy="42" rx="34" ry="32" fill="#58CC02"/>
+            <circle cx="28" cy="34" r="11" fill="#ffffff"/>
+            <circle cx="52" cy="34" r="11" fill="#ffffff"/>
+            <circle cx="30" cy="34" r="5" fill="#131F24"/>
+            <circle cx="54" cy="34" r="5" fill="#131F24"/>
+            <polygon points="40,38 33,45 47,45" fill="#FF9600"/>
+          </svg>
+        </div>
+        <div class="duo-bubble" id="mascotBubbleText">
+          Complete o exercício:
+        </div>
+      </div>
+
+      <!-- Type 1: Sentence Builder / Word Bank -->
+      <div id="wordBankView" style="display:none;">
+        <div class="duo-slots-area" id="selectedSlots"></div>
+        <div class="duo-word-bank" id="availableWords"></div>
+      </div>
+
+      <!-- Type 2: Multiple Choice -->
+      <div id="multipleChoiceView" class="duo-choices" style="display:none;"></div>
+    </div>
+
+    <!-- Completion Screen (Shown when done) -->
+    <div id="completionScreen" class="duo-completion-screen">
+      <div style="font-size: 80px; margin-bottom: 12px;">🏆</div>
+      <h1 class="duo-title" style="font-size: 34px; color: var(--duo-yellow-shadow);">Unidade 2 Conquistada!</h1>
+      <p class="duo-subtitle">Você concluiu os 50 exercícios de revisão com perguntas aleatórias e dominou o Present Simple!</p>
+
+      <div class="duo-streak-banner" style="background: linear-gradient(135deg, #ffc800 0%, #e58200 100%);">
+        <div>
+          <div style="font-size: 14px; font-weight: 800; opacity: 0.9;">TOTAL XP</div>
+          <div style="font-size: 32px; font-weight: 900;">+50 XP</div>
+        </div>
+        <div>
+          <div style="font-size: 14px; font-weight: 800; opacity: 0.9;">TROFÉU</div>
+          <div style="font-size: 32px; font-weight: 900;">👑 OURO</div>
+        </div>
+        <div>
+          <div style="font-size: 14px; font-weight: 800; opacity: 0.9;">PRECISÃO</div>
+          <div style="font-size: 32px; font-weight: 900;" id="accuracyStat">100%</div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 16px; justify-content: center; margin-top: 32px; flex-wrap: wrap;">
+        <a href="explanation.html" class="btn-duo btn-duo-secondary">REVER GUIA</a>
+        <a href="../../../index.html" class="btn-duo btn-duo-green">VOLTAR À TRILHA ➔</a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Bottom Sheet Feedback Drawer -->
+  <footer class="duo-footer-drawer" id="footerDrawer">
+    <div class="duo-footer-content">
+      <div class="duo-footer-message" id="footerMessage" style="visibility: hidden;">
+        <div class="duo-feedback-icon" id="feedbackIcon">✓</div>
+        <div class="duo-feedback-text">
+          <h4 id="feedbackTitle">Bom trabalho!</h4>
+          <p id="feedbackExplanation"></p>
+          <button type="button" class="btn-explain-answer" id="btnExplainAnswer" onclick="openExplanationModal()">
+            💡 Ver explicação da resposta
+          </button>
+        </div>
+      </div>
+      <button id="btnAction" class="btn-duo btn-duo-green btn-duo-disabled" disabled onclick="handleActionClick()">
+        VERIFICAR
+      </button>
+    </div>
+  </footer>
+
+  <!-- Explain Answer Bottom Sheet Modal (Estilo Duolingo) -->
+  <div class="duo-modal-overlay" id="explanationModalOverlay" onclick="closeExplanationModal(event)">
+    <div class="duo-explanation-sheet" onclick="event.stopPropagation()">
+      <div class="duo-sheet-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 26px;">🦉</span>
+          <h3 id="sheetTopicTitle">Regra Gramatical</h3>
+        </div>
+        <button class="btn-close" onclick="closeExplanationModal()" title="Fechar modal">✕</button>
+      </div>
+
+      <div class="duo-sheet-rule" id="sheetRuleText"></div>
+
+      <div class="duo-sheet-contrast-box" id="sheetContrastBox"></div>
+
+      <div class="duo-sheet-actions">
+        <a href="#" id="sheetTheoryLink" target="_blank" class="btn-duo btn-duo-secondary" style="font-size: 13px; padding: 10px 14px;">
+          📖 Abrir Lição Completa ↗
+        </a>
+        <button class="btn-duo btn-duo-green" onclick="closeExplanationModal()" style="font-size: 14px; padding: 10px 22px;">
+          ENTENDI! ➔
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Fisher-Yates Array Shuffle Algorithm
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    // 50 Brand-new Comprehensive Questions covering all Unit 2 topics with rich explanations
+    const rawQuestions = [
+      // 1-5: Afirmações & Terminações (-s, -es, -ies)
+      {
+        id: 1,
+        type: 'word_bank',
+        category: 'Afirmação no Present Simple',
+        promptText: "Monte a frase: <strong>'Ela ensina matemática na escola.'</strong>",
+        bank: ["She", "teaches", "math", "at", "school", "teach", "is", "study"],
+        correctAnswer: "She teaches math at school",
+        correctDisplay: "She teaches math at school.",
+        successTip: "Perfeito! Verbos terminados em -ch recebem -es: teach ➔ teaches!",
+        explanation: {
+          topic: "Regra do -ES para 3ª Pessoa (He/She/It)",
+          rule: "Verbos que terminam com o som de <strong>-ch, -sh, -ss, -x ou -o</strong> recebem o sufixo <strong>-ES</strong> quando conjugados com <em>He, She</em> ou <em>It</em> no Present Simple.",
+          comparison: "✅ She <strong>teaches</strong> math.<br>❌ She <s>teachs</s> math.",
+          audioPhrase: "She teaches math at school.",
+          theoryUrl: "../present-simple-affirmative/explanation.html"
+        }
+      },
+      {
+        id: 2,
+        type: 'choice',
+        category: 'Regra de Ortografia (-IES)',
+        promptText: "Lucas estuda espanhol aos sábados.<br><strong>'Lucas _____ Spanish on Saturdays.'</strong>",
+        options: [
+          { id: "1", text: "studies" },
+          { id: "2", text: "studys" },
+          { id: "3", text: "study" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Lucas studies Spanish on Saturdays.",
+        successTip: "Excelente! 'Study' termina em consoante + Y, virando 'studies'!",
+        explanation: {
+          topic: "Regra do -IES (Consoante + Y)",
+          rule: "Quando um verbo termina em <strong>Consoante + Y</strong> (como <em>study, fly, try</em>), trocamos o <strong>Y</strong> por <strong>-IES</strong> na 3ª pessoa do singular (He / She / It).",
+          comparison: "✅ Lucas <strong>studies</strong> Spanish.<br>❌ Lucas <s>studys</s> Spanish.",
+          audioPhrase: "Lucas studies Spanish on Saturdays.",
+          theoryUrl: "../present-simple-affirmative/explanation.html"
+        }
+      },
+      {
+        id: 3,
+        type: 'word_bank',
+        category: 'Afirmação (-ES)',
+        promptText: "Monte a frase: <strong>'O filme termina às dez da noite.'</strong>",
+        bank: ["The", "movie", "finishes", "at", "ten", "at", "night", "finish", "finishs"],
+        correctAnswer: "The movie finishes at ten at night",
+        correctDisplay: "The movie finishes at ten at night.",
+        successTip: "Muito bem! Verbos em -sh recebem -es: finish ➔ finishes!",
+        explanation: {
+          topic: "Terminação em -SH",
+          rule: "Verbos terminados em <strong>-SH</strong> (como <em>finish, wash, push</em>) recebem <strong>-ES</strong> com sujeitos singulares (The movie = it).",
+          comparison: "✅ The movie <strong>finishes</strong> at ten.<br>❌ The movie <s>finishs</s> at ten.",
+          audioPhrase: "The movie finishes at ten at night.",
+          theoryUrl: "../present-simple-affirmative/explanation.html"
+        }
+      },
+      {
+        id: 4,
+        type: 'choice',
+        category: 'Afirmação Regular (+S)',
+        promptText: "Meu pai dirige um carro elétrico.<br><strong>'My father _____ an electric car.'</strong>",
+        options: [
+          { id: "1", text: "drives" },
+          { id: "2", text: "drive" },
+          { id: "3", text: "is drive" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "My father drives an electric car.",
+        successTip: "Correto! 'My father' (he) recebe o sufixo -s no verbo (drives)!",
+        explanation: {
+          topic: "Regra Geral do +S no Present Simple",
+          rule: "Para a maioria dos verbos regulares em inglês, basta acrescentar <strong>-S</strong> ao final do verbo na forma afirmativa com <em>He, She</em> ou <em>It</em>.",
+          comparison: "✅ My father <strong>drives</strong> a car.<br>❌ My father <s>drive</s> a car.",
+          audioPhrase: "My father drives an electric car.",
+          theoryUrl: "../present-simple-affirmative/explanation.html"
+        }
+      },
+      {
+        id: 5,
+        type: 'word_bank',
+        category: 'Afirmação com Verbo Composto',
+        promptText: "Monte a frase: <strong>'Ela acorda cedo e corre no parque todos os dias.'</strong>",
+        bank: ["She", "wakes", "up", "early", "and", "runs", "in", "the", "park", "every", "day", "wake", "run"],
+        correctAnswer: "She wakes up early and runs in the park every day",
+        correctDisplay: "She wakes up early and runs in the park every day.",
+        successTip: "Sensacional! Os dois verbos recebem -s (wakes e runs) para 'She'!",
+        explanation: {
+          topic: "Concordância de Múltiplos Verbos",
+          rule: "Quando uma frase tem duas ações feitas pelo mesmo sujeito (<em>She wakes up and runs</em>), <strong>ambos os verbos</strong> devem ser conjugados com <strong>-S</strong>!",
+          comparison: "✅ She <strong>wakes</strong> up and <strong>runs</strong>.<br>❌ She wakes up and <s>run</s>.",
+          audioPhrase: "She wakes up early and runs in the park every day.",
+          theoryUrl: "../present-simple-affirmative/explanation.html"
+        }
+      },
+
+      // 6-10: Super Verbo Have (have / has)
+      {
+        id: 6,
+        type: 'choice',
+        category: 'Super Verbo: Have',
+        promptText: "Sara tem dois gatos e um cachorro.<br><strong>'Sara _____ two cats and a dog.'</strong>",
+        options: [
+          { id: "1", text: "has" },
+          { id: "2", text: "have" },
+          { id: "3", text: "haves" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Sara has two cats and a dog.",
+        successTip: "Perfeito! 'Sara' (she) usa a forma irregular 'has'!",
+        explanation: {
+          topic: "O Verbo Irregular Have ➔ Has",
+          rule: "O verbo <strong>Have</strong> é irregular no presente. Com <em>He, She</em> e <em>It</em>, ele <strong>sempre</strong> vira <strong>HAS</strong> (a palavra 'haves' não existe em inglês!).",
+          comparison: "✅ Sara <strong>has</strong> two cats.<br>❌ Sara <s>have</s> two cats.",
+          audioPhrase: "Sara has two cats and a dog.",
+          theoryUrl: "../verbs-have-go-do/explanation.html"
+        }
+      },
+      {
+        id: 7,
+        type: 'choice',
+        category: 'Exercício de Audição',
+        promptText: "Ouça o áudio em inglês e escolha o significado correto:",
+        audioText: "Carlos has a cup of tea in the morning.",
+        options: [
+          { id: "1", text: "Carlos toma uma xícara de chá pela manhã." },
+          { id: "2", text: "Carlos compra chá pela manhã." },
+          { id: "3", text: "Carlos prepara café pela manhã." }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Carlos toma uma xícara de chá pela manhã.",
+        successTip: "Ótima escuta! 'Has a cup of tea' significa tomar uma xícara de chá!",
+        explanation: {
+          topic: "Expressões de Refeições com Have",
+          rule: "Em inglês natural, usamos o verbo <strong>Have</strong> para refeições e bebidas: <em>have breakfast, have coffee, have a cup of tea, have lunch</em>.",
+          comparison: "✅ Carlos <strong>has</strong> a cup of tea.<br>💡 'Carlos drinks tea' também existe, mas 'has' é a forma mais comum.",
+          audioPhrase: "Carlos has a cup of tea in the morning.",
+          theoryUrl: "../verbs-have-go-do/explanation.html"
+        }
+      },
+      {
+        id: 8,
+        type: 'word_bank',
+        category: 'Expressão com Have',
+        promptText: "Monte a frase: <strong>'Eu tomo café da manhã com a minha família.'</strong>",
+        bank: ["I", "have", "breakfast", "with", "my", "family", "has", "eat", "the"],
+        correctAnswer: "I have breakfast with my family",
+        correctDisplay: "I have breakfast with my family.",
+        successTip: "Muito bem! 'Have breakfast' é a expressão mais natural em inglês!",
+        explanation: {
+          topic: "Tomar Café da Manhã = Have Breakfast",
+          rule: "Diz-se <strong>have breakfast</strong> (sem artigo 'the'). Com o pronome 'I', usamos a forma base <strong>have</strong>.",
+          comparison: "✅ I <strong>have breakfast</strong> with my family.<br>❌ I <s>eat the breakfast</s> with my family.",
+          audioPhrase: "I have breakfast with my family.",
+          theoryUrl: "../verbs-have-go-do/explanation.html"
+        }
+      },
+      {
+        id: 9,
+        type: 'choice',
+        category: 'Expressão com Have',
+        promptText: "Eles almoçam ao meio-dia todos os dias.<br><strong>'They _____ lunch at noon every day.'</strong>",
+        options: [
+          { id: "1", text: "have" },
+          { id: "2", text: "has" },
+          { id: "3", text: "eats" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "They have lunch at noon every day.",
+        successTip: "Correto! 'They' usa a forma base 'have' (have lunch = almoçar)!",
+        explanation: {
+          topic: "Almoçar = Have Lunch",
+          rule: "Com pronomes no plural (<em>They, We</em>), o verbo permanece na sua forma base <strong>have</strong>.",
+          comparison: "✅ They <strong>have</strong> lunch.<br>❌ They <s>has</s> lunch.",
+          audioPhrase: "They have lunch at noon every day.",
+          theoryUrl: "../verbs-have-go-do/explanation.html"
+        }
+      },
+      {
+        id: 10,
+        type: 'choice',
+        category: 'Expressão com Have',
+        promptText: "Ele toma banho antes de dormir.<br><strong>'He _____ a shower before bed.'</strong>",
+        options: [
+          { id: "1", text: "has" },
+          { id: "2", text: "have" },
+          { id: "3", text: "takes not" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "He has a shower before bed.",
+        successTip: "Show! 'He has a shower' ou 'He takes a shower' são ambas corretas!",
+        explanation: {
+          topic: "Tomar Banho = Have a shower",
+          rule: "Tanto <em>have a shower</em> quanto <em>take a shower</em> são expressões consagradas. Com 'He', usa-se <strong>has</strong>.",
+          comparison: "✅ He <strong>has a shower</strong>.<br>❌ He <s>have a shower</s>.",
+          audioPhrase: "He has a shower before bed.",
+          theoryUrl: "../verbs-have-go-do/explanation.html"
+        }
+      },
+
+      // 11-15: Super Verbo Go (go / goes & go home)
+      {
+        id: 11,
+        type: 'choice',
+        category: 'Super Verbo: Go',
+        promptText: "Meu irmão vai para a academia toda manhã.<br><strong>'My brother _____ to the gym every morning.'</strong>",
+        options: [
+          { id: "1", text: "goes" },
+          { id: "2", text: "go" },
+          { id: "3", text: "is go" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "My brother goes to the gym every morning.",
+        successTip: "Excelente! 'My brother' (he) usa 'goes'!",
+        explanation: {
+          topic: "Go ➔ Goes",
+          rule: "O verbo <strong>go</strong> termina em 'O', recebendo <strong>-ES</strong> para formar <strong>goes</strong> com <em>He, She</em> ou <em>It</em>.",
+          comparison: "✅ My brother <strong>goes</strong> to the gym.<br>❌ My brother <s>gos</s> to the gym.",
+          audioPhrase: "My brother goes to the gym every morning.",
+          theoryUrl: "../verbs-have-go-do/explanation.html"
+        }
+      },
+      {
+        id: 12,
+        type: 'choice',
+        category: 'A Exceção do Go Home',
+        promptText: "Ele vai para casa às seis horas.<br><strong>'He goes _____ at six o'clock.'</strong>",
+        options: [
+          { id: "1", text: "home" },
+          { id: "2", text: "to home" },
+          { id: "3", text: "to the home" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "He goes home at six o'clock.",
+        successTip: "Você lembrou da regra de ouro! Com 'home', nunca usamos 'to'!",
+        explanation: {
+          topic: "A Exceção do 'Home' sem 'To'",
+          rule: "Em inglês, a palavra <strong>home</strong> funciona como advérbio de direção. Portanto, dizemos apenas <strong>go home</strong> (e NUNCA <em>go to home</em>!).",
+          comparison: "✅ He goes <strong>home</strong>.<br>❌ He goes <s>to home</s>.",
+          audioPhrase: "He goes home at six o'clock.",
+          theoryUrl: "../verbs-have-go-do/explanation.html"
+        }
+      },
+      {
+        id: 13,
+        type: 'word_bank',
+        category: 'Super Verbo: Go',
+        promptText: "Monte a frase: <strong>'Nós vamos à praia no verão.'</strong>",
+        bank: ["We", "go", "to", "the", "beach", "in", "summer", "goes", "at"],
+        correctAnswer: "We go to the beach in summer",
+        correctDisplay: "We go to the beach in summer.",
+        successTip: "Muito bem! Para 'we', usamos 'go to the beach'!",
+        explanation: {
+          topic: "Destinos com Preposição 'To'",
+          rule: "Para a maioria dos destinos (beach, park, school, work), usamos a preposição <strong>to</strong>: <em>go to the beach</em>.",
+          comparison: "✅ We <strong>go to the beach</strong>.<br>❌ We <s>goes at beach</s>.",
+          audioPhrase: "We go to the beach in summer.",
+          theoryUrl: "../verbs-have-go-do/explanation.html"
+        }
+      },
+      {
+        id: 14,
+        type: 'choice',
+        category: 'Exercício de Audição',
+        promptText: "Ouça o áudio e selecione a tradução correta:",
+        audioText: "She goes to school by bus.",
+        options: [
+          { id: "1", text: "Ela vai para a escola de ônibus." },
+          { id: "2", text: "Ela volta da escola a pé." },
+          { id: "3", text: "Ela estuda na escola perto de casa." }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Ela vai para a escola de ônibus.",
+        successTip: "Ótima escuta! 'She goes to school' = Ela vai para a escola!",
+        explanation: {
+          topic: "Meios de Transporte com 'By'",
+          rule: "Diz-se <em>by bus</em> (de ônibus), <em>by car</em> (de carro), <em>by train</em> (de trem). Com 'She', o verbo é <strong>goes</strong>.",
+          comparison: "✅ She <strong>goes</strong> to school <strong>by bus</strong>.<br>❌ She <s>go to school with bus</s>.",
+          audioPhrase: "She goes to school by bus.",
+          theoryUrl: "../verbs-have-go-do/explanation.html"
+        }
+      },
+      {
+        id: 15,
+        type: 'choice',
+        category: 'Super Verbo: Go',
+        promptText: "Eles vão ao supermercado aos sábados.<br><strong>'They _____ to the supermarket on Saturdays.'</strong>",
+        options: [
+          { id: "1", text: "go" },
+          { id: "2", text: "goes" },
+          { id: "3", text: "going" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "They go to the supermarket on Saturdays.",
+        successTip: "Correto! 'They' usa 'go'!",
+        explanation: {
+          topic: "Forma Base com 'They'",
+          rule: "Com sujeitos plurais (<em>They, We</em>), verbos não recebem o sufixo -es. Fica apenas <strong>go</strong>.",
+          comparison: "✅ They <strong>go</strong> to the supermarket.<br>❌ They <s>goes</s> to the supermarket.",
+          audioPhrase: "They go to the supermarket on Saturdays.",
+          theoryUrl: "../verbs-have-go-do/explanation.html"
+        }
+      },
+
+      // 16-20: Super Verbo Do (do / does)
+      {
+        id: 16,
+        type: 'word_bank',
+        category: 'Super Verbo: Do',
+        promptText: "Monte a frase: <strong>'Nós fazemos ioga no parque aos domingos.'</strong>",
+        bank: ["We", "do", "yoga", "in", "the", "park", "on", "Sundays", "does", "make"],
+        correctAnswer: "We do yoga in the park on Sundays",
+        correctDisplay: "We do yoga in the park on Sundays.",
+        successTip: "Excelente! Para atividades físicas como yoga, usamos 'do'!",
+        explanation: {
+          topic: "Do vs. Make para Atividades",
+          rule: "Usamos o verbo <strong>DO</strong> para exercícios, tarefas e esportes não coletivos: <em>do yoga, do karate, do gymnastics, do homework</em> (e não 'make'!).",
+          comparison: "✅ We <strong>do yoga</strong>.<br>❌ We <s>make yoga</s>.",
+          audioPhrase: "We do yoga in the park on Sundays.",
+          theoryUrl: "../verbs-have-go-do/explanation.html"
+        }
+      },
+      {
+        id: 17,
+        type: 'choice',
+        category: 'Expressão com Do',
+        promptText: "Amanda lava a roupa suja aos sábados.<br><strong>'Amanda _____ laundry on Saturdays.'</strong>",
+        options: [
+          { id: "1", text: "does" },
+          { id: "2", text: "do" },
+          { id: "3", text: "makes" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Amanda does laundry on Saturdays.",
+        successTip: "Perfeito! 'Lavar roupa' é 'do laundry', e Amanda (she) usa 'does'!",
+        explanation: {
+          topic: "Lavar Roupa = Do Laundry",
+          rule: "A tarefa doméstica de lavar roupa em inglês é <strong>do laundry</strong>. Para Amanda (she), o verbo vira <strong>does</strong>.",
+          comparison: "✅ Amanda <strong>does laundry</strong>.<br>❌ Amanda <s>makes laundry</s>.",
+          audioPhrase: "Amanda does laundry on Saturdays.",
+          theoryUrl: "../verbs-have-go-do/explanation.html"
+        }
+      },
+      {
+        id: 18,
+        type: 'choice',
+        category: 'Expressão com Do',
+        promptText: "As crianças fazem a lição de casa depois do almoço.<br><strong>'The children _____ their homework after lunch.'</strong>",
+        options: [
+          { id: "1", text: "do" },
+          { id: "2", text: "does" },
+          { id: "3", text: "make" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "The children do their homework after lunch.",
+        successTip: "'Children' é plural (they), então usamos 'do homework'!",
+        explanation: {
+          topic: "Fazer Lição de Casa = Do Homework",
+          rule: "Lição de casa sempre usa <strong>do homework</strong>. Como 'children' é plural (as crianças = they), usa-se <strong>do</strong>.",
+          comparison: "✅ The children <strong>do homework</strong>.<br>❌ The children <s>make homework</s>.",
+          audioPhrase: "The children do their homework after lunch.",
+          theoryUrl: "../verbs-have-go-do/explanation.html"
+        }
+      },
+      {
+        id: 19,
+        type: 'choice',
+        category: 'Exercício de Audição',
+        promptText: "Ouça o áudio e selecione a tradução exata:",
+        audioText: "He does karate three times a week.",
+        options: [
+          { id: "1", text: "Ele faz caratê três vezes por semana." },
+          { id: "2", text: "Ele treina judô nos fins de semana." },
+          { id: "3", text: "Ele ensina artes marciais todo dia." }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Ele faz caratê três vezes por semana.",
+        successTip: "Excelente! Para artes marciais usamos o verbo 'do' (he does karate)!",
+        explanation: {
+          topic: "Artes Marciais com 'Do'",
+          rule: "Para artes marciais individuais (karate, judo, kung fu), usa-se o verbo <strong>do</strong>. Com 'He', vira <strong>does</strong>.",
+          comparison: "✅ He <strong>does karate</strong>.<br>❌ He <s>plays karate</s>.",
+          audioPhrase: "He does karate three times a week.",
+          theoryUrl: "../verbs-have-go-do/explanation.html"
+        }
+      },
+      {
+        id: 20,
+        type: 'word_bank',
+        category: 'Super Verbo: Do',
+        promptText: "Monte a frase: <strong>'Eu faço o meu melhor todos os dias.'</strong>",
+        bank: ["I", "do", "my", "best", "every", "day", "does", "make"],
+        correctAnswer: "I do my best every day",
+        correctDisplay: "I do my best every day.",
+        successTip: "Sensacional! 'Do my best' = dar o meu melhor!",
+        explanation: {
+          topic: "Expressão 'Do My Best'",
+          rule: "A expressão consagrada para 'dar o meu melhor' ou 'fazer o possível' é <strong>do my best</strong>.",
+          comparison: "✅ I <strong>do my best</strong>.<br>❌ I <s>make my best</s>.",
+          audioPhrase: "I do my best every day.",
+          theoryUrl: "../verbs-have-go-do/explanation.html"
+        }
+      },
+
+      // 21-25: Negações com Don't
+      {
+        id: 21,
+        type: 'choice',
+        category: 'Negação no Present Simple',
+        promptText: "Eles não bebem café à noite.<br><strong>'They _____ drink coffee at night.'</strong>",
+        options: [
+          { id: "1", text: "don't" },
+          { id: "2", text: "doesn't" },
+          { id: "3", text: "no" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "They don't drink coffee at night.",
+        successTip: "Muito bem! Para 'They', usamos 'don't' para negar!",
+        explanation: {
+          topic: "Negação com Don't",
+          rule: "Para negar ações no presente com <em>I, You, We, They</em>, usamos o auxiliar <strong>don't</strong> (do not) antes do verbo.",
+          comparison: "✅ They <strong>don't drink</strong> coffee.<br>❌ They <s>no drink</s> coffee.",
+          audioPhrase: "They don't drink coffee at night.",
+          theoryUrl: "../present-simple-negative/explanation.html"
+        }
+      },
+      {
+        id: 22,
+        type: 'choice',
+        category: 'Exercício de Audição',
+        promptText: "Ouça o áudio e selecione a tradução correta:",
+        audioText: "My parents don't watch TV in the afternoon.",
+        options: [
+          { id: "1", text: "Meus pais não assistem TV à tarde." },
+          { id: "2", text: "Meus pais assistem TV no quarto." },
+          { id: "3", text: "Meus pais não têm televisão." }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Meus pais não assistem TV à tarde.",
+        successTip: "Excelente! 'Don't watch' nega a ação de assistir!",
+        explanation: {
+          topic: "Negação no Plural",
+          rule: "'My parents' equivale a <em>They</em> (eles), portanto a negação correta é <strong>don't watch</strong>.",
+          comparison: "✅ My parents <strong>don't watch</strong> TV.<br>❌ My parents <s>doesn't watch</s> TV.",
+          audioPhrase: "My parents don't watch TV in the afternoon.",
+          theoryUrl: "../present-simple-negative/explanation.html"
+        }
+      },
+      {
+        id: 23,
+        type: 'choice',
+        category: 'Negação com We',
+        promptText: "Nós não moramos perto do aeroporto.<br><strong>'We _____ live near the airport.'</strong>",
+        options: [
+          { id: "1", text: "don't" },
+          { id: "2", text: "doesn't" },
+          { id: "3", text: "aren't" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "We don't live near the airport.",
+        successTip: "Correto! 'We' usa o auxiliar negativo 'don't'!",
+        explanation: {
+          topic: "Don't vs. Aren't",
+          rule: "Com o verbo de ação <em>live</em> (morar), usamos o auxiliar <strong>don't live</strong>. O 'aren't' só seria usado com o verbo To Be!",
+          comparison: "✅ We <strong>don't live</strong> here.<br>❌ We <s>aren't live</s> here.",
+          audioPhrase: "We don't live near the airport.",
+          theoryUrl: "../present-simple-negative/explanation.html"
+        }
+      },
+      {
+        id: 24,
+        type: 'word_bank',
+        category: 'Negação com I',
+        promptText: "Monte a frase: <strong>'Eu não gosto de acordar cedo.'</strong>",
+        bank: ["I", "don't", "like", "to", "wake", "up", "early", "doesn't", "not"],
+        correctAnswer: "I don't like to wake up early",
+        correctDisplay: "I don't like to wake up early.",
+        successTip: "Muito bem! 'I don't like' = Eu não gosto!",
+        explanation: {
+          topic: "Negação de Preferências com 'I'",
+          rule: "Para negar com o pronome 'I', usa-se <strong>I don't like</strong>.",
+          comparison: "✅ I <strong>don't like</strong> to wake up early.<br>❌ I <s>not like</s> to wake up early.",
+          audioPhrase: "I don't like to wake up early.",
+          theoryUrl: "../present-simple-negative/explanation.html"
+        }
+      },
+      {
+        id: 25,
+        type: 'choice',
+        category: 'Negação com You',
+        promptText: "Você não precisa de um carro nesta cidade.<br><strong>'You _____ need a car in this city.'</strong>",
+        options: [
+          { id: "1", text: "don't" },
+          { id: "2", text: "doesn't" },
+          { id: "3", text: "no" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "You don't need a car in this city.",
+        successTip: "Exato! 'You' usa o auxiliar 'don't'!",
+        explanation: {
+          topic: "Auxiliar Negativo 'Don't'",
+          rule: "Nunca usamos 'no' sozinho antes de verbos em inglês. O correto é <strong>don't need</strong>.",
+          comparison: "✅ You <strong>don't need</strong> a car.<br>❌ You <s>no need</s> a car.",
+          audioPhrase: "You don't need a car in this city.",
+          theoryUrl: "../present-simple-negative/explanation.html"
+        }
+      },
+
+      // 26-30: Negações com Doesn't & Restauração do Verbo Base
+      {
+        id: 26,
+        type: 'choice',
+        category: 'Negação com She',
+        promptText: "Ela não come carne vermelha.<br><strong>'She _____ eat red meat.'</strong>",
+        options: [
+          { id: "1", text: "doesn't" },
+          { id: "2", text: "don't" },
+          { id: "3", text: "isn't" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "She doesn't eat red meat.",
+        successTip: "Brilhante! 'She' usa 'doesn't' para negar no presente!",
+        explanation: {
+          topic: "Negação com Doesn't",
+          rule: "Para negar com a 3ª pessoa do singular (<em>He, She, It</em>), usamos o auxiliar <strong>doesn't</strong> (does not).",
+          comparison: "✅ She <strong>doesn't eat</strong> meat.<br>❌ She <s>don't eat</s> meat.",
+          audioPhrase: "She doesn't eat red meat.",
+          theoryUrl: "../present-simple-negative/explanation.html"
+        }
+      },
+      {
+        id: 27,
+        type: 'choice',
+        category: 'O Ladrão de S',
+        promptText: "Ele não viaja no inverno.<br><strong>'He doesn't _____ in the winter.'</strong>",
+        options: [
+          { id: "1", text: "travel" },
+          { id: "2", text: "travels" },
+          { id: "3", text: "traveling" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "He doesn't travel in the winter.",
+        successTip: "Exato! O 'doesn't' já roubou o S, então o verbo fica 'travel'!",
+        explanation: {
+          topic: "O Efeito 'Ladrão de S' do Doesn't",
+          rule: "Quando o auxiliar <strong>doesn't</strong> entra na frase, o verbo principal <strong>perde o -S</strong> e volta para a sua forma base (infinitivo sem 'to').",
+          comparison: "✅ He doesn't <strong>travel</strong>.<br>❌ He doesn't <s>travels</s>.",
+          audioPhrase: "He doesn't travel in the winter.",
+          theoryUrl: "../present-simple-negative/explanation.html"
+        }
+      },
+      {
+        id: 28,
+        type: 'word_bank',
+        category: 'Negação com He',
+        promptText: "Monte a frase: <strong>'Ele não trabalha aos domingos.'</strong>",
+        bank: ["He", "doesn't", "work", "on", "Sundays", "don't", "works", "is"],
+        correctAnswer: "He doesn't work on Sundays",
+        correctDisplay: "He doesn't work on Sundays.",
+        successTip: "Sensacional! 'Doesn't work' (sem -s no work)!",
+        explanation: {
+          topic: "Estrutura: Sujeito + Doesn't + Verbo Base",
+          rule: "Com 'He', a estrutura é <em>He + doesn't + work</em>.",
+          comparison: "✅ He <strong>doesn't work</strong>.<br>❌ He <s>doesn't works</s>.",
+          audioPhrase: "He doesn't work on Sundays.",
+          theoryUrl: "../present-simple-negative/explanation.html"
+        }
+      },
+      {
+        id: 29,
+        type: 'choice',
+        category: 'Exercício de Audição',
+        promptText: "Ouça o áudio e identifique a frase correta:",
+        audioText: "My dog doesn't bark at night.",
+        options: [
+          { id: "1", text: "O meu cachorro não late à noite." },
+          { id: "2", text: "O meu cachorro late para estranhos." },
+          { id: "3", text: "O meu cachorro dorme no quintal." }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "O meu cachorro não late à noite.",
+        successTip: "Perfeito! 'My dog' (it) usa 'doesn't bark'!",
+        explanation: {
+          topic: "Negação com 'It' (Animais / Objetos)",
+          rule: "'My dog' equivale ao pronome <em>It</em>, por isso usa <strong>doesn't bark</strong>.",
+          comparison: "✅ My dog <strong>doesn't bark</strong>.<br>❌ My dog <s>don't bark</s>.",
+          audioPhrase: "My dog doesn't bark at night.",
+          theoryUrl: "../present-simple-negative/explanation.html"
+        }
+      },
+      {
+        id: 30,
+        type: 'choice',
+        category: 'O Ladrão de S com Have',
+        promptText: "Ela não tem um carro novo.<br><strong>'She doesn't _____ a new car.'</strong>",
+        options: [
+          { id: "1", text: "have" },
+          { id: "2", text: "has" },
+          { id: "3", text: "haves" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "She doesn't have a new car.",
+        successTip: "Regra de ouro! Com 'doesn't', o verbo volta para 'have' (doesn't have)!",
+        explanation: {
+          topic: "Doesn't + HAVE (e nunca 'doesn't has')",
+          rule: "Na negação, o verbo irregular 'has' volta para a forma base <strong>have</strong> após o 'doesn't'. A forma 'doesn't has' é um dos erros mais comuns de iniciantes!",
+          comparison: "✅ She doesn't <strong>have</strong> a car.<br>❌ She doesn't <s>has</s> a car.",
+          audioPhrase: "She doesn't have a new car.",
+          theoryUrl: "../present-simple-negative/explanation.html"
+        }
+      },
+
+      // 31-35: Perguntas com Do & Short Answers
+      {
+        id: 31,
+        type: 'word_bank',
+        category: 'Pergunta com Do',
+        promptText: "Monte a pergunta: <strong>'Você toca violão nos fins de semana?'</strong>",
+        bank: ["Do", "you", "play", "the", "guitar", "on", "weekends", "Does", "plays", "are"],
+        correctAnswer: "Do you play the guitar on weekends",
+        correctDisplay: "Do you play the guitar on weekends?",
+        successTip: "Show de bola! Perguntas para 'you' começam com 'Do'!",
+        explanation: {
+          topic: "Perguntas de Ação com 'Do'",
+          rule: "Para fazer perguntas com verbos de ação para <em>I, You, We, They</em>, iniciamos a frase com o auxiliar <strong>DO</strong>.",
+          comparison: "✅ <strong>Do you play</strong> the guitar?<br>❌ <s>You play</s> the guitar? / ❌ <s>Are you play</s>?",
+          audioPhrase: "Do you play the guitar on weekends?",
+          theoryUrl: "../present-simple-questions/explanation.html"
+        }
+      },
+      {
+        id: 32,
+        type: 'choice',
+        category: 'Resposta Curta com Do',
+        promptText: "Como responder afirmativamente a:<br><strong>'Do they live in New York?'</strong>",
+        options: [
+          { id: "1", text: "Yes, they do." },
+          { id: "2", text: "Yes, they live." },
+          { id: "3", text: "Yes, they are." }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Yes, they do.",
+        successTip: "Correto! Resposta curta para 'Do they...?' é 'Yes, they do'!",
+        explanation: {
+          topic: "Short Answers com 'Do'",
+          rule: "Em inglês, respostas curtas afirmativas repetem o pronome e o auxiliar: <strong>Yes, they do</strong> (e não 'Yes, they live').",
+          comparison: "✅ Yes, they <strong>do</strong>.<br>❌ Yes, they <s>live</s>.",
+          audioPhrase: "Do they live in New York? Yes, they do.",
+          theoryUrl: "../present-simple-questions/explanation.html"
+        }
+      },
+      {
+        id: 33,
+        type: 'choice',
+        category: 'Pergunta com Do',
+        promptText: "Nós temos uma reunião hoje?<br><strong>'_____ we have a meeting today?'</strong>",
+        options: [
+          { id: "1", text: "Do" },
+          { id: "2", text: "Does" },
+          { id: "3", text: "Are" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Do we have a meeting today?",
+        successTip: "Perfeito! 'We' usa o auxiliar 'Do' para fazer perguntas!",
+        explanation: {
+          topic: "Auxiliar 'Do' com We",
+          rule: "O pronome 'We' (nós) sempre faz perguntas no Present Simple usando o auxiliar <strong>Do</strong>.",
+          comparison: "✅ <strong>Do we</strong> have a meeting?<br>❌ <s>Does we</s> have a meeting?",
+          audioPhrase: "Do we have a meeting today?",
+          theoryUrl: "../present-simple-questions/explanation.html"
+        }
+      },
+      {
+        id: 34,
+        type: 'choice',
+        category: 'Exercício de Audição',
+        promptText: "Ouça o áudio e selecione a tradução:",
+        audioText: "Do you drink coffee every morning?",
+        options: [
+          { id: "1", text: "Você bebe café toda manhã?" },
+          { id: "2", text: "Você prefere café ou chá?" },
+          { id: "3", text: "Você comprou café hoje?" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Você bebe café toda manhã?",
+        successTip: "Excelente escuta! Pergunta sobre rotina diária!",
+        explanation: {
+          topic: "Perguntas de Hábito com 'Do you'",
+          rule: "A estrutura <em>Do you + verbo + every morning?</em> é o padrão mais clássico para investigar hábitos.",
+          comparison: "✅ <strong>Do you drink</strong> coffee every morning?<br>❌ <s>Drink you</s> coffee?",
+          audioPhrase: "Do you drink coffee every morning?",
+          theoryUrl: "../present-simple-questions/explanation.html"
+        }
+      },
+      {
+        id: 35,
+        type: 'choice',
+        category: 'Resposta Curta Negativa',
+        promptText: "Como responder negativamente a:<br><strong>'Do you speak German?'</strong>",
+        options: [
+          { id: "1", text: "No, I don't." },
+          { id: "2", text: "No, I not speak." },
+          { id: "3", text: "No, I am not." }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "No, I don't.",
+        successTip: "Muito bem! 'No, I don't' é a resposta curta natural!",
+        explanation: {
+          topic: "Short Answer Negativa com Don't",
+          rule: "Para perguntas iniciadas com 'Do you...?', a resposta curta negativa educada e natural é <strong>No, I don't</strong>.",
+          comparison: "✅ No, I <strong>don't</strong>.<br>❌ No, I <s>not speak</s>.",
+          audioPhrase: "Do you speak German? No, I don't.",
+          theoryUrl: "../present-simple-questions/explanation.html"
+        }
+      },
+
+      // 36-40: Perguntas com Does & Short Answers
+      {
+        id: 36,
+        type: 'word_bank',
+        category: 'Pergunta com Does',
+        promptText: "Monte a pergunta: <strong>'O seu pai trabalha em um banco?'</strong>",
+        bank: ["Does", "your", "father", "work", "at", "a", "bank", "Do", "works", "is"],
+        correctAnswer: "Does your father work at a bank",
+        correctDisplay: "Does your father work at a bank?",
+        successTip: "Sensacional! 'Your father' (he) pede 'Does', e o verbo volta para 'work'!",
+        explanation: {
+          topic: "Perguntas com Does + Verbo Base",
+          rule: "Ao fazer perguntas sobre <em>He, She</em> ou <em>It</em>, usamos <strong>Does</strong> no início e o verbo <strong>fica na forma base</strong> (sem -s!).",
+          comparison: "✅ <strong>Does</strong> your father <strong>work</strong>?<br>❌ Does your father <s>works</s>?",
+          audioPhrase: "Does your father work at a bank?",
+          theoryUrl: "../present-simple-questions/explanation.html"
+        }
+      },
+      {
+        id: 37,
+        type: 'choice',
+        category: 'Resposta Curta com Does',
+        promptText: "Como responder afirmativamente a:<br><strong>'Does Michael drive to work?'</strong>",
+        options: [
+          { id: "1", text: "Yes, he does." },
+          { id: "2", text: "Yes, he drives." },
+          { id: "3", text: "Yes, he is." }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Yes, he does.",
+        successTip: "Correto! Perguntas com 'Does' terminam com 'does' na resposta curta!",
+        explanation: {
+          topic: "Short Answers com 'Does'",
+          rule: "Perguntas com 'Does he...?' respondem-se com <strong>Yes, he does</strong>.",
+          comparison: "✅ Yes, he <strong>does</strong>.<br>❌ Yes, he <s>drives</s>.",
+          audioPhrase: "Does Michael drive to work? Yes, he does.",
+          theoryUrl: "../present-simple-questions/explanation.html"
+        }
+      },
+      {
+        id: 38,
+        type: 'choice',
+        category: 'Exercício de Audição',
+        promptText: "Ouça a pergunta em inglês e identifique o significado:",
+        audioText: "Does your manager speak French?",
+        options: [
+          { id: "1", text: "O seu gerente fala francês?" },
+          { id: "2", text: "O seu gerente estuda na França?" },
+          { id: "3", text: "O seu amigo mora na França?" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "O seu gerente fala francês?",
+        successTip: "Excelente! 'Does your manager speak...?' pergunta se a 3ª pessoa fala o idioma!",
+        explanation: {
+          topic: "Does + Sujeito Singular",
+          rule: "'Your manager' é singular (he/she), por isso pergunta-se com <strong>Does your manager speak</strong>.",
+          comparison: "✅ <strong>Does</strong> your manager speak?<br>❌ <s>Do</s> your manager speak?",
+          audioPhrase: "Does your manager speak French?",
+          theoryUrl: "../present-simple-questions/explanation.html"
+        }
+      },
+      {
+        id: 39,
+        type: 'choice',
+        category: 'Pergunta com Does',
+        promptText: "O trem chega no horário?<br><strong>'_____ the train arrive on time?'</strong>",
+        options: [
+          { id: "1", text: "Does" },
+          { id: "2", text: "Do" },
+          { id: "3", text: "Is" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Does the train arrive on time?",
+        successTip: "'The train' (it) usa o auxiliar 'Does' para fazer perguntas!",
+        explanation: {
+          topic: "Perguntas com 'It' (Objetos/Meios de Transporte)",
+          rule: "'The train' é um substantivo singular (it). Para o verbo de ação 'arrive', usamos <strong>Does</strong>.",
+          comparison: "✅ <strong>Does</strong> the train arrive?<br>❌ <s>Is</s> the train arrive?",
+          audioPhrase: "Does the train arrive on time?",
+          theoryUrl: "../present-simple-questions/explanation.html"
+        }
+      },
+      {
+        id: 40,
+        type: 'choice',
+        category: 'Resposta Curta Negativa com Does',
+        promptText: "Como responder negativamente a:<br><strong>'Does she like spicy food?'</strong>",
+        options: [
+          { id: "1", text: "No, she doesn't." },
+          { id: "2", text: "No, she don't." },
+          { id: "3", text: "No, she isn't." }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "No, she doesn't.",
+        successTip: "Perfeito! 'No, she doesn't' é a resposta curta negativa correta!",
+        explanation: {
+          topic: "Short Answer Negativa com Doesn't",
+          rule: "Para perguntas com 'Does she...?', a resposta curta negativa é <strong>No, she doesn't</strong>.",
+          comparison: "✅ No, she <strong>doesn't</strong>.<br>❌ No, she <s>don't</s>.",
+          audioPhrase: "Does she like spicy food? No, she doesn't.",
+          theoryUrl: "../present-simple-questions/explanation.html"
+        }
+      },
+
+      // 41-45: Perguntas com o Verbo To Be (Am / Is / Are)
+      {
+        id: 41,
+        type: 'choice',
+        category: 'Pergunta com o Verbo To Be',
+        promptText: "Você está pronto para o exame?<br><strong>'_____ you ready for the exam?'</strong>",
+        options: [
+          { id: "1", text: "Are" },
+          { id: "2", text: "Do" },
+          { id: "3", text: "Is" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Are you ready for the exam?",
+        successTip: "Correto! O verbo To Be faz pergunta invertendo: 'Are you ready?' (sem Do!).",
+        explanation: {
+          topic: "Inversão do Verbo To Be (Am / Is / Are)",
+          rule: "O verbo <strong>To Be</strong> NÃO usa auxiliares Do/Does! Para perguntar se alguém 'é' ou 'está', basta colocar o verbo To Be antes do sujeito: <strong>Are you...?</strong>",
+          comparison: "✅ <strong>Are you</strong> ready?<br>❌ <s>Do you be</s> ready? / ❌ <s>Do you ready</s>?",
+          audioPhrase: "Are you ready for the exam?",
+          theoryUrl: "../to-be-questions/explanation.html"
+        }
+      },
+      {
+        id: 42,
+        type: 'choice',
+        category: 'Resposta Curta com To Be',
+        promptText: "Como responder afirmativamente a:<br><strong>'Is your sister at home right now?'</strong>",
+        options: [
+          { id: "1", text: "Yes, she is." },
+          { id: "2", text: "Yes, she does." },
+          { id: "3", text: "Yes, she's." }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Yes, she is.",
+        successTip: "Muito bem! Resposta curta afirmativa com To Be é 'Yes, she is' (sem contrair!).",
+        explanation: {
+          topic: "Sem Contração no Fim de Resposta Curta",
+          rule: "Em respostas curtas afirmativas com o verbo To Be, <strong>nunca se usa contração</strong> no final da frase. Diga sempre <strong>Yes, she is</strong> (e nunca <em>Yes, she's</em>).",
+          comparison: "✅ Yes, she <strong>is</strong>.<br>❌ Yes, she<s>'s</s>.",
+          audioPhrase: "Is your sister at home? Yes, she is.",
+          theoryUrl: "../to-be-questions/explanation.html"
+        }
+      },
+      {
+        id: 43,
+        type: 'word_bank',
+        category: 'Pergunta com Where e To Be',
+        promptText: "Monte a pergunta: <strong>'Onde estão os seus amigos agora?'</strong>",
+        bank: ["Where", "are", "your", "friends", "now", "is", "do", "they"],
+        correctAnswer: "Where are your friends now",
+        correctDisplay: "Where are your friends now?",
+        successTip: "Perfeito! 'Your friends' é plural (they), então usamos 'Where are'!",
+        explanation: {
+          topic: "WH- Questions com o Verbo To Be",
+          rule: "Estrutura de pergunta aberta com To Be: <em>[WH- Word] + [AM/IS/ARE] + [Sujeito]</em>. Como 'your friends' é plural, usamos <strong>Where are</strong>.",
+          comparison: "✅ <strong>Where are</strong> your friends?<br>❌ Where <s>your friends are</s>?",
+          audioPhrase: "Where are your friends now?",
+          theoryUrl: "../to-be-questions/explanation.html"
+        }
+      },
+      {
+        id: 44,
+        type: 'choice',
+        category: 'Exercício de Audição',
+        promptText: "Ouça o áudio e selecione a tradução exata:",
+        audioText: "Why is the store closed today?",
+        options: [
+          { id: "1", text: "Por que a loja está fechada hoje?" },
+          { id: "2", text: "Quando a loja abre hoje?" },
+          { id: "3", text: "Onde fica a loja aberta?" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Por que a loja está fechada hoje?",
+        successTip: "Excelente escuta! 'Why is the store closed?' pergunta o motivo do fechamento!",
+        explanation: {
+          topic: "Why is + Sujeito Singular",
+          rule: "'The store' é singular (it), logo a pergunta com 'Why' inverte com 'is': <strong>Why is the store closed?</strong>",
+          comparison: "✅ <strong>Why is</strong> the store closed?<br>❌ Why <s>the store is</s> closed?",
+          audioPhrase: "Why is the store closed today?",
+          theoryUrl: "../to-be-questions/explanation.html"
+        }
+      },
+      {
+        id: 45,
+        type: 'choice',
+        category: 'Resposta Curta Negativa com To Be',
+        promptText: "Como responder negativamente a:<br><strong>'Are you tired after work?'</strong>",
+        options: [
+          { id: "1", text: "No, I'm not." },
+          { id: "2", text: "No, I don't." },
+          { id: "3", text: "No, I isn't." }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "No, I'm not.",
+        successTip: "Exato! Para 'Are you...?' a resposta negativa é 'No, I'm not'!",
+        explanation: {
+          topic: "Resposta Curta: No, I'm not",
+          rule: "Perguntas de estado/sentimento feitas com 'Are you...?' respondem-se no negativo com <strong>No, I'm not</strong> (usando o To Be e não 'don't').",
+          comparison: "✅ No, I<strong>'m not</strong>.<br>❌ No, I <s>don't</s>.",
+          audioPhrase: "Are you tired? No, I'm not.",
+          theoryUrl: "../to-be-questions/explanation.html"
+        }
+      },
+
+      // 46-50: WH- Questions & To Be vs Do/Does
+      {
+        id: 46,
+        type: 'choice',
+        category: 'Duelo To Be vs Do',
+        promptText: "Como se pergunta corretamente: <strong>'Você está com fome agora?'</strong>",
+        options: [
+          { id: "1", text: "Are you hungry now?" },
+          { id: "2", text: "Do you hungry now?" },
+          { id: "3", text: "Do you be hungry now?" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Are you hungry now?",
+        successTip: "Perfeito! 'Hungry' é um estado/adjetivo, então perguntamos com 'Are you'!",
+        explanation: {
+          topic: "Duelo: TO BE (Estados) vs. DO (Ações)",
+          rule: "Use <strong>AM / IS / ARE</strong> para quem você é ou como/onde está (adjetivos como <em>hungry, tired, ready, happy</em>). Use <strong>DO / DOES</strong> apenas para ações com verbos (como <em>eat, live, work</em>).",
+          comparison: "✅ <strong>Are you</strong> hungry?<br>❌ <s>Do you</s> hungry?",
+          audioPhrase: "Are you hungry now?",
+          theoryUrl: "../to-be-questions/explanation.html"
+        }
+      },
+      {
+        id: 47,
+        type: 'word_bank',
+        category: 'WH Question com Do',
+        promptText: "Monte a pergunta: <strong>'O que você come no almoço?'</strong>",
+        bank: ["What", "do", "you", "eat", "for", "lunch", "does", "eats", "are"],
+        correctAnswer: "What do you eat for lunch",
+        correctDisplay: "What do you eat for lunch?",
+        successTip: "Sensacional! Estrutura: What + do + you + eat + for lunch?",
+        explanation: {
+          topic: "Estrutura WH- Questions de Ação",
+          rule: "Fórmula universal: <strong>[WH- Word] + [DO / DOES] + [Sujeito] + [Verbo Base]?</strong>",
+          comparison: "✅ <strong>What do you eat</strong> for lunch?<br>❌ What <s>you eat</s> for lunch?",
+          audioPhrase: "What do you eat for lunch?",
+          theoryUrl: "../present-simple-questions/explanation.html"
+        }
+      },
+      {
+        id: 48,
+        type: 'word_bank',
+        category: 'WH Question com Where e Does',
+        promptText: "Monte a pergunta: <strong>'Onde a sua mãe mora?'</strong>",
+        bank: ["Where", "does", "your", "mother", "live", "do", "lives", "is"],
+        correctAnswer: "Where does your mother live",
+        correctDisplay: "Where does your mother live?",
+        successTip: "Brilhante! 'Your mother' (she) usa 'Where does' + 'live'!",
+        explanation: {
+          topic: "Where + DOES + 3ª Pessoa",
+          rule: "Para 'your mother' (she), usamos <strong>Does</strong>. E o verbo 'live' permanece sem -s!",
+          comparison: "✅ Where <strong>does</strong> your mother <strong>live</strong>?<br>❌ Where does your mother <s>lives</s>?",
+          audioPhrase: "Where does your mother live?",
+          theoryUrl: "../present-simple-questions/explanation.html"
+        }
+      },
+      {
+        id: 49,
+        type: 'choice',
+        category: 'Duelo To Be vs Do',
+        promptText: "Como se pergunta corretamente: <strong>'Você trabalha aos sábados?'</strong>",
+        options: [
+          { id: "1", text: "Do you work on Saturdays?" },
+          { id: "2", text: "Are you work on Saturdays?" },
+          { id: "3", text: "Work you on Saturdays?" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Do you work on Saturdays?",
+        successTip: "Exato! Para o verbo de ação 'work', usamos o auxiliar 'Do you work'!",
+        explanation: {
+          topic: "Nunca misture 'Are you' com verbos de ação!",
+          rule: "O erro mais clássico de iniciantes é dizer <em>'Are you work?'</em>. Para verbos de ação na rotina, SEMPRE pergunte com <strong>Do you</strong>.",
+          comparison: "✅ <strong>Do you work</strong> on Saturdays?<br>❌ <s>Are you work</s> on Saturdays?",
+          audioPhrase: "Do you work on Saturdays?",
+          theoryUrl: "../present-simple-questions/explanation.html"
+        }
+      },
+      {
+        id: 50,
+        type: 'choice',
+        category: 'WH Question de Horário',
+        promptText: "A que horas o museu abre?<br><strong>'What time _____ the museum open?'</strong>",
+        options: [
+          { id: "1", text: "does" },
+          { id: "2", text: "do" },
+          { id: "3", text: "is" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "What time does the museum open?",
+        successTip: "Parabéns! 'The museum' (it) pede 'does' para perguntar o horário de abertura!",
+        explanation: {
+          topic: "What time + DOES + Sujeito Singular",
+          rule: "'The museum' é singular (it). Para o verbo de ação 'open', usamos o auxiliar <strong>does</strong>.",
+          comparison: "✅ What time <strong>does</strong> the museum open?<br>❌ What time <s>is</s> the museum open?",
+          audioPhrase: "What time does the museum open?",
+          theoryUrl: "../present-simple-questions/explanation.html"
+        }
+      }
+    ];
+
+    // Randomize the 50 questions for this session!
+    const questions = shuffleArray([...rawQuestions]);
+
+    let currentIndex = 0;
+    let selectedAnswer = null;
+    let selectedWordTokens = [];
+    let state = 'answering'; // 'answering' | 'evaluated'
+    let correctCount = 0;
+    let hearts = 5;
+
+    const progressBar = document.getElementById('progressBar');
+    const questionCounter = document.getElementById('questionCounter');
+    const questionPrompt = document.getElementById('questionPrompt');
+    const mascotBubbleText = document.getElementById('mascotBubbleText');
+    const wordBankView = document.getElementById('wordBankView');
+    const selectedSlots = document.getElementById('selectedSlots');
+    const availableWords = document.getElementById('availableWords');
+    const multipleChoiceView = document.getElementById('multipleChoiceView');
+    const footerDrawer = document.getElementById('footerDrawer');
+    const footerMessage = document.getElementById('footerMessage');
+    const feedbackIcon = document.getElementById('feedbackIcon');
+    const feedbackTitle = document.getElementById('feedbackTitle');
+    const feedbackExplanation = document.getElementById('feedbackExplanation');
+    const btnAction = document.getElementById('btnAction');
+    const audioPromptContainer = document.getElementById('audioPromptContainer');
+
+    function renderQuestion() {
+      state = 'answering';
+      selectedAnswer = null;
+      selectedWordTokens = [];
+
+      // Reset UI drawer
+      footerDrawer.className = 'duo-footer-drawer';
+      footerMessage.style.visibility = 'hidden';
+      btnAction.className = 'btn-duo btn-duo-green btn-duo-disabled';
+      btnAction.disabled = true;
+      btnAction.innerText = 'VERIFICAR';
+
+      const q = questions[currentIndex];
+      const progressPercent = Math.round(((currentIndex + 1) / questions.length) * 100);
+      progressBar.style.width = Math.max(2, progressPercent) + '%';
+      questionCounter.innerText = `${currentIndex + 1}/${questions.length}`;
+
+      questionPrompt.innerText = `${currentIndex + 1}/${questions.length} • ${q.category || 'Desafio Geral'}`;
+      mascotBubbleText.innerHTML = q.promptText;
+
+      // Audio setup
+      if (q.audioText) {
+        audioPromptContainer.style.display = 'block';
+        window.currentAudioText = q.audioText;
+        setTimeout(() => {
+          if (window.duoAudio) duoAudio.speak(q.audioText);
+        }, 300);
+      } else {
+        audioPromptContainer.style.display = 'none';
+      }
+
+      if (q.type === 'word_bank') {
+        renderWordBank(q);
+      } else {
+        renderMultipleChoice(q);
+      }
+    }
+
+    function renderMultipleChoice(q) {
+      wordBankView.style.display = 'none';
+      multipleChoiceView.style.display = 'flex';
+      multipleChoiceView.innerHTML = '';
+
+      // Shuffle options for extra challenge!
+      const shuffledOptions = shuffleArray([...q.options]);
+
+      shuffledOptions.forEach((opt, idx) => {
+        const card = document.createElement('div');
+        card.className = 'duo-choice-card';
+        card.innerHTML = `
+          <div class="duo-choice-number">${idx + 1}</div>
+          <div>${opt.text}</div>
+        `;
+        card.onclick = () => {
+          if (state !== 'answering') return;
+          duoAudio.playTap();
+          document.querySelectorAll('.duo-choice-card').forEach(c => c.classList.remove('selected'));
+          card.classList.add('selected');
+          selectedAnswer = opt.id;
+          enableCheckButton();
+        };
+        multipleChoiceView.appendChild(card);
+      });
+    }
+
+    function renderWordBank(q) {
+      multipleChoiceView.style.display = 'none';
+      wordBankView.style.display = 'block';
+      selectedSlots.innerHTML = '';
+      availableWords.innerHTML = '';
+
+      // Shuffle word bank chips
+      const shuffledBank = shuffleArray([...q.bank]);
+
+      shuffledBank.forEach((word, idx) => {
+        const chip = document.createElement('button');
+        chip.className = 'duo-word-chip';
+        chip.innerText = word;
+        chip.id = 'word-token-' + idx;
+
+        chip.onclick = () => {
+          if (state !== 'answering') return;
+          duoAudio.playTap();
+          chip.classList.add('used');
+
+          const slotChip = document.createElement('button');
+          slotChip.className = 'duo-word-chip';
+          slotChip.innerText = word;
+          slotChip.onclick = () => {
+            if (state !== 'answering') return;
+            duoAudio.playTap();
+            slotChip.remove();
+            chip.classList.remove('used');
+            selectedWordTokens = selectedWordTokens.filter(t => t.id !== chip.id);
+            checkWordBankState();
+          };
+
+          selectedSlots.appendChild(slotChip);
+          selectedWordTokens.push({ id: chip.id, text: word });
+          checkWordBankState();
+        };
+
+        availableWords.appendChild(chip);
+      });
+    }
+
+    function checkWordBankState() {
+      if (selectedWordTokens.length > 0) {
+        enableCheckButton();
+      } else {
+        disableCheckButton();
+      }
+    }
+
+    function enableCheckButton() {
+      btnAction.classList.remove('btn-duo-disabled');
+      btnAction.disabled = false;
+    }
+
+    function disableCheckButton() {
+      btnAction.classList.add('btn-duo-disabled');
+      btnAction.disabled = true;
+    }
+
+    function handleActionClick() {
+      if (state === 'answering') {
+        evaluateAnswer();
+      } else if (state === 'evaluated') {
+        nextQuestion();
+      }
+    }
+
+    function evaluateAnswer() {
+      state = 'evaluated';
+      const q = questions[currentIndex];
+      let isCorrect = false;
+
+      if (q.type === 'word_bank') {
+        const userPhrase = selectedWordTokens.map(t => t.text).join(' ').trim();
+        isCorrect = (userPhrase.toLowerCase() === q.correctAnswer.toLowerCase());
+      } else {
+        isCorrect = (selectedAnswer === q.correctOptionId);
+      }
+
+      footerMessage.style.visibility = 'visible';
+
+      if (isCorrect) {
+        correctCount++;
+        duoAudio.playSuccess();
+        footerDrawer.className = 'duo-footer-drawer correct';
+        feedbackIcon.innerText = '✓';
+        feedbackTitle.innerText = 'Excelente!';
+        feedbackExplanation.innerText = q.successTip || 'Você acertou na mosca!';
+        btnAction.innerText = 'CONTINUAR';
+        btnAction.className = 'btn-duo btn-duo-green';
+      } else {
+        duoAudio.playError();
+        hearts = Math.max(0, hearts - 1);
+        document.getElementById('heartsCount').innerText = hearts;
+        footerDrawer.className = 'duo-footer-drawer incorrect';
+        feedbackIcon.innerText = '✕';
+        feedbackTitle.innerText = 'Resposta correta:';
+        feedbackExplanation.innerText = q.correctDisplay || q.correctAnswer;
+        btnAction.innerText = 'CONTINUAR';
+        btnAction.className = 'btn-duo btn-duo-green';
+      }
+    }
+
+    function nextQuestion() {
+      currentIndex++;
+      if (currentIndex < questions.length) {
+        renderQuestion();
+      } else {
+        showCompletion();
+      }
+    }
+
+    function showCompletion() {
+      progressBar.style.width = '100%';
+      document.getElementById('exerciseArea').style.display = 'none';
+      footerDrawer.style.display = 'none';
+      
+      const accuracy = Math.round((correctCount / questions.length) * 100);
+      document.getElementById('accuracyStat').innerText = accuracy + '%';
+      document.getElementById('completionScreen').style.display = 'block';
+      duoAudio.playSuccess();
+    }
+
+    // Modal Controller Functions
+    function openExplanationModal() {
+      if (window.duoAudio) duoAudio.playTap();
+      const q = questions[currentIndex];
+      if (!q || !q.explanation) return;
+
+      document.getElementById('sheetTopicTitle').innerText = q.explanation.topic || q.category || 'Explicação do Duo';
+      document.getElementById('sheetRuleText').innerHTML = q.explanation.rule || q.successTip || '';
+      
+      const contrastBox = document.getElementById('sheetContrastBox');
+      if (q.explanation.comparison) {
+        contrastBox.style.display = 'block';
+        contrastBox.innerHTML = `
+          <div style="font-size: 12px; text-transform: uppercase; color: var(--duo-gray-400); margin-bottom: 6px; font-weight: 800;">Exemplo de Contraste:</div>
+          <div>${q.explanation.comparison}</div>
+          ${q.explanation.audioPhrase ? `<div style="margin-top: 10px;"><button class="btn-speaker" onclick="duoAudio.speak('${q.explanation.audioPhrase}')" style="font-size: 13px; padding: 4px 10px;">🔊 Ouvir frase</button></div>` : ''}
+        `;
+      } else {
+        contrastBox.style.display = 'none';
+      }
+
+      const theoryLink = document.getElementById('sheetTheoryLink');
+      if (q.explanation.theoryUrl) {
+        theoryLink.style.display = 'inline-flex';
+        theoryLink.href = q.explanation.theoryUrl;
+      } else {
+        theoryLink.style.display = 'none';
+      }
+
+      document.getElementById('explanationModalOverlay').classList.add('active');
+    }
+
+    function closeExplanationModal(e) {
+      if (e && e.target !== document.getElementById('explanationModalOverlay') && !e.target.classList.contains('btn-close') && !e.target.classList.contains('btn-duo-green')) {
+        return;
+      }
+      if (window.duoAudio) duoAudio.playTap();
+      document.getElementById('explanationModalOverlay').classList.remove('active');
+    }
+
+    // Start with randomized questions
+    renderQuestion();
+  </script>
+</body>
+</html>

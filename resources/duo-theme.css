@@ -250,14 +250,28 @@ body {
 .duo-lang-badge {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   font-weight: 800;
   font-size: 14px;
   background: var(--duo-gray-100);
-  padding: 6px 12px;
+  padding: 6px 14px;
   border-radius: var(--duo-radius-pill);
   border: 2px solid var(--duo-gray-200);
+  border-bottom-width: 3px;
   user-select: none;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.duo-lang-badge:hover {
+  background: #ffffff;
+  border-color: var(--duo-blue);
+  transform: translateY(-1px);
+}
+
+.duo-lang-badge:active {
+  transform: translateY(2px);
+  border-bottom-width: 2px;
 }
 
 .duo-stat-item {
@@ -1704,6 +1718,144 @@ html, body {
   border-color: #283d47;
   color: #ffffff;
 }
+
+/* ============================================================
+   Course Selection Modal (Selector de Cursos e Idiomas)
+   ============================================================ */
+.duo-course-modal-box {
+  background: #ffffff;
+  width: 100%;
+  max-width: 580px;
+  border-radius: var(--duo-radius-xl);
+  padding: 32px 28px calc(28px + env(safe-area-inset-bottom, 0px));
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.28);
+  border: 2px solid var(--duo-gray-200);
+  border-bottom-width: 6px;
+  transform: scale(0.92);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.duo-modal-overlay.active .duo-course-modal-box {
+  transform: scale(1);
+}
+
+.duo-course-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.duo-course-modal-header h2 {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--duo-gray-900);
+  margin: 0;
+}
+
+.duo-course-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.duo-course-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  border: 2px solid var(--duo-gray-200);
+  border-bottom-width: 4px;
+  border-radius: var(--duo-radius-lg);
+  background: #ffffff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  gap: 16px;
+}
+
+.duo-course-card:hover {
+  border-color: var(--duo-blue);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(28, 176, 246, 0.15);
+}
+
+.duo-course-card:active {
+  transform: translateY(2px);
+  border-bottom-width: 2px;
+}
+
+.duo-course-card.active {
+  border-color: var(--duo-green);
+  background: var(--duo-green-light);
+}
+
+.duo-course-card-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.duo-course-flag-wrapper {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--duo-radius-md);
+  background: var(--duo-gray-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  border: 2px solid var(--duo-gray-200);
+  box-shadow: 0 2px 0 var(--duo-gray-200);
+}
+
+.duo-course-card.active .duo-course-flag-wrapper {
+  background: #ffffff;
+  border-color: var(--duo-green);
+}
+
+.duo-course-title {
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--duo-gray-900);
+  margin-bottom: 3px;
+}
+
+.duo-course-sub {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--duo-gray-400);
+}
+
+/* Dark Mode Overrides for Course Selection Modal */
+[data-theme="dark"] .duo-course-modal-box {
+  background: #18272f;
+  border-color: #283d47;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .duo-course-card {
+  background: #131f24;
+  border-color: #283d47;
+}
+
+[data-theme="dark"] .duo-course-card:hover {
+  border-color: var(--duo-blue);
+}
+
+[data-theme="dark"] .duo-course-card.active {
+  background: rgba(88, 204, 2, 0.15);
+  border-color: var(--duo-green);
+}
+
+[data-theme="dark"] .duo-course-flag-wrapper {
+  background: #18272f;
+  border-color: #283d47;
+  box-shadow: 0 2px 0 #283d47;
+}
+
 
 
 

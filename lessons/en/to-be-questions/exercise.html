@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{TOPIC_TITLE}} - Exercícios | Linguo</title>
+  <title>Perguntas com o Verbo To Be - Exercícios | Linguo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
@@ -14,7 +14,7 @@
 
   <!-- Top Progress Bar with Lives -->
   <div class="duo-progress-container">
-    <button class="btn-close" onclick="if(confirm('Deseja sair da lição?')) window.location.href='explanation.html'">✕</button>
+    <button class="btn-close" onclick="if(confirm('Deseja sair da lição?')) window.location.href='../../../index.html'" title="Voltar à trilha">✕</button>
     <div class="duo-progress-track">
       <div class="duo-progress-fill" id="progressBar" style="width: 10%;"></div>
     </div>
@@ -51,7 +51,7 @@
           </svg>
         </div>
         <div class="duo-bubble" id="mascotBubbleText">
-          Traduza esta frase:
+          Complete o exercício:
         </div>
       </div>
 
@@ -68,8 +68,8 @@
     <!-- Completion Screen (Shown when done) -->
     <div id="completionScreen" class="duo-completion-screen">
       <div style="font-size: 72px; margin-bottom: 12px;">🎉</div>
-      <h1 class="duo-title" style="font-size: 36px; color: var(--duo-green);">Lição Concluída!</h1>
-      <p class="duo-subtitle">Você mandou muito bem e fixou o conteúdo de hoje.</p>
+      <h1 class="duo-title" style="font-size: 36px; color: var(--duo-green);">Perguntas To Be Dominadas!</h1>
+      <p class="duo-subtitle">Você já sabe perguntar com Am, Is e Are sem hesitar.</p>
 
       <div class="duo-streak-banner">
         <div>
@@ -78,7 +78,7 @@
         </div>
         <div>
           <div style="font-size: 14px; font-weight: 800; opacity: 0.9;">OFENSIVA</div>
-          <div style="font-size: 32px; font-weight: 900;">🔥 1 DIA</div>
+          <div style="font-size: 32px; font-weight: 900;">🔥 3 DIAS</div>
         </div>
         <div>
           <div style="font-size: 14px; font-weight: 800; opacity: 0.9;">PRECISÃO</div>
@@ -86,9 +86,9 @@
         </div>
       </div>
 
-      <div style="display: flex; gap: 16px; justify-content: center; margin-top: 32px;">
+      <div style="display: flex; gap: 16px; justify-content: center; margin-top: 32px; flex-wrap: wrap;">
         <a href="explanation.html" class="btn-duo btn-duo-secondary">REVISAR TEORIA</a>
-        <button class="btn-duo btn-duo-green" onclick="window.location.reload()">PRATICAR NOVAMENTE</button>
+        <a href="../../../index.html" class="btn-duo btn-duo-green">CONTINUAR TRILHA ➔</a>
       </div>
     </div>
 
@@ -111,8 +111,72 @@
   </footer>
 
   <script>
-    // Injected questions data
-    const questions = {{QUESTIONS_JSON}};
+    // 5 Engaging questions testing To Be Questions, Inversion, and Short Answers
+    const questions = [
+      {
+        id: 1,
+        type: 'word_bank',
+        title: 'Monte a pergunta com Are you:',
+        promptText: "Monte a pergunta: <strong>'Você está pronto para sair?'</strong>",
+        bank: ["Are", "you", "ready", "to", "go", "Do", "is", "be"],
+        correctAnswer: "Are you ready to go",
+        correctDisplay: "Are you ready to go?",
+        successTip: "Sensacional! Para perguntar se alguém 'está' com you, usamos a inversão 'Are you'!"
+      },
+      {
+        id: 2,
+        type: 'choice',
+        title: 'Complete com a forma certa do To Be:',
+        promptText: "Ela é médica no hospital?<br><strong>'_____ she a doctor at the hospital?'</strong>",
+        options: [
+          { id: "1", text: "Is" },
+          { id: "2", text: "Does" },
+          { id: "3", text: "Are" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Is she a doctor at the hospital?",
+        successTip: "Perfeito! Para perguntar profissão ou estado com 'she', usamos 'Is' no início!"
+      },
+      {
+        id: 3,
+        type: 'choice',
+        title: 'Exercício de Audição:',
+        promptText: "Ouça a pergunta em inglês e selecione a tradução correta:",
+        audioText: "Where are you from?",
+        options: [
+          { id: "1", text: "De onde você é?" },
+          { id: "2", text: "Onde você mora agora?" },
+          { id: "3", text: "Para onde você vai?" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "De onde você é?",
+        successTip: "Excelente escuta! 'Where are you from?' é a pergunta clássica para saber a origem de alguém!"
+      },
+      {
+        id: 4,
+        type: 'choice',
+        title: 'Resposta Curta (Short Answer):',
+        promptText: "Como você responde afirmativamente de forma natural a:<br><strong>'Are you tired today?'</strong>",
+        options: [
+          { id: "1", text: "Yes, I am." },
+          { id: "2", text: "Yes, I'm." },
+          { id: "3", text: "Yes, I do." }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Yes, I am.",
+        successTip: "Muito bem! Em respostas curtas afirmativas com To Be, usamos 'Yes, I am' (sem contração e sem 'do')!"
+      },
+      {
+        id: 5,
+        type: 'word_bank',
+        title: 'Monte a pergunta essencial para viagens:',
+        promptText: "Monte a pergunta: <strong>'Onde fica o banheiro?'</strong>",
+        bank: ["Where", "is", "the", "bathroom", "does", "are", "it"],
+        correctAnswer: "Where is the bathroom",
+        correctDisplay: "Where is the bathroom?",
+        successTip: "Brilhante! 'Where is the bathroom?' é a pergunta que salva qualquer viagem!"
+      }
+    ];
 
     let currentIndex = 0;
     let selectedAnswer = null;
@@ -150,7 +214,7 @@
 
       const q = questions[currentIndex];
       const progressPercent = Math.round(((currentIndex) / questions.length) * 100);
-      progressBar.style.width = Math.max(8, progressPercent) + '%';
+      progressBar.style.width = Math.max(10, progressPercent) + '%';
 
       questionPrompt.innerText = q.title || 'Complete a atividade:';
       mascotBubbleText.innerHTML = q.promptText;
@@ -159,8 +223,9 @@
       if (q.audioText) {
         audioPromptContainer.style.display = 'block';
         window.currentAudioText = q.audioText;
-        // Pronounce automatically on start
-        setTimeout(() => duoAudio.speak(q.audioText), 400);
+        setTimeout(() => {
+          if (window.duoAudio) duoAudio.speak(q.audioText);
+        }, 300);
       } else {
         audioPromptContainer.style.display = 'none';
       }
@@ -316,7 +381,7 @@
       duoAudio.playSuccess();
     }
 
-    // Initialize first question
+    // Start with the first question
     renderQuestion();
   </script>
 </body>

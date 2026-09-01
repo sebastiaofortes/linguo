@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Práctica: Saludos & Presentaciones | Linguo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../resources/duo-theme.css">
+  <script src="../../../resources/duo-sfx.js"></script>
+</head>
+<body>
+
+  <!-- Top Exercise Navigation Bar -->
+  <div class="duo-progress-container">
+    <button class="btn-close" onclick="if(confirm('¿Deseas salir de la lección?')) window.location.href='../../../index.html'" title="Volver a la ruta">✕</button>
+    <div class="duo-progress-track">
+      <div class="duo-progress-fill" id="progressBar" style="width: 0%;"></div>
+    </div>
+    <div class="duo-stat-item duo-stat-heart">
+      <span>❤️</span>
+      <span id="heartsCount">5</span>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="duo-container">
+    <div id="quizArea">
+      <!-- Injected Dynamically by JS -->
+    </div>
+  </main>
+
+  <!-- Bottom Drawer for Verification & Feedback -->
+  <div class="duo-footer-drawer" id="footerDrawer">
+    <div class="duo-footer-content">
+      <div id="feedbackMessage" style="display: none; align-items: center; gap: 12px;">
+        <div id="feedbackIcon" style="font-size: 32px;"></div>
+        <div>
+          <h3 id="feedbackTitle" style="font-size: 20px; font-weight: 900; margin: 0;"></h3>
+          <p id="feedbackDesc" style="font-size: 14px; font-weight: 700; margin: 2px 0 0;"></p>
+        </div>
+      </div>
+      <div id="footerPlaceholder" style="font-weight: 700; color: var(--duo-gray-400);">
+        Selecciona o arma tu respuesta
+      </div>
+      <button class="btn-duo btn-duo-green" id="btnAction" disabled onclick="handleAction()">
+        COMPROBAR
+      </button>
+    </div>
+  </div>
+
+  <!-- Completion Celebration Screen (Hidden Initially) -->
+  <div id="completionScreen" class="duo-completion-screen" style="display: none;">
+    <div class="duo-completion-card">
+      <div style="font-size: 64px; margin-bottom: 12px;">🎉</div>
+      <h2 style="font-size: 32px; font-weight: 900; color: var(--duo-gray-900); margin-bottom: 8px;">
+        ¡Lección Completada!
+      </h2>
+      <p style="font-size: 16px; font-weight: 700; color: var(--duo-gray-400); margin-bottom: 24px;">
+        Has dominado los saludos y presentaciones en español.
+      </p>
+
+      <div class="duo-completion-stats">
+        <div class="duo-stat-box">
+          <span style="font-size: 24px;">⚡</span>
+          <span class="duo-stat-box-val">+25 XP</span>
+          <span class="duo-stat-box-lbl">TOTAL GANADO</span>
+        </div>
+        <div class="duo-stat-box">
+          <span style="font-size: 24px;">🎯</span>
+          <span class="duo-stat-box-val" id="accuracyVal">100%</span>
+          <span class="duo-stat-box-lbl">PRECISIÓN</span>
+        </div>
+        <div class="duo-stat-box">
+          <span style="font-size: 24px;">🔥</span>
+          <span class="duo-stat-box-val">3 DÍAS</span>
+          <span class="duo-stat-box-lbl">RACHA</span>
+        </div>
+      </div>
+
+      <div style="margin-top: 32px;">
+        <a href="../../../index.html" class="btn-duo btn-duo-green">CONTINUAR RUTA ➔</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        type: "choice",
+        prompt: "Selecciona la traducción correcta para: \"Bom dia, prazer em conhecê-lo\"",
+        audioPhrase: "Buenos días, mucho gusto en conocerte.",
+        options: [
+          "Buenas noches, hasta luego.",
+          "Buenos días, mucho gusto.",
+          "Hola, ¿cómo te llamas?"
+        ],
+        correctIndex: 1
+      },
+      {
+        type: "word_bank",
+        prompt: "Traduce esta frase al español:",
+        originalPhrase: "Olá, meu nome é Maria.",
+        audioPhrase: "Hola, me llamo María.",
+        words: ["Hola,", "me", "llamo", "María.", "tú", "cómo", "días", "gracias"],
+        correctSentence: "Hola, me llamo María."
+      },
+      {
+        type: "choice",
+        prompt: "¿Cómo se pregunta \"Qual é o seu nome?\" en español?",
+        audioPhrase: "¿Cómo te llamas?",
+        options: [
+          "¿Cómo te llamas?",
+          "¿De dónde eres?",
+          "¿Qué hora es?"
+        ],
+        correctIndex: 0
+      },
+      {
+        type: "word_bank",
+        prompt: "Arma la frase correcta:",
+        originalPhrase: "Boa tarde, como você está?",
+        audioPhrase: "Buenas tardes, ¿cómo estás?",
+        words: ["Buenas", "tardes,", "¿cómo", "estás?", "noches", "me", "llamo"],
+        correctSentence: "Buenas tardes, ¿cómo estás?"
+      },
+      {
+        type: "choice",
+        prompt: "Si alguien te dice \"¡Mucho gusto!\", ¿cuál es la mejor respuesta?",
+        audioPhrase: "El gusto es mío.",
+        options: [
+          "El gusto es mío.",
+          "Buenas noches.",
+          "No tengo hambre."
+        ],
+        correctIndex: 0
+      }
+    ];
+
+    let currentIdx = 0;
+    let selectedOption = null;
+    let selectedTokens = [];
+    let isChecking = true;
+    let hearts = 5;
+    let errorsCount = 0;
+
+    function renderQuestion() {
+      const q = questions[currentIdx];
+      const quizArea = document.getElementById('quizArea');
+      selectedOption = null;
+      selectedTokens = [];
+      isChecking = true;
+
+      // Update progress bar
+      const pct = (currentIdx / questions.length) * 100;
+      document.getElementById('progressBar').style.width = pct + '%';
+
+      // Reset bottom drawer
+      const footerDrawer = document.getElementById('footerDrawer');
+      footerDrawer.className = 'duo-footer-drawer';
+      document.getElementById('feedbackMessage').style.display = 'none';
+      document.getElementById('footerPlaceholder').style.display = 'block';
+      const btnAction = document.getElementById('btnAction');
+      btnAction.innerText = 'COMPROBAR';
+      btnAction.disabled = true;
+      btnAction.className = 'btn-duo btn-duo-green';
+
+      if (q.type === 'choice') {
+        quizArea.innerHTML = `
+          <h2 class="duo-question-prompt">${q.prompt}</h2>
+          ${q.audioPhrase ? `
+            <div style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+              <button class="btn-speaker" onclick="duoAudio.speak('${q.audioPhrase}', 'es-ES')">🔊</button>
+              <span style="font-size: 16px; font-weight: 700; color: var(--duo-gray-700);">Escuchar pronunciación</span>
+            </div>
+          ` : ''}
+          <div class="duo-choices-grid">
+            ${q.options.map((opt, i) => `
+              <div class="duo-choice-card" onclick="selectChoice(${i})" id="choice-${i}">
+                <div class="duo-choice-key">${i + 1}</div>
+                <div class="duo-choice-text">${opt}</div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      } else if (q.type === 'word_bank') {
+        quizArea.innerHTML = `
+          <h2 class="duo-question-prompt">${q.prompt}</h2>
+          <div class="duo-bubble-phrase">
+            <button class="btn-speaker" onclick="duoAudio.speak('${q.audioPhrase}', 'es-ES')">🔊</button>
+            <span style="font-size: 18px; font-weight: 800;">${q.originalPhrase}</span>
+          </div>
+
+          <!-- Answer Slot Area -->
+          <div class="duo-word-slots" id="slotArea">
+            <span class="duo-slot-hint">Toca las palabras para armar la frase</span>
+          </div>
+
+          <!-- Available Word Bank -->
+          <div class="duo-word-bank" id="bankArea">
+            ${q.words.map((w, i) => `
+              <button class="duo-word-chip" id="chip-${i}" onclick="pushWord('${w}', ${i})">${w}</button>
+            `).join('')}
+          </div>
+        `;
+      }
+    }
+
+    window.selectChoice = function(index) {
+      if (!isChecking) return;
+      if (window.duoAudio) duoAudio.playTap();
+      selectedOption = index;
+
+      document.querySelectorAll('.duo-choice-card').forEach((c, idx) => {
+        c.classList.toggle('selected', idx === index);
+      });
+
+      document.getElementById('btnAction').disabled = false;
+      document.getElementById('footerPlaceholder').style.display = 'none';
+    };
+
+    window.pushWord = function(word, chipId) {
+      if (!isChecking) return;
+      if (window.duoAudio) duoAudio.playTap();
+
+      const chip = document.getElementById('chip-' + chipId);
+      if (chip.classList.contains('used')) return;
+      chip.classList.add('used');
+
+      selectedTokens.push({ word, chipId });
+      renderSlots();
+    };
+
+    window.removeWord = function(index) {
+      if (!isChecking) return;
+      if (window.duoAudio) duoAudio.playTap();
+
+      const item = selectedTokens[index];
+      const chip = document.getElementById('chip-' + item.chipId);
+      if (chip) chip.classList.remove('used');
+
+      selectedTokens.splice(index, 1);
+      renderSlots();
+    };
+
+    function renderSlots() {
+      const slotArea = document.getElementById('slotArea');
+      if (selectedTokens.length === 0) {
+        slotArea.innerHTML = '<span class="duo-slot-hint">Toca las palabras para armar la frase</span>';
+        document.getElementById('btnAction').disabled = true;
+      } else {
+        slotArea.innerHTML = selectedTokens.map((item, idx) => `
+          <button class="duo-word-chip" onclick="removeWord(${idx})">${item.word}</button>
+        `).join('');
+        document.getElementById('btnAction').disabled = false;
+        document.getElementById('footerPlaceholder').style.display = 'none';
+      }
+    }
+
+    window.handleAction = function() {
+      if (isChecking) {
+        checkAnswer();
+      } else {
+        nextQuestion();
+      }
+    };
+
+    function checkAnswer() {
+      const q = questions[currentIdx];
+      let isCorrect = false;
+
+      if (q.type === 'choice') {
+        isCorrect = (selectedOption === q.correctIndex);
+      } else if (q.type === 'word_bank') {
+        const assembled = selectedTokens.map(t => t.word).join(' ').trim();
+        isCorrect = (assembled === q.correctSentence.trim());
+      }
+
+      const footerDrawer = document.getElementById('footerDrawer');
+      const feedbackMsg = document.getElementById('feedbackMessage');
+      const feedbackIcon = document.getElementById('feedbackIcon');
+      const feedbackTitle = document.getElementById('feedbackTitle');
+      const feedbackDesc = document.getElementById('feedbackDesc');
+      const btnAction = document.getElementById('btnAction');
+
+      feedbackMsg.style.display = 'flex';
+      document.getElementById('footerPlaceholder').style.display = 'none';
+
+      if (isCorrect) {
+        if (window.duoAudio) duoAudio.playSuccess();
+        footerDrawer.className = 'duo-footer-drawer correct';
+        feedbackIcon.innerText = '✅';
+        feedbackTitle.innerText = '¡Excelente!';
+        feedbackTitle.style.color = 'var(--duo-green-text)';
+        feedbackDesc.innerText = '¡Has respondido a la perfección!';
+        btnAction.innerText = 'CONTINUAR';
+        btnAction.className = 'btn-duo btn-duo-green';
+      } else {
+        if (window.duoAudio) duoAudio.playError();
+        errorsCount++;
+        hearts = Math.max(0, hearts - 1);
+        document.getElementById('heartsCount').innerText = hearts;
+
+        footerDrawer.className = 'duo-footer-drawer incorrect';
+        feedbackIcon.innerText = '❌';
+        feedbackTitle.innerText = 'Solución correcta:';
+        feedbackTitle.style.color = 'var(--duo-red-dark)';
+        const correctText = (q.type === 'choice') ? q.options[q.correctIndex] : q.correctSentence;
+        feedbackDesc.innerText = correctText;
+        btnAction.innerText = 'CONTINUAR';
+        btnAction.className = 'btn-duo btn-duo-red';
+      }
+
+      isChecking = false;
+    }
+
+    function nextQuestion() {
+      currentIdx++;
+      if (currentIdx < questions.length) {
+        renderQuestion();
+      } else {
+        finishLesson();
+      }
+    }
+
+    function finishLesson() {
+      document.getElementById('progressBar').style.width = '100%';
+      document.getElementById('quizArea').style.display = 'none';
+      document.getElementById('footerDrawer').style.display = 'none';
+      document.getElementById('completionScreen').style.display = 'flex';
+
+      const accuracy = Math.max(0, Math.round(((questions.length - errorsCount) / questions.length) * 100));
+      document.getElementById('accuracyVal').innerText = accuracy + '%';
+      if (window.duoAudio) duoAudio.playSuccess();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderQuestion();
+    });
+  </script>
+</body>
+</html>

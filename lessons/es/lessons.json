@@ -1,0 +1,35 @@
+{
+  "units": [
+    {
+      "id": "unit-1",
+      "number": 1,
+      "section": 1,
+      "title": "Fundamentos del Español",
+      "description": "Saludos, presentaciones y la diferencia esencial entre Ser y Estar",
+      "color": "green",
+      "badgeText": "TRILHA ATIVA",
+      "lessons": [
+        {
+          "id": "saludos-presentaciones",
+          "title": "Saludos & Presentaciones",
+          "subtitle": "Hola, ¿cómo estás?, presentaciones personales y fórmulas de cortesía.",
+          "icon": "👋",
+          "theoryUrl": "lessons/es/saludos-presentaciones/explanation.html",
+          "exerciseUrl": "lessons/es/saludos-presentaciones/exercise.html",
+          "status": "completed",
+          "date": "2026-09-01"
+        },
+        {
+          "id": "ser-estar-basico",
+          "title": "Ser vs. Estar",
+          "subtitle": "Identidad, origen y profesión (Ser) vs. ubicación, emociones y estados (Estar).",
+          "icon": "🧠",
+          "theoryUrl": "lessons/es/ser-estar-basico/explanation.html",
+          "exerciseUrl": "lessons/es/ser-estar-basico/exercise.html",
+          "status": "active",
+          "date": "2026-09-01"
+        }
+      ]
+    }
+  ]
+}

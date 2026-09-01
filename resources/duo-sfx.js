@@ -107,9 +107,9 @@ class DuoAudioEngine {
   }
 
   /**
-   * Selects the highest quality natural/studio English voice available
+   * Selects the highest quality natural/studio voice available for English or Spanish
    */
-  getBestVoice() {
+  getBestVoice(lang = 'en-US') {
     if (!window.speechSynthesis) return null;
     const voices = window.speechSynthesis.getVoices();
     if (!voices || voices.length === 0) return null;
@@ -121,15 +121,49 @@ class DuoAudioEngine {
       'organ', 'bells', 'boing', 'bubbles', 'cellos', 'hysterical', 'bahh'
     ];
 
+    const isSpanishTarget = lang.toLowerCase().startsWith('es');
+
     const cleanVoices = voices.filter(v => {
-      const isEnglish = v.lang && (v.lang.startsWith('en') || v.lang.includes('en_') || v.lang.includes('en-'));
+      if (!v.lang) return false;
+      const isTargetLang = isSpanishTarget
+        ? (v.lang.startsWith('es') || v.lang.includes('es_') || v.lang.includes('es-'))
+        : (v.lang.startsWith('en') || v.lang.includes('en_') || v.lang.includes('en-'));
       const isBanned = bannedVoices.some(b => v.name.toLowerCase().includes(b));
-      return isEnglish && !isBanned;
+      return isTargetLang && !isBanned;
     });
 
-    if (cleanVoices.length === 0) return voices[0] || null;
+    if (cleanVoices.length === 0) {
+      const fallbackVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith(isSpanishTarget ? 'es' : 'en'));
+      return fallbackVoice || voices[0] || null;
+    }
 
-    // Prioritize ultra-clear, natural modern voices (Google Neural, Apple Enhanced/Premium)
+    if (isSpanishTarget) {
+      // Prioritize natural Spanish voices (Google Español, Apple Monica/Paulina/Jorge Enhanced)
+      const preferredSpanish = [
+        'google español',
+        'mónica (enhanced)',
+        'monica (enhanced)',
+        'paulina (enhanced)',
+        'jorge (enhanced)',
+        'mónica',
+        'monica',
+        'paulina',
+        'jorge',
+        'soledad',
+        'diego',
+        'carlos',
+        'angelica',
+        'paloma',
+        'natural'
+      ];
+      for (const name of preferredSpanish) {
+        const match = cleanVoices.find(v => v.name.toLowerCase().includes(name));
+        if (match) return match;
+      }
+      return cleanVoices.find(v => v.lang === 'es-ES' || v.lang === 'es-MX') || cleanVoices[0];
+    }
+
+    // Prioritize ultra-clear, natural modern English voices (Google Neural, Apple Enhanced/Premium)
     const preferredNames = [
       'google us english',
       'samantha (enhanced)',
@@ -164,18 +198,29 @@ class DuoAudioEngine {
   }
 
   /**
-   * Pronounce English text using native Browser SpeechSynthesis with studio clarity
+   * Pronounce text using native Browser SpeechSynthesis with studio clarity
+   * Supports both English (en-US) and Spanish (es-ES)
    */
-  speak(text, rate = 0.92) {
+  speak(text, langOrRate = 'en-US', rateOpt = 0.92) {
     if (!window.speechSynthesis) return;
     window.speechSynthesis.cancel(); // Stop prior speech
 
+    let lang = 'en-US';
+    let rate = 0.92;
+
+    if (typeof langOrRate === 'string') {
+      lang = langOrRate;
+      if (typeof rateOpt === 'number') rate = rateOpt;
+    } else if (typeof langOrRate === 'number') {
+      rate = langOrRate;
+    }
+
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-US';
+    utterance.lang = lang;
     utterance.rate = rate;
     utterance.pitch = 1.0;
 
-    const bestVoice = this.getBestVoice();
+    const bestVoice = this.getBestVoice(lang);
     if (bestVoice) {
       utterance.voice = bestVoice;
     }

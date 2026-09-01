@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{TOPIC_TITLE}} - Exercícios | Linguo</title>
+  <title>Perguntas no Present Simple - Exercícios | Linguo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
@@ -14,7 +14,7 @@
 
   <!-- Top Progress Bar with Lives -->
   <div class="duo-progress-container">
-    <button class="btn-close" onclick="if(confirm('Deseja sair da lição?')) window.location.href='explanation.html'">✕</button>
+    <button class="btn-close" onclick="if(confirm('Deseja sair da lição?')) window.location.href='../../../index.html'" title="Voltar à trilha">✕</button>
     <div class="duo-progress-track">
       <div class="duo-progress-fill" id="progressBar" style="width: 10%;"></div>
     </div>
@@ -51,7 +51,7 @@
           </svg>
         </div>
         <div class="duo-bubble" id="mascotBubbleText">
-          Traduza esta frase:
+          Complete o exercício:
         </div>
       </div>
 
@@ -68,8 +68,8 @@
     <!-- Completion Screen (Shown when done) -->
     <div id="completionScreen" class="duo-completion-screen">
       <div style="font-size: 72px; margin-bottom: 12px;">🎉</div>
-      <h1 class="duo-title" style="font-size: 36px; color: var(--duo-green);">Lição Concluída!</h1>
-      <p class="duo-subtitle">Você mandou muito bem e fixou o conteúdo de hoje.</p>
+      <h1 class="duo-title" style="font-size: 36px; color: var(--duo-green);">Perguntas Dominadas!</h1>
+      <p class="duo-subtitle">Você já sabe perguntar e responder no Present Simple com naturalidade.</p>
 
       <div class="duo-streak-banner">
         <div>
@@ -78,7 +78,7 @@
         </div>
         <div>
           <div style="font-size: 14px; font-weight: 800; opacity: 0.9;">OFENSIVA</div>
-          <div style="font-size: 32px; font-weight: 900;">🔥 1 DIA</div>
+          <div style="font-size: 32px; font-weight: 900;">🔥 3 DIAS</div>
         </div>
         <div>
           <div style="font-size: 14px; font-weight: 800; opacity: 0.9;">PRECISÃO</div>
@@ -86,9 +86,9 @@
         </div>
       </div>
 
-      <div style="display: flex; gap: 16px; justify-content: center; margin-top: 32px;">
+      <div style="display: flex; gap: 16px; justify-content: center; margin-top: 32px; flex-wrap: wrap;">
         <a href="explanation.html" class="btn-duo btn-duo-secondary">REVISAR TEORIA</a>
-        <button class="btn-duo btn-duo-green" onclick="window.location.reload()">PRATICAR NOVAMENTE</button>
+        <a href="../../../index.html" class="btn-duo btn-duo-green">CONTINUAR TRILHA ➔</a>
       </div>
     </div>
 
@@ -111,8 +111,72 @@
   </footer>
 
   <script>
-    // Injected questions data
-    const questions = {{QUESTIONS_JSON}};
+    // 5 Engaging questions testing Questions, Do/Does, and Short Answers
+    const questions = [
+      {
+        id: 1,
+        type: 'word_bank',
+        title: 'Monte a pergunta com Do:',
+        promptText: "Monte a pergunta: <strong>'Você fala inglês todos os dias?'</strong>",
+        bank: ["Do", "you", "speak", "English", "every", "day", "Does", "speaks", "are"],
+        correctAnswer: "Do you speak English every day",
+        correctDisplay: "Do you speak English every day?",
+        successTip: "Perfeito! Para fazer perguntas com 'you', colocamos o auxiliar 'Do' no início!"
+      },
+      {
+        id: 2,
+        type: 'choice',
+        title: 'Complete a pergunta com Does:',
+        promptText: "Ele mora no Brasil?<br><strong>'_____ he _____ in Brazil?'</strong>",
+        options: [
+          { id: "1", text: "Does / live" },
+          { id: "2", text: "Does / lives" },
+          { id: "3", text: "Do / live" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Does / live",
+        successTip: "Show de bola! Usamos 'Does' para 'he' e o verbo de ação fica na forma pura 'live'!"
+      },
+      {
+        id: 3,
+        type: 'choice',
+        title: 'Exercício de Audição:',
+        promptText: "Ouça a pergunta em inglês e escolha o significado correto:",
+        audioText: "Does she work in a hospital?",
+        options: [
+          { id: "1", text: "Ela trabalha em um hospital?" },
+          { id: "2", text: "Ela estuda em um hospital?" },
+          { id: "3", text: "Eles trabalham em um hospital?" }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Ela trabalha em um hospital?",
+        successTip: "Excelente escuta! 'Does she work...?' pergunta sobre a profissão ou local de trabalho dela!"
+      },
+      {
+        id: 4,
+        type: 'choice',
+        title: 'Resposta Curta (Short Answer):',
+        promptText: "Como você responde afirmativamente de forma natural a:<br><strong>'Do you like chocolate?'</strong>",
+        options: [
+          { id: "1", text: "Yes, I do." },
+          { id: "2", text: "Yes, I like." },
+          { id: "3", text: "Yes, I have." }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Yes, I do.",
+        successTip: "Sensacional! No inglês natural, usamos o auxiliar da pergunta na resposta curta: 'Yes, I do'!"
+      },
+      {
+        id: 5,
+        type: 'word_bank',
+        title: 'Monte a pergunta com Where (Onde):',
+        promptText: "Monte a pergunta: <strong>'Onde ele mora?'</strong>",
+        bank: ["Where", "does", "he", "live", "do", "lives", "is", "where"],
+        correctAnswer: "Where does he live",
+        correctDisplay: "Where does he live?",
+        successTip: "Incrível! 'Where' (Onde) + 'does' (auxiliar) + 'he' + 'live' (verbo base)!"
+      }
+    ];
 
     let currentIndex = 0;
     let selectedAnswer = null;
@@ -150,7 +214,7 @@
 
       const q = questions[currentIndex];
       const progressPercent = Math.round(((currentIndex) / questions.length) * 100);
-      progressBar.style.width = Math.max(8, progressPercent) + '%';
+      progressBar.style.width = Math.max(10, progressPercent) + '%';
 
       questionPrompt.innerText = q.title || 'Complete a atividade:';
       mascotBubbleText.innerHTML = q.promptText;
@@ -159,8 +223,9 @@
       if (q.audioText) {
         audioPromptContainer.style.display = 'block';
         window.currentAudioText = q.audioText;
-        // Pronounce automatically on start
-        setTimeout(() => duoAudio.speak(q.audioText), 400);
+        setTimeout(() => {
+          if (window.duoAudio) duoAudio.speak(q.audioText);
+        }, 300);
       } else {
         audioPromptContainer.style.display = 'none';
       }
@@ -316,7 +381,7 @@
       duoAudio.playSuccess();
     }
 
-    // Initialize first question
+    // Start with the first question
     renderQuestion();
   </script>
 </body>

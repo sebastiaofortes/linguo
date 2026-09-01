@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{TOPIC_TITLE}} - Exercícios | Linguo</title>
+  <title>O Básico dos Verbos em Inglês - Exercícios | Linguo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
@@ -14,7 +14,7 @@
 
   <!-- Top Progress Bar with Lives -->
   <div class="duo-progress-container">
-    <button class="btn-close" onclick="if(confirm('Deseja sair da lição?')) window.location.href='explanation.html'">✕</button>
+    <button class="btn-close" onclick="if(confirm('Deseja sair da lição?')) window.location.href='../../../index.html'" title="Voltar à trilha">✕</button>
     <div class="duo-progress-track">
       <div class="duo-progress-fill" id="progressBar" style="width: 10%;"></div>
     </div>
@@ -51,7 +51,7 @@
           </svg>
         </div>
         <div class="duo-bubble" id="mascotBubbleText">
-          Traduza esta frase:
+          Complete o exercício:
         </div>
       </div>
 
@@ -69,7 +69,7 @@
     <div id="completionScreen" class="duo-completion-screen">
       <div style="font-size: 72px; margin-bottom: 12px;">🎉</div>
       <h1 class="duo-title" style="font-size: 36px; color: var(--duo-green);">Lição Concluída!</h1>
-      <p class="duo-subtitle">Você mandou muito bem e fixou o conteúdo de hoje.</p>
+      <p class="duo-subtitle">Você mandou muito bem e fixou o básico dos verbos!</p>
 
       <div class="duo-streak-banner">
         <div>
@@ -78,7 +78,7 @@
         </div>
         <div>
           <div style="font-size: 14px; font-weight: 800; opacity: 0.9;">OFENSIVA</div>
-          <div style="font-size: 32px; font-weight: 900;">🔥 1 DIA</div>
+          <div style="font-size: 32px; font-weight: 900;">🔥 2 DIAS</div>
         </div>
         <div>
           <div style="font-size: 14px; font-weight: 800; opacity: 0.9;">PRECISÃO</div>
@@ -86,9 +86,9 @@
         </div>
       </div>
 
-      <div style="display: flex; gap: 16px; justify-content: center; margin-top: 32px;">
+      <div style="display: flex; gap: 16px; justify-content: center; margin-top: 32px; flex-wrap: wrap;">
         <a href="explanation.html" class="btn-duo btn-duo-secondary">REVISAR TEORIA</a>
-        <button class="btn-duo btn-duo-green" onclick="window.location.reload()">PRATICAR NOVAMENTE</button>
+        <a href="../../../index.html" class="btn-duo btn-duo-green">CONTINUAR TRILHA ➔</a>
       </div>
     </div>
 
@@ -111,8 +111,72 @@
   </footer>
 
   <script>
-    // Injected questions data
-    const questions = {{QUESTIONS_JSON}};
+    // 5 Progressive and engaging questions on Basic English Verbs
+    const questions = [
+      {
+        id: 1,
+        type: 'word_bank',
+        title: 'Monte esta frase em inglês:',
+        promptText: "Monte a frase: <strong>'Eu bebo água todos os dias.'</strong>",
+        bank: ["I", "drink", "water", "every", "day", "drinks", "eats", "coffee"],
+        correctAnswer: "I drink water every day",
+        correctDisplay: "I drink water every day",
+        successTip: "Perfeito! Com o pronome 'I' usamos a forma base: drink."
+      },
+      {
+        id: 2,
+        type: 'choice',
+        title: 'Complete a frase:',
+        promptText: "Ela fala inglês muito bem:<br><strong>'She _____ English very well.'</strong>",
+        options: [
+          { id: "1", text: "speak" },
+          { id: "2", text: "speaks" },
+          { id: "3", text: "is speak" }
+        ],
+        correctOptionId: "2",
+        correctDisplay: "speaks",
+        successTip: "Mandou muito bem! Para He, She e It, acrescentamos '-s' ao verbo!"
+      },
+      {
+        id: 3,
+        type: 'choice',
+        title: 'Exercício de Audição:',
+        promptText: "Ouça a frase em inglês e escolha o significado correto:",
+        audioText: "He works at a hospital.",
+        options: [
+          { id: "1", text: "Ele trabalha em um hospital." },
+          { id: "2", text: "Ele mora perto do hospital." },
+          { id: "3", text: "Eles trabalham no hospital." }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "Ele trabalha em um hospital.",
+        successTip: "Ótimo ouvido! 'He works' significa 'Ele trabalha'."
+      },
+      {
+        id: 4,
+        type: 'word_bank',
+        title: 'Monte a frase com o verbo To Be:',
+        promptText: "Monte a frase: <strong>'Eles são muito inteligentes.'</strong>",
+        bank: ["They", "are", "very", "smart", "is", "am", "happy", "she"],
+        correctAnswer: "They are very smart",
+        correctDisplay: "They are very smart",
+        successTip: "Show! O verbo To Be correspondente a 'They' é 'are'!"
+      },
+      {
+        id: 5,
+        type: 'choice',
+        title: 'Desafio Final:',
+        promptText: "Qual frase expressa corretamente: <strong>'Ela não come carne'</strong>?",
+        options: [
+          { id: "1", text: "She doesn't eat meat." },
+          { id: "2", text: "She not eats meat." },
+          { id: "3", text: "She don't eat meat." }
+        ],
+        correctOptionId: "1",
+        correctDisplay: "She doesn't eat meat.",
+        successTip: "Incrível! Na negação com 'doesn't', o verbo principal permanece na forma base (eat)!"
+      }
+    ];
 
     let currentIndex = 0;
     let selectedAnswer = null;
@@ -150,7 +214,7 @@
 
       const q = questions[currentIndex];
       const progressPercent = Math.round(((currentIndex) / questions.length) * 100);
-      progressBar.style.width = Math.max(8, progressPercent) + '%';
+      progressBar.style.width = Math.max(10, progressPercent) + '%';
 
       questionPrompt.innerText = q.title || 'Complete a atividade:';
       mascotBubbleText.innerHTML = q.promptText;
@@ -159,8 +223,9 @@
       if (q.audioText) {
         audioPromptContainer.style.display = 'block';
         window.currentAudioText = q.audioText;
-        // Pronounce automatically on start
-        setTimeout(() => duoAudio.speak(q.audioText), 400);
+        setTimeout(() => {
+          if (window.duoAudio) duoAudio.speak(q.audioText);
+        }, 300);
       } else {
         audioPromptContainer.style.display = 'none';
       }
@@ -316,7 +381,7 @@
       duoAudio.playSuccess();
     }
 
-    // Initialize first question
+    // Start with the first question
     renderQuestion();
   </script>
 </body>
