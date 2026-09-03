@@ -73,10 +73,10 @@
           <div class="duo-vocab-header-info">
             <h2>
               <span>🎴</span>
-              <span id="vocabHeaderTitle">Baú de Vocabulário</span>
+              <span id="vocabHeaderTitle">Meu Baú de Vocabulário</span>
             </h2>
             <p id="vocabHeaderSubtitle">
-              Palavras essenciais, colocações e repetição espaçada (SRS)
+              Dicionário visual com fonética IPA e pronúncia nativa
             </p>
           </div>
           <div class="duo-badge" style="background: var(--duo-purple); font-size: 13px; padding: 6px 14px;">
@@ -122,11 +122,24 @@
         </div>
       </div>
 
+      <!-- Seletor de Tipo (Pills de Alto Contraste) -->
+      <div class="duo-type-selector">
+        <button class="duo-type-pill active" id="typePill-word" onclick="setVocabType('word')">
+          <span>🔤</span> Palavras Isoladas (IPA)
+        </button>
+        <button class="duo-type-pill" id="typePill-chunk" onclick="setVocabType('chunk')">
+          <span>💬</span> Expressões & Chunks
+        </button>
+        <button class="duo-type-pill" id="typePill-all" onclick="setVocabType('all')">
+          <span>🌐</span> Todas
+        </button>
+      </div>
+
       <!-- Barra de Busca & Filtros por Categoria -->
       <div class="duo-vocab-controls">
         <div class="duo-vocab-search-wrap">
           <span class="duo-vocab-search-icon">🔍</span>
-          <input type="text" id="vocabSearchInput" class="duo-vocab-search-input" placeholder="Buscar palavra, pronúncia ou tradução..." oninput="handleVocabSearch(this.value)">
+          <input type="text" id="vocabSearchInput" class="duo-vocab-search-input" placeholder="Buscar por termo, IPA (/.../) ou tradução..." oninput="handleVocabSearch(this.value)">
           <button id="vocabSearchClear" class="duo-vocab-search-clear" onclick="clearVocabSearch()" title="Limpar busca">✕</button>
         </div>
 
@@ -135,8 +148,8 @@
         </div>
       </div>
 
-      <!-- Grade de Cards Léxicos -->
-      <div class="duo-vocab-grid" id="vocabGridContainer">
+      <!-- Grade de Cards Compactos (Dicionário Visual) -->
+      <div class="duo-vocab-grid-compact" id="vocabGridContainer">
         <!-- Renderizado dinamicamente -->
       </div>
 
@@ -724,6 +737,70 @@
         </div>
       </div>
 
+    </div>
+  </div>
+
+  <!-- ============================================================
+       VOCABULARY COMPACT ITEM DETAIL MODAL
+       ============================================================ -->
+  <div id="vocabDetailModal" class="duo-modal-overlay" onclick="closeVocabDetailModal(event)">
+    <div class="duo-detail-modal-box" onclick="event.stopPropagation()">
+      <!-- Header with Icon, Term, IPA, and Close -->
+      <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span id="detailModalIcon" style="font-size: 42px; line-height: 1;">🍎</span>
+          <div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <h3 id="detailModalTerm" style="font-size: 22px; font-weight: 900; color: var(--duo-gray-900); margin: 0;">apple</h3>
+              <button class="btn-speaker-mini" id="detailModalAudioBtn" onclick="speakDetailModalTerm()" title="Ouvir pronúncia">🔊</button>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-top: 6px; flex-wrap: wrap;">
+              <span id="detailModalIpa" class="duo-compact-ipa">/ˈæp.əl/</span>
+              <span id="detailModalPos" class="duo-pos-badge" style="margin: 0;">Substantivo</span>
+              <span id="detailModalLevel" class="duo-badge" style="font-size: 10px; padding: 2px 6px;">A1</span>
+            </div>
+          </div>
+        </div>
+        <button class="btn-close" onclick="closeVocabDetailModal()" title="Fechar">✕</button>
+      </div>
+
+      <!-- Meaning / Translation in Portuguese -->
+      <div style="background: var(--duo-gray-100); border-radius: var(--duo-radius-lg); padding: 14px 18px; border: 2px solid var(--duo-gray-200);">
+        <div style="font-size: 11px; font-weight: 800; color: var(--duo-gray-400); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">
+          Significado em Português
+        </div>
+        <div id="detailModalTranslation" style="font-size: 18px; font-weight: 900; color: var(--duo-green-text);">
+          maçã
+        </div>
+      </div>
+
+      <!-- Contextual Example Sentence with Audio -->
+      <div style="border: 2px solid var(--duo-blue); background: var(--duo-blue-light); border-radius: var(--duo-radius-lg); padding: 16px; position: relative;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+          <span style="font-size: 11px; font-weight: 800; color: var(--duo-blue-shadow); text-transform: uppercase; letter-spacing: 0.5px;">
+            Frase em Contexto
+          </span>
+          <button class="btn-speaker-mini" id="detailModalExampleAudioBtn" onclick="speakDetailModalExample()" title="Ouvir frase completa" style="width: 30px; height: 30px; font-size: 12px;">
+            🔊
+          </button>
+        </div>
+        <div id="detailModalExample" style="font-size: 15px; font-weight: 800; color: var(--duo-gray-900); line-height: 1.4;">
+          "I eat a fresh apple every morning."
+        </div>
+        <div id="detailModalExamplePt" style="font-size: 13px; font-weight: 700; color: var(--duo-gray-700); margin-top: 6px; border-top: 1px dashed rgba(28, 176, 246, 0.3); padding-top: 6px;">
+          Eu como uma maçã fresca toda manhã.
+        </div>
+      </div>
+
+      <!-- Category and Action -->
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 4px;">
+        <div id="detailModalCategory" style="font-size: 12px; font-weight: 800; color: var(--duo-gray-400);">
+          🏷️ Alimentos & Bebidas
+        </div>
+        <button class="btn-duo btn-duo-green" style="padding: 10px 22px; font-size: 14px;" onclick="closeVocabDetailModal()">
+          <span>ENTENDI ✓</span>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -1397,6 +1474,7 @@
         closeCourseModal();
         closeFlashcardsModal();
         closeMatchMadnessModal();
+        closeVocabDetailModal();
       }
     });
 
@@ -1480,935 +1558,1054 @@
     let VOCABULARY_DATA = {
       en: [
       {
-            "id": "order_the_check",
-            "term": "order the check",
-            "phonetic": "/ˈɔːrdər ðə tʃɛk/",
-            "translation": "pedir a conta",
-            "category": "Restaurante & Comida",
-            "level": "A2",
-            "collocation": "could we have the check, please?",
-            "example": "Excuse me, can we order the check, please?",
-            "examplePt": "Com licença, podemos pedir a conta, por favor?",
-            "audioText": "order the check",
-            "tip": "Nos EUA usa-se 'the check', enquanto no Reino Unido é mais comum 'the bill'."
+            "id": "en_apple",
+            "type": "word",
+            "icon": "🍎",
+            "term": "apple",
+            "ipa": "/ˈæp.əl/",
+            "pos": "Substantivo",
+            "translation": "maçã",
+            "category": "Alimentos & Bebidas",
+            "level": "A1",
+            "example": "I eat a fresh apple every morning.",
+            "examplePt": "Eu como uma maçã fresca toda manhã."
       },
       {
-            "id": "make_a_reservation",
-            "term": "make a reservation",
-            "phonetic": "/meɪk ə ˌrɛzərˈveɪʃən/",
-            "translation": "fazer uma reserva",
-            "category": "Restaurante & Comida",
-            "level": "A2",
-            "collocation": "make a table reservation",
-            "example": "I would like to make a reservation for two tonight.",
-            "examplePt": "Gostaria de fazer uma reserva para dois esta noite.",
-            "audioText": "make a reservation",
-            "tip": "Use 'make a reservation' e nunca 'do a reservation'."
+            "id": "en_bread",
+            "type": "word",
+            "icon": "🍞",
+            "term": "bread",
+            "ipa": "/brɛd/",
+            "pos": "Substantivo",
+            "translation": "pão",
+            "category": "Alimentos & Bebidas",
+            "level": "A1",
+            "example": "Do you like fresh bread with butter?",
+            "examplePt": "Você gosta de pão fresco com manteiga?"
       },
       {
-            "id": "on_the_house",
-            "term": "on the house",
-            "phonetic": "/ɒn ðə haʊs/",
-            "translation": "cortesia da casa (grátis)",
-            "category": "Restaurante & Comida",
-            "level": "B1",
-            "collocation": "dessert is on the house",
-            "example": "Don't worry about the dessert, it's on the house!",
-            "examplePt": "Não se preocupe com a sobremesa, é cortesia da casa!",
-            "audioText": "on the house",
-            "tip": "Expressão idiomática usada quando o estabelecimento oferece algo gratuitamente."
+            "id": "en_coffee",
+            "type": "word",
+            "icon": "☕",
+            "term": "coffee",
+            "ipa": "/ˈkɒf.i/",
+            "pos": "Substantivo",
+            "translation": "café",
+            "category": "Alimentos & Bebidas",
+            "level": "A1",
+            "example": "Can I have a cup of black coffee, please?",
+            "examplePt": "Pode me trazer uma xícara de café preto, por favor?"
       },
       {
-            "id": "sparkling_water",
+            "id": "en_water",
+            "type": "word",
+            "icon": "💧",
+            "term": "water",
+            "ipa": "/ˈwɔː.tər/",
+            "pos": "Substantivo",
+            "translation": "água",
+            "category": "Alimentos & Bebidas",
+            "level": "A1",
+            "example": "Drink plenty of water on hot days.",
+            "examplePt": "Beba bastante água em dias quentes."
+      },
+      {
+            "id": "en_sparkling_water",
+            "type": "chunk",
+            "icon": "🫧",
             "term": "sparkling water",
-            "phonetic": "/ˈspɑːrklɪŋ ˈwɔːtər/",
+            "ipa": "/ˈspɑːr.klɪŋ ˈwɔː.tər/",
+            "pos": "Expressão",
             "translation": "água com gás",
-            "category": "Restaurante & Comida",
+            "category": "Alimentos & Bebidas",
             "level": "A1",
-            "collocation": "still or sparkling water",
             "example": "Would you like still or sparkling water with your meal?",
-            "examplePt": "Você prefere água sem gás ou com gás com sua refeição?",
-            "audioText": "sparkling water",
-            "tip": "'Still water' é água sem gás e 'sparkling water' é com gás."
+            "examplePt": "Você prefere água sem gás ou com gás com sua refeição?"
       },
       {
-            "id": "split_the_bill",
+            "id": "en_order_the_check",
+            "type": "chunk",
+            "icon": "🧾",
+            "term": "order the check",
+            "ipa": "/ˈɔːr.dər ðə tʃɛk/",
+            "pos": "Expressão",
+            "translation": "pedir a conta",
+            "category": "Alimentos & Bebidas",
+            "level": "A2",
+            "example": "Excuse me, can we order the check, please?",
+            "examplePt": "Com licença, podemos pedir a conta, por favor?"
+      },
+      {
+            "id": "en_on_the_house",
+            "type": "chunk",
+            "icon": "🎁",
+            "term": "on the house",
+            "ipa": "/ɒn ðə haʊs/",
+            "pos": "Expressão",
+            "translation": "cortesia da casa (grátis)",
+            "category": "Alimentos & Bebidas",
+            "level": "B1",
+            "example": "Don't worry about the dessert, it's on the house!",
+            "examplePt": "Não se preocupe com a sobremesa, é cortesia da casa!"
+      },
+      {
+            "id": "en_split_the_bill",
+            "type": "chunk",
+            "icon": "💳",
             "term": "split the bill",
-            "phonetic": "/splɪt ðə bɪl/",
+            "ipa": "/splɪt ðə bɪl/",
+            "pos": "Expressão",
             "translation": "dividir a conta",
-            "category": "Restaurante & Comida",
+            "category": "Alimentos & Bebidas",
             "level": "A2",
-            "collocation": "split the bill evenly",
-            "example": "We had a great dinner and decided to split the bill.",
-            "examplePt": "Tivemos um ótimo jantar e decidimos dividir a conta.",
-            "audioText": "split the bill",
-            "tip": "Outra expressão comum para dividir a conta igualmente é 'go Dutch'."
+            "example": "We had dinner together and decided to split the bill.",
+            "examplePt": "Jantamos juntos e decidimos dividir a conta."
       },
       {
-            "id": "rare_medium_well_done",
-            "term": "medium-rare",
-            "phonetic": "/ˌmiːdiəm ˈrɛər/",
-            "translation": "ao ponto para malpassado (carne)",
-            "category": "Restaurante & Comida",
-            "level": "A2",
-            "collocation": "how would you like your steak?",
-            "example": "I would like my steak medium-rare, please.",
-            "examplePt": "Eu gostaria do meu bife ao ponto para malpassado, por favor.",
-            "audioText": "medium-rare",
-            "tip": "Escala de carne: rare (malpassada), medium-rare, medium (ao ponto), well-done (bem passada)."
+            "id": "en_airport",
+            "type": "word",
+            "icon": "✈️",
+            "term": "airport",
+            "ipa": "/ˈɛər.pɔːrt/",
+            "pos": "Substantivo",
+            "translation": "aeroporto",
+            "category": "Viagem & Cidade",
+            "level": "A1",
+            "example": "We need to arrive at the airport two hours early.",
+            "examplePt": "Precisamos chegar ao aeroporto duas horas mais cedo."
       },
       {
-            "id": "carry_on_luggage",
-            "term": "carry-on luggage",
-            "phonetic": "/ˈkæri ɒn ˈlʌɡɪdʒ/",
-            "translation": "bagagem de mão",
-            "category": "Viagem & Aeroporto",
-            "level": "A2",
-            "collocation": "overhead bin for carry-on luggage",
-            "example": "You can bring one piece of carry-on luggage onto the plane.",
-            "examplePt": "Você pode levar uma mala de mão no avião.",
-            "audioText": "carry-on luggage",
-            "tip": "'Luggage' é substantivo incontável em inglês: não existe 'luggages', use 'a piece of luggage'."
+            "id": "en_passport",
+            "type": "word",
+            "icon": "🛂",
+            "term": "passport",
+            "ipa": "/ˈpæs.pɔːrt/",
+            "pos": "Substantivo",
+            "translation": "passaporte",
+            "category": "Viagem & Cidade",
+            "level": "A1",
+            "example": "Always keep your passport in a safe place.",
+            "examplePt": "Sempre guarde seu passaporte em um lugar seguro."
       },
       {
-            "id": "boarding_pass",
+            "id": "en_suitcase",
+            "type": "word",
+            "icon": "🧳",
+            "term": "suitcase",
+            "ipa": "/ˈsuːt.keɪs/",
+            "pos": "Substantivo",
+            "translation": "mala de viagem",
+            "category": "Viagem & Cidade",
+            "level": "A2",
+            "example": "My suitcase is packed and ready for the trip.",
+            "examplePt": "Minha mala está pronta para a viagem."
+      },
+      {
+            "id": "en_subway",
+            "type": "word",
+            "icon": "🚇",
+            "term": "subway",
+            "ipa": "/ˈsʌb.weɪ/",
+            "pos": "Substantivo",
+            "translation": "metrô",
+            "category": "Viagem & Cidade",
+            "level": "A1",
+            "example": "Taking the subway is the fastest way to travel in NYC.",
+            "examplePt": "Pegar o metrô é a forma mais rápida de se locomover em NY."
+      },
+      {
+            "id": "en_boarding_pass",
+            "type": "chunk",
+            "icon": "🎫",
             "term": "boarding pass",
-            "phonetic": "/ˈbɔːrdɪŋ pæs/",
+            "ipa": "/ˈbɔːr.dɪŋ pæs/",
+            "pos": "Expressão",
             "translation": "cartão de embarque",
-            "category": "Viagem & Aeroporto",
+            "category": "Viagem & Cidade",
             "level": "A1",
-            "collocation": "show your boarding pass and passport",
-            "example": "Please have your passport and boarding pass ready at the gate.",
-            "examplePt": "Por favor, tenha seu passaporte e cartão de embarque prontos no portão.",
-            "audioText": "boarding pass",
-            "tip": "'Boarding time' é o horário em que o embarque começa, diferente do horário de decolagem."
+            "example": "Please show your boarding pass at the gate.",
+            "examplePt": "Por favor, mostre seu cartão de embarque no portão."
       },
       {
-            "id": "catch_a_flight",
+            "id": "en_carry_on_luggage",
+            "type": "chunk",
+            "icon": "🎒",
+            "term": "carry-on luggage",
+            "ipa": "/ˈkæri ɒn ˈlʌɡɪdʒ/",
+            "pos": "Expressão",
+            "translation": "bagagem de mão",
+            "category": "Viagem & Cidade",
+            "level": "A2",
+            "example": "You can bring one piece of carry-on luggage onto the plane.",
+            "examplePt": "Você pode levar uma mala de mão no avião."
+      },
+      {
+            "id": "en_catch_a_flight",
+            "type": "chunk",
+            "icon": "🛫",
             "term": "catch a flight",
-            "phonetic": "/kætʃ ə flaɪt/",
+            "ipa": "/kætʃ ə flaɪt/",
+            "pos": "Expressão",
             "translation": "pegar um voo",
-            "category": "Viagem & Aeroporto",
+            "category": "Viagem & Cidade",
             "level": "A2",
-            "collocation": "rush to catch a flight",
             "example": "We have to leave now to catch our morning flight.",
-            "examplePt": "Temos que sair agora para pegar o nosso voo da manhã.",
-            "audioText": "catch a flight",
-            "tip": "Usa-se o verbo 'catch' para voos, trens e ônibus (assim como 'take')."
+            "examplePt": "Temos que sair agora para pegar o nosso voo da manhã."
       },
       {
-            "id": "layover",
+            "id": "en_layover",
+            "type": "word",
+            "icon": "⏱️",
             "term": "layover",
-            "phonetic": "/ˈleɪˌoʊvər/",
-            "translation": "escala / conexão",
-            "category": "Viagem & Aeroporto",
+            "ipa": "/ˈleɪˌoʊ.vər/",
+            "pos": "Substantivo",
+            "translation": "escala / conexão de voo",
+            "category": "Viagem & Cidade",
             "level": "B1",
-            "collocation": "a three-hour layover in Atlanta",
-            "example": "We have a short layover in Frankfurt before flying to Tokyo.",
-            "examplePt": "Temos uma escala rápida em Frankfurt antes de voar para Tóquio.",
-            "audioText": "layover",
-            "tip": "'Layover' refere-se a uma parada rápida; paradas de mais de 24 horas são chamadas de 'stopover'."
+            "example": "We have a two-hour layover in Atlanta before flying home.",
+            "examplePt": "Temos uma escala de duas horas em Atlanta antes de voar para casa."
       },
       {
-            "id": "customs_clearance",
+            "id": "en_customs",
+            "type": "word",
+            "icon": "👮",
             "term": "customs",
-            "phonetic": "/ˈkʌstəmz/",
+            "ipa": "/ˈkʌs.təmz/",
+            "pos": "Substantivo",
             "translation": "alfândega",
-            "category": "Viagem & Aeroporto",
+            "category": "Viagem & Cidade",
             "level": "B1",
-            "collocation": "go through customs",
-            "example": "It took only ten minutes to go through customs at the airport.",
-            "examplePt": "Levou apenas dez minutos para passar pela alfândega no aeroporto.",
-            "audioText": "customs",
-            "tip": "Atenção: 'custom' sem o 's' significa costume ou tradição."
+            "example": "It took only ten minutes to go through customs.",
+            "examplePt": "Levou apenas dez minutos para passar pela alfândega."
       },
       {
-            "id": "ask_for_directions",
-            "term": "ask for directions",
-            "phonetic": "/æsk fər dɪˈrɛkʃənz/",
-            "translation": "pedir direções / informações",
-            "category": "Viagem & Aeroporto",
+            "id": "en_meeting",
+            "type": "word",
+            "icon": "💼",
+            "term": "meeting",
+            "ipa": "/ˈmiː.tɪŋ/",
+            "pos": "Substantivo",
+            "translation": "reunião",
+            "category": "Trabalho & Rotina",
+            "level": "A1",
+            "example": "I have an important team meeting at 10 AM.",
+            "examplePt": "Tenho uma reunião importante de equipe às 10h."
+      },
+      {
+            "id": "en_deadline",
+            "type": "word",
+            "icon": "⏳",
+            "term": "deadline",
+            "ipa": "/ˈdɛd.laɪn/",
+            "pos": "Substantivo",
+            "translation": "prazo limite",
+            "category": "Trabalho & Rotina",
             "level": "A2",
-            "collocation": "stop and ask for directions",
-            "example": "If you get lost, don't hesitate to ask for directions.",
-            "examplePt": "Se você se perder, não hesite em pedir informações.",
-            "audioText": "ask for directions",
-            "tip": "Sempre use 'ask for' quando estiver solicitando orientações a alguém."
+            "example": "Friday is the strict deadline for this project.",
+            "examplePt": "Sexta-feira é o prazo final rigoroso para este projeto."
       },
       {
-            "id": "schedule_a_meeting",
-            "term": "schedule a meeting",
-            "phonetic": "/ˈskɛdʒuːl ə ˈmiːtɪŋ/",
-            "translation": "agendar uma reunião",
-            "category": "Trabalho & Negócios",
-            "level": "A2",
-            "collocation": "schedule a kickoff meeting",
-            "example": "Let's schedule a meeting for tomorrow morning to review the plan.",
-            "examplePt": "Vamos agendar uma reunião para amanhã de manhã para revisar o plano.",
-            "audioText": "schedule a meeting",
-            "tip": "Pronúncia: nos EUA fala-se 'sked-jool'; no inglês britânico costuma-se ouvir 'shed-yool'."
-      },
-      {
-            "id": "meet_a_deadline",
-            "term": "meet a deadline",
-            "phonetic": "/miːt ə ˈdɛdlaɪn/",
-            "translation": "cumprir um prazo",
-            "category": "Trabalho & Negócios",
-            "level": "B1",
-            "collocation": "work hard to meet the deadline",
-            "example": "Our team worked late yesterday to meet the tight deadline.",
-            "examplePt": "Nossa equipe trabalhou até tarde ontem para cumprir o prazo apertado.",
-            "audioText": "meet a deadline",
-            "tip": "O oposto de 'meet a deadline' é 'miss a deadline' (perder o prazo)."
-      },
-      {
-            "id": "work_overtime",
-            "term": "work overtime",
-            "phonetic": "/wɜːrk ˈoʊvərˌtaɪm/",
-            "translation": "fazer hora extra",
-            "category": "Trabalho & Negócios",
-            "level": "A2",
-            "collocation": "paid for working overtime",
-            "example": "She had to work overtime this week to finish the project.",
-            "examplePt": "Ela teve que fazer hora extra esta semana para terminar o projeto.",
-            "audioText": "work overtime",
-            "tip": "'Overtime' funciona como advérbio ou substantivo incontável."
-      },
-      {
-            "id": "give_a_presentation",
-            "term": "give a presentation",
-            "phonetic": "/ɡɪv ə ˌprɛzənˈteɪʃən/",
-            "translation": "fazer uma apresentação",
-            "category": "Trabalho & Negócios",
-            "level": "B1",
-            "collocation": "give a PowerPoint presentation",
-            "example": "He will give a presentation on the quarterly sales results.",
-            "examplePt": "Ele fará uma apresentação sobre os resultados de vendas do trimestre.",
-            "audioText": "give a presentation",
-            "tip": "Em inglês diz-se 'give a presentation' ou 'deliver a presentation', não 'make a presentation'."
-      },
-      {
-            "id": "touch_base",
-            "term": "touch base",
-            "phonetic": "/tʌtʃ beɪs/",
-            "translation": "fazer um alinhamento rápido / conversar brevemente",
-            "category": "Trabalho & Negócios",
-            "level": "B1",
-            "collocation": "touch base with the client",
-            "example": "Let's touch base next Monday to see how things are going.",
-            "examplePt": "Vamos nos alinhar na próxima segunda para ver como as coisas estão indo.",
-            "audioText": "touch base",
-            "tip": "Expressão corporativa muito popular originária do beisebol."
-      },
-      {
-            "id": "call_in_sick",
-            "term": "call in sick",
-            "phonetic": "/kɔːl ɪn sɪk/",
-            "translation": "ligar avisando que está doente (faltar ao trabalho)",
-            "category": "Trabalho & Negócios",
-            "level": "B1",
-            "collocation": "call in sick to work",
-            "example": "Sarah had the flu, so she had to call in sick today.",
-            "examplePt": "Sarah estava gripada, então teve que ligar avisando que não iria trabalhar hoje.",
-            "audioText": "call in sick",
-            "tip": "Frase idiomática padrão para justificar ausência médica no trabalho."
-      },
-      {
-            "id": "take_a_break",
+            "id": "en_take_a_break",
+            "type": "chunk",
+            "icon": "☕",
             "term": "take a break",
-            "phonetic": "/teɪk ə breɪk/",
-            "translation": "fazer uma pausa / descansar",
-            "category": "Rotina & Hábitos",
+            "ipa": "/teɪk ə breɪk/",
+            "pos": "Expressão",
+            "translation": "fazer uma pausa",
+            "category": "Trabalho & Rotina",
             "level": "A1",
-            "collocation": "take a 10-minute break",
-            "example": "You have studied for three hours; you should take a break.",
-            "examplePt": "Você estudou por três horas; você deveria fazer uma pausa.",
-            "audioText": "take a break",
-            "tip": "Colocação fixa: em inglês não dizemos 'make a break', mas sim 'take a break'."
+            "example": "You have worked for three hours; take a break.",
+            "examplePt": "Você trabalhou por três horas; faça uma pausa."
       },
       {
-            "id": "get_ready",
+            "id": "en_meet_a_deadline",
+            "type": "chunk",
+            "icon": "🎯",
+            "term": "meet a deadline",
+            "ipa": "/miːt ə ˈdɛdlaɪn/",
+            "pos": "Expressão",
+            "translation": "cumprir um prazo",
+            "category": "Trabalho & Rotina",
+            "level": "B1",
+            "example": "Our team worked late yesterday to meet the tight deadline.",
+            "examplePt": "Nossa equipe trabalhou até tarde ontem para cumprir o prazo apertado."
+      },
+      {
+            "id": "en_touch_base",
+            "type": "chunk",
+            "icon": "🤝",
+            "term": "touch base",
+            "ipa": "/tʌtʃ beɪs/",
+            "pos": "Expressão",
+            "translation": "alinhar rapidamente / conversar",
+            "category": "Trabalho & Rotina",
+            "level": "B1",
+            "example": "Let's touch base next Monday to review the status.",
+            "examplePt": "Vamos nos alinhar na próxima segunda para revisar o status."
+      },
+      {
+            "id": "en_work_overtime",
+            "type": "chunk",
+            "icon": "⏰",
+            "term": "work overtime",
+            "ipa": "/wɜːrk ˈoʊvərˌtaɪm/",
+            "pos": "Expressão",
+            "translation": "fazer hora extra",
+            "category": "Trabalho & Rotina",
+            "level": "A2",
+            "example": "She had to work overtime to finish the report.",
+            "examplePt": "Ela teve que fazer hora extra para terminar o relatório."
+      },
+      {
+            "id": "en_call_in_sick",
+            "type": "chunk",
+            "icon": "🤒",
+            "term": "call in sick",
+            "ipa": "/kɔːl ɪn sɪk/",
+            "pos": "Expressão",
+            "translation": "ligar avisando ausência por doença",
+            "category": "Trabalho & Rotina",
+            "level": "B1",
+            "example": "Sarah had the flu and had to call in sick today.",
+            "examplePt": "Sarah estava gripada e teve que avisar que não iria hoje."
+      },
+      {
+            "id": "en_key",
+            "type": "word",
+            "icon": "🔑",
+            "term": "key",
+            "ipa": "/kiː/",
+            "pos": "Substantivo",
+            "translation": "chave",
+            "category": "Cotidiano & Objetos",
+            "level": "A1",
+            "example": "Don't forget to take your house key with you.",
+            "examplePt": "Não esqueça de levar a chave de casa com você."
+      },
+      {
+            "id": "en_wallet",
+            "type": "word",
+            "icon": "👛",
+            "term": "wallet",
+            "ipa": "/ˈwɒl.ɪt/",
+            "pos": "Substantivo",
+            "translation": "carteira",
+            "category": "Cotidiano & Objetos",
+            "level": "A1",
+            "example": "I left my wallet in the car by accident.",
+            "examplePt": "Deixei minha carteira no carro por acidente."
+      },
+      {
+            "id": "en_get_ready",
+            "type": "chunk",
+            "icon": "👔",
             "term": "get ready",
-            "phonetic": "/ɡɛt ˈrɛdi/",
+            "ipa": "/ɡɛt ˈrɛd.i/",
+            "pos": "Expressão",
             "translation": "se arrumar / se aprontar",
-            "category": "Rotina & Hábitos",
+            "category": "Cotidiano & Objetos",
             "level": "A1",
-            "collocation": "get ready for work",
-            "example": "It takes me thirty minutes to get ready in the morning.",
-            "examplePt": "Levo trinta minutos para me arrumar pela manhã.",
-            "audioText": "get ready",
-            "tip": "'Get' expressa transição de estado: passar do estado despreparado para preparado."
+            "example": "It takes me twenty minutes to get ready in the morning.",
+            "examplePt": "Levo vinte minutos para me arrumar pela manhã."
       },
       {
-            "id": "wake_up_early",
+            "id": "en_wake_up_early",
+            "type": "chunk",
+            "icon": "🌅",
             "term": "wake up early",
-            "phonetic": "/weɪk ʌp ˈɜːrli/",
+            "ipa": "/weɪk ʌp ˈɜːr.li/",
+            "pos": "Expressão",
             "translation": "acordar cedo",
-            "category": "Rotina & Hábitos",
+            "category": "Cotidiano & Objetos",
             "level": "A1",
-            "collocation": "used to waking up early",
             "example": "I always wake up early on weekdays to go for a run.",
-            "examplePt": "Eu sempre acordo cedo nos dias de semana para dar uma corrida.",
-            "audioText": "wake up early",
-            "tip": "'Wake up' é abrir os olhos; 'get up' é levantar-se da cama fisicamente."
+            "examplePt": "Eu sempre acordo cedo nos dias de semana para correr."
       },
       {
-            "id": "run_errands",
+            "id": "en_run_errands",
+            "type": "chunk",
+            "icon": "🛒",
             "term": "run errands",
-            "phonetic": "/rʌn ˈɛrəndz/",
-            "translation": "fazer tarefas de rua (banco, mercado, correios)",
-            "category": "Rotina & Hábitos",
+            "ipa": "/rʌn ˈɛr.əndz/",
+            "pos": "Expressão",
+            "translation": "resolver tarefas de rua",
+            "category": "Cotidiano & Objetos",
             "level": "B1",
-            "collocation": "spend Saturday running errands",
-            "example": "I need to run some errands before the supermarket closes.",
-            "examplePt": "Preciso resolver umas coisas na rua antes que o supermercado feche.",
-            "audioText": "run errands",
-            "tip": "'Errands' são pequenos afazeres fora de casa como pagar contas, ir à farmácia, etc."
+            "example": "I spent the whole Saturday morning running errands.",
+            "examplePt": "Passei toda a manhã de sábado resolvendo coisas na rua."
       },
       {
-            "id": "hit_the_gym",
+            "id": "en_hit_the_gym",
+            "type": "chunk",
+            "icon": "🏋️",
             "term": "hit the gym",
-            "phonetic": "/hɪt ðə dʒɪm/",
-            "translation": "ir para a academia / malhar",
-            "category": "Rotina & Hábitos",
+            "ipa": "/hɪt ðə dʒɪm/",
+            "pos": "Expressão",
+            "translation": "ir malhar / ir à academia",
+            "category": "Cotidiano & Objetos",
             "level": "A2",
-            "collocation": "hit the gym after work",
             "example": "I usually hit the gym three times a week.",
-            "examplePt": "Eu geralmente vou para a academia três vezes por semana.",
-            "audioText": "hit the gym",
-            "tip": "Gíria muito comum no dia a dia; equivale a 'go to the gym'."
+            "examplePt": "Eu costumo ir à academia três vezes por semana."
       },
       {
-            "id": "fall_asleep",
-            "term": "fall asleep",
-            "phonetic": "/fɔːl əˈsliːp/",
-            "translation": "pegar no sono / adormecer",
-            "category": "Rotina & Hábitos",
+            "id": "en_choose",
+            "type": "word",
+            "icon": "🎯",
+            "term": "choose",
+            "ipa": "/tʃuːz/",
+            "pos": "Verbo",
+            "translation": "escolher",
+            "category": "Ações Essenciais / Verbos",
+            "level": "A1",
+            "example": "You can choose any book you want from the shelf.",
+            "examplePt": "Você pode escolher qualquer livro que quiser da estante."
+      },
+      {
+            "id": "en_decide",
+            "type": "word",
+            "icon": "💡",
+            "term": "decide",
+            "ipa": "/dɪˈsaɪd/",
+            "pos": "Verbo",
+            "translation": "decidir",
+            "category": "Ações Essenciais / Verbos",
             "level": "A2",
-            "collocation": "fall asleep reading a book",
-            "example": "I was so exhausted that I fell asleep on the couch.",
-            "examplePt": "Eu estava tão exausto que peguei no sono no sofá.",
-            "audioText": "fall asleep",
-            "tip": "Diferente de 'sleep' (dormir), 'fall asleep' denota o momento em que se adormece."
+            "example": "Take your time to decide what is best for you.",
+            "examplePt": "Tome seu tempo para decidir o que é melhor para você."
       },
       {
-            "id": "figure_out",
+            "id": "en_figure_out",
+            "type": "chunk",
+            "icon": "🧩",
             "term": "figure out",
-            "phonetic": "/ˈfɪɡjər aʊt/",
+            "ipa": "/ˈfɪɡ.jər aʊt/",
+            "pos": "Expressão",
             "translation": "descobrir / compreender / resolver",
-            "category": "Phrasal Verbs Essenciais",
+            "category": "Ações Essenciais / Verbos",
             "level": "B1",
-            "collocation": "figure out the solution",
             "example": "Don't worry, we will figure out how to solve this bug.",
-            "examplePt": "Não se preocupe, vamos descobrir como resolver este problema.",
-            "audioText": "figure out",
-            "tip": "Significa chegar a uma solução através do raciocínio e da reflexão."
+            "examplePt": "Não se preocupe, vamos descobrir como resolver este problema."
       },
       {
-            "id": "look_forward_to",
+            "id": "en_look_forward_to",
+            "type": "chunk",
+            "icon": "🤩",
             "term": "look forward to",
-            "phonetic": "/lʊk ˈfɔːrwərd tuː/",
-            "translation": "estar ansioso por / aguardar com expectativa",
-            "category": "Phrasal Verbs Essenciais",
+            "ipa": "/lʊk ˈfɔːr.wərd tuː/",
+            "pos": "Expressão",
+            "translation": "aguardar com grande expectativa",
+            "category": "Ações Essenciais / Verbos",
             "level": "B1",
-            "collocation": "look forward to seeing you",
             "example": "I look forward to meeting your family this weekend.",
-            "examplePt": "Estou ansioso para conhecer sua família neste fim de semana.",
-            "audioText": "look forward to",
-            "tip": "Atenção: o verbo seguinte vem com -ING (ex: 'looking forward to hearing from you')."
+            "examplePt": "Estou ansioso para conhecer sua família neste fim de semana."
       },
       {
-            "id": "give_up",
+            "id": "en_give_up",
+            "type": "chunk",
+            "icon": "🏳️",
             "term": "give up",
-            "phonetic": "/ɡɪv ʌp/",
+            "ipa": "/ɡɪv ʌp/",
+            "pos": "Expressão",
             "translation": "desistir / abrir mão",
-            "category": "Phrasal Verbs Essenciais",
+            "category": "Ações Essenciais / Verbos",
             "level": "A2",
-            "collocation": "never give up on your dreams",
-            "example": "Learning English takes time, so don't give up!",
-            "examplePt": "Aprender inglês leva tempo, então não desista!",
-            "audioText": "give up",
-            "tip": "Quando acompanhado de verbo, usa o gerúndio (ex: 'give up smoking')."
+            "example": "Learning English takes patience, so never give up!",
+            "examplePt": "Aprender inglês exige paciência, então nunca desista!"
       },
       {
-            "id": "turn_down",
-            "term": "turn down",
-            "phonetic": "/tɜːrn daʊn/",
-            "translation": "recusar / rejeitar (ou abaixar o volume)",
-            "category": "Phrasal Verbs Essenciais",
-            "level": "B1",
-            "collocation": "turn down a job offer",
-            "example": "She turned down the job offer because the salary was too low.",
-            "examplePt": "Ela recusou a oferta de emprego porque o salário era muito baixo.",
-            "audioText": "turn down",
-            "tip": "Pode significar tanto recusar convite/proposta quanto diminuir intensidade ou som."
-      },
-      {
-            "id": "run_out_of",
+            "id": "en_run_out_of",
+            "type": "chunk",
+            "icon": "⌛",
             "term": "run out of",
-            "phonetic": "/rʌn aʊt əv/",
-            "translation": "ficar sem / esgotar o estoque",
-            "category": "Phrasal Verbs Essenciais",
+            "ipa": "/rʌn aʊt əv/",
+            "pos": "Expressão",
+            "translation": "ficar sem / esgotar",
+            "category": "Ações Essenciais / Verbos",
             "level": "A2",
-            "collocation": "run out of coffee / time",
-            "example": "Hurry up! We are running out of time before the test ends.",
-            "examplePt": "Depressa! Estamos ficando sem tempo antes que o teste termine.",
-            "audioText": "run out of",
-            "tip": "Usa-se para tempo, bateria, dinheiro, comida, gasolina: 'my phone ran out of battery'."
+            "example": "Hurry up! We are running out of time before the gate closes.",
+            "examplePt": "Depressa! Estamos ficando sem tempo antes que o portão feche."
       },
       {
-            "id": "show_up",
-            "term": "show up",
-            "phonetic": "/ʃoʊ ʌp/",
-            "translation": "aparecer / dar as caras / comparecer",
-            "category": "Phrasal Verbs Essenciais",
-            "level": "A2",
-            "collocation": "show up on time",
-            "example": "He didn't show up to the party yesterday.",
-            "examplePt": "Ele não apareceu na festa ontem.",
-            "audioText": "show up",
-            "tip": "Equivalente mais informal e frequente para 'arrive' ou 'attend'."
-      },
-      {
-            "id": "actually",
+            "id": "en_actually",
+            "type": "word",
+            "icon": "💬",
             "term": "actually",
-            "phonetic": "/ˈæktʃuəli/",
+            "ipa": "/ˈæk.tʃu.ə.li/",
+            "pos": "Advérbio",
             "translation": "na verdade / na realidade",
-            "category": "Falsos Cognatos & Pegadinhas",
+            "category": "Falsos Cognatos / Pegadinhas",
             "level": "A2",
-            "collocation": "actually, I changed my mind",
             "example": "I thought he was British, but actually he is Australian.",
-            "examplePt": "Pensei que ele fosse britânico, mas na verdade ele é australiano.",
-            "audioText": "actually",
-            "tip": "Falso cognato clássico: NÃO significa 'atualmente' (atualmente é 'currently' ou 'nowadays')."
+            "examplePt": "Pensei que ele fosse britânico, mas na verdade ele é australiano."
       },
       {
-            "id": "pretend",
-            "term": "pretend",
-            "phonetic": "/prɪˈtɛnd/",
-            "translation": "fingir",
-            "category": "Falsos Cognatos & Pegadinhas",
-            "level": "B1",
-            "collocation": "pretend to be asleep",
-            "example": "The children love to pretend they are superheroes.",
-            "examplePt": "As crianças adoram fingir que são super-heróis.",
-            "audioText": "pretend",
-            "tip": "Falso cognato: 'pretend' significa FINGIR. Se quiser dizer 'pretender', use 'intend'."
-      },
-      {
-            "id": "intend",
-            "term": "intend",
-            "phonetic": "/ɪnˈtɛnd/",
-            "translation": "pretender / ter intenção de",
-            "category": "Falsos Cognatos & Pegadinhas",
-            "level": "B1",
-            "collocation": "intend to move abroad",
-            "example": "I intend to visit Canada next year during my vacation.",
-            "examplePt": "Eu pretendo visitar o Canadá no ano que vem durante minhas férias.",
-            "audioText": "intend",
-            "tip": "Este é o verdadeiro 'pretender' em português! Cuidado para não trocar com 'pretend'."
-      },
-      {
-            "id": "push",
+            "id": "en_push",
+            "type": "word",
+            "icon": "🚪",
             "term": "push",
-            "phonetic": "/pʊʃ/",
-            "translation": "empurrar",
-            "category": "Falsos Cognatos & Pegadinhas",
+            "ipa": "/pʊʃ/",
+            "pos": "Verbo",
+            "translation": "empurrar (não puxar!)",
+            "category": "Falsos Cognatos / Pegadinhas",
             "level": "A1",
-            "collocation": "push the door open",
-            "example": "Remember to push the door when leaving the restaurant.",
-            "examplePt": "Lembre-se de empurrar a porta ao sair do restaurante.",
-            "audioText": "push",
-            "tip": "Pegadinha de portas em todo o mundo: 'push' é empurrar! 'Pull' é puxar."
+            "example": "Remember to push the door when entering the coffee shop.",
+            "examplePt": "Lembre-se de empurrar a porta ao entrar na cafeteria."
       },
       {
-            "id": "realize",
-            "term": "realize",
-            "phonetic": "/ˈriːəlaɪz/",
-            "translation": "perceber / dar-se conta de",
-            "category": "Falsos Cognatos & Pegadinhas",
+            "id": "en_pretend",
+            "type": "word",
+            "icon": "🎭",
+            "term": "pretend",
+            "ipa": "/prɪˈtɛnd/",
+            "pos": "Verbo",
+            "translation": "fingir (não pretender!)",
+            "category": "Falsos Cognatos / Pegadinhas",
             "level": "B1",
-            "collocation": "suddenly realize the mistake",
-            "example": "I realized I had forgotten my keys as soon as the door closed.",
-            "examplePt": "Percebi que tinha esquecido minhas chaves assim que a porta fechou.",
-            "audioText": "realize",
-            "tip": "'Realize' quase sempre significa 'dar-se conta'. Para 'realizar um evento', usa-se 'carry out' ou 'hold'."
+            "example": "The children love to pretend they are superheroes.",
+            "examplePt": "As crianças adoram fingir que são super-heróis."
       },
       {
-            "id": "parents",
-            "term": "parents",
-            "phonetic": "/ˈpɛərənts/",
-            "translation": "pais (pai e mãe)",
-            "category": "Falsos Cognatos & Pegadinhas",
-            "level": "A1",
-            "collocation": "visit my parents on Sunday",
-            "example": "My parents live in São Paulo, but I moved to Curitiba.",
-            "examplePt": "Meus pais moram em São Paulo, mas eu me mudei para Curitiba.",
-            "audioText": "parents",
-            "tip": "Falso cognato: 'parents' são pai e mãe. Parentes em geral são chamados de 'relatives'."
+            "id": "en_realize",
+            "type": "word",
+            "icon": "💡",
+            "term": "realize",
+            "ipa": "/ˈriː.ə.laɪz/",
+            "pos": "Verbo",
+            "translation": "perceber / dar-se conta",
+            "category": "Falsos Cognatos / Pegadinhas",
+            "level": "B1",
+            "example": "I realized I had forgotten my keys inside the car.",
+            "examplePt": "Percebi que tinha esquecido minhas chaves dentro do carro."
       }
 ],
       es: [
       {
-            "id": "la_cuenta_por_favor",
+            "id": "es_manzana",
+            "type": "word",
+            "icon": "🍎",
+            "term": "la manzana",
+            "ipa": "/la manˈθana/",
+            "pos": "Substantivo",
+            "translation": "a maçã",
+            "category": "Alimentos & Bebidas",
+            "level": "A1",
+            "example": "Como una manzana fresca todas las mañanas.",
+            "examplePt": "Como uma maçã fresca todas as manhãs."
+      },
+      {
+            "id": "es_pan",
+            "type": "word",
+            "icon": "🍞",
+            "term": "el pan",
+            "ipa": "/el pan/",
+            "pos": "Substantivo",
+            "translation": "o pão",
+            "category": "Alimentos & Bebidas",
+            "level": "A1",
+            "example": "¿Compraste pan caliente en la panadería?",
+            "examplePt": "Você comprou pão quentinho na padaria?"
+      },
+      {
+            "id": "es_cafe",
+            "type": "word",
+            "icon": "☕",
+            "term": "el café",
+            "ipa": "/el kaˈfe/",
+            "pos": "Substantivo",
+            "translation": "o café",
+            "category": "Alimentos & Bebidas",
+            "level": "A1",
+            "example": "Me gustaría un café con leche templada, por favor.",
+            "examplePt": "Gostaria de um café com leite morno, por favor."
+      },
+      {
+            "id": "es_agua",
+            "type": "word",
+            "icon": "💧",
+            "term": "el agua",
+            "ipa": "/el ˈaɣwa/",
+            "pos": "Substantivo",
+            "translation": "a água (substantivo feminino com artigo 'el')",
+            "category": "Alimentos & Bebidas",
+            "level": "A1",
+            "example": "¿Me traes un vaso de agua fresca, por favor?",
+            "examplePt": "Você me traz um copo de água fresca, por favor?"
+      },
+      {
+            "id": "es_la_cuenta_por_favor",
+            "type": "chunk",
+            "icon": "🧾",
             "term": "la cuenta, por favor",
-            "phonetic": "/la ˈkwenta por faˈβor/",
+            "ipa": "/la ˈkwenta por faˈβor/",
+            "pos": "Expressão",
             "translation": "a conta, por favor",
-            "category": "Restaurante & Tapas",
+            "category": "Alimentos & Bebidas",
             "level": "A1",
-            "collocation": "¿nos trae la cuenta, por favor?",
             "example": "¿Nos cobras? La cuenta, por favor.",
-            "examplePt": "Pode nos cobrar? A conta, por favor.",
-            "audioText": "la cuenta por favor",
-            "tip": "Fórmula padrão para pedir a conta em qualquer restaurante ou bar na Espanha e América Latina."
+            "examplePt": "Pode nos cobrar? A conta, por favor."
       },
       {
-            "id": "tapa_del_dia",
-            "term": "la tapa",
-            "phonetic": "/la ˈtapa/",
-            "translation": "aperitivo / petisco servido com bebida",
-            "category": "Restaurante & Tapas",
-            "level": "A1",
-            "collocation": "ir de tapas",
-            "example": "¿Vamos a tomar una caña y comer unas tapas?",
-            "examplePt": "Vamos tomar um chope e comer uns petiscos?",
-            "audioText": "la tapa",
-            "tip": "Na Espanha, 'ir de tapas' ou 'tapear' é o costume social de ir de bar em bar provando petiscos."
-      },
-      {
-            "id": "cana_bien_fria",
+            "id": "es_una_cana",
+            "type": "chunk",
+            "icon": "🍺",
             "term": "una caña",
-            "phonetic": "/ˈuna ˈkaɲa/",
-            "translation": "um chope (copo pequeno de cerveja tirada)",
-            "category": "Restaurante & Tapas",
+            "ipa": "/ˈuna ˈkaɲa/",
+            "pos": "Expressão",
+            "translation": "um chope (cerveja tirada de pressão)",
+            "category": "Alimentos & Bebidas",
             "level": "A1",
-            "collocation": "camarero, ponme una caña bien fría",
-            "example": "Por favor, pónganos dos cañas y una ración de bravas.",
-            "examplePt": "Por favor, traga-nos dois chopes e uma porção de batatas bravas.",
-            "audioText": "una caña",
-            "tip": "Na Espanha, pedir 'una caña' é a forma mais tradicional de pedir cerveja de pressão em copo de 200ml."
+            "example": "Camarero, ponme una caña bien fría y unas tapas.",
+            "examplePt": "Garçom, me vê um chope bem gelado e uns petiscos."
       },
       {
-            "id": "dejar_propina",
+            "id": "es_dejar_propina",
+            "type": "chunk",
+            "icon": "🪙",
             "term": "dejar propina",
-            "phonetic": "/deˈxar proˈpina/",
+            "ipa": "/deˈxar proˈpina/",
+            "pos": "Expressão",
             "translation": "deixar gorjeta",
-            "category": "Restaurante & Tapas",
+            "category": "Alimentos & Bebidas",
             "level": "A2",
-            "collocation": "dejar una buena propina",
             "example": "El servicio fue excelente, así que vamos a dejar propina.",
-            "examplePt": "O atendimento foi excelente, então vamos deixar gorjeta.",
-            "audioText": "dejar propina",
-            "tip": "Falso amigo sonoro: 'propina' em espanhol é simplesmente a gorjeta do garçom, sem conotação ilegal!"
+            "examplePt": "O atendimento foi excelente, então vamos deixar gorjeta."
       },
       {
-            "id": "sobremesa",
-            "term": "la sobremesa",
-            "phonetic": "/la soβɾeˈmesa/",
-            "translation": "conversa pós-refeição à mesa",
-            "category": "Restaurante & Tapas",
-            "level": "B1",
-            "collocation": "una larga sobremesa con amigos",
-            "example": "Pasamos dos horas haciendo sobremesa después de comer.",
-            "examplePt": "Passamos duas horas conversando à mesa depois de almoçar.",
-            "audioText": "la sobremesa",
-            "tip": "Pegadinha clássica! Sobremesa NÃO é o doce (o doce é 'el postre'). Sobremesa é a conversa pós-refeição!"
-      },
-      {
-            "id": "el_menu_del_dia",
+            "id": "es_el_menu_del_dia",
+            "type": "chunk",
+            "icon": "🍽️",
             "term": "el menú del día",
-            "phonetic": "/el meˈnu ðel ˈdi.a/",
-            "translation": "o prato executivo do dia (entrada, prato e sobremesa)",
-            "category": "Restaurante & Tapas",
+            "ipa": "/el meˈnu ðel ˈdi.a/",
+            "pos": "Expressão",
+            "translation": "prato executivo do dia a preço fixo",
+            "category": "Alimentos & Bebidas",
             "level": "A2",
-            "collocation": "elegir el primer plato del menú",
-            "example": "¿Qué incluye el menú del día hoy?",
-            "examplePt": "O que inclui o menu do dia hoje?",
-            "audioText": "el menú del día",
-            "tip": "Instituição culinária espanhola: inclui primeiro prato, segundo prato, pão, bebida e 'postre' a preço fixo."
+            "example": "¿Qué incluye el primer plato del menú del día hoy?",
+            "examplePt": "O que inclui o primeiro prato do menu do dia hoje?"
       },
       {
-            "id": "esta_rico",
-            "term": "estar rico",
-            "phonetic": "/esˈtaɾ ˈriko/",
-            "translation": "estar gostoso / saboroso",
-            "category": "Restaurante & Tapas",
+            "id": "es_aeropuerto",
+            "type": "word",
+            "icon": "✈️",
+            "term": "el aeropuerto",
+            "ipa": "/el aeɾoˈpweɾto/",
+            "pos": "Substantivo",
+            "translation": "o aeroporto",
+            "category": "Viagem & Cidade",
             "level": "A1",
-            "collocation": "¡la paella está riquísima!",
-            "example": "¡Este plato tradicional está muy rico!",
-            "examplePt": "Este prato tradicional está muito gostoso!",
-            "audioText": "estar rico",
-            "tip": "Usa-se 'estar rico' para comida deliciosa. 'Ser rico' refere-se a ter muito dinheiro ou fortuna."
+            "example": "El taxi nos llevará directamente al aeropuerto.",
+            "examplePt": "O táxi nos levará diretamente ao aeroporto."
       },
       {
-            "id": "tarjeta_de_embarque",
-            "term": "la tarjeta de embarque",
-            "phonetic": "/la taɾˈxeta ðe emˈbaɾke/",
-            "translation": "o cartão de embarque",
-            "category": "Viajes & Direcciones",
+            "id": "es_maleta",
+            "type": "word",
+            "icon": "🧳",
+            "term": "la maleta",
+            "ipa": "/la maˈleta/",
+            "pos": "Substantivo",
+            "translation": "a mala",
+            "category": "Viagem & Cidade",
             "level": "A1",
-            "collocation": "descargar la tarjeta de embarque en el móvil",
-            "example": "Muestre su pasaporte y la tarjeta de embarque, por favor.",
-            "examplePt": "Mostre seu passaporte e o cartão de embarque, por favor.",
-            "audioText": "la tarjeta de embarque",
-            "tip": "'Tarjeta' significa cartão em geral (tarjeta de crédito, tarjeta de metro, tarjeta de embarque)."
+            "example": "Ya tengo la maleta lista para viajar a Barcelona.",
+            "examplePt": "Já estou com a mala pronta para viajar a Barcelona."
       },
       {
-            "id": "equipaje_de_mano",
-            "term": "el equipaje de mano",
-            "phonetic": "/el ekiˈpaxe ðe ˈmano/",
-            "translation": "a bagagem de mão",
-            "category": "Viajes & Direcciones",
-            "level": "A2",
-            "collocation": "pesar el equipaje de mano",
-            "example": "Solo llevo una mochila como equipaje de mano.",
-            "examplePt": "Levo apenas uma mochila como bagagem de mão.",
-            "audioText": "el equipaje de mano",
-            "tip": "Mala de viagem é chamada de 'la maleta'; bagagem no total é 'el equipaje'."
-      },
-      {
-            "id": "billete_de_ida_y_vuelta",
-            "term": "billete de ida y vuelta",
-            "phonetic": "/biˈʎete ðe ˈiða i ˈβwelta/",
-            "translation": "passagem de ida e volta",
-            "category": "Viajes & Direcciones",
-            "level": "A2",
-            "collocation": "comprar un billete de ida y vuelta",
-            "example": "Quisiera un billete de ida y vuelta para Madrid.",
-            "examplePt": "Queria uma passagem de ida e volta para Madri.",
-            "audioText": "billete de ida y vuelta",
-            "tip": "Na Espanha usa-se 'billete'; na América Latina é muito mais comum 'boleto' ou 'pasaje'."
-      },
-      {
-            "id": "girar_a_la_derecha",
-            "term": "girar a la derecha",
-            "phonetic": "/xiˈɾaɾ a la ðeˈɾetʃa/",
-            "translation": "virar à direita",
-            "category": "Viajes & Direcciones",
+            "id": "es_billete",
+            "type": "word",
+            "icon": "🎫",
+            "term": "el billete",
+            "ipa": "/el biˈʎete/",
+            "pos": "Substantivo",
+            "translation": "a passagem / bilhete",
+            "category": "Viagem & Cidade",
             "level": "A1",
-            "collocation": "girar en la primera esquina",
-            "example": "Siga recto y luego gire a la derecha en el semáforo.",
-            "examplePt": "Siga em frente e depois vire à direita no semáforo.",
-            "audioText": "girar a la derecha",
-            "tip": "Em muitas regiões da América Latina diz-se 'doblar a la derecha'."
+            "example": "Quisiera un billete de ida y vuelta para Sevilla.",
+            "examplePt": "Queria uma passagem de ida e volta para Sevilha."
       },
       {
-            "id": "seguir_recto",
-            "term": "seguir recto",
-            "phonetic": "/seˈɣiɾ ˈrekto/",
-            "translation": "seguir em frente / seguir reto",
-            "category": "Viajes & Direcciones",
-            "level": "A1",
-            "collocation": "seguir recto dos calles",
-            "example": "Para llegar al museo, debe seguir todo recto por esta avenida.",
-            "examplePt": "Para chegar ao museu, deve seguir todo reto por esta avenida.",
-            "audioText": "seguir recto",
-            "tip": "Também se diz 'seguir derecho' (com 'o' no final) ou 'todo recto'."
-      },
-      {
-            "id": "parada_de_metro",
+            "id": "es_parada",
+            "type": "word",
+            "icon": "🚏",
             "term": "la parada",
-            "phonetic": "/la paˈɾaða/",
-            "translation": "o ponto / a parada de ônibus ou metrô",
-            "category": "Viajes & Direcciones",
+            "ipa": "/la paˈɾaða/",
+            "pos": "Substantivo",
+            "translation": "o ponto de ônibus ou parada",
+            "category": "Viagem & Cidade",
             "level": "A1",
-            "collocation": "parada de autobús / metro",
-            "example": "¿Dónde está la parada de metro más cercana?",
-            "examplePt": "Onde fica a estação/parada de metrô mais próxima?",
-            "audioText": "la parada",
-            "tip": "Para ônibus diz-se 'la parada de autobús'. Para trem e metrô diz-se 'la estación' ou 'la parada'."
+            "example": "¿Dónde está la parada de autobús más cercana?",
+            "examplePt": "Onde fica o ponto de ônibus mais próximo?"
       },
       {
-            "id": "hacer_escala",
-            "term": "hacer escala",
-            "phonetic": "/aˈseɾ esˈkala/",
-            "translation": "fazer escala / conexão",
-            "category": "Viajes & Direcciones",
+            "id": "es_tarjeta_de_embarque",
+            "type": "chunk",
+            "icon": "🎫",
+            "term": "tarjeta de embarque",
+            "ipa": "/taɾˈxeta ðe emˈbaɾke/",
+            "pos": "Expressão",
+            "translation": "cartão de embarque",
+            "category": "Viagem & Cidade",
+            "level": "A1",
+            "example": "Descargue su tarjeta de embarque en el teléfono móvil.",
+            "examplePt": "Baixe seu cartão de embarque no celular."
+      },
+      {
+            "id": "es_equipaje_de_mano",
+            "type": "chunk",
+            "icon": "🎒",
+            "term": "equipaje de mano",
+            "ipa": "/ekiˈpaxe ðe ˈmano/",
+            "pos": "Expressão",
+            "translation": "bagagem de mão",
+            "category": "Viagem & Cidade",
             "level": "A2",
-            "collocation": "vuelo con escala",
-            "example": "Nuestro vuelo hace escala en Bogotá antes de llegar a Lima.",
-            "examplePt": "Nosso voo faz escala em Bogotá antes de chegar a Lima.",
-            "audioText": "hacer escala",
-            "tip": "Um voo direto é chamado de 'vuelo directo' ou 'sin escalas'."
+            "example": "Solo llevo una mochila pequeña como equipaje de mano.",
+            "examplePt": "Levo apenas uma mochila pequena como bagagem de mão."
       },
       {
-            "id": "cumplir_el_plazo",
+            "id": "es_girar_a_la_derecha",
+            "type": "chunk",
+            "icon": "➡️",
+            "term": "girar a la derecha",
+            "ipa": "/xiˈɾaɾ a la ðeˈɾetʃa/",
+            "pos": "Expressão",
+            "translation": "virar à direita",
+            "category": "Viagem & Cidade",
+            "level": "A1",
+            "example": "Siga recto y luego gire a la derecha en la farmacia.",
+            "examplePt": "Siga em frente e depois vire à direita na farmácia."
+      },
+      {
+            "id": "es_seguir_recto",
+            "type": "chunk",
+            "icon": "⬆️",
+            "term": "seguir recto",
+            "ipa": "/seˈɣiɾ ˈrekto/",
+            "pos": "Expressão",
+            "translation": "seguir reto / seguir em frente",
+            "category": "Viagem & Cidade",
+            "level": "A1",
+            "example": "Para llegar a la catedral debe seguir todo recto.",
+            "examplePt": "Para chegar à catedral deve seguir todo em frente."
+      },
+      {
+            "id": "es_reunion",
+            "type": "word",
+            "icon": "💼",
+            "term": "la reunión",
+            "ipa": "/la rewˈnjon/",
+            "pos": "Substantivo",
+            "translation": "a reunião",
+            "category": "Trabalho & Rotina",
+            "level": "A2",
+            "example": "Tenemos una reunión de equipo todos los lunes.",
+            "examplePt": "Temos uma reunião de equipe todas as segundas."
+      },
+      {
+            "id": "es_plazo",
+            "type": "word",
+            "icon": "⏳",
+            "term": "el plazo",
+            "ipa": "/el ˈplaθo/",
+            "pos": "Substantivo",
+            "translation": "o prazo de entrega",
+            "category": "Trabalho & Rotina",
+            "level": "B1",
+            "example": "El plazo para entregar el informe vence mañana.",
+            "examplePt": "O prazo para entregar o relatório vence amanhã."
+      },
+      {
+            "id": "es_cumplir_el_plazo",
+            "type": "chunk",
+            "icon": "🎯",
             "term": "cumplir el plazo",
-            "phonetic": "/kumˈpliɾ el ˈplaθo/",
+            "ipa": "/kumˈpliɾ el ˈplaθo/",
+            "pos": "Expressão",
             "translation": "cumprir o prazo",
-            "category": "Trabajo & Cotidiano",
+            "category": "Trabalho & Rotina",
             "level": "B1",
-            "collocation": "trabajar bajo presión para cumplir el plazo",
-            "example": "Hicimos un gran esfuerzo para cumplir el plazo de entrega.",
-            "examplePt": "Fizemos um grande esforço para cumprir o prazo de entrega.",
-            "audioText": "cumplir el plazo",
-            "tip": "'Plazo' é o prazo de entrega ou limite temporal; 'fecha límite' é a data limite."
+            "example": "Trabajamos duro para cumplir el plazo acordado.",
+            "examplePt": "Trabalhamos duro para cumprir o prazo combinado."
       },
       {
-            "id": "reunirse_con",
-            "term": "reunirse con",
-            "phonetic": "/rewˈniɾse kon/",
-            "translation": "reunir-se com / encontrar-se com",
-            "category": "Trabajo & Cotidiano",
-            "level": "A2",
-            "collocation": "reunirse con el cliente",
-            "example": "Voy a reunirme con el equipo a las diez de la mañana.",
-            "examplePt": "Vou me reunir com a equipe às dez da manhã.",
-            "audioText": "reunirse con",
-            "tip": "Verbo pronominal: 'yo me reúno', 'tú te reúnes', 'nosotros nos reunimos'."
-      },
-      {
-            "id": "teletrabajar",
+            "id": "es_teletrabajar",
+            "type": "word",
+            "icon": "💻",
             "term": "teletrabajar",
-            "phonetic": "/teletɾaβaˈxaɾ/",
-            "translation": "fazer home office / trabalhar remotamente",
-            "category": "Trabajo & Cotidiano",
+            "ipa": "/teletɾaβaˈxaɾ/",
+            "pos": "Verbo",
+            "translation": "fazer home office / trabalhar remoto",
+            "category": "Trabalho & Rotina",
             "level": "A2",
-            "collocation": "teletrabajar tres días por semana",
-            "example": "En mi empresa podemos teletrabajar los lunes y los viernes.",
-            "examplePt": "Na minha empresa podemos trabalhar de home office às segundas e sextas.",
-            "audioText": "teletrabajar",
-            "tip": "Em espanhol é preferível o verbo 'teletrabajar' ou o substantivo 'el teletrabajo' em vez de termos em inglês."
+            "example": "En mi empresa podemos teletrabajar dos días por semana.",
+            "examplePt": "Na minha empresa podemos fazer home office dois dias por semana."
       },
       {
-            "id": "hacer_horas_extras",
+            "id": "es_horas_extras",
+            "type": "chunk",
+            "icon": "⏰",
             "term": "hacer horas extras",
-            "phonetic": "/aˈseɾ ˈoɾas ˈekstɾas/",
+            "ipa": "/aˈseɾ ˈoɾas ˈekstɾas/",
+            "pos": "Expressão",
             "translation": "fazer hora extra",
-            "category": "Trabajo & Cotidiano",
+            "category": "Trabalho & Rotina",
             "level": "A2",
-            "collocation": "cobrar por horas extras",
-            "example": "Tuve que hacer horas extras para terminar el informe mensual.",
-            "examplePt": "Tive que fazer horas extras para terminar o relatório mensal.",
-            "audioText": "hacer horas extras",
-            "tip": "Sempre com o verbo 'hacer': 'hacer horas extras'."
+            "example": "Tuve que hacer horas extras para terminar el proyecto.",
+            "examplePt": "Tive que fazer horas extras para terminar o projeto."
       },
       {
-            "id": "pedir_cita_previa",
+            "id": "es_pedir_cita",
+            "type": "chunk",
+            "icon": "🗓️",
             "term": "pedir cita",
-            "phonetic": "/peˈðiɾ ˈθita/",
-            "translation": "marcar um horário / consulta",
-            "category": "Trabajo & Cotidiano",
+            "ipa": "/peˈðiɾ ˈθita/",
+            "pos": "Expressão",
+            "translation": "marcar horário / consulta",
+            "category": "Trabalho & Rotina",
             "level": "A2",
-            "collocation": "pedir cita con el médico",
-            "example": "Necesito pedir cita en la oficina del médico para el martes.",
-            "examplePt": "Preciso marcar uma consulta no médico para terça-feira.",
-            "audioText": "pedir cita",
-            "tip": "'Cita' pode ser tanto um compromisso profissional/médico quanto um encontro amoroso ('una cita romántica')."
+            "example": "Necesito pedir cita previa con el médico.",
+            "examplePt": "Preciso agendar uma consulta com o médico."
       },
       {
-            "id": "madrugar",
+            "id": "es_madrugar",
+            "type": "word",
+            "icon": "🌅",
             "term": "madrugar",
-            "phonetic": "/maðɾuˈɣaɾ/",
-            "translation": "acordar de madrugada / madrugar",
-            "category": "Trabajo & Cotidiano",
+            "ipa": "/maðɾuˈɣaɾ/",
+            "pos": "Verbo",
+            "translation": "acordar bem cedo / madrugar",
+            "category": "Trabalho & Rotina",
             "level": "A2",
-            "collocation": "a quien madruga, Dios le ayuda",
-            "example": "Mañana tengo que madrugar mucho para tomar el tren.",
-            "examplePt": "Amanhã tenho que madrugar muito para pegar o trem.",
-            "audioText": "madrugar",
-            "tip": "Existe um provérbio famoso idêntico: 'A quien madruga, Dios le ayuda' (Deus ajuda quem cedo madruga)."
+            "example": "Mañana tengo que madrugar para tomar el primer tren.",
+            "examplePt": "Amanhã tenho que madrugar para pegar o primeiro trem."
       },
       {
-            "id": "echarse_la_siesta",
+            "id": "es_llave",
+            "type": "word",
+            "icon": "🔑",
+            "term": "la llave",
+            "ipa": "/la ˈʎaβe/",
+            "pos": "Substantivo",
+            "translation": "a chave",
+            "category": "Cotidiano & Objetos",
+            "level": "A1",
+            "example": "¿Dónde dejaste la llave de la habitación?",
+            "examplePt": "Onde você deixou a chave do quarto?"
+      },
+      {
+            "id": "es_cartera",
+            "type": "word",
+            "icon": "👛",
+            "term": "la cartera",
+            "ipa": "/la kaɾˈteɾa/",
+            "pos": "Substantivo",
+            "translation": "a carteira",
+            "category": "Cotidiano & Objetos",
+            "level": "A1",
+            "example": "No llevo efectivo en mi cartera, solo tarjetas.",
+            "examplePt": "Não levo dinheiro vivo na minha carteira, só cartões."
+      },
+      {
+            "id": "es_echarse_la_siesta",
+            "type": "chunk",
+            "icon": "😴",
             "term": "echarse una siesta",
-            "phonetic": "/eˈtʃaɾse ˈuna ˈsjesta/",
+            "ipa": "/eˈtʃaɾse ˈuna ˈsjesta/",
+            "pos": "Expressão",
             "translation": "tirar um cochilo / fazer a sesta",
-            "category": "Trabajo & Cotidiano",
+            "category": "Cotidiano & Objetos",
             "level": "A2",
-            "collocation": "echarse una siesta de veinte minutos",
-            "example": "Los domingos me gusta echarme una pequeña siesta después de comer.",
-            "examplePt": "Aos domingos gosto de tirar um pequeno cochilo depois do almoço.",
-            "audioText": "echarse una siesta",
-            "tip": "Usa-se a expressão coloquial 'echarse la siesta' ou 'dormir la siesta'."
+            "example": "Los domingos me gusta echarme una siesta después de comer.",
+            "examplePt": "Aos domingos gosto de tirar um cochilo depois do almoço."
       },
       {
-            "id": "por_supuesto",
-            "term": "por supuesto",
-            "phonetic": "/por suˈpwesto/",
-            "translation": "com certeza / com toda certeza / claro",
-            "category": "Conectores & Expresiones",
-            "level": "A1",
-            "collocation": "por supuesto que sí",
-            "example": "—¿Me acompañas al cine? —¡Por supuesto!",
-            "examplePt": "— Você me acompanha ao cinema? — Com certeza!",
-            "audioText": "por supuesto",
-            "tip": "Equivalente perfeito e muito educado a 'claro que sim' ou 'com certeza'."
-      },
-      {
-            "id": "sin_embargo",
-            "term": "sin embargo",
-            "phonetic": "/sin emˈbaɾɣo/",
-            "translation": "no entanto / porém / todavia",
-            "category": "Conectores & Expresiones",
-            "level": "B1",
-            "collocation": "estudió mucho; sin embargo, estaba nervioso",
-            "example": "Estudió mucho; sin embargo, el examen fue muy difícil.",
-            "examplePt": "Ele estudou muito; no entanto, a prova foi muito difícil.",
-            "audioText": "sin embargo",
-            "tip": "Um dos conectores de oposição formal mais importantes da língua espanhola."
-      },
-      {
-            "id": "echar_de_menos",
+            "id": "es_echar_de_menos",
+            "type": "chunk",
+            "icon": "💭",
             "term": "echar de menos",
-            "phonetic": "/eˈtʃaɾ ðe ˈmenos/",
+            "ipa": "/eˈtʃaɾ ðe ˈmenos/",
+            "pos": "Expressão",
             "translation": "sentir saudades / sentir falta",
-            "category": "Conectores & Expresiones",
+            "category": "Cotidiano & Objetos",
             "level": "A2",
-            "collocation": "te echo mucho de menos",
-            "example": "Echo mucho de menos a mi familia cuando viajo al extranjero.",
-            "examplePt": "Sinto muitas saudades da minha família quando viajo para o exterior.",
-            "audioText": "echar de menos",
-            "tip": "Na Espanha diz-se 'echar de menos'. Na maior parte da América Latina prefere-se 'extrañar' ('te extraño')."
+            "example": "Echo mucho de menos a mi familia cuando viajo.",
+            "examplePt": "Sinto muitas saudades da minha família quando viajo."
       },
       {
-            "id": "darse_cuenta_de",
-            "term": "darse cuenta de",
-            "phonetic": "/ˈdaɾse ˈkwenta ðe/",
-            "translation": "perceber / dar-se conta de",
-            "category": "Conectores & Expresiones",
-            "level": "B1",
-            "collocation": "darse cuenta del error a tiempo",
-            "example": "Al salir de casa, me di cuenta de que no llevaba la cartera.",
-            "examplePt": "Ao sair de casa, percebi que não estava levando a carteira.",
-            "audioText": "darse cuenta de",
-            "tip": "Não confunda com 'contar': 'darse cuenta' é exclusivamente a percepção mental consciente de algo."
-      },
-      {
-            "id": "a_lo_mejor",
-            "term": "a lo mejor",
-            "phonetic": "/a lo meˈxoɾ/",
-            "translation": "talvez / quem sabe",
-            "category": "Conectores & Expresiones",
-            "level": "A2",
-            "collocation": "a lo mejor mañana llueve",
-            "example": "A lo mejor voy a la fiesta más tarde si termino mi trabajo.",
-            "examplePt": "Talvez eu vá à festa mais tarde se terminar meu trabalho.",
-            "audioText": "a lo mejor",
-            "tip": "Regra de ouro gramatical: após 'a lo mejor', o verbo sempre fica no INDICATIVO, nunca no subjuntivo!"
-      },
-      {
-            "id": "valer_la_pena",
+            "id": "es_valer_la_pena",
+            "type": "chunk",
+            "icon": "✨",
             "term": "valer la pena",
-            "phonetic": "/baˈleɾ la ˈpena/",
+            "ipa": "/baˈleɾ la ˈpena/",
+            "pos": "Expressão",
             "translation": "valer a pena",
-            "category": "Conectores & Expresiones",
+            "category": "Cotidiano & Objetos",
             "level": "A2",
-            "collocation": "el esfuerzo vale la pena",
             "example": "El viaje fue largo, pero conocer la Alhambra valió la pena.",
-            "examplePt": "A viagem foi longa, mas conhecer o Alhambra valeu a pena.",
-            "audioText": "valer la pena",
-            "tip": "Idêntico ao português; muito usado para expressar que a recompensa supera o esforço."
+            "examplePt": "A viagem foi longa, mas conhecer o Alhambra valeu a pena."
       },
       {
-            "id": "por_lo_tanto",
-            "term": "por lo tanto",
-            "phonetic": "/por lo ˈtanto/",
-            "translation": "portanto / por conseguinte",
-            "category": "Conectores & Expresiones",
+            "id": "es_llegar",
+            "type": "word",
+            "icon": "🛬",
+            "term": "llegar",
+            "ipa": "/ʎeˈɣaɾ/",
+            "pos": "Verbo",
+            "translation": "chegar",
+            "category": "Ações Essenciais / Verbos",
+            "level": "A1",
+            "example": "El tren va a llegar a la estación en cinco minutos.",
+            "examplePt": "O trem vai chegar na estação em cinco minutos."
+      },
+      {
+            "id": "es_elegir",
+            "type": "word",
+            "icon": "🎯",
+            "term": "elegir",
+            "ipa": "/eleˈxiɾ/",
+            "pos": "Verbo",
+            "translation": "escolher / eleger",
+            "category": "Ações Essenciais / Verbos",
+            "level": "A2",
+            "example": "Es difícil elegir entre tantas opciones deliciosas.",
+            "examplePt": "É difícil escolher entre tantas opções deliciosas."
+      },
+      {
+            "id": "es_por_supuesto",
+            "type": "chunk",
+            "icon": "👍",
+            "term": "por supuesto",
+            "ipa": "/por suˈpwesto/",
+            "pos": "Expressão",
+            "translation": "com certeza / claro que sim",
+            "category": "Ações Essenciais / Verbos",
+            "level": "A1",
+            "example": "—¿Vienes a la fiesta con nosotros? —¡Por supuesto!",
+            "examplePt": "— Você vem à festa conosco? — Com certeza!"
+      },
+      {
+            "id": "es_sin_embargo",
+            "type": "chunk",
+            "icon": "⚖️",
+            "term": "sin embargo",
+            "ipa": "/sin emˈbaɾɣo/",
+            "pos": "Expressão",
+            "translation": "no entanto / porém",
+            "category": "Ações Essenciais / Verbos",
             "level": "B1",
-            "collocation": "no había billetes, por lo tanto cancelamos",
-            "example": "No quedaban entradas, por lo tanto fuimos a cenar juntos.",
-            "examplePt": "Não havia ingressos sobrando, portanto fomos jantar juntos.",
-            "audioText": "por lo tanto",
-            "tip": "Conector conclusivo essencial para argumentação e redação."
+            "example": "Estudió mucho; sin embargo, el examen fue muy complejo.",
+            "examplePt": "Estudou muito; no entanto, o exame foi muito complexo."
       },
       {
-            "id": "embarazada",
+            "id": "es_darse_cuenta",
+            "type": "chunk",
+            "icon": "💡",
+            "term": "darse cuenta de",
+            "ipa": "/ˈdaɾse ˈkwenta ðe/",
+            "pos": "Expressão",
+            "translation": "perceber / dar-se conta",
+            "category": "Ações Essenciais / Verbos",
+            "level": "B1",
+            "example": "Me di cuenta de que había olvidado el cargador del móvil.",
+            "examplePt": "Percebi que tinha esquecido o carregador do celular."
+      },
+      {
+            "id": "es_a_lo_mejor",
+            "type": "chunk",
+            "icon": "🎲",
+            "term": "a lo mejor",
+            "ipa": "/a lo meˈxoɾ/",
+            "pos": "Expressão",
+            "translation": "talvez / quem sabe (+ indicativo)",
+            "category": "Ações Essenciais / Verbos",
+            "level": "A2",
+            "example": "A lo mejor vamos a la playa si hace buen tiempo.",
+            "examplePt": "Talvez a gente vá à praia se fizer tempo bom."
+      },
+      {
+            "id": "es_embarazada",
+            "type": "word",
+            "icon": "🤰",
             "term": "embarazada",
-            "phonetic": "/embaɾaˈθaða/",
-            "translation": "grávida / gestante",
-            "category": "Falsos Amigos Essenciais",
+            "ipa": "/embaɾaˈθaða/",
+            "pos": "Adjetivo",
+            "translation": "grávida (não embaraçada!)",
+            "category": "Falsos Cognatos / Pegadinhas",
             "level": "A2",
-            "collocation": "estar embarazada de seis meses",
             "example": "Mi hermana mayor está embarazada y espera una niña.",
-            "examplePt": "Minha irmã mais velha está grávida e espera uma menina.",
-            "audioText": "embarazada",
-            "tip": "O mais clássico dos falsos amigos! NÃO significa 'embaraçada/envergonhada' (envergonhada é 'avergonzada')."
+            "examplePt": "Minha irmã mais velha está grávida e espera uma menina."
       },
       {
-            "id": "exito",
+            "id": "es_exito",
+            "type": "word",
+            "icon": "🏆",
             "term": "el éxito",
-            "phonetic": "/el ˈeɡzito/",
-            "translation": "o sucesso / o triunfo",
-            "category": "Falsos Amigos Essenciais",
+            "ipa": "/el ˈeɡzito/",
+            "pos": "Substantivo",
+            "translation": "o sucesso (não a saída!)",
+            "category": "Falsos Cognatos / Pegadinhas",
             "level": "A2",
-            "collocation": "tener mucho éxito en el proyecto",
-            "example": "La nueva aplicación fue un gran éxito entre los estudiantes.",
-            "examplePt": "O novo aplicativo foi um grande sucesso entre os estudantes.",
-            "audioText": "el éxito",
-            "tip": "Falso amigo: 'éxito' é sucesso! Se quiser falar 'saída' de um lugar, a palavra correta é 'la salida'."
+            "example": "La presentación del proyecto fue un gran éxito.",
+            "examplePt": "A apresentação do projeto foi um grande sucesso."
       },
       {
-            "id": "largo",
+            "id": "es_largo",
+            "type": "word",
+            "icon": "📏",
             "term": "largo",
-            "phonetic": "/ˈlaɾɣo/",
-            "translation": "comprido / longo",
-            "category": "Falsos Amigos Essenciais",
+            "ipa": "/ˈlaɾɣo/",
+            "pos": "Adjetivo",
+            "translation": "comprido / longo (não largo!)",
+            "category": "Falsos Cognatos / Pegadinhas",
             "level": "A1",
-            "collocation": "un camino muy largo",
-            "example": "Ella tiene el pelo muy largo y brillante.",
-            "examplePt": "Ela tem o cabelo bem comprido e brilhante.",
-            "audioText": "largo",
-            "tip": "Falso amigo: 'largo' significa LONGO/COMPRIDO. Para dizer 'largo/amplo' em espanhol, usa-se 'ancho'."
+            "example": "Ella tiene el pelo muy largo y castaño.",
+            "examplePt": "Ela tem o cabelo bem comprido e castanho."
       },
       {
-            "id": "apellido",
+            "id": "es_apellido",
+            "type": "word",
+            "icon": "🏷️",
             "term": "el apellido",
-            "phonetic": "/el apeˈʎiðo/",
-            "translation": "o sobrenome da família",
-            "category": "Falsos Amigos Essenciais",
+            "ipa": "/el apeˈʎiðo/",
+            "pos": "Substantivo",
+            "translation": "o sobrenome (não apelido!)",
+            "category": "Falsos Cognatos / Pegadinhas",
             "level": "A1",
-            "collocation": "primer y segundo apellido",
-            "example": "¿Cómo se escribe tu primer apellido?",
-            "examplePt": "Como se escreve o seu primeiro sobrenome?",
-            "audioText": "el apellido",
-            "tip": "Falso amigo: 'apellido' é o SOBRENOME. 'Apelido' informal (ex: Zeca, Gabi) é chamado de 'apodo'."
+            "example": "¿Cómo se escribe tu primer apellido familiar?",
+            "examplePt": "Como se escreve o seu primeiro sobrenome da família?"
       },
       {
-            "id": "vaso",
+            "id": "es_vaso",
+            "type": "word",
+            "icon": "🥛",
             "term": "el vaso",
-            "phonetic": "/el ˈbaso/",
-            "translation": "o copo",
-            "category": "Falsos Amigos Essenciais",
+            "ipa": "/el ˈbaso/",
+            "pos": "Substantivo",
+            "translation": "o copo (não vaso de flor!)",
+            "category": "Falsos Cognatos / Pegadinhas",
             "level": "A1",
-            "collocation": "un vaso de agua fresca",
-            "example": "¿Me traes un vaso de agua con limón, por favor?",
-            "examplePt": "Você me traz um copo de água com limão, por favor?",
-            "audioText": "el vaso",
-            "tip": "Falso amigo: 'vaso' é copo de beber! Vaso de plantas é chamado de 'maceta' ou 'florero'."
+            "example": "Sirve un vaso de zumo de naranja, por favor.",
+            "examplePt": "Sirva um copo de suco de laranja, por favor."
       },
       {
-            "id": "taller",
-            "term": "el taller",
-            "phonetic": "/el taˈʎeɾ/",
-            "translation": "oficina mecânica / oficina de artesanato",
-            "category": "Falsos Amigos Essenciais",
-            "level": "A2",
-            "collocation": "llevar el coche al taller mecánico",
-            "example": "Tuve que llevar el coche al taller para cambiar los frenos.",
-            "examplePt": "Tive que levar o carro à oficina para trocar os freios.",
-            "audioText": "el taller",
-            "tip": "Falso amigo: 'taller' é oficina mecânica ou workshop. 'Talheres' de mesa em espanhol são 'los cubiertos'."
-      },
-      {
-            "id": "acordarse",
-            "term": "acordarse de",
-            "phonetic": "/akoɾˈdaɾse ðe/",
-            "translation": "lembrar-se de / recordar",
-            "category": "Falsos Amigos Essenciais",
-            "level": "A2",
-            "collocation": "acordarse del cumpleaños",
-            "example": "No me acuerdo de la contraseña de mi cuenta.",
-            "examplePt": "Não me lembro da senha da minha conta.",
-            "audioText": "acordarse de",
-            "tip": "Falso amigo: 'acordarse' significa LEMBRAR-SE! Acordar pela manhã em espanhol é 'despertarse'."
+            "id": "es_sobremesa",
+            "type": "word",
+            "icon": "🗣️",
+            "term": "la sobremesa",
+            "ipa": "/la soβɾeˈmesa/",
+            "pos": "Substantivo",
+            "translation": "conversa pós-refeição à mesa (não doce!)",
+            "category": "Falsos Cognatos / Pegadinhas",
+            "level": "B1",
+            "example": "Pasamos dos horas haciendo sobremesa los domingos.",
+            "examplePt": "Passamos duas horas conversando à mesa aos domingos."
       }
 ]
     };
 
+    let activeVocabType = 'word'; // "word" | "chunk" | "all"
     let activeVocabCategory = 'all';
     let activeVocabSearch = '';
+    let currentDetailModalItem = null;
 
     // Load vocabulary from JSON files with graceful fallback
     async function initVocabularyData() {
@@ -2478,6 +2675,20 @@
       };
     }
 
+    // Set active vocabulary type (word, chunk, all)
+    function setVocabType(type) {
+      if (window.duoAudio) duoAudio.playTap();
+      activeVocabType = type;
+      document.querySelectorAll('.duo-type-pill').forEach(pill => {
+        pill.classList.remove('active');
+      });
+      const targetPill = document.getElementById('typePill-' + type);
+      if (targetPill) targetPill.classList.add('active');
+      activeVocabCategory = 'all';
+      renderVocabView();
+    }
+    window.setVocabType = setVocabType;
+
     // Render Vocabulary View
     function renderVocabView() {
       const lang = currentLanguage || 'en';
@@ -2488,12 +2699,10 @@
       const titleEl = document.getElementById('vocabHeaderTitle');
       const subEl = document.getElementById('vocabHeaderSubtitle');
       if (titleEl) {
-        titleEl.innerText = isEnglish ? 'Baú de Vocabulário (Inglês)' : 'Baú de Vocabulário (Espanhol)';
+        titleEl.innerText = isEnglish ? 'Meu Baú de Vocabulário (Inglês 🇺🇸)' : 'Meu Baú de Vocabulário (Espanhol 🇪🇸)';
       }
       if (subEl) {
-        subEl.innerText = isEnglish 
-          ? 'Termos essenciais, phrasal verbs e colocações com repetição espaçada'
-          : 'Termos práticos, expressões cotidianas e falsos amigos com repetição espaçada';
+        subEl.innerText = `${list.length} palavras e expressões catalogadas • 🔊 Áudio nativo e fonética IPA`;
       }
 
       // Update Metrics
@@ -2505,9 +2714,13 @@
       if (dueEl) dueEl.innerText = metrics.due;
       if (masteredEl) masteredEl.innerText = metrics.mastered;
 
-      // Extract unique categories
+      // Extract unique categories based on active type
+      const listForCategories = (activeVocabType === 'all')
+        ? list
+        : list.filter(i => i.type === activeVocabType);
+
       const categories = ['all'];
-      list.forEach(item => {
+      listForCategories.forEach(item => {
         if (item.category && !categories.includes(item.category)) {
           categories.push(item.category);
         }
@@ -2524,8 +2737,8 @@
           const isActive = (cat === activeVocabCategory);
           const label = (cat === 'all') ? 'Todas' : cat;
           const count = (cat === 'all') 
-            ? list.length 
-            : list.filter(i => i.category === cat).length;
+            ? listForCategories.length 
+            : listForCategories.filter(i => i.category === cat).length;
           return `
             <button class="duo-filter-chip ${isActive ? 'active' : ''}" onclick="setVocabCategory('${cat}')">
               ${label} (${count})
@@ -2537,13 +2750,14 @@
       renderVocabCards();
     }
 
-    window.setVocabCategory = function(cat) {
+    function setVocabCategory(cat) {
       if (window.duoAudio) duoAudio.playTap();
       activeVocabCategory = cat;
       renderVocabView();
-    };
+    }
+    window.setVocabCategory = setVocabCategory;
 
-    window.handleVocabSearch = function(query) {
+    function handleVocabSearch(query) {
       activeVocabSearch = (query || '').toLowerCase().trim();
       const clearBtn = document.getElementById('vocabSearchClear');
       if (clearBtn) {
@@ -2554,9 +2768,10 @@
         }
       }
       renderVocabCards();
-    };
+    }
+    window.handleVocabSearch = handleVocabSearch;
 
-    window.clearVocabSearch = function() {
+    function clearVocabSearch() {
       if (window.duoAudio) duoAudio.playTap();
       const input = document.getElementById('vocabSearchInput');
       if (input) input.value = '';
@@ -2564,36 +2779,37 @@
       const clearBtn = document.getElementById('vocabSearchClear');
       if (clearBtn) clearBtn.classList.remove('visible');
       renderVocabCards();
-    };
+    }
+    window.clearVocabSearch = clearVocabSearch;
 
+    // Render Compact Visual Dictionary Cards
     function renderVocabCards() {
       const grid = document.getElementById('vocabGridContainer');
       if (!grid) return;
 
       const lang = currentLanguage || 'en';
       const list = VOCABULARY_DATA[lang] || [];
-      const store = getSRSStore(lang);
 
       const filtered = list.filter(item => {
-        const matchesCat = (activeVocabCategory === 'all' || item.category === activeVocabCategory);
-        if (!matchesCat) return false;
-
+        if (activeVocabType !== 'all' && item.type !== activeVocabType) return false;
+        if (activeVocabCategory !== 'all' && item.category !== activeVocabCategory) return false;
         if (!activeVocabSearch) return true;
 
         const termMatch = (item.term || '').toLowerCase().includes(activeVocabSearch);
+        const ipaMatch = (item.ipa || item.phonetic || '').toLowerCase().includes(activeVocabSearch);
         const transMatch = (item.translation || '').toLowerCase().includes(activeVocabSearch);
         const exMatch = (item.example || '').toLowerCase().includes(activeVocabSearch);
-        const tipMatch = (item.tip || '').toLowerCase().includes(activeVocabSearch);
-        return termMatch || transMatch || exMatch || tipMatch;
+        const posMatch = (item.pos || '').toLowerCase().includes(activeVocabSearch);
+        return termMatch || ipaMatch || transMatch || exMatch || posMatch;
       });
 
       if (filtered.length === 0) {
         grid.innerHTML = `
-          <div class="duo-vocab-empty">
+          <div class="duo-vocab-empty" style="grid-column: 1 / -1;">
             <div style="font-size: 48px; margin-bottom: 10px;">🔍</div>
             <h3 style="font-size: 18px; font-weight: 800; color: var(--duo-gray-900);">Nenhum termo encontrado</h3>
             <p style="font-size: 14px; color: var(--duo-gray-400); margin-top: 4px;">
-              Tente buscar por outra palavra ou limpe os filtros de categoria.
+              Tente buscar por outra palavra ou selecione o filtro "Todas".
             </p>
           </div>
         `;
@@ -2601,73 +2817,94 @@
       }
 
       grid.innerHTML = filtered.map(item => {
-        const srs = store[item.id];
-        let srsBadge = '<span class="duo-vocab-tag srs-new">Novo</span>';
-        if (srs && srs.lastReviewed) {
-          if (srs.level >= 3) {
-            srsBadge = '<span class="duo-vocab-tag srs-mastered">✓ Dominada</span>';
-          } else {
-            srsBadge = `<span class="duo-vocab-tag srs-learning">Em Revisão (Nv. ${srs.level})</span>`;
-          }
-        }
-
-        const safeAudioText = (item.audioText || item.term).replace(/'/g, "\\'");
-        const safeExample = (item.example || '').replace(/'/g, "\\'");
-
+        const safeAudio = (item.audioText || item.term).replace(/'/g, "\\'");
         return `
-          <div class="duo-vocab-card">
-            <div>
-              <div class="duo-vocab-card-header">
-                <div class="duo-vocab-term-group">
-                  <div class="duo-vocab-term">${item.term}</div>
-                  <div class="duo-vocab-phonetic">${item.phonetic || ''}</div>
-                </div>
-                <button class="btn-speaker-sm" onclick="speakVocabTerm(event, '${safeAudioText}')" title="Ouvir pronúncia nativa">
-                  🔊
-                </button>
-              </div>
-
-              <div class="duo-vocab-badges" style="margin-top: 10px;">
-                <span class="duo-vocab-tag">${item.category}</span>
-                ${item.level ? `<span class="duo-vocab-tag level">${item.level}</span>` : ''}
-                ${srsBadge}
-              </div>
-
-              <div class="duo-vocab-translation" style="margin-top: 14px;">
-                ${item.translation}
-              </div>
+          <div class="duo-word-compact-card" onclick="openVocabDetailModal('${item.id}')" title="Toque para ver exemplo contextual">
+            <div class="duo-card-top-row">
+              <span class="duo-card-icon-emoji">${item.icon || '📖'}</span>
+              <button class="btn-speaker-mini" onclick="speakVocabTerm(event, '${safeAudio}')" title="Ouvir pronúncia">
+                🔊
+              </button>
             </div>
-
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-              ${item.example ? `
-                <div class="duo-vocab-example-box">
-                  <div class="duo-vocab-example-target">
-                    <span>${item.example}</span>
-                    <button class="btn-speaker-sm" style="width: 28px; height: 28px; font-size: 12px; border-width: 1px;" onclick="speakVocabTerm(event, '${safeExample}')" title="Ouvir frase">
-                      🔊
-                    </button>
-                  </div>
-                  <div class="duo-vocab-example-pt">${item.examplePt || ''}</div>
-                </div>
-              ` : ''}
-
-              ${item.tip ? `
-                <div class="duo-vocab-tip">
-                  <span>💡</span>
-                  <span>${item.tip}</span>
-                </div>
-              ` : ''}
+            <div class="duo-card-body">
+              <div class="duo-compact-term">${item.term}</div>
+              <div class="duo-compact-ipa">${item.ipa || item.phonetic || ''}</div>
+              <div class="duo-pos-badge">${item.pos || 'Termo'} • ${item.level || 'A1'}</div>
+            </div>
+            <div class="duo-compact-translation">
+              ${item.translation}
             </div>
           </div>
         `;
       }).join('');
     }
 
-    window.speakVocabTerm = function(event, text) {
+    function speakVocabTerm(event, text) {
       if (event) event.stopPropagation();
       const lang = (currentLanguage === 'en') ? 'en-US' : 'es-ES';
       if (window.duoAudio) duoAudio.speak(text, lang);
-    };
+    }
+    window.speakVocabTerm = speakVocabTerm;
+
+    // Vocab Detail Modal Controller
+    function openVocabDetailModal(id) {
+      const lang = currentLanguage || 'en';
+      const list = VOCABULARY_DATA[lang] || [];
+      const item = list.find(i => i.id === id);
+      if (!item) return;
+
+      currentDetailModalItem = item;
+      const audioLang = (lang === 'en') ? 'en-US' : 'es-ES';
+      if (window.duoAudio) duoAudio.speak(item.audioText || item.term, audioLang);
+
+      const iconEl = document.getElementById('detailModalIcon');
+      const termEl = document.getElementById('detailModalTerm');
+      const ipaEl = document.getElementById('detailModalIpa');
+      const posEl = document.getElementById('detailModalPos');
+      const lvlEl = document.getElementById('detailModalLevel');
+      const transEl = document.getElementById('detailModalTranslation');
+      const exEl = document.getElementById('detailModalExample');
+      const exPtEl = document.getElementById('detailModalExamplePt');
+      const catEl = document.getElementById('detailModalCategory');
+
+      if (iconEl) iconEl.innerText = item.icon || '📖';
+      if (termEl) termEl.innerText = item.term;
+      if (ipaEl) ipaEl.innerText = item.ipa || item.phonetic || '';
+      if (posEl) posEl.innerText = item.pos || 'Termo';
+      if (lvlEl) lvlEl.innerText = item.level || 'A1';
+      if (transEl) transEl.innerText = item.translation;
+      if (exEl) exEl.innerText = item.example ? `"${item.example}"` : `"${item.term}"`;
+      if (exPtEl) exPtEl.innerText = item.examplePt || '';
+      if (catEl) catEl.innerText = `🏷️ ${item.category}`;
+
+      const modal = document.getElementById('vocabDetailModal');
+      if (modal) modal.classList.add('active');
+    }
+    window.openVocabDetailModal = openVocabDetailModal;
+
+    function closeVocabDetailModal(event) {
+      if (event && event.target !== event.currentTarget && !event.target.classList.contains('btn-close') && !event.target.closest('.btn-duo')) {
+        return;
+      }
+      if (window.duoAudio) duoAudio.playTap();
+      const modal = document.getElementById('vocabDetailModal');
+      if (modal) modal.classList.remove('active');
+    }
+    window.closeVocabDetailModal = closeVocabDetailModal;
+
+    function speakDetailModalTerm() {
+      if (!currentDetailModalItem) return;
+      const lang = (currentLanguage === 'en') ? 'en-US' : 'es-ES';
+      if (window.duoAudio) duoAudio.speak(currentDetailModalItem.audioText || currentDetailModalItem.term, lang);
+    }
+    window.speakDetailModalTerm = speakDetailModalTerm;
+
+    function speakDetailModalExample() {
+      if (!currentDetailModalItem || !currentDetailModalItem.example) return;
+      const lang = (currentLanguage === 'en') ? 'en-US' : 'es-ES';
+      if (window.duoAudio) duoAudio.speak(currentDetailModalItem.example, lang);
+    }
+    window.speakDetailModalExample = speakDetailModalExample;
 
     /* ============================================================
      * FLASHCARDS 3D ENGINE (ACTIVE RECALL & LEITNER SRS)
@@ -2765,9 +3002,9 @@
       const fcCloze = document.getElementById('fcFrontCloze');
 
       if (fcCat) fcCat.innerText = card.category;
-      if (fcLevel) fcLevel.innerText = card.level || 'A2';
-      if (fcTerm) fcTerm.innerText = card.term;
-      if (fcPhonetic) fcPhonetic.innerText = card.phonetic || '';
+      if (fcLevel) fcLevel.innerText = card.level || 'A1';
+      if (fcTerm) fcTerm.innerText = (card.icon ? card.icon + ' ' : '') + card.term;
+      if (fcPhonetic) fcPhonetic.innerText = card.ipa || card.phonetic || '';
 
       if (fcCloze) {
         let sentence = card.example || card.collocation || card.term;
@@ -2787,11 +3024,11 @@
       const fcExPt = document.getElementById('fcBackExamplePt');
       const fcTip = document.getElementById('fcBackTip');
 
-      if (fcColloc) fcColloc.innerText = card.collocation || card.category;
+      if (fcColloc) fcColloc.innerText = card.pos ? `${card.pos} • ${card.category}` : (card.collocation || card.category);
       if (fcTrans) fcTrans.innerText = card.translation;
       if (fcEx) fcEx.innerText = card.example || card.term;
       if (fcExPt) fcExPt.innerText = card.examplePt || '';
-      if (fcTip) fcTip.innerHTML = `💡 ${card.tip || 'Pratique repetindo em voz alta!'}`;
+      if (fcTip) fcTip.innerHTML = `💡 ${card.tip || (card.pos ? 'Classe gramatical: ' + card.pos : 'Pratique repetindo em voz alta!')}`;
     }
 
     function flipCurrentFlashcard() {
@@ -2910,7 +3147,7 @@
         tiles.push({
           pairId: item.id,
           type: 'term',
-          text: item.term,
+          text: (item.icon ? item.icon + ' ' : '') + item.term,
           audioText: item.audioText || item.term,
           matched: false
         });
