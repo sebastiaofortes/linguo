@@ -40,7 +40,7 @@
       </div>
       <div class="duo-stat-item duo-stat-gem" title="Gemas">
         <span>💎</span>
-        <span>200</span>
+        <span id="headerGemsDisplay">200</span>
       </div>
       <div class="duo-stat-item duo-stat-heart" title="Vidas">
         <span>❤️</span>
@@ -58,6 +58,88 @@
       <main class="duo-main-path" id="unitsContainer">
         <!-- Rendered dynamically by JavaScript from UNITS_DATA -->
       </main>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TAB: VOCABULÁRIO & PRÁTICA SRS (VOCAB)
+       ============================================================ -->
+  <div id="view-vocab" class="duo-tab-view">
+    <div class="duo-tab-content-wrapper">
+      
+      <!-- Header de Status Léxico & Curva de Ebbinghaus -->
+      <div class="duo-vocab-header">
+        <div class="duo-vocab-header-top">
+          <div class="duo-vocab-header-info">
+            <h2>
+              <span>🎴</span>
+              <span id="vocabHeaderTitle">Baú de Vocabulário</span>
+            </h2>
+            <p id="vocabHeaderSubtitle">
+              Palavras essenciais, colocações e repetição espaçada (SRS)
+            </p>
+          </div>
+          <div class="duo-badge" style="background: var(--duo-purple); font-size: 13px; padding: 6px 14px;">
+            🧠 CURVA DE EBBINGHAUS
+          </div>
+        </div>
+
+        <!-- Indicadores SRS -->
+        <div class="duo-vocab-metrics-row">
+          <div class="duo-vocab-metric-card">
+            <div class="duo-vocab-metric-icon">📚</div>
+            <div>
+              <div class="duo-vocab-metric-val" id="vocabTotalCount">0</div>
+              <div class="duo-vocab-metric-lbl">Total no Baú</div>
+            </div>
+          </div>
+
+          <div class="duo-vocab-metric-card">
+            <div class="duo-vocab-metric-icon">🔥</div>
+            <div>
+              <div class="duo-vocab-metric-val" style="color: var(--duo-orange);" id="vocabDueCount">0</div>
+              <div class="duo-vocab-metric-lbl">Revisão Hoje</div>
+            </div>
+          </div>
+
+          <div class="duo-vocab-metric-card">
+            <div class="duo-vocab-metric-icon">⭐</div>
+            <div>
+              <div class="duo-vocab-metric-val" style="color: var(--duo-green-text);" id="vocabMasteredCount">0</div>
+              <div class="duo-vocab-metric-lbl">Dominadas</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botões de Ação 3D -->
+        <div class="duo-vocab-actions-row">
+          <button class="btn-duo btn-duo-green" onclick="openFlashcardsModal()">
+            <span>🎴 PRATICAR FLASHCARDS DO DIA ➔</span>
+          </button>
+          <button class="btn-duo btn-duo-blue" onclick="openMatchMadnessModal()">
+            <span>⚡ COMBINAR PARES (DESAFIO RÁPIDO)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Barra de Busca & Filtros por Categoria -->
+      <div class="duo-vocab-controls">
+        <div class="duo-vocab-search-wrap">
+          <span class="duo-vocab-search-icon">🔍</span>
+          <input type="text" id="vocabSearchInput" class="duo-vocab-search-input" placeholder="Buscar palavra, pronúncia ou tradução..." oninput="handleVocabSearch(this.value)">
+          <button id="vocabSearchClear" class="duo-vocab-search-clear" onclick="clearVocabSearch()" title="Limpar busca">✕</button>
+        </div>
+
+        <div class="duo-filter-chips-scroll" id="vocabCategoryChips">
+          <!-- Renderizado dinamicamente -->
+        </div>
+      </div>
+
+      <!-- Grade de Cards Léxicos -->
+      <div class="duo-vocab-grid" id="vocabGridContainer">
+        <!-- Renderizado dinamicamente -->
+      </div>
+
     </div>
   </div>
 
@@ -225,7 +307,7 @@
         <div class="duo-stat-card">
           <div class="duo-stat-card-icon" style="color: var(--duo-orange);">⚡</div>
           <div>
-            <div class="duo-stat-card-value">200</div>
+            <div class="duo-stat-card-value" id="profileXpDisplay">200</div>
             <div class="duo-stat-card-label">Total de XP</div>
           </div>
         </div>
@@ -249,7 +331,7 @@
         <div class="duo-stat-card">
           <div class="duo-stat-card-icon" style="color: var(--duo-purple);">💎</div>
           <div>
-            <div class="duo-stat-card-value">200</div>
+            <div class="duo-stat-card-value" id="profileGemsDisplay">200</div>
             <div class="duo-stat-card-label">Gemas Acumuladas</div>
           </div>
         </div>
@@ -374,6 +456,16 @@
       <span class="duo-nav-label">Trilha</span>
     </button>
 
+    <!-- Tab: Vocabulário (SRS) -->
+    <button class="duo-nav-item" id="nav-vocab" onclick="switchTab('vocab')">
+      <div class="duo-nav-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12zm-8-3h8v-2h-8v2zm0-4h8V9h-8v2zm0-4h8V5h-8v2z"/>
+        </svg>
+      </div>
+      <span class="duo-nav-label">Vocabulário</span>
+    </button>
+
     <!-- Tab 2: Missões (Quests) -->
     <button class="duo-nav-item" id="nav-quests" onclick="switchTab('quests')">
       <div class="duo-nav-icon">
@@ -430,6 +522,208 @@
       <div class="duo-course-list" id="courseListContainer">
         <!-- Rendered dynamically by renderCourseModal() -->
       </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       FLASHCARDS 3D MODAL (ACTIVE RECALL & SRS)
+       ============================================================ -->
+  <div id="vocabFlashcardModal" class="duo-modal-overlay" onclick="closeFlashcardsModal(event)">
+    <div class="duo-flashcard-modal-box" onclick="event.stopPropagation()">
+      <!-- Header -->
+      <div class="duo-flashcard-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 26px;">🎴</span>
+          <div>
+            <h3 style="font-size: 19px; font-weight: 900; color: var(--duo-gray-900); margin: 0;">Flashcards do Dia</h3>
+            <div style="font-size: 12px; font-weight: 800; color: var(--duo-gray-400);" id="flashcardCounter">Card 1 de 10</div>
+          </div>
+        </div>
+        <button class="btn-close" onclick="closeFlashcardsModal()" title="Fechar">✕</button>
+      </div>
+
+      <!-- Progress Track -->
+      <div class="duo-progress-track" style="height: 10px; margin-bottom: 2px;">
+        <div class="duo-progress-fill" id="flashcardProgressFill" style="width: 10%;"></div>
+      </div>
+
+      <!-- Card Stage (Playing) -->
+      <div id="flashcardStage">
+        <!-- 3D Card Scene -->
+        <div class="duo-flashcard-scene" onclick="flipCurrentFlashcard()">
+          <div class="duo-flashcard-card" id="flashcardElement">
+            <!-- Front Face -->
+            <div class="duo-flashcard-front">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span class="duo-vocab-tag" id="fcFrontCategory">Categoria</span>
+                <span class="duo-vocab-tag level" id="fcFrontLevel">Nível</span>
+              </div>
+
+              <div style="text-align: center; margin: auto 0;">
+                <div style="font-size: 28px; font-weight: 900; color: var(--duo-gray-900);" id="fcFrontTerm">take a break</div>
+                <div style="margin-top: 6px;">
+                  <span class="duo-vocab-phonetic" id="fcFrontPhonetic">/teɪk ə breɪk/</span>
+                </div>
+                <button class="btn-speaker-sm" style="margin: 12px auto 0;" id="fcFrontAudioBtn" onclick="speakFlashcard(event)" title="Ouvir pronúncia">
+                  🔊
+                </button>
+                <div style="margin-top: 14px; font-size: 14px; font-weight: 700; color: var(--duo-gray-700); background: var(--duo-gray-100); padding: 10px 14px; border-radius: var(--duo-radius-md); line-height: 1.4;" id="fcFrontCloze">
+                  "I work for two hours and then I _____."
+                </div>
+              </div>
+
+              <div class="duo-flashcard-flip-hint">
+                <span>🔄 Toque no cartão para virar e ver a resposta</span>
+              </div>
+            </div>
+
+            <!-- Back Face -->
+            <div class="duo-flashcard-back">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 11px; font-weight: 900; color: var(--duo-green-text); background: var(--duo-green-light); padding: 3px 8px; border-radius: var(--duo-radius-pill);">RESPOSTA & DICA</span>
+                <span class="duo-vocab-tag" id="fcBackCollocation">Colocação</span>
+              </div>
+
+              <div style="margin: auto 0;">
+                <div style="font-size: 22px; font-weight: 900; color: var(--duo-green-text); text-align: center;" id="fcBackTranslation">
+                  fazer uma pausa / descansar
+                </div>
+                <div style="margin-top: 10px; font-size: 14px; font-weight: 700; color: var(--duo-gray-900); background: #ffffff; border: 1px solid var(--duo-gray-200); padding: 10px 14px; border-radius: var(--duo-radius-md);" id="fcBackExample">
+                  I work for two hours and then I take a break.
+                </div>
+                <div style="font-size: 12px; font-weight: 600; color: var(--duo-gray-400); margin-top: 4px; padding-left: 4px;" id="fcBackExamplePt">
+                  Eu trabalho por duas horas e depois faço uma pausa.
+                </div>
+                <div class="duo-vocab-tip" style="margin-top: 10px;" id="fcBackTip">
+                  💡 Colocação fixa: em inglês não dizemos 'make a break', mas sim 'take a break'.
+                </div>
+              </div>
+
+              <div class="duo-flashcard-flip-hint">
+                <span>Como foi lembrar desta palavra? Avalie abaixo:</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rating Buttons (Leitner SRS) -->
+        <div class="duo-srs-rating-container" style="margin-top: 14px;">
+          <div class="duo-srs-btn-row">
+            <button class="btn-srs btn-srs-hard" onclick="rateFlashcard('hard')" title="Revisar em 1 dia">
+              <span>🔴 Difícil</span>
+              <span class="sub">Rever em 1 dia</span>
+            </button>
+            <button class="btn-srs btn-srs-good" onclick="rateFlashcard('good')" title="Revisar em 3 dias">
+              <span>🟡 Bom</span>
+              <span class="sub">Rever em 3 dias</span>
+            </button>
+            <button class="btn-srs btn-srs-easy" onclick="rateFlashcard('easy')" title="Revisar em 7 dias">
+              <span>🟢 Fácil</span>
+              <span class="sub">Rever em 7 dias</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Completion Screen -->
+      <div id="flashcardCompletedStage" style="display: none; text-align: center; padding: 20px 10px;">
+        <div style="font-size: 64px; margin-bottom: 12px; animation: duoMatchPop 0.5s ease;">🎉</div>
+        <h3 style="font-size: 24px; font-weight: 900; color: var(--duo-gray-900); margin-bottom: 6px;">Sessão Concluída!</h3>
+        <p style="font-size: 15px; font-weight: 700; color: var(--duo-gray-400); margin-bottom: 20px;">
+          Você revisou seus flashcards hoje e reforçou sua memória de longo prazo!
+        </p>
+        
+        <div style="display: flex; justify-content: center; gap: 16px; margin-bottom: 24px;">
+          <div class="duo-vocab-metric-card" style="flex: 0 1 160px;">
+            <div class="duo-vocab-metric-icon">⚡</div>
+            <div>
+              <div class="duo-vocab-metric-val" style="color: var(--duo-orange);">+30 XP</div>
+              <div class="duo-vocab-metric-lbl">Pontos</div>
+            </div>
+          </div>
+          <div class="duo-vocab-metric-card" style="flex: 0 1 160px;">
+            <div class="duo-vocab-metric-icon">💎</div>
+            <div>
+              <div class="duo-vocab-metric-val" style="color: var(--duo-blue);">+5</div>
+              <div class="duo-vocab-metric-lbl">Gemas</div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-duo btn-duo-green" style="width: 100%; justify-content: center; font-size: 16px;" onclick="closeFlashcardsModal()">
+          <span>CONTINUAR ➔</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MATCH MADNESS MODAL (COMBINE OS PARES)
+       ============================================================ -->
+  <div id="vocabMatchModal" class="duo-modal-overlay" onclick="closeMatchMadnessModal(event)">
+    <div class="duo-match-modal-box" onclick="event.stopPropagation()">
+      <!-- Header -->
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 26px;">⚡</span>
+          <div>
+            <h3 style="font-size: 19px; font-weight: 900; color: var(--duo-gray-900); margin: 0;">Combine os Pares</h3>
+            <div style="font-size: 13px; font-weight: 700; color: var(--duo-gray-400);">
+              Toque no termo e na sua respectiva tradução
+            </div>
+          </div>
+        </div>
+        <button class="btn-close" onclick="closeMatchMadnessModal()" title="Fechar">✕</button>
+      </div>
+
+      <!-- Match Stage -->
+      <div id="matchGameStage">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <span style="font-size: 14px; font-weight: 800; color: var(--duo-gray-700);">Pares Restantes:</span>
+          <span class="duo-badge" id="matchPairsBadge" style="background: var(--duo-blue); font-size: 13px;">5 / 5</span>
+        </div>
+
+        <div class="duo-match-board" id="matchBoardContainer">
+          <!-- Tiles rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- Match Victory Stage -->
+      <div id="matchVictoryStage" style="display: none; text-align: center; padding: 24px 10px;">
+        <div style="font-size: 64px; margin-bottom: 12px; animation: duoMatchPop 0.5s ease;">🏆</div>
+        <h3 style="font-size: 24px; font-weight: 900; color: var(--duo-gray-900); margin-bottom: 6px;">Sensacional!</h3>
+        <p style="font-size: 15px; font-weight: 700; color: var(--duo-gray-400); margin-bottom: 20px;">
+          Você combinou todos os pares com agilidade e precisão!
+        </p>
+
+        <div style="display: flex; justify-content: center; gap: 16px; margin-bottom: 24px;">
+          <div class="duo-vocab-metric-card" style="flex: 0 1 160px;">
+            <div class="duo-vocab-metric-icon">⚡</div>
+            <div>
+              <div class="duo-vocab-metric-val" style="color: var(--duo-orange);">+25 XP</div>
+              <div class="duo-vocab-metric-lbl">Pontos</div>
+            </div>
+          </div>
+          <div class="duo-vocab-metric-card" style="flex: 0 1 160px;">
+            <div class="duo-vocab-metric-icon">💎</div>
+            <div>
+              <div class="duo-vocab-metric-val" style="color: var(--duo-blue);">+5</div>
+              <div class="duo-vocab-metric-lbl">Gemas</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 12px;">
+          <button class="btn-duo btn-duo-secondary" style="flex: 1; justify-content: center;" onclick="startMatchMadnessRound()">
+            <span>JOGAR NOVAMENTE 🔄</span>
+          </button>
+          <button class="btn-duo btn-duo-green" style="flex: 1; justify-content: center;" onclick="closeMatchMadnessModal()">
+            <span>CONCLUIR ➔</span>
+          </button>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -990,21 +1284,23 @@
     /**
      * COURSE SELECTION MODAL CONTROLLER
      */
-    window.openCourseModal = function() {
+    function openCourseModal() {
       if (window.duoAudio) duoAudio.playTap();
       renderCourseModal();
       const modal = document.getElementById('courseModalOverlay');
       if (modal) modal.classList.add('active');
-    };
+    }
+    window.openCourseModal = openCourseModal;
 
-    window.closeCourseModal = function(event) {
+    function closeCourseModal(event) {
       if (event && event.target !== event.currentTarget && !event.target.classList.contains('btn-close')) {
         return;
       }
       if (window.duoAudio) duoAudio.playTap();
       const modal = document.getElementById('courseModalOverlay');
       if (modal) modal.classList.remove('active');
-    };
+    }
+    window.closeCourseModal = closeCourseModal;
 
     function renderCourseModal() {
       const container = document.getElementById('courseListContainer');
@@ -1045,7 +1341,7 @@
       }).join('');
     }
 
-    window.selectLanguage = function(langCode) {
+    function selectLanguage(langCode) {
       if (!COURSES_DATA[langCode]) return;
       if (window.duoAudio) duoAudio.playSuccess();
 
@@ -1056,8 +1352,10 @@
 
       updateLanguageUI();
       renderPath();
+      renderVocabView();
       closeCourseModal();
-    };
+    }
+    window.selectLanguage = selectLanguage;
 
     let activePopoverId = null;
 
@@ -1096,17 +1394,16 @@
     // Close modals on Escape key
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
-        const modal = document.getElementById('courseModalOverlay');
-        if (modal && modal.classList.contains('active')) {
-          closeCourseModal();
-        }
+        closeCourseModal();
+        closeFlashcardsModal();
+        closeMatchMadnessModal();
       }
     });
 
     /**
      * TAB NAVIGATION CONTROLLER (SPA)
      */
-    window.switchTab = function(tabName, event) {
+    function switchTab(tabName, event) {
       if (event) event.preventDefault();
       if (window.duoAudio) duoAudio.playTap();
 
@@ -1124,6 +1421,9 @@
       const targetView = document.getElementById('view-' + tabName);
       if (targetView) {
         targetView.classList.add('active');
+        if (tabName === 'vocab') {
+          renderVocabView();
+        }
       }
 
       // Activate target nav button
@@ -1133,16 +1433,1615 @@
       }
 
       // Update URL hash without jumping
-      history.replaceState(null, null, '#' + tabName);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, null, '#' + tabName);
+      }
+      if (window.scrollTo) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+    window.switchTab = switchTab;
+
+    /* ============================================================
+     * VOCABULARY & SPACED REPETITION SYSTEM (SRS) CONTROLLER
+     * ============================================================ */
+
+    // Local state for rewards
+    let userStats = {
+      xp: 200,
+      gems: 200
     };
+    try {
+      const savedXp = localStorage.getItem('linguo-user-xp');
+      const savedGems = localStorage.getItem('linguo-user-gems');
+      if (savedXp) userStats.xp = parseInt(savedXp, 10);
+      if (savedGems) userStats.gems = parseInt(savedGems, 10);
+    } catch(e) {}
+
+    function updateUserStatsUI() {
+      const headGems = document.getElementById('headerGemsDisplay');
+      const profGems = document.getElementById('profileGemsDisplay');
+      const profXp = document.getElementById('profileXpDisplay');
+      if (headGems) headGems.innerText = userStats.gems;
+      if (profGems) profGems.innerText = userStats.gems;
+      if (profXp) profXp.innerText = userStats.xp;
+    }
+
+    function addRewards(xpGained, gemsGained) {
+      userStats.xp += xpGained;
+      userStats.gems += gemsGained;
+      try {
+        localStorage.setItem('linguo-user-xp', userStats.xp);
+        localStorage.setItem('linguo-user-gems', userStats.gems);
+      } catch(e) {}
+      updateUserStatsUI();
+    }
+
+    let VOCABULARY_DATA = {
+      en: [
+      {
+            "id": "order_the_check",
+            "term": "order the check",
+            "phonetic": "/ˈɔːrdər ðə tʃɛk/",
+            "translation": "pedir a conta",
+            "category": "Restaurante & Comida",
+            "level": "A2",
+            "collocation": "could we have the check, please?",
+            "example": "Excuse me, can we order the check, please?",
+            "examplePt": "Com licença, podemos pedir a conta, por favor?",
+            "audioText": "order the check",
+            "tip": "Nos EUA usa-se 'the check', enquanto no Reino Unido é mais comum 'the bill'."
+      },
+      {
+            "id": "make_a_reservation",
+            "term": "make a reservation",
+            "phonetic": "/meɪk ə ˌrɛzərˈveɪʃən/",
+            "translation": "fazer uma reserva",
+            "category": "Restaurante & Comida",
+            "level": "A2",
+            "collocation": "make a table reservation",
+            "example": "I would like to make a reservation for two tonight.",
+            "examplePt": "Gostaria de fazer uma reserva para dois esta noite.",
+            "audioText": "make a reservation",
+            "tip": "Use 'make a reservation' e nunca 'do a reservation'."
+      },
+      {
+            "id": "on_the_house",
+            "term": "on the house",
+            "phonetic": "/ɒn ðə haʊs/",
+            "translation": "cortesia da casa (grátis)",
+            "category": "Restaurante & Comida",
+            "level": "B1",
+            "collocation": "dessert is on the house",
+            "example": "Don't worry about the dessert, it's on the house!",
+            "examplePt": "Não se preocupe com a sobremesa, é cortesia da casa!",
+            "audioText": "on the house",
+            "tip": "Expressão idiomática usada quando o estabelecimento oferece algo gratuitamente."
+      },
+      {
+            "id": "sparkling_water",
+            "term": "sparkling water",
+            "phonetic": "/ˈspɑːrklɪŋ ˈwɔːtər/",
+            "translation": "água com gás",
+            "category": "Restaurante & Comida",
+            "level": "A1",
+            "collocation": "still or sparkling water",
+            "example": "Would you like still or sparkling water with your meal?",
+            "examplePt": "Você prefere água sem gás ou com gás com sua refeição?",
+            "audioText": "sparkling water",
+            "tip": "'Still water' é água sem gás e 'sparkling water' é com gás."
+      },
+      {
+            "id": "split_the_bill",
+            "term": "split the bill",
+            "phonetic": "/splɪt ðə bɪl/",
+            "translation": "dividir a conta",
+            "category": "Restaurante & Comida",
+            "level": "A2",
+            "collocation": "split the bill evenly",
+            "example": "We had a great dinner and decided to split the bill.",
+            "examplePt": "Tivemos um ótimo jantar e decidimos dividir a conta.",
+            "audioText": "split the bill",
+            "tip": "Outra expressão comum para dividir a conta igualmente é 'go Dutch'."
+      },
+      {
+            "id": "rare_medium_well_done",
+            "term": "medium-rare",
+            "phonetic": "/ˌmiːdiəm ˈrɛər/",
+            "translation": "ao ponto para malpassado (carne)",
+            "category": "Restaurante & Comida",
+            "level": "A2",
+            "collocation": "how would you like your steak?",
+            "example": "I would like my steak medium-rare, please.",
+            "examplePt": "Eu gostaria do meu bife ao ponto para malpassado, por favor.",
+            "audioText": "medium-rare",
+            "tip": "Escala de carne: rare (malpassada), medium-rare, medium (ao ponto), well-done (bem passada)."
+      },
+      {
+            "id": "carry_on_luggage",
+            "term": "carry-on luggage",
+            "phonetic": "/ˈkæri ɒn ˈlʌɡɪdʒ/",
+            "translation": "bagagem de mão",
+            "category": "Viagem & Aeroporto",
+            "level": "A2",
+            "collocation": "overhead bin for carry-on luggage",
+            "example": "You can bring one piece of carry-on luggage onto the plane.",
+            "examplePt": "Você pode levar uma mala de mão no avião.",
+            "audioText": "carry-on luggage",
+            "tip": "'Luggage' é substantivo incontável em inglês: não existe 'luggages', use 'a piece of luggage'."
+      },
+      {
+            "id": "boarding_pass",
+            "term": "boarding pass",
+            "phonetic": "/ˈbɔːrdɪŋ pæs/",
+            "translation": "cartão de embarque",
+            "category": "Viagem & Aeroporto",
+            "level": "A1",
+            "collocation": "show your boarding pass and passport",
+            "example": "Please have your passport and boarding pass ready at the gate.",
+            "examplePt": "Por favor, tenha seu passaporte e cartão de embarque prontos no portão.",
+            "audioText": "boarding pass",
+            "tip": "'Boarding time' é o horário em que o embarque começa, diferente do horário de decolagem."
+      },
+      {
+            "id": "catch_a_flight",
+            "term": "catch a flight",
+            "phonetic": "/kætʃ ə flaɪt/",
+            "translation": "pegar um voo",
+            "category": "Viagem & Aeroporto",
+            "level": "A2",
+            "collocation": "rush to catch a flight",
+            "example": "We have to leave now to catch our morning flight.",
+            "examplePt": "Temos que sair agora para pegar o nosso voo da manhã.",
+            "audioText": "catch a flight",
+            "tip": "Usa-se o verbo 'catch' para voos, trens e ônibus (assim como 'take')."
+      },
+      {
+            "id": "layover",
+            "term": "layover",
+            "phonetic": "/ˈleɪˌoʊvər/",
+            "translation": "escala / conexão",
+            "category": "Viagem & Aeroporto",
+            "level": "B1",
+            "collocation": "a three-hour layover in Atlanta",
+            "example": "We have a short layover in Frankfurt before flying to Tokyo.",
+            "examplePt": "Temos uma escala rápida em Frankfurt antes de voar para Tóquio.",
+            "audioText": "layover",
+            "tip": "'Layover' refere-se a uma parada rápida; paradas de mais de 24 horas são chamadas de 'stopover'."
+      },
+      {
+            "id": "customs_clearance",
+            "term": "customs",
+            "phonetic": "/ˈkʌstəmz/",
+            "translation": "alfândega",
+            "category": "Viagem & Aeroporto",
+            "level": "B1",
+            "collocation": "go through customs",
+            "example": "It took only ten minutes to go through customs at the airport.",
+            "examplePt": "Levou apenas dez minutos para passar pela alfândega no aeroporto.",
+            "audioText": "customs",
+            "tip": "Atenção: 'custom' sem o 's' significa costume ou tradição."
+      },
+      {
+            "id": "ask_for_directions",
+            "term": "ask for directions",
+            "phonetic": "/æsk fər dɪˈrɛkʃənz/",
+            "translation": "pedir direções / informações",
+            "category": "Viagem & Aeroporto",
+            "level": "A2",
+            "collocation": "stop and ask for directions",
+            "example": "If you get lost, don't hesitate to ask for directions.",
+            "examplePt": "Se você se perder, não hesite em pedir informações.",
+            "audioText": "ask for directions",
+            "tip": "Sempre use 'ask for' quando estiver solicitando orientações a alguém."
+      },
+      {
+            "id": "schedule_a_meeting",
+            "term": "schedule a meeting",
+            "phonetic": "/ˈskɛdʒuːl ə ˈmiːtɪŋ/",
+            "translation": "agendar uma reunião",
+            "category": "Trabalho & Negócios",
+            "level": "A2",
+            "collocation": "schedule a kickoff meeting",
+            "example": "Let's schedule a meeting for tomorrow morning to review the plan.",
+            "examplePt": "Vamos agendar uma reunião para amanhã de manhã para revisar o plano.",
+            "audioText": "schedule a meeting",
+            "tip": "Pronúncia: nos EUA fala-se 'sked-jool'; no inglês britânico costuma-se ouvir 'shed-yool'."
+      },
+      {
+            "id": "meet_a_deadline",
+            "term": "meet a deadline",
+            "phonetic": "/miːt ə ˈdɛdlaɪn/",
+            "translation": "cumprir um prazo",
+            "category": "Trabalho & Negócios",
+            "level": "B1",
+            "collocation": "work hard to meet the deadline",
+            "example": "Our team worked late yesterday to meet the tight deadline.",
+            "examplePt": "Nossa equipe trabalhou até tarde ontem para cumprir o prazo apertado.",
+            "audioText": "meet a deadline",
+            "tip": "O oposto de 'meet a deadline' é 'miss a deadline' (perder o prazo)."
+      },
+      {
+            "id": "work_overtime",
+            "term": "work overtime",
+            "phonetic": "/wɜːrk ˈoʊvərˌtaɪm/",
+            "translation": "fazer hora extra",
+            "category": "Trabalho & Negócios",
+            "level": "A2",
+            "collocation": "paid for working overtime",
+            "example": "She had to work overtime this week to finish the project.",
+            "examplePt": "Ela teve que fazer hora extra esta semana para terminar o projeto.",
+            "audioText": "work overtime",
+            "tip": "'Overtime' funciona como advérbio ou substantivo incontável."
+      },
+      {
+            "id": "give_a_presentation",
+            "term": "give a presentation",
+            "phonetic": "/ɡɪv ə ˌprɛzənˈteɪʃən/",
+            "translation": "fazer uma apresentação",
+            "category": "Trabalho & Negócios",
+            "level": "B1",
+            "collocation": "give a PowerPoint presentation",
+            "example": "He will give a presentation on the quarterly sales results.",
+            "examplePt": "Ele fará uma apresentação sobre os resultados de vendas do trimestre.",
+            "audioText": "give a presentation",
+            "tip": "Em inglês diz-se 'give a presentation' ou 'deliver a presentation', não 'make a presentation'."
+      },
+      {
+            "id": "touch_base",
+            "term": "touch base",
+            "phonetic": "/tʌtʃ beɪs/",
+            "translation": "fazer um alinhamento rápido / conversar brevemente",
+            "category": "Trabalho & Negócios",
+            "level": "B1",
+            "collocation": "touch base with the client",
+            "example": "Let's touch base next Monday to see how things are going.",
+            "examplePt": "Vamos nos alinhar na próxima segunda para ver como as coisas estão indo.",
+            "audioText": "touch base",
+            "tip": "Expressão corporativa muito popular originária do beisebol."
+      },
+      {
+            "id": "call_in_sick",
+            "term": "call in sick",
+            "phonetic": "/kɔːl ɪn sɪk/",
+            "translation": "ligar avisando que está doente (faltar ao trabalho)",
+            "category": "Trabalho & Negócios",
+            "level": "B1",
+            "collocation": "call in sick to work",
+            "example": "Sarah had the flu, so she had to call in sick today.",
+            "examplePt": "Sarah estava gripada, então teve que ligar avisando que não iria trabalhar hoje.",
+            "audioText": "call in sick",
+            "tip": "Frase idiomática padrão para justificar ausência médica no trabalho."
+      },
+      {
+            "id": "take_a_break",
+            "term": "take a break",
+            "phonetic": "/teɪk ə breɪk/",
+            "translation": "fazer uma pausa / descansar",
+            "category": "Rotina & Hábitos",
+            "level": "A1",
+            "collocation": "take a 10-minute break",
+            "example": "You have studied for three hours; you should take a break.",
+            "examplePt": "Você estudou por três horas; você deveria fazer uma pausa.",
+            "audioText": "take a break",
+            "tip": "Colocação fixa: em inglês não dizemos 'make a break', mas sim 'take a break'."
+      },
+      {
+            "id": "get_ready",
+            "term": "get ready",
+            "phonetic": "/ɡɛt ˈrɛdi/",
+            "translation": "se arrumar / se aprontar",
+            "category": "Rotina & Hábitos",
+            "level": "A1",
+            "collocation": "get ready for work",
+            "example": "It takes me thirty minutes to get ready in the morning.",
+            "examplePt": "Levo trinta minutos para me arrumar pela manhã.",
+            "audioText": "get ready",
+            "tip": "'Get' expressa transição de estado: passar do estado despreparado para preparado."
+      },
+      {
+            "id": "wake_up_early",
+            "term": "wake up early",
+            "phonetic": "/weɪk ʌp ˈɜːrli/",
+            "translation": "acordar cedo",
+            "category": "Rotina & Hábitos",
+            "level": "A1",
+            "collocation": "used to waking up early",
+            "example": "I always wake up early on weekdays to go for a run.",
+            "examplePt": "Eu sempre acordo cedo nos dias de semana para dar uma corrida.",
+            "audioText": "wake up early",
+            "tip": "'Wake up' é abrir os olhos; 'get up' é levantar-se da cama fisicamente."
+      },
+      {
+            "id": "run_errands",
+            "term": "run errands",
+            "phonetic": "/rʌn ˈɛrəndz/",
+            "translation": "fazer tarefas de rua (banco, mercado, correios)",
+            "category": "Rotina & Hábitos",
+            "level": "B1",
+            "collocation": "spend Saturday running errands",
+            "example": "I need to run some errands before the supermarket closes.",
+            "examplePt": "Preciso resolver umas coisas na rua antes que o supermercado feche.",
+            "audioText": "run errands",
+            "tip": "'Errands' são pequenos afazeres fora de casa como pagar contas, ir à farmácia, etc."
+      },
+      {
+            "id": "hit_the_gym",
+            "term": "hit the gym",
+            "phonetic": "/hɪt ðə dʒɪm/",
+            "translation": "ir para a academia / malhar",
+            "category": "Rotina & Hábitos",
+            "level": "A2",
+            "collocation": "hit the gym after work",
+            "example": "I usually hit the gym three times a week.",
+            "examplePt": "Eu geralmente vou para a academia três vezes por semana.",
+            "audioText": "hit the gym",
+            "tip": "Gíria muito comum no dia a dia; equivale a 'go to the gym'."
+      },
+      {
+            "id": "fall_asleep",
+            "term": "fall asleep",
+            "phonetic": "/fɔːl əˈsliːp/",
+            "translation": "pegar no sono / adormecer",
+            "category": "Rotina & Hábitos",
+            "level": "A2",
+            "collocation": "fall asleep reading a book",
+            "example": "I was so exhausted that I fell asleep on the couch.",
+            "examplePt": "Eu estava tão exausto que peguei no sono no sofá.",
+            "audioText": "fall asleep",
+            "tip": "Diferente de 'sleep' (dormir), 'fall asleep' denota o momento em que se adormece."
+      },
+      {
+            "id": "figure_out",
+            "term": "figure out",
+            "phonetic": "/ˈfɪɡjər aʊt/",
+            "translation": "descobrir / compreender / resolver",
+            "category": "Phrasal Verbs Essenciais",
+            "level": "B1",
+            "collocation": "figure out the solution",
+            "example": "Don't worry, we will figure out how to solve this bug.",
+            "examplePt": "Não se preocupe, vamos descobrir como resolver este problema.",
+            "audioText": "figure out",
+            "tip": "Significa chegar a uma solução através do raciocínio e da reflexão."
+      },
+      {
+            "id": "look_forward_to",
+            "term": "look forward to",
+            "phonetic": "/lʊk ˈfɔːrwərd tuː/",
+            "translation": "estar ansioso por / aguardar com expectativa",
+            "category": "Phrasal Verbs Essenciais",
+            "level": "B1",
+            "collocation": "look forward to seeing you",
+            "example": "I look forward to meeting your family this weekend.",
+            "examplePt": "Estou ansioso para conhecer sua família neste fim de semana.",
+            "audioText": "look forward to",
+            "tip": "Atenção: o verbo seguinte vem com -ING (ex: 'looking forward to hearing from you')."
+      },
+      {
+            "id": "give_up",
+            "term": "give up",
+            "phonetic": "/ɡɪv ʌp/",
+            "translation": "desistir / abrir mão",
+            "category": "Phrasal Verbs Essenciais",
+            "level": "A2",
+            "collocation": "never give up on your dreams",
+            "example": "Learning English takes time, so don't give up!",
+            "examplePt": "Aprender inglês leva tempo, então não desista!",
+            "audioText": "give up",
+            "tip": "Quando acompanhado de verbo, usa o gerúndio (ex: 'give up smoking')."
+      },
+      {
+            "id": "turn_down",
+            "term": "turn down",
+            "phonetic": "/tɜːrn daʊn/",
+            "translation": "recusar / rejeitar (ou abaixar o volume)",
+            "category": "Phrasal Verbs Essenciais",
+            "level": "B1",
+            "collocation": "turn down a job offer",
+            "example": "She turned down the job offer because the salary was too low.",
+            "examplePt": "Ela recusou a oferta de emprego porque o salário era muito baixo.",
+            "audioText": "turn down",
+            "tip": "Pode significar tanto recusar convite/proposta quanto diminuir intensidade ou som."
+      },
+      {
+            "id": "run_out_of",
+            "term": "run out of",
+            "phonetic": "/rʌn aʊt əv/",
+            "translation": "ficar sem / esgotar o estoque",
+            "category": "Phrasal Verbs Essenciais",
+            "level": "A2",
+            "collocation": "run out of coffee / time",
+            "example": "Hurry up! We are running out of time before the test ends.",
+            "examplePt": "Depressa! Estamos ficando sem tempo antes que o teste termine.",
+            "audioText": "run out of",
+            "tip": "Usa-se para tempo, bateria, dinheiro, comida, gasolina: 'my phone ran out of battery'."
+      },
+      {
+            "id": "show_up",
+            "term": "show up",
+            "phonetic": "/ʃoʊ ʌp/",
+            "translation": "aparecer / dar as caras / comparecer",
+            "category": "Phrasal Verbs Essenciais",
+            "level": "A2",
+            "collocation": "show up on time",
+            "example": "He didn't show up to the party yesterday.",
+            "examplePt": "Ele não apareceu na festa ontem.",
+            "audioText": "show up",
+            "tip": "Equivalente mais informal e frequente para 'arrive' ou 'attend'."
+      },
+      {
+            "id": "actually",
+            "term": "actually",
+            "phonetic": "/ˈæktʃuəli/",
+            "translation": "na verdade / na realidade",
+            "category": "Falsos Cognatos & Pegadinhas",
+            "level": "A2",
+            "collocation": "actually, I changed my mind",
+            "example": "I thought he was British, but actually he is Australian.",
+            "examplePt": "Pensei que ele fosse britânico, mas na verdade ele é australiano.",
+            "audioText": "actually",
+            "tip": "Falso cognato clássico: NÃO significa 'atualmente' (atualmente é 'currently' ou 'nowadays')."
+      },
+      {
+            "id": "pretend",
+            "term": "pretend",
+            "phonetic": "/prɪˈtɛnd/",
+            "translation": "fingir",
+            "category": "Falsos Cognatos & Pegadinhas",
+            "level": "B1",
+            "collocation": "pretend to be asleep",
+            "example": "The children love to pretend they are superheroes.",
+            "examplePt": "As crianças adoram fingir que são super-heróis.",
+            "audioText": "pretend",
+            "tip": "Falso cognato: 'pretend' significa FINGIR. Se quiser dizer 'pretender', use 'intend'."
+      },
+      {
+            "id": "intend",
+            "term": "intend",
+            "phonetic": "/ɪnˈtɛnd/",
+            "translation": "pretender / ter intenção de",
+            "category": "Falsos Cognatos & Pegadinhas",
+            "level": "B1",
+            "collocation": "intend to move abroad",
+            "example": "I intend to visit Canada next year during my vacation.",
+            "examplePt": "Eu pretendo visitar o Canadá no ano que vem durante minhas férias.",
+            "audioText": "intend",
+            "tip": "Este é o verdadeiro 'pretender' em português! Cuidado para não trocar com 'pretend'."
+      },
+      {
+            "id": "push",
+            "term": "push",
+            "phonetic": "/pʊʃ/",
+            "translation": "empurrar",
+            "category": "Falsos Cognatos & Pegadinhas",
+            "level": "A1",
+            "collocation": "push the door open",
+            "example": "Remember to push the door when leaving the restaurant.",
+            "examplePt": "Lembre-se de empurrar a porta ao sair do restaurante.",
+            "audioText": "push",
+            "tip": "Pegadinha de portas em todo o mundo: 'push' é empurrar! 'Pull' é puxar."
+      },
+      {
+            "id": "realize",
+            "term": "realize",
+            "phonetic": "/ˈriːəlaɪz/",
+            "translation": "perceber / dar-se conta de",
+            "category": "Falsos Cognatos & Pegadinhas",
+            "level": "B1",
+            "collocation": "suddenly realize the mistake",
+            "example": "I realized I had forgotten my keys as soon as the door closed.",
+            "examplePt": "Percebi que tinha esquecido minhas chaves assim que a porta fechou.",
+            "audioText": "realize",
+            "tip": "'Realize' quase sempre significa 'dar-se conta'. Para 'realizar um evento', usa-se 'carry out' ou 'hold'."
+      },
+      {
+            "id": "parents",
+            "term": "parents",
+            "phonetic": "/ˈpɛərənts/",
+            "translation": "pais (pai e mãe)",
+            "category": "Falsos Cognatos & Pegadinhas",
+            "level": "A1",
+            "collocation": "visit my parents on Sunday",
+            "example": "My parents live in São Paulo, but I moved to Curitiba.",
+            "examplePt": "Meus pais moram em São Paulo, mas eu me mudei para Curitiba.",
+            "audioText": "parents",
+            "tip": "Falso cognato: 'parents' são pai e mãe. Parentes em geral são chamados de 'relatives'."
+      }
+],
+      es: [
+      {
+            "id": "la_cuenta_por_favor",
+            "term": "la cuenta, por favor",
+            "phonetic": "/la ˈkwenta por faˈβor/",
+            "translation": "a conta, por favor",
+            "category": "Restaurante & Tapas",
+            "level": "A1",
+            "collocation": "¿nos trae la cuenta, por favor?",
+            "example": "¿Nos cobras? La cuenta, por favor.",
+            "examplePt": "Pode nos cobrar? A conta, por favor.",
+            "audioText": "la cuenta por favor",
+            "tip": "Fórmula padrão para pedir a conta em qualquer restaurante ou bar na Espanha e América Latina."
+      },
+      {
+            "id": "tapa_del_dia",
+            "term": "la tapa",
+            "phonetic": "/la ˈtapa/",
+            "translation": "aperitivo / petisco servido com bebida",
+            "category": "Restaurante & Tapas",
+            "level": "A1",
+            "collocation": "ir de tapas",
+            "example": "¿Vamos a tomar una caña y comer unas tapas?",
+            "examplePt": "Vamos tomar um chope e comer uns petiscos?",
+            "audioText": "la tapa",
+            "tip": "Na Espanha, 'ir de tapas' ou 'tapear' é o costume social de ir de bar em bar provando petiscos."
+      },
+      {
+            "id": "cana_bien_fria",
+            "term": "una caña",
+            "phonetic": "/ˈuna ˈkaɲa/",
+            "translation": "um chope (copo pequeno de cerveja tirada)",
+            "category": "Restaurante & Tapas",
+            "level": "A1",
+            "collocation": "camarero, ponme una caña bien fría",
+            "example": "Por favor, pónganos dos cañas y una ración de bravas.",
+            "examplePt": "Por favor, traga-nos dois chopes e uma porção de batatas bravas.",
+            "audioText": "una caña",
+            "tip": "Na Espanha, pedir 'una caña' é a forma mais tradicional de pedir cerveja de pressão em copo de 200ml."
+      },
+      {
+            "id": "dejar_propina",
+            "term": "dejar propina",
+            "phonetic": "/deˈxar proˈpina/",
+            "translation": "deixar gorjeta",
+            "category": "Restaurante & Tapas",
+            "level": "A2",
+            "collocation": "dejar una buena propina",
+            "example": "El servicio fue excelente, así que vamos a dejar propina.",
+            "examplePt": "O atendimento foi excelente, então vamos deixar gorjeta.",
+            "audioText": "dejar propina",
+            "tip": "Falso amigo sonoro: 'propina' em espanhol é simplesmente a gorjeta do garçom, sem conotação ilegal!"
+      },
+      {
+            "id": "sobremesa",
+            "term": "la sobremesa",
+            "phonetic": "/la soβɾeˈmesa/",
+            "translation": "conversa pós-refeição à mesa",
+            "category": "Restaurante & Tapas",
+            "level": "B1",
+            "collocation": "una larga sobremesa con amigos",
+            "example": "Pasamos dos horas haciendo sobremesa después de comer.",
+            "examplePt": "Passamos duas horas conversando à mesa depois de almoçar.",
+            "audioText": "la sobremesa",
+            "tip": "Pegadinha clássica! Sobremesa NÃO é o doce (o doce é 'el postre'). Sobremesa é a conversa pós-refeição!"
+      },
+      {
+            "id": "el_menu_del_dia",
+            "term": "el menú del día",
+            "phonetic": "/el meˈnu ðel ˈdi.a/",
+            "translation": "o prato executivo do dia (entrada, prato e sobremesa)",
+            "category": "Restaurante & Tapas",
+            "level": "A2",
+            "collocation": "elegir el primer plato del menú",
+            "example": "¿Qué incluye el menú del día hoy?",
+            "examplePt": "O que inclui o menu do dia hoje?",
+            "audioText": "el menú del día",
+            "tip": "Instituição culinária espanhola: inclui primeiro prato, segundo prato, pão, bebida e 'postre' a preço fixo."
+      },
+      {
+            "id": "esta_rico",
+            "term": "estar rico",
+            "phonetic": "/esˈtaɾ ˈriko/",
+            "translation": "estar gostoso / saboroso",
+            "category": "Restaurante & Tapas",
+            "level": "A1",
+            "collocation": "¡la paella está riquísima!",
+            "example": "¡Este plato tradicional está muy rico!",
+            "examplePt": "Este prato tradicional está muito gostoso!",
+            "audioText": "estar rico",
+            "tip": "Usa-se 'estar rico' para comida deliciosa. 'Ser rico' refere-se a ter muito dinheiro ou fortuna."
+      },
+      {
+            "id": "tarjeta_de_embarque",
+            "term": "la tarjeta de embarque",
+            "phonetic": "/la taɾˈxeta ðe emˈbaɾke/",
+            "translation": "o cartão de embarque",
+            "category": "Viajes & Direcciones",
+            "level": "A1",
+            "collocation": "descargar la tarjeta de embarque en el móvil",
+            "example": "Muestre su pasaporte y la tarjeta de embarque, por favor.",
+            "examplePt": "Mostre seu passaporte e o cartão de embarque, por favor.",
+            "audioText": "la tarjeta de embarque",
+            "tip": "'Tarjeta' significa cartão em geral (tarjeta de crédito, tarjeta de metro, tarjeta de embarque)."
+      },
+      {
+            "id": "equipaje_de_mano",
+            "term": "el equipaje de mano",
+            "phonetic": "/el ekiˈpaxe ðe ˈmano/",
+            "translation": "a bagagem de mão",
+            "category": "Viajes & Direcciones",
+            "level": "A2",
+            "collocation": "pesar el equipaje de mano",
+            "example": "Solo llevo una mochila como equipaje de mano.",
+            "examplePt": "Levo apenas uma mochila como bagagem de mão.",
+            "audioText": "el equipaje de mano",
+            "tip": "Mala de viagem é chamada de 'la maleta'; bagagem no total é 'el equipaje'."
+      },
+      {
+            "id": "billete_de_ida_y_vuelta",
+            "term": "billete de ida y vuelta",
+            "phonetic": "/biˈʎete ðe ˈiða i ˈβwelta/",
+            "translation": "passagem de ida e volta",
+            "category": "Viajes & Direcciones",
+            "level": "A2",
+            "collocation": "comprar un billete de ida y vuelta",
+            "example": "Quisiera un billete de ida y vuelta para Madrid.",
+            "examplePt": "Queria uma passagem de ida e volta para Madri.",
+            "audioText": "billete de ida y vuelta",
+            "tip": "Na Espanha usa-se 'billete'; na América Latina é muito mais comum 'boleto' ou 'pasaje'."
+      },
+      {
+            "id": "girar_a_la_derecha",
+            "term": "girar a la derecha",
+            "phonetic": "/xiˈɾaɾ a la ðeˈɾetʃa/",
+            "translation": "virar à direita",
+            "category": "Viajes & Direcciones",
+            "level": "A1",
+            "collocation": "girar en la primera esquina",
+            "example": "Siga recto y luego gire a la derecha en el semáforo.",
+            "examplePt": "Siga em frente e depois vire à direita no semáforo.",
+            "audioText": "girar a la derecha",
+            "tip": "Em muitas regiões da América Latina diz-se 'doblar a la derecha'."
+      },
+      {
+            "id": "seguir_recto",
+            "term": "seguir recto",
+            "phonetic": "/seˈɣiɾ ˈrekto/",
+            "translation": "seguir em frente / seguir reto",
+            "category": "Viajes & Direcciones",
+            "level": "A1",
+            "collocation": "seguir recto dos calles",
+            "example": "Para llegar al museo, debe seguir todo recto por esta avenida.",
+            "examplePt": "Para chegar ao museu, deve seguir todo reto por esta avenida.",
+            "audioText": "seguir recto",
+            "tip": "Também se diz 'seguir derecho' (com 'o' no final) ou 'todo recto'."
+      },
+      {
+            "id": "parada_de_metro",
+            "term": "la parada",
+            "phonetic": "/la paˈɾaða/",
+            "translation": "o ponto / a parada de ônibus ou metrô",
+            "category": "Viajes & Direcciones",
+            "level": "A1",
+            "collocation": "parada de autobús / metro",
+            "example": "¿Dónde está la parada de metro más cercana?",
+            "examplePt": "Onde fica a estação/parada de metrô mais próxima?",
+            "audioText": "la parada",
+            "tip": "Para ônibus diz-se 'la parada de autobús'. Para trem e metrô diz-se 'la estación' ou 'la parada'."
+      },
+      {
+            "id": "hacer_escala",
+            "term": "hacer escala",
+            "phonetic": "/aˈseɾ esˈkala/",
+            "translation": "fazer escala / conexão",
+            "category": "Viajes & Direcciones",
+            "level": "A2",
+            "collocation": "vuelo con escala",
+            "example": "Nuestro vuelo hace escala en Bogotá antes de llegar a Lima.",
+            "examplePt": "Nosso voo faz escala em Bogotá antes de chegar a Lima.",
+            "audioText": "hacer escala",
+            "tip": "Um voo direto é chamado de 'vuelo directo' ou 'sin escalas'."
+      },
+      {
+            "id": "cumplir_el_plazo",
+            "term": "cumplir el plazo",
+            "phonetic": "/kumˈpliɾ el ˈplaθo/",
+            "translation": "cumprir o prazo",
+            "category": "Trabajo & Cotidiano",
+            "level": "B1",
+            "collocation": "trabajar bajo presión para cumplir el plazo",
+            "example": "Hicimos un gran esfuerzo para cumplir el plazo de entrega.",
+            "examplePt": "Fizemos um grande esforço para cumprir o prazo de entrega.",
+            "audioText": "cumplir el plazo",
+            "tip": "'Plazo' é o prazo de entrega ou limite temporal; 'fecha límite' é a data limite."
+      },
+      {
+            "id": "reunirse_con",
+            "term": "reunirse con",
+            "phonetic": "/rewˈniɾse kon/",
+            "translation": "reunir-se com / encontrar-se com",
+            "category": "Trabajo & Cotidiano",
+            "level": "A2",
+            "collocation": "reunirse con el cliente",
+            "example": "Voy a reunirme con el equipo a las diez de la mañana.",
+            "examplePt": "Vou me reunir com a equipe às dez da manhã.",
+            "audioText": "reunirse con",
+            "tip": "Verbo pronominal: 'yo me reúno', 'tú te reúnes', 'nosotros nos reunimos'."
+      },
+      {
+            "id": "teletrabajar",
+            "term": "teletrabajar",
+            "phonetic": "/teletɾaβaˈxaɾ/",
+            "translation": "fazer home office / trabalhar remotamente",
+            "category": "Trabajo & Cotidiano",
+            "level": "A2",
+            "collocation": "teletrabajar tres días por semana",
+            "example": "En mi empresa podemos teletrabajar los lunes y los viernes.",
+            "examplePt": "Na minha empresa podemos trabalhar de home office às segundas e sextas.",
+            "audioText": "teletrabajar",
+            "tip": "Em espanhol é preferível o verbo 'teletrabajar' ou o substantivo 'el teletrabajo' em vez de termos em inglês."
+      },
+      {
+            "id": "hacer_horas_extras",
+            "term": "hacer horas extras",
+            "phonetic": "/aˈseɾ ˈoɾas ˈekstɾas/",
+            "translation": "fazer hora extra",
+            "category": "Trabajo & Cotidiano",
+            "level": "A2",
+            "collocation": "cobrar por horas extras",
+            "example": "Tuve que hacer horas extras para terminar el informe mensual.",
+            "examplePt": "Tive que fazer horas extras para terminar o relatório mensal.",
+            "audioText": "hacer horas extras",
+            "tip": "Sempre com o verbo 'hacer': 'hacer horas extras'."
+      },
+      {
+            "id": "pedir_cita_previa",
+            "term": "pedir cita",
+            "phonetic": "/peˈðiɾ ˈθita/",
+            "translation": "marcar um horário / consulta",
+            "category": "Trabajo & Cotidiano",
+            "level": "A2",
+            "collocation": "pedir cita con el médico",
+            "example": "Necesito pedir cita en la oficina del médico para el martes.",
+            "examplePt": "Preciso marcar uma consulta no médico para terça-feira.",
+            "audioText": "pedir cita",
+            "tip": "'Cita' pode ser tanto um compromisso profissional/médico quanto um encontro amoroso ('una cita romántica')."
+      },
+      {
+            "id": "madrugar",
+            "term": "madrugar",
+            "phonetic": "/maðɾuˈɣaɾ/",
+            "translation": "acordar de madrugada / madrugar",
+            "category": "Trabajo & Cotidiano",
+            "level": "A2",
+            "collocation": "a quien madruga, Dios le ayuda",
+            "example": "Mañana tengo que madrugar mucho para tomar el tren.",
+            "examplePt": "Amanhã tenho que madrugar muito para pegar o trem.",
+            "audioText": "madrugar",
+            "tip": "Existe um provérbio famoso idêntico: 'A quien madruga, Dios le ayuda' (Deus ajuda quem cedo madruga)."
+      },
+      {
+            "id": "echarse_la_siesta",
+            "term": "echarse una siesta",
+            "phonetic": "/eˈtʃaɾse ˈuna ˈsjesta/",
+            "translation": "tirar um cochilo / fazer a sesta",
+            "category": "Trabajo & Cotidiano",
+            "level": "A2",
+            "collocation": "echarse una siesta de veinte minutos",
+            "example": "Los domingos me gusta echarme una pequeña siesta después de comer.",
+            "examplePt": "Aos domingos gosto de tirar um pequeno cochilo depois do almoço.",
+            "audioText": "echarse una siesta",
+            "tip": "Usa-se a expressão coloquial 'echarse la siesta' ou 'dormir la siesta'."
+      },
+      {
+            "id": "por_supuesto",
+            "term": "por supuesto",
+            "phonetic": "/por suˈpwesto/",
+            "translation": "com certeza / com toda certeza / claro",
+            "category": "Conectores & Expresiones",
+            "level": "A1",
+            "collocation": "por supuesto que sí",
+            "example": "—¿Me acompañas al cine? —¡Por supuesto!",
+            "examplePt": "— Você me acompanha ao cinema? — Com certeza!",
+            "audioText": "por supuesto",
+            "tip": "Equivalente perfeito e muito educado a 'claro que sim' ou 'com certeza'."
+      },
+      {
+            "id": "sin_embargo",
+            "term": "sin embargo",
+            "phonetic": "/sin emˈbaɾɣo/",
+            "translation": "no entanto / porém / todavia",
+            "category": "Conectores & Expresiones",
+            "level": "B1",
+            "collocation": "estudió mucho; sin embargo, estaba nervioso",
+            "example": "Estudió mucho; sin embargo, el examen fue muy difícil.",
+            "examplePt": "Ele estudou muito; no entanto, a prova foi muito difícil.",
+            "audioText": "sin embargo",
+            "tip": "Um dos conectores de oposição formal mais importantes da língua espanhola."
+      },
+      {
+            "id": "echar_de_menos",
+            "term": "echar de menos",
+            "phonetic": "/eˈtʃaɾ ðe ˈmenos/",
+            "translation": "sentir saudades / sentir falta",
+            "category": "Conectores & Expresiones",
+            "level": "A2",
+            "collocation": "te echo mucho de menos",
+            "example": "Echo mucho de menos a mi familia cuando viajo al extranjero.",
+            "examplePt": "Sinto muitas saudades da minha família quando viajo para o exterior.",
+            "audioText": "echar de menos",
+            "tip": "Na Espanha diz-se 'echar de menos'. Na maior parte da América Latina prefere-se 'extrañar' ('te extraño')."
+      },
+      {
+            "id": "darse_cuenta_de",
+            "term": "darse cuenta de",
+            "phonetic": "/ˈdaɾse ˈkwenta ðe/",
+            "translation": "perceber / dar-se conta de",
+            "category": "Conectores & Expresiones",
+            "level": "B1",
+            "collocation": "darse cuenta del error a tiempo",
+            "example": "Al salir de casa, me di cuenta de que no llevaba la cartera.",
+            "examplePt": "Ao sair de casa, percebi que não estava levando a carteira.",
+            "audioText": "darse cuenta de",
+            "tip": "Não confunda com 'contar': 'darse cuenta' é exclusivamente a percepção mental consciente de algo."
+      },
+      {
+            "id": "a_lo_mejor",
+            "term": "a lo mejor",
+            "phonetic": "/a lo meˈxoɾ/",
+            "translation": "talvez / quem sabe",
+            "category": "Conectores & Expresiones",
+            "level": "A2",
+            "collocation": "a lo mejor mañana llueve",
+            "example": "A lo mejor voy a la fiesta más tarde si termino mi trabajo.",
+            "examplePt": "Talvez eu vá à festa mais tarde se terminar meu trabalho.",
+            "audioText": "a lo mejor",
+            "tip": "Regra de ouro gramatical: após 'a lo mejor', o verbo sempre fica no INDICATIVO, nunca no subjuntivo!"
+      },
+      {
+            "id": "valer_la_pena",
+            "term": "valer la pena",
+            "phonetic": "/baˈleɾ la ˈpena/",
+            "translation": "valer a pena",
+            "category": "Conectores & Expresiones",
+            "level": "A2",
+            "collocation": "el esfuerzo vale la pena",
+            "example": "El viaje fue largo, pero conocer la Alhambra valió la pena.",
+            "examplePt": "A viagem foi longa, mas conhecer o Alhambra valeu a pena.",
+            "audioText": "valer la pena",
+            "tip": "Idêntico ao português; muito usado para expressar que a recompensa supera o esforço."
+      },
+      {
+            "id": "por_lo_tanto",
+            "term": "por lo tanto",
+            "phonetic": "/por lo ˈtanto/",
+            "translation": "portanto / por conseguinte",
+            "category": "Conectores & Expresiones",
+            "level": "B1",
+            "collocation": "no había billetes, por lo tanto cancelamos",
+            "example": "No quedaban entradas, por lo tanto fuimos a cenar juntos.",
+            "examplePt": "Não havia ingressos sobrando, portanto fomos jantar juntos.",
+            "audioText": "por lo tanto",
+            "tip": "Conector conclusivo essencial para argumentação e redação."
+      },
+      {
+            "id": "embarazada",
+            "term": "embarazada",
+            "phonetic": "/embaɾaˈθaða/",
+            "translation": "grávida / gestante",
+            "category": "Falsos Amigos Essenciais",
+            "level": "A2",
+            "collocation": "estar embarazada de seis meses",
+            "example": "Mi hermana mayor está embarazada y espera una niña.",
+            "examplePt": "Minha irmã mais velha está grávida e espera uma menina.",
+            "audioText": "embarazada",
+            "tip": "O mais clássico dos falsos amigos! NÃO significa 'embaraçada/envergonhada' (envergonhada é 'avergonzada')."
+      },
+      {
+            "id": "exito",
+            "term": "el éxito",
+            "phonetic": "/el ˈeɡzito/",
+            "translation": "o sucesso / o triunfo",
+            "category": "Falsos Amigos Essenciais",
+            "level": "A2",
+            "collocation": "tener mucho éxito en el proyecto",
+            "example": "La nueva aplicación fue un gran éxito entre los estudiantes.",
+            "examplePt": "O novo aplicativo foi um grande sucesso entre os estudantes.",
+            "audioText": "el éxito",
+            "tip": "Falso amigo: 'éxito' é sucesso! Se quiser falar 'saída' de um lugar, a palavra correta é 'la salida'."
+      },
+      {
+            "id": "largo",
+            "term": "largo",
+            "phonetic": "/ˈlaɾɣo/",
+            "translation": "comprido / longo",
+            "category": "Falsos Amigos Essenciais",
+            "level": "A1",
+            "collocation": "un camino muy largo",
+            "example": "Ella tiene el pelo muy largo y brillante.",
+            "examplePt": "Ela tem o cabelo bem comprido e brilhante.",
+            "audioText": "largo",
+            "tip": "Falso amigo: 'largo' significa LONGO/COMPRIDO. Para dizer 'largo/amplo' em espanhol, usa-se 'ancho'."
+      },
+      {
+            "id": "apellido",
+            "term": "el apellido",
+            "phonetic": "/el apeˈʎiðo/",
+            "translation": "o sobrenome da família",
+            "category": "Falsos Amigos Essenciais",
+            "level": "A1",
+            "collocation": "primer y segundo apellido",
+            "example": "¿Cómo se escribe tu primer apellido?",
+            "examplePt": "Como se escreve o seu primeiro sobrenome?",
+            "audioText": "el apellido",
+            "tip": "Falso amigo: 'apellido' é o SOBRENOME. 'Apelido' informal (ex: Zeca, Gabi) é chamado de 'apodo'."
+      },
+      {
+            "id": "vaso",
+            "term": "el vaso",
+            "phonetic": "/el ˈbaso/",
+            "translation": "o copo",
+            "category": "Falsos Amigos Essenciais",
+            "level": "A1",
+            "collocation": "un vaso de agua fresca",
+            "example": "¿Me traes un vaso de agua con limón, por favor?",
+            "examplePt": "Você me traz um copo de água com limão, por favor?",
+            "audioText": "el vaso",
+            "tip": "Falso amigo: 'vaso' é copo de beber! Vaso de plantas é chamado de 'maceta' ou 'florero'."
+      },
+      {
+            "id": "taller",
+            "term": "el taller",
+            "phonetic": "/el taˈʎeɾ/",
+            "translation": "oficina mecânica / oficina de artesanato",
+            "category": "Falsos Amigos Essenciais",
+            "level": "A2",
+            "collocation": "llevar el coche al taller mecánico",
+            "example": "Tuve que llevar el coche al taller para cambiar los frenos.",
+            "examplePt": "Tive que levar o carro à oficina para trocar os freios.",
+            "audioText": "el taller",
+            "tip": "Falso amigo: 'taller' é oficina mecânica ou workshop. 'Talheres' de mesa em espanhol são 'los cubiertos'."
+      },
+      {
+            "id": "acordarse",
+            "term": "acordarse de",
+            "phonetic": "/akoɾˈdaɾse ðe/",
+            "translation": "lembrar-se de / recordar",
+            "category": "Falsos Amigos Essenciais",
+            "level": "A2",
+            "collocation": "acordarse del cumpleaños",
+            "example": "No me acuerdo de la contraseña de mi cuenta.",
+            "examplePt": "Não me lembro da senha da minha conta.",
+            "audioText": "acordarse de",
+            "tip": "Falso amigo: 'acordarse' significa LEMBRAR-SE! Acordar pela manhã em espanhol é 'despertarse'."
+      }
+]
+    };
+
+    let activeVocabCategory = 'all';
+    let activeVocabSearch = '';
+
+    // Load vocabulary from JSON files with graceful fallback
+    async function initVocabularyData() {
+      try {
+        const [resEn, resEs] = await Promise.all([
+          fetch('lessons/en/vocabulary.json').then(r => r.json()),
+          fetch('lessons/es/vocabulary.json').then(r => r.json())
+        ]);
+        if (Array.isArray(resEn) && resEn.length > 0) VOCABULARY_DATA.en = resEn;
+        if (Array.isArray(resEs) && resEs.length > 0) VOCABULARY_DATA.es = resEs;
+      } catch (err) {
+        console.info('Vocabulary JSON loaded via fallback/embedded cache.');
+      }
+      renderVocabView();
+    }
+
+    // SRS Date Helpers
+    function getTodayString() {
+      return new Date().toISOString().split('T')[0];
+    }
+
+    function addDaysToString(dateStr, days) {
+      const d = new Date(dateStr + 'T00:00:00');
+      d.setDate(d.getDate() + days);
+      return d.toISOString().split('T')[0];
+    }
+
+    function getSRSStore(lang) {
+      const key = 'linguo-vocab-srs-' + (lang || currentLanguage);
+      try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : {};
+      } catch(e) {
+        return {};
+      }
+    }
+
+    function saveSRSStore(lang, store) {
+      const key = 'linguo-vocab-srs-' + (lang || currentLanguage);
+      try {
+        localStorage.setItem(key, JSON.stringify(store));
+      } catch(e) {}
+    }
+
+    function calculateVocabMetrics(lang) {
+      const list = VOCABULARY_DATA[lang || currentLanguage] || [];
+      const store = getSRSStore(lang || currentLanguage);
+      const today = getTodayString();
+
+      let dueCount = 0;
+      let masteredCount = 0;
+
+      list.forEach(item => {
+        const srs = store[item.id];
+        if (!srs || !srs.nextReview || srs.nextReview <= today) {
+          dueCount++;
+        }
+        if (srs && srs.level >= 3) {
+          masteredCount++;
+        }
+      });
+
+      return {
+        total: list.length,
+        due: dueCount,
+        mastered: masteredCount
+      };
+    }
+
+    // Render Vocabulary View
+    function renderVocabView() {
+      const lang = currentLanguage || 'en';
+      const isEnglish = (lang === 'en');
+      const list = VOCABULARY_DATA[lang] || [];
+
+      // Update Header Info
+      const titleEl = document.getElementById('vocabHeaderTitle');
+      const subEl = document.getElementById('vocabHeaderSubtitle');
+      if (titleEl) {
+        titleEl.innerText = isEnglish ? 'Baú de Vocabulário (Inglês)' : 'Baú de Vocabulário (Espanhol)';
+      }
+      if (subEl) {
+        subEl.innerText = isEnglish 
+          ? 'Termos essenciais, phrasal verbs e colocações com repetição espaçada'
+          : 'Termos práticos, expressões cotidianas e falsos amigos com repetição espaçada';
+      }
+
+      // Update Metrics
+      const metrics = calculateVocabMetrics(lang);
+      const totalEl = document.getElementById('vocabTotalCount');
+      const dueEl = document.getElementById('vocabDueCount');
+      const masteredEl = document.getElementById('vocabMasteredCount');
+      if (totalEl) totalEl.innerText = metrics.total;
+      if (dueEl) dueEl.innerText = metrics.due;
+      if (masteredEl) masteredEl.innerText = metrics.mastered;
+
+      // Extract unique categories
+      const categories = ['all'];
+      list.forEach(item => {
+        if (item.category && !categories.includes(item.category)) {
+          categories.push(item.category);
+        }
+      });
+
+      if (!categories.includes(activeVocabCategory)) {
+        activeVocabCategory = 'all';
+      }
+
+      // Render Category Chips
+      const chipsContainer = document.getElementById('vocabCategoryChips');
+      if (chipsContainer) {
+        chipsContainer.innerHTML = categories.map(cat => {
+          const isActive = (cat === activeVocabCategory);
+          const label = (cat === 'all') ? 'Todas' : cat;
+          const count = (cat === 'all') 
+            ? list.length 
+            : list.filter(i => i.category === cat).length;
+          return `
+            <button class="duo-filter-chip ${isActive ? 'active' : ''}" onclick="setVocabCategory('${cat}')">
+              ${label} (${count})
+            </button>
+          `;
+        }).join('');
+      }
+
+      renderVocabCards();
+    }
+
+    window.setVocabCategory = function(cat) {
+      if (window.duoAudio) duoAudio.playTap();
+      activeVocabCategory = cat;
+      renderVocabView();
+    };
+
+    window.handleVocabSearch = function(query) {
+      activeVocabSearch = (query || '').toLowerCase().trim();
+      const clearBtn = document.getElementById('vocabSearchClear');
+      if (clearBtn) {
+        if (activeVocabSearch.length > 0) {
+          clearBtn.classList.add('visible');
+        } else {
+          clearBtn.classList.remove('visible');
+        }
+      }
+      renderVocabCards();
+    };
+
+    window.clearVocabSearch = function() {
+      if (window.duoAudio) duoAudio.playTap();
+      const input = document.getElementById('vocabSearchInput');
+      if (input) input.value = '';
+      activeVocabSearch = '';
+      const clearBtn = document.getElementById('vocabSearchClear');
+      if (clearBtn) clearBtn.classList.remove('visible');
+      renderVocabCards();
+    };
+
+    function renderVocabCards() {
+      const grid = document.getElementById('vocabGridContainer');
+      if (!grid) return;
+
+      const lang = currentLanguage || 'en';
+      const list = VOCABULARY_DATA[lang] || [];
+      const store = getSRSStore(lang);
+
+      const filtered = list.filter(item => {
+        const matchesCat = (activeVocabCategory === 'all' || item.category === activeVocabCategory);
+        if (!matchesCat) return false;
+
+        if (!activeVocabSearch) return true;
+
+        const termMatch = (item.term || '').toLowerCase().includes(activeVocabSearch);
+        const transMatch = (item.translation || '').toLowerCase().includes(activeVocabSearch);
+        const exMatch = (item.example || '').toLowerCase().includes(activeVocabSearch);
+        const tipMatch = (item.tip || '').toLowerCase().includes(activeVocabSearch);
+        return termMatch || transMatch || exMatch || tipMatch;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="duo-vocab-empty">
+            <div style="font-size: 48px; margin-bottom: 10px;">🔍</div>
+            <h3 style="font-size: 18px; font-weight: 800; color: var(--duo-gray-900);">Nenhum termo encontrado</h3>
+            <p style="font-size: 14px; color: var(--duo-gray-400); margin-top: 4px;">
+              Tente buscar por outra palavra ou limpe os filtros de categoria.
+            </p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(item => {
+        const srs = store[item.id];
+        let srsBadge = '<span class="duo-vocab-tag srs-new">Novo</span>';
+        if (srs && srs.lastReviewed) {
+          if (srs.level >= 3) {
+            srsBadge = '<span class="duo-vocab-tag srs-mastered">✓ Dominada</span>';
+          } else {
+            srsBadge = `<span class="duo-vocab-tag srs-learning">Em Revisão (Nv. ${srs.level})</span>`;
+          }
+        }
+
+        const safeAudioText = (item.audioText || item.term).replace(/'/g, "\\'");
+        const safeExample = (item.example || '').replace(/'/g, "\\'");
+
+        return `
+          <div class="duo-vocab-card">
+            <div>
+              <div class="duo-vocab-card-header">
+                <div class="duo-vocab-term-group">
+                  <div class="duo-vocab-term">${item.term}</div>
+                  <div class="duo-vocab-phonetic">${item.phonetic || ''}</div>
+                </div>
+                <button class="btn-speaker-sm" onclick="speakVocabTerm(event, '${safeAudioText}')" title="Ouvir pronúncia nativa">
+                  🔊
+                </button>
+              </div>
+
+              <div class="duo-vocab-badges" style="margin-top: 10px;">
+                <span class="duo-vocab-tag">${item.category}</span>
+                ${item.level ? `<span class="duo-vocab-tag level">${item.level}</span>` : ''}
+                ${srsBadge}
+              </div>
+
+              <div class="duo-vocab-translation" style="margin-top: 14px;">
+                ${item.translation}
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              ${item.example ? `
+                <div class="duo-vocab-example-box">
+                  <div class="duo-vocab-example-target">
+                    <span>${item.example}</span>
+                    <button class="btn-speaker-sm" style="width: 28px; height: 28px; font-size: 12px; border-width: 1px;" onclick="speakVocabTerm(event, '${safeExample}')" title="Ouvir frase">
+                      🔊
+                    </button>
+                  </div>
+                  <div class="duo-vocab-example-pt">${item.examplePt || ''}</div>
+                </div>
+              ` : ''}
+
+              ${item.tip ? `
+                <div class="duo-vocab-tip">
+                  <span>💡</span>
+                  <span>${item.tip}</span>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.speakVocabTerm = function(event, text) {
+      if (event) event.stopPropagation();
+      const lang = (currentLanguage === 'en') ? 'en-US' : 'es-ES';
+      if (window.duoAudio) duoAudio.speak(text, lang);
+    };
+
+    /* ============================================================
+     * FLASHCARDS 3D ENGINE (ACTIVE RECALL & LEITNER SRS)
+     * ============================================================ */
+    let activeFlashcardsDeck = [];
+    let currentFlashcardIndex = 0;
+
+    function openFlashcardsModal() {
+      if (window.duoAudio) duoAudio.playTap();
+
+      const lang = currentLanguage || 'en';
+      const list = VOCABULARY_DATA[lang] || [];
+      if (list.length === 0) {
+        alert('Nenhum vocabulário disponível no momento.');
+        return;
+      }
+
+      const store = getSRSStore(lang);
+      const today = getTodayString();
+
+      // Prioritize due cards, then unreviewed cards, then cards with lowest level
+      const dueCards = [];
+      const unreviewed = [];
+      const otherCards = [];
+
+      list.forEach(item => {
+        const srs = store[item.id];
+        if (!srs || !srs.lastReviewed) {
+          unreviewed.push(item);
+        } else if (!srs.nextReview || srs.nextReview <= today) {
+          dueCards.push(item);
+        } else {
+          otherCards.push(item);
+        }
+      });
+
+      dueCards.sort(() => 0.5 - Math.random());
+      unreviewed.sort(() => 0.5 - Math.random());
+      otherCards.sort(() => 0.5 - Math.random());
+
+      let deck = [...dueCards, ...unreviewed, ...otherCards].slice(0, 10);
+      if (deck.length === 0) deck = list.slice(0, 10);
+
+      activeFlashcardsDeck = deck;
+      currentFlashcardIndex = 0;
+
+      const stageEl = document.getElementById('flashcardStage');
+      const compEl = document.getElementById('flashcardCompletedStage');
+      if (stageEl) stageEl.style.display = 'block';
+      if (compEl) compEl.style.display = 'none';
+
+      renderCurrentFlashcard();
+
+      const modal = document.getElementById('vocabFlashcardModal');
+      if (modal) modal.classList.add('active');
+    }
+    window.openFlashcardsModal = openFlashcardsModal;
+
+    function closeFlashcardsModal(event) {
+      if (event && event.target !== event.currentTarget && !event.target.classList.contains('btn-close')) {
+        return;
+      }
+      if (window.duoAudio) duoAudio.playTap();
+      const modal = document.getElementById('vocabFlashcardModal');
+      if (modal) modal.classList.remove('active');
+      renderVocabView();
+    }
+    window.closeFlashcardsModal = closeFlashcardsModal;
+
+    function renderCurrentFlashcard() {
+      if (activeFlashcardsDeck.length === 0 || currentFlashcardIndex >= activeFlashcardsDeck.length) {
+        showFlashcardCompletion();
+        return;
+      }
+
+      const card = activeFlashcardsDeck[currentFlashcardIndex];
+      const cardEl = document.getElementById('flashcardElement');
+      if (cardEl) cardEl.classList.remove('flipped');
+
+      const counterEl = document.getElementById('flashcardCounter');
+      const fillEl = document.getElementById('flashcardProgressFill');
+      if (counterEl) {
+        counterEl.innerText = `Card ${currentFlashcardIndex + 1} de ${activeFlashcardsDeck.length}`;
+      }
+      if (fillEl) {
+        const pct = ((currentFlashcardIndex) / activeFlashcardsDeck.length) * 100;
+        fillEl.style.width = pct + '%';
+      }
+
+      // Front Face
+      const fcCat = document.getElementById('fcFrontCategory');
+      const fcLevel = document.getElementById('fcFrontLevel');
+      const fcTerm = document.getElementById('fcFrontTerm');
+      const fcPhonetic = document.getElementById('fcFrontPhonetic');
+      const fcCloze = document.getElementById('fcFrontCloze');
+
+      if (fcCat) fcCat.innerText = card.category;
+      if (fcLevel) fcLevel.innerText = card.level || 'A2';
+      if (fcTerm) fcTerm.innerText = card.term;
+      if (fcPhonetic) fcPhonetic.innerText = card.phonetic || '';
+
+      if (fcCloze) {
+        let sentence = card.example || card.collocation || card.term;
+        try {
+          const regex = new RegExp(card.term, 'gi');
+          sentence = sentence.replace(regex, '_____');
+        } catch(e) {
+          sentence = '_____';
+        }
+        fcCloze.innerText = `"${sentence}"`;
+      }
+
+      // Back Face
+      const fcColloc = document.getElementById('fcBackCollocation');
+      const fcTrans = document.getElementById('fcBackTranslation');
+      const fcEx = document.getElementById('fcBackExample');
+      const fcExPt = document.getElementById('fcBackExamplePt');
+      const fcTip = document.getElementById('fcBackTip');
+
+      if (fcColloc) fcColloc.innerText = card.collocation || card.category;
+      if (fcTrans) fcTrans.innerText = card.translation;
+      if (fcEx) fcEx.innerText = card.example || card.term;
+      if (fcExPt) fcExPt.innerText = card.examplePt || '';
+      if (fcTip) fcTip.innerHTML = `💡 ${card.tip || 'Pratique repetindo em voz alta!'}`;
+    }
+
+    function flipCurrentFlashcard() {
+      if (window.duoAudio) duoAudio.playTap();
+      const cardEl = document.getElementById('flashcardElement');
+      if (cardEl) cardEl.classList.toggle('flipped');
+    }
+    window.flipCurrentFlashcard = flipCurrentFlashcard;
+
+    function speakFlashcard(event) {
+      if (event) event.stopPropagation();
+      if (!activeFlashcardsDeck || !activeFlashcardsDeck[currentFlashcardIndex]) return;
+      const card = activeFlashcardsDeck[currentFlashcardIndex];
+      const lang = (currentLanguage === 'en') ? 'en-US' : 'es-ES';
+      if (window.duoAudio) duoAudio.speak(card.audioText || card.term, lang);
+    }
+    window.speakFlashcard = speakFlashcard;
+
+    function rateFlashcard(rating) {
+      if (window.duoAudio) duoAudio.playTap();
+      if (!activeFlashcardsDeck || !activeFlashcardsDeck[currentFlashcardIndex]) return;
+
+      const card = activeFlashcardsDeck[currentFlashcardIndex];
+      const lang = currentLanguage || 'en';
+      const store = getSRSStore(lang);
+      const today = getTodayString();
+
+      const itemSRS = store[card.id] || { level: 0, repetitions: 0 };
+      let newLevel = itemSRS.level || 0;
+      let intervalDays = 1;
+
+      if (rating === 'hard') {
+        newLevel = 1;
+        intervalDays = 1;
+      } else if (rating === 'good') {
+        newLevel = Math.min(newLevel + 1, 5);
+        if (newLevel <= 1) intervalDays = 1;
+        else if (newLevel === 2) intervalDays = 3;
+        else if (newLevel === 3) intervalDays = 7;
+        else if (newLevel === 4) intervalDays = 14;
+        else intervalDays = 21;
+      } else if (rating === 'easy') {
+        newLevel = Math.min(newLevel + 2, 5);
+        if (newLevel <= 2) intervalDays = 7;
+        else if (newLevel === 3) intervalDays = 14;
+        else intervalDays = 30;
+      }
+
+      store[card.id] = {
+        level: newLevel,
+        lastReviewed: today,
+        nextReview: addDaysToString(today, intervalDays),
+        repetitions: (itemSRS.repetitions || 0) + 1,
+        lastRating: rating
+      };
+      saveSRSStore(lang, store);
+
+      currentFlashcardIndex++;
+      if (currentFlashcardIndex < activeFlashcardsDeck.length) {
+        renderCurrentFlashcard();
+      } else {
+        showFlashcardCompletion();
+      }
+    }
+    window.rateFlashcard = rateFlashcard;
+
+    function showFlashcardCompletion() {
+      const stageEl = document.getElementById('flashcardStage');
+      const compEl = document.getElementById('flashcardCompletedStage');
+      const fillEl = document.getElementById('flashcardProgressFill');
+      if (fillEl) fillEl.style.width = '100%';
+
+      if (stageEl) stageEl.style.display = 'none';
+      if (compEl) compEl.style.display = 'block';
+
+      addRewards(30, 5);
+      if (window.duoAudio) duoAudio.playSuccess();
+    }
+
+    /* ============================================================
+     * MATCH MADNESS GAME ("COMBINE OS PARES")
+     * ============================================================ */
+    let currentMatchTiles = [];
+    let matchPairsRemaining = 5;
+    let matchSelectedTile = null;
+    let matchIsProcessing = false;
+
+    function openMatchMadnessModal() {
+      if (window.duoAudio) duoAudio.playTap();
+      startMatchMadnessRound();
+      const modal = document.getElementById('vocabMatchModal');
+      if (modal) modal.classList.add('active');
+    }
+    window.openMatchMadnessModal = openMatchMadnessModal;
+
+    function closeMatchMadnessModal(event) {
+      if (event && event.target !== event.currentTarget && !event.target.classList.contains('btn-close')) {
+        return;
+      }
+      if (window.duoAudio) duoAudio.playTap();
+      const modal = document.getElementById('vocabMatchModal');
+      if (modal) modal.classList.remove('active');
+    }
+    window.closeMatchMadnessModal = closeMatchMadnessModal;
+
+    function startMatchMadnessRound() {
+      const lang = currentLanguage || 'en';
+      const list = VOCABULARY_DATA[lang] || [];
+      if (list.length < 5) return;
+
+      const shuffled = [...list].sort(() => 0.5 - Math.random());
+      const selected = shuffled.slice(0, 5);
+
+      const tiles = [];
+      selected.forEach(item => {
+        tiles.push({
+          pairId: item.id,
+          type: 'term',
+          text: item.term,
+          audioText: item.audioText || item.term,
+          matched: false
+        });
+        tiles.push({
+          pairId: item.id,
+          type: 'trans',
+          text: item.translation,
+          matched: false
+        });
+      });
+
+      tiles.sort(() => 0.5 - Math.random());
+      currentMatchTiles = tiles;
+      matchPairsRemaining = 5;
+      matchSelectedTile = null;
+      matchIsProcessing = false;
+
+      const badge = document.getElementById('matchPairsBadge');
+      if (badge) badge.innerText = '5 / 5';
+
+      const gameStage = document.getElementById('matchGameStage');
+      const vicStage = document.getElementById('matchVictoryStage');
+      if (gameStage) gameStage.style.display = 'block';
+      if (vicStage) vicStage.style.display = 'none';
+
+      renderMatchBoard();
+    }
+    window.startMatchMadnessRound = startMatchMadnessRound;
+
+    function renderMatchBoard() {
+      const board = document.getElementById('matchBoardContainer');
+      if (!board) return;
+
+      board.innerHTML = currentMatchTiles.map((tile, idx) => `
+        <button class="duo-match-tile ${tile.matched ? 'matched' : ''}" id="matchTile-${idx}" onclick="handleMatchTileClick(${idx})">
+          ${tile.text}
+        </button>
+      `).join('');
+    }
+
+    function handleMatchTileClick(idx) {
+      if (matchIsProcessing) return;
+      const tile = currentMatchTiles[idx];
+      if (!tile || tile.matched) return;
+
+      const tileEl = document.getElementById('matchTile-' + idx);
+      if (!tileEl) return;
+
+      const lang = (currentLanguage === 'en') ? 'en-US' : 'es-ES';
+
+      if (!matchSelectedTile) {
+        matchSelectedTile = { idx, tile, el: tileEl };
+        tileEl.classList.add('selected');
+        if (tile.type === 'term') {
+          if (window.duoAudio) duoAudio.speak(tile.audioText, lang);
+        } else {
+          if (window.duoAudio) duoAudio.playTap();
+        }
+        return;
+      }
+
+      if (matchSelectedTile.idx === idx) {
+        tileEl.classList.remove('selected');
+        matchSelectedTile = null;
+        if (window.duoAudio) duoAudio.playTap();
+        return;
+      }
+
+      if (matchSelectedTile.tile.type === tile.type) {
+        matchSelectedTile.el.classList.remove('selected');
+        matchSelectedTile = { idx, tile, el: tileEl };
+        tileEl.classList.add('selected');
+        if (tile.type === 'term') {
+          if (window.duoAudio) duoAudio.speak(tile.audioText, lang);
+        } else {
+          if (window.duoAudio) duoAudio.playTap();
+        }
+        return;
+      }
+
+      const first = matchSelectedTile;
+      const second = { idx, tile, el: tileEl };
+
+      if (first.tile.pairId === second.tile.pairId) {
+        if (window.duoAudio) duoAudio.playSuccess();
+        first.el.classList.remove('selected');
+        first.el.classList.add('matched');
+        second.el.classList.add('matched');
+        first.tile.matched = true;
+        second.tile.matched = true;
+
+        matchPairsRemaining--;
+        const badge = document.getElementById('matchPairsBadge');
+        if (badge) badge.innerText = `${matchPairsRemaining} / 5`;
+
+        matchSelectedTile = null;
+
+        if (matchPairsRemaining === 0) {
+          setTimeout(() => {
+            const gameStage = document.getElementById('matchGameStage');
+            const vicStage = document.getElementById('matchVictoryStage');
+            if (gameStage) gameStage.style.display = 'none';
+            if (vicStage) vicStage.style.display = 'block';
+            addRewards(25, 5);
+            if (window.duoAudio) duoAudio.playSuccess();
+          }, 450);
+        }
+      } else {
+        if (window.duoAudio) duoAudio.playError();
+        first.el.classList.add('wrong');
+        second.el.classList.add('wrong');
+        matchIsProcessing = true;
+
+        setTimeout(() => {
+          first.el.classList.remove('selected', 'wrong');
+          second.el.classList.remove('wrong');
+          matchSelectedTile = null;
+          matchIsProcessing = false;
+        }, 450);
+      }
+    }
+    window.handleMatchTileClick = handleMatchTileClick;
 
     // Handle initial load
     window.addEventListener('DOMContentLoaded', () => {
+      updateUserStatsUI();
       updateLanguageUI();
       renderPath();
+      initVocabularyData();
       const initialHash = window.location.hash.replace('#', '');
-      if (['home', 'quests', 'stats', 'tutor'].includes(initialHash)) {
+      if (['home', 'vocab', 'quests', 'stats', 'tutor'].includes(initialHash)) {
         switchTab(initialHash);
       }
     });
