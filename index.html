@@ -119,8 +119,8 @@
           <button class="btn-duo btn-duo-blue" onclick="openMatchMadnessModal()">
             <span>⚡ COMBINAR PARES (DESAFIO RÁPIDO)</span>
           </button>
-          <button class="btn-duo btn-duo-purple" onclick="openTranslateDeckModal()">
-            <span>🎙️ TRADUZA AS PALAVRAS (DECK 3D)</span>
+          <button class="btn-duo btn-duo-purple" id="vocabDeckActionBtn" onclick="openTranslateDeckModal()">
+            <span id="vocabDeckActionBtnText">🎙️ TRADUZA AS PALAVRAS (DECK 3D)</span>
           </button>
         </div>
       </div>
@@ -762,21 +762,8 @@
       <!-- Playing Stage -->
       <div id="translateDeckStage">
         <!-- Exercise Title -->
-        <div style="text-align: center; margin-bottom: 6px;">
+        <div style="text-align: center; margin-bottom: 12px;">
           <h3 style="font-size: 20px; font-weight: 900; color: var(--duo-gray-900); margin: 0;" id="translateDeckTitle">Traduza as palavras</h3>
-        </div>
-
-        <!-- Type Selector (Mini-Pills) -->
-        <div class="duo-deck-type-selector">
-          <button class="duo-deck-pill" id="deckTypePill-word" onclick="setTranslateDeckType('word')">
-            <span>🔤</span> Palavras
-          </button>
-          <button class="duo-deck-pill" id="deckTypePill-chunk" onclick="setTranslateDeckType('chunk')">
-            <span>💬</span> Chunks
-          </button>
-          <button class="duo-deck-pill active" id="deckTypePill-all" onclick="setTranslateDeckType('all')">
-            <span>🌐</span> Todas
-          </button>
         </div>
 
         <!-- 3D Card Stack Scene -->
@@ -2842,6 +2829,18 @@
       if (dueEl) dueEl.innerText = metrics.due;
       if (masteredEl) masteredEl.innerText = metrics.mastered;
 
+      // Update 3D Deck Action Button Text according to active tab
+      const deckActionBtnText = document.getElementById('vocabDeckActionBtnText');
+      if (deckActionBtnText) {
+        if (activeVocabType === 'word') {
+          deckActionBtnText.innerText = '🎙️ PRATICAR PALAVRAS (DECK 3D)';
+        } else if (activeVocabType === 'chunk') {
+          deckActionBtnText.innerText = '🎙️ PRATICAR EXPRESSÕES (DECK 3D)';
+        } else {
+          deckActionBtnText.innerText = '🎙️ TRADUZA AS PALAVRAS (DECK 3D)';
+        }
+      }
+
       // Extract unique categories based on active type
       const listForCategories = (activeVocabType === 'all')
         ? list
@@ -3423,12 +3422,6 @@
         translateDeckFeedbackTimeout = null;
       }
       activeTranslateDeckType = type;
-
-      // Update pill classes in modal
-      document.querySelectorAll('.duo-deck-pill').forEach(pill => pill.classList.remove('active'));
-      const targetPill = document.getElementById('deckTypePill-' + type);
-      if (targetPill) targetPill.classList.add('active');
-
       startTranslateDeckRound();
     }
     window.setTranslateDeckType = setTranslateDeckType;
@@ -3575,13 +3568,8 @@
         return;
       }
 
-      // Herança Inteligente do Estado Atual (Camada 1)
+      // Herança Inteligente do Estado Atual do Baú (activeVocabType)
       activeTranslateDeckType = activeVocabType || 'all';
-
-      // Sincroniza classes das pills no modal
-      document.querySelectorAll('.duo-deck-pill').forEach(pill => pill.classList.remove('active'));
-      const targetPill = document.getElementById('deckTypePill-' + activeTranslateDeckType);
-      if (targetPill) targetPill.classList.add('active');
 
       startTranslateDeckRound();
 
@@ -3597,7 +3585,9 @@
       const fullList = [...(VOCABULARY_DATA[lang] || [])];
       if (fullList.length === 0) return;
 
-      // 1. Filtragem por Tipo ('word', 'chunk', 'all')
+      const TRANSLATE_DECK_SIZE = 7;
+
+      // 1. Filtragem por Tipo herdado ('word', 'chunk', 'all')
       let filtered = (activeTranslateDeckType === 'all')
         ? fullList
         : fullList.filter(item => item.type === activeTranslateDeckType);
@@ -3635,26 +3625,17 @@
 
       // Update Header Text & Placeholders based on Target Language and Type
       const titleEl = document.getElementById('translateDeckTitle');
-      const subEl = document.getElementById('translateDeckSubtitle');
-      const micLbl = document.getElementById('translateDeckMicLabel');
       const inputEl = document.getElementById('translateDeckTextInput');
 
-      const typeLabel = (activeTranslateDeckType === 'word')
-        ? 'Palavras Isoladas'
-        : (activeTranslateDeckType === 'chunk' ? 'Expressões & Chunks' : 'Todas as palavras');
-
-      if (titleEl) titleEl.innerText = 'Traduza as palavras';
+      if (titleEl) {
+        titleEl.innerText = (activeTranslateDeckType === 'chunk') ? 'Traduza as expressões' : 'Traduza as palavras';
+      }
       if (inputEl) {
         inputEl.placeholder = isEnglish
           ? 'Digite a tradução em inglês...'
           : 'Digite a tradução em espanhol...';
         inputEl.value = '';
       }
-
-      // Sync active state of pills in modal
-      document.querySelectorAll('.duo-deck-pill').forEach(pill => pill.classList.remove('active'));
-      const activePill = document.getElementById('deckTypePill-' + activeTranslateDeckType);
-      if (activePill) activePill.classList.add('active');
 
       // Check Speech Recognition capability
       const hasSpeech = window.duoSpeech && window.duoSpeech.isSupported;
