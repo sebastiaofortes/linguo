@@ -762,11 +762,8 @@
       <!-- Playing Stage -->
       <div id="translateDeckStage">
         <!-- Exercise Title -->
-        <div style="text-align: center; margin-bottom: 4px;">
+        <div style="text-align: center; margin-bottom: 6px;">
           <h3 style="font-size: 20px; font-weight: 900; color: var(--duo-gray-900); margin: 0;" id="translateDeckTitle">Traduza as palavras</h3>
-          <div style="font-size: 13px; font-weight: 700; color: var(--duo-gray-400);" id="translateDeckSubtitle">
-            Diga ou digite a tradução correta
-          </div>
         </div>
 
         <!-- Type Selector (Mini-Pills) -->
@@ -799,18 +796,15 @@
 
         <!-- Controls: Voice Mode (Default) -->
         <div id="translateDeckVoiceControls" class="duo-deck-controls-block">
-          <div class="duo-deck-actions-row">
-            <button class="btn-duo btn-duo-blue btn-duo-mic" id="translateDeckMicBtn" onclick="toggleDeckSpeechRecording()">
+          <div class="duo-deck-actions-row" style="justify-content: center; gap: 12px;">
+            <button class="btn-duo btn-duo-blue btn-duo-mic" id="translateDeckMicBtn" onclick="toggleDeckSpeechRecording()" title="Falar em voz alta" aria-label="Falar em voz alta">
               <span id="translateDeckMicIcon">🎙️</span>
-              <span id="translateDeckMicLabel">Falar em Inglês</span>
             </button>
-            <button class="btn-duo btn-duo-secondary" id="translateDeckSkipBtn" onclick="skipCurrentDeckCard()" title="Deixar para o final da pilha">
-              <span>⏩ Pular</span>
+            <button class="btn-duo btn-duo-secondary btn-duo-skip" id="translateDeckSkipBtn" onclick="skipCurrentDeckCard()" title="Deixar para o final da pilha" aria-label="Pular">
+              <span>⏩</span>
             </button>
           </div>
-          <div class="duo-speech-status" id="translateDeckSpeechStatus">
-            Toque no microfone e fale a tradução em voz alta
-          </div>
+          <div class="duo-speech-status" id="translateDeckSpeechStatus"></div>
         </div>
 
         <!-- Controls: Typing Mode (Alternative) -->
@@ -3650,14 +3644,6 @@
         : (activeTranslateDeckType === 'chunk' ? 'Expressões & Chunks' : 'Todas as palavras');
 
       if (titleEl) titleEl.innerText = 'Traduza as palavras';
-      if (subEl) {
-        subEl.innerText = isEnglish
-          ? `Traduza do Português para o Inglês 🇺🇸 • ${typeLabel}`
-          : `Traduza do Português para o Espanhol 🇪🇸 • ${typeLabel}`;
-      }
-      if (micLbl) {
-        micLbl.innerText = isEnglish ? 'Falar em Inglês' : 'Falar em Espanhol';
-      }
       if (inputEl) {
         inputEl.placeholder = isEnglish
           ? 'Digite a tradução em inglês...'
@@ -3748,7 +3734,7 @@
           toggleBtn.innerText = '⌨️ Prefiro digitar no teclado';
         }
         if (statusEl) {
-          statusEl.innerText = 'Toque no microfone e fale a tradução em voz alta';
+          statusEl.innerText = '';
           statusEl.classList.remove('listening');
         }
       } else {
@@ -3808,26 +3794,16 @@
         html += `
           <div class="duo-stack-card ${layerClass}" id="deckCard-${i}">
             <div class="duo-stack-card-header">
-              <span class="duo-vocab-tag">
-                ${card.icon ? card.icon + ' ' : ''}${card.category || 'Vocabulário'}
-              </span>
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <span class="duo-deck-card-type-badge ${card.type === 'chunk' ? 'chunk' : 'word'}">
-                  ${card.type === 'chunk' ? '💬 CHUNK' : '🔤 PALAVRA'}
-                </span>
-                <span class="duo-vocab-tag level">${card.level || 'A1'}</span>
+              <div class="duo-deck-card-unified-badge">
+                <span>${card.icon ? card.icon + ' ' : ''}${card.category || 'Vocabulário'}</span>
+                <span class="dot">•</span>
+                <span class="level">${card.level || 'A1'}</span>
               </div>
             </div>
 
             <div style="text-align: center; margin: auto 0;">
               <div class="duo-stack-card-term">${ptData.main}</div>
               ${ptData.hint ? `<div style="font-size: 13px; font-weight: 700; color: var(--duo-gray-400); margin-top: 4px;">${ptData.hint}</div>` : ''}
-            </div>
-
-            <div class="duo-stack-card-footer">
-              <span>🇧🇷 Português</span>
-              <span>➔</span>
-              <span style="color: var(--duo-blue);">${targetLangName}</span>
             </div>
           </div>
         `;
@@ -3848,7 +3824,7 @@
       const statusEl = document.getElementById('translateDeckSpeechStatus');
       const micBtn = document.getElementById('translateDeckMicBtn');
       if (statusEl) {
-        statusEl.innerText = 'Toque no microfone e fale a tradução em voz alta';
+        statusEl.innerText = '';
         statusEl.classList.remove('listening');
       }
       if (micBtn) {
@@ -3874,7 +3850,7 @@
         window.duoSpeech.stopListening();
         if (micBtn) micBtn.classList.remove('recording');
         if (statusEl) {
-          statusEl.innerText = 'Toque no microfone e fale a tradução em voz alta';
+          statusEl.innerText = '';
           statusEl.classList.remove('listening');
         }
         return;

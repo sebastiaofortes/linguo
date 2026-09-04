@@ -3338,16 +3338,28 @@ html, body {
 }
 
 .btn-duo-mic {
-  flex: 2;
-  font-size: 16px;
-  padding: 14px 20px;
-  position: relative;
-  overflow: visible;
-  transition: all 0.2s ease;
+  min-width: 90px;
+  height: 56px;
+  padding: 0 24px;
+  font-size: 26px;
+  border-radius: var(--duo-radius-lg);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  position: relative;
+  overflow: visible;
+  transition: all 0.2s ease;
+}
+
+.btn-duo-skip {
+  min-width: 56px;
+  height: 56px;
+  padding: 0 16px;
+  font-size: 20px;
+  border-radius: var(--duo-radius-lg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-duo-mic.recording {
@@ -3611,6 +3623,30 @@ html, body {
   font-weight: 900;
 }
 
+/* Badge único unificado no topo da carta (Pure Duolingo) */
+.duo-deck-card-unified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: var(--duo-radius-pill);
+  background: var(--duo-gray-100);
+  color: var(--duo-gray-700);
+  border: 1px solid var(--duo-gray-200);
+}
+
+.duo-deck-card-unified-badge .level {
+  color: var(--duo-blue);
+  font-weight: 900;
+}
+
+.duo-deck-card-unified-badge .dot {
+  color: var(--duo-gray-400);
+  font-weight: 900;
+}
+
 /* Badge no topo do cartão ativo para contextualizar o aluno */
 .duo-deck-card-type-badge {
   font-size: 11px;
@@ -3657,6 +3693,20 @@ html, body {
   color: var(--duo-blue);
 }
 
+[data-theme="dark"] .duo-deck-card-unified-badge {
+  background: #131f24;
+  border-color: #283d47;
+  color: var(--duo-gray-400);
+}
+
+[data-theme="dark"] .duo-deck-card-unified-badge .level {
+  color: var(--duo-blue);
+}
+
+[data-theme="dark"] .duo-deck-card-unified-badge .dot {
+  color: var(--duo-gray-400);
+}
+
 [data-theme="dark"] .duo-deck-card-type-badge {
   background: #131f24;
   border-color: #283d47;
@@ -3673,6 +3723,15 @@ html, body {
   background: rgba(28, 176, 246, 0.2);
   border-color: var(--duo-blue);
   color: var(--duo-blue);
+}
+
+/* Destaque das cartas traseiras da pilha em Dark Mode */
+[data-theme="dark"] .duo-stack-card.layer-1,
+[data-theme="dark"] .duo-stack-card.layer-2,
+[data-theme="dark"] .duo-stack-card.layer-3 {
+  border-color: #283d47;
+  border-top-color: #375362;
+  box-shadow: 0 -2px 0 rgba(28, 176, 246, 0.25), 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
 
