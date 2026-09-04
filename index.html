@@ -767,6 +767,19 @@
         </div>
       </div>
 
+      <!-- Type Selector (Mini-Pills) -->
+      <div class="duo-deck-type-selector">
+        <button class="duo-deck-pill" id="deckTypePill-word" onclick="setTranslateDeckType('word')">
+          <span>🔤</span> Palavras
+        </button>
+        <button class="duo-deck-pill" id="deckTypePill-chunk" onclick="setTranslateDeckType('chunk')">
+          <span>💬</span> Chunks
+        </button>
+        <button class="duo-deck-pill active" id="deckTypePill-all" onclick="setTranslateDeckType('all')">
+          <span>🌐</span> Todas
+        </button>
+      </div>
+
       <!-- Playing Stage -->
       <div id="translateDeckStage">
         <!-- 3D Card Stack Scene -->
@@ -3402,6 +3415,28 @@
     let translateDeckMode = 'voice'; // 'voice' | 'typing'
     let translateDeckIsProcessing = false;
     let translateDeckFeedbackTimeout = null;
+    let activeTranslateDeckType = 'all'; // 'word' | 'chunk' | 'all'
+
+    // Set filter type for 3D translate deck
+    function setTranslateDeckType(type) {
+      if (window.duoAudio) duoAudio.playTap();
+      if (window.duoSpeech && window.duoSpeech.isListening) {
+        window.duoSpeech.stopListening();
+      }
+      if (translateDeckFeedbackTimeout) {
+        clearTimeout(translateDeckFeedbackTimeout);
+        translateDeckFeedbackTimeout = null;
+      }
+      activeTranslateDeckType = type;
+
+      // Update pill classes in modal
+      document.querySelectorAll('.duo-deck-pill').forEach(pill => pill.classList.remove('active'));
+      const targetPill = document.getElementById('deckTypePill-' + type);
+      if (targetPill) targetPill.classList.add('active');
+
+      startTranslateDeckRound();
+    }
+    window.setTranslateDeckType = setTranslateDeckType;
 
     // String normalization for answer evaluation
     function normalizeDeckAnswer(str) {
@@ -3545,6 +3580,14 @@
         return;
       }
 
+      // Herança Inteligente do Estado Atual (Camada 1)
+      activeTranslateDeckType = activeVocabType || 'all';
+
+      // Sincroniza classes das pills no modal
+      document.querySelectorAll('.duo-deck-pill').forEach(pill => pill.classList.remove('active'));
+      const targetPill = document.getElementById('deckTypePill-' + activeTranslateDeckType);
+      if (targetPill) targetPill.classList.add('active');
+
       startTranslateDeckRound();
 
       const modal = document.getElementById('vocabTranslateDeckModal');
@@ -3556,12 +3599,38 @@
     function startTranslateDeckRound() {
       const lang = currentLanguage || 'en';
       const isEnglish = (lang === 'en');
-      const list = [...(VOCABULARY_DATA[lang] || [])];
-      if (list.length === 0) return;
+      const fullList = [...(VOCABULARY_DATA[lang] || [])];
+      if (fullList.length === 0) return;
 
-      // Shuffle and pick 10 cards
-      list.sort(() => 0.5 - Math.random());
-      const selected = list.slice(0, 10);
+      // 1. Filtragem por Tipo ('word', 'chunk', 'all')
+      let filtered = (activeTranslateDeckType === 'all')
+        ? fullList
+        : fullList.filter(item => item.type === activeTranslateDeckType);
+
+      if (filtered.length === 0) {
+        filtered = fullList; // Fallback se o tipo filtrado não tiver itens
+      }
+
+      // 2. Priorização por Spaced Repetition (SRS)
+      const store = getSRSStore(lang);
+      const today = getTodayString();
+
+      const due = [];
+      const unreviewed = [];
+      const others = [];
+
+      filtered.forEach(item => {
+        const srs = store[item.id];
+        if (!srs || !srs.lastReviewed) unreviewed.push(item);
+        else if (!srs.nextReview || srs.nextReview <= today) due.push(item);
+        else others.push(item);
+      });
+
+      due.sort(() => 0.5 - Math.random());
+      unreviewed.sort(() => 0.5 - Math.random());
+      others.sort(() => 0.5 - Math.random());
+
+      const selected = [...due, ...unreviewed, ...others].slice(0, 10);
 
       translateDeck = selected;
       translateDeckTotal = selected.length;
@@ -3569,17 +3638,21 @@
       translateDeckStreak = 0;
       translateDeckIsProcessing = false;
 
-      // Update Header Text & Placeholders based on Target Language
+      // Update Header Text & Placeholders based on Target Language and Type
       const titleEl = document.getElementById('translateDeckTitle');
       const subEl = document.getElementById('translateDeckSubtitle');
       const micLbl = document.getElementById('translateDeckMicLabel');
       const inputEl = document.getElementById('translateDeckTextInput');
 
+      const typeLabel = (activeTranslateDeckType === 'word')
+        ? 'Palavras Isoladas'
+        : (activeTranslateDeckType === 'chunk' ? 'Expressões & Chunks' : 'Todas as palavras');
+
       if (titleEl) titleEl.innerText = 'Traduza as palavras';
       if (subEl) {
         subEl.innerText = isEnglish
-          ? 'Traduza do Português para o Inglês 🇺🇸'
-          : 'Traduza do Português para o Espanhol 🇪🇸';
+          ? `Traduza do Português para o Inglês 🇺🇸 • ${typeLabel}`
+          : `Traduza do Português para o Espanhol 🇪🇸 • ${typeLabel}`;
       }
       if (micLbl) {
         micLbl.innerText = isEnglish ? 'Falar em Inglês' : 'Falar em Espanhol';
@@ -3590,6 +3663,11 @@
           : 'Digite a tradução em espanhol...';
         inputEl.value = '';
       }
+
+      // Sync active state of pills in modal
+      document.querySelectorAll('.duo-deck-pill').forEach(pill => pill.classList.remove('active'));
+      const activePill = document.getElementById('deckTypePill-' + activeTranslateDeckType);
+      if (activePill) activePill.classList.add('active');
 
       // Check Speech Recognition capability
       const hasSpeech = window.duoSpeech && window.duoSpeech.isSupported;
@@ -3731,7 +3809,12 @@
               <span class="duo-vocab-tag">
                 ${card.icon ? card.icon + ' ' : ''}${card.category || 'Vocabulário'}
               </span>
-              <span class="duo-vocab-tag level">${card.level || 'A1'}</span>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span class="duo-deck-card-type-badge ${card.type === 'chunk' ? 'chunk' : 'word'}">
+                  ${card.type === 'chunk' ? '💬 CHUNK' : '🔤 PALAVRA'}
+                </span>
+                <span class="duo-vocab-tag level">${card.level || 'A1'}</span>
+              </div>
             </div>
 
             <div style="text-align: center; margin: auto 0;">
