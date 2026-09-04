@@ -107,6 +107,30 @@ class DuoAudioEngine {
   }
 
   /**
+   * Quick smooth whoosh/swipe sound for cards
+   */
+  playSwipe() {
+    this.initContext();
+    if (!this.ctx) return;
+
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(320, this.ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(620, this.ctx.currentTime + 0.07);
+
+    gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.08);
+
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    osc.start(this.ctx.currentTime);
+    osc.stop(this.ctx.currentTime + 0.09);
+  }
+
+  /**
    * Selects the highest quality natural/studio voice available for English or Spanish
    */
   getBestVoice(lang = 'en-US') {
@@ -232,6 +256,140 @@ class DuoAudioEngine {
 // Global instance ready to use
 const duoAudio = new DuoAudioEngine();
 window.duoAudio = duoAudio;
+
+/**
+ * Duolingo-like Speech Recognition with Web Speech API
+ * Supports continuous/single-phrase oral production and fallbacks
+ */
+class DuoSpeechRecognizer {
+  constructor() {
+    const SpeechAPI = (typeof window !== 'undefined') && (window.SpeechRecognition || window.webkitSpeechRecognition);
+    this.isSupported = !!SpeechAPI;
+    this.recognition = null;
+    this.isListening = false;
+    this.currentLang = 'en-US';
+    this.onResultCb = null;
+    this.onErrorCb = null;
+    this.onEndCb = null;
+    this.onInterimCb = null;
+    this.onStartCb = null;
+
+    if (this.isSupported) {
+      try {
+        this.recognition = new SpeechAPI();
+        this.recognition.continuous = false;
+        this.recognition.interimResults = true;
+        this.recognition.maxAlternatives = 4;
+
+        this.recognition.onstart = () => {
+          this.isListening = true;
+          if (this.onStartCb) this.onStartCb();
+        };
+
+        this.recognition.onresult = (event) => {
+          let interimText = '';
+          let finalText = '';
+          const alternatives = [];
+
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            const res = event.results[i];
+            if (res.isFinal) {
+              if (res[0] && res[0].transcript) {
+                finalText = res[0].transcript.trim();
+              }
+              for (let j = 0; j < res.length; j++) {
+                if (res[j] && res[j].transcript) {
+                  alternatives.push(res[j].transcript.trim());
+                }
+              }
+            } else {
+              if (res[0] && res[0].transcript) {
+                interimText += res[0].transcript;
+              }
+            }
+          }
+
+          if (interimText && this.onInterimCb) {
+            this.onInterimCb(interimText.trim());
+          }
+
+          if (finalText && this.onResultCb) {
+            this.onResultCb(finalText, alternatives);
+          }
+        };
+
+        this.recognition.onerror = (event) => {
+          this.isListening = false;
+          if (this.onErrorCb) {
+            this.onErrorCb(event);
+          }
+        };
+
+        this.recognition.onend = () => {
+          this.isListening = false;
+          if (this.onEndCb) {
+            this.onEndCb();
+          }
+        };
+      } catch (err) {
+        console.warn('SpeechRecognition initialization error:', err);
+        this.isSupported = false;
+        this.recognition = null;
+      }
+    }
+  }
+
+  startListening(langCode, onResult, onError, onEnd, onInterim, onStart) {
+    if (!this.isSupported || !this.recognition) {
+      if (onError) onError({ error: 'not_supported' });
+      return false;
+    }
+
+    if (this.isListening) {
+      try {
+        this.recognition.abort();
+      } catch (e) {}
+      this.isListening = false;
+    }
+
+    this.currentLang = langCode || 'en-US';
+    this.recognition.lang = this.currentLang;
+    this.onResultCb = onResult;
+    this.onErrorCb = onError;
+    this.onEndCb = onEnd;
+    this.onInterimCb = onInterim;
+    this.onStartCb = onStart;
+
+    try {
+      this.recognition.start();
+      return true;
+    } catch (err) {
+      console.warn('Recognition start failed:', err);
+      if (onError) onError(err);
+      return false;
+    }
+  }
+
+  stopListening() {
+    if (!this.recognition) return;
+    try {
+      this.recognition.stop();
+    } catch (e) {}
+    this.isListening = false;
+  }
+
+  abortListening() {
+    if (!this.recognition) return;
+    try {
+      this.recognition.abort();
+    } catch (e) {}
+    this.isListening = false;
+  }
+}
+
+// Global speech recognizer instance ready to use
+const duoSpeech = new DuoSpeechRecognizer();
+window.duoSpeech = duoSpeech;
 
 /**
  * Global Theme Manager (Dark / Light Mode) with LocalStorage persistence

@@ -546,6 +546,17 @@ body {
   box-shadow: 0 0 0 transparent;
 }
 
+.btn-duo-purple {
+  background-color: var(--duo-purple);
+  color: #ffffff;
+  box-shadow: 0 4px 0 var(--duo-purple-shadow);
+}
+.btn-duo-purple:hover { filter: brightness(1.05); }
+.btn-duo-purple:active {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 transparent;
+}
+
 .btn-duo-secondary {
   background-color: #ffffff;
   color: var(--duo-gray-700);
@@ -3087,6 +3098,366 @@ html, body {
   background: #18272f;
   border-color: #283d47;
 }
+
+/* ============================================================
+   3D TRANSLATE DECK MODAL ("TRADUZA AS PALAVRAS")
+   ============================================================ */
+
+.duo-deck-modal-box {
+  background: #ffffff;
+  width: 100%;
+  max-width: 520px;
+  border-radius: var(--duo-radius-xl);
+  padding: 24px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+  border: 2px solid var(--duo-gray-200);
+  border-bottom-width: 6px;
+  transform: scale(0.92);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.duo-modal-overlay.active .duo-deck-modal-box {
+  transform: scale(1);
+}
+
+.duo-deck-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.duo-deck-streak {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 15px;
+  font-weight: 900;
+  color: var(--duo-orange);
+  background: var(--duo-orange-light);
+  padding: 4px 10px;
+  border-radius: var(--duo-radius-pill);
+}
+
+/* 3D Stack Scene */
+.duo-card-stack-scene {
+  perspective: 1200px;
+  width: 100%;
+  min-height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin: 12px 0 8px;
+}
+
+.duo-stack-card {
+  position: absolute;
+  width: 100%;
+  max-width: 360px;
+  height: 220px;
+  border-radius: 24px;
+  background: #ffffff;
+  border: 3px solid var(--duo-gray-200);
+  border-bottom: 7px solid var(--duo-gray-300);
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transition: transform 0.4s cubic-bezier(0.34, 1.4, 0.64, 1), opacity 0.3s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Layer positioning for depth */
+.duo-stack-card.layer-0 {
+  z-index: 5;
+  transform: translate3d(0, 0, 0) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.duo-stack-card.layer-1 {
+  z-index: 4;
+  transform: translate3d(0, -9px, -20px) scale(0.96);
+  opacity: 0.9;
+}
+
+.duo-stack-card.layer-2 {
+  z-index: 3;
+  transform: translate3d(0, -18px, -40px) scale(0.92);
+  opacity: 0.75;
+}
+
+.duo-stack-card.layer-3 {
+  z-index: 2;
+  transform: translate3d(0, -26px, -60px) scale(0.88);
+  opacity: 0.55;
+}
+
+.duo-stack-card.layer-hidden {
+  z-index: 1;
+  transform: translate3d(0, -32px, -80px) scale(0.84);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Card Interaction Animations */
+.duo-stack-card.swipe-right {
+  transform: translate3d(420px, -20px, 0) rotate(16deg) !important;
+  opacity: 0 !important;
+  transition: transform 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.2), opacity 0.35s ease !important;
+}
+
+.duo-stack-card.send-back {
+  transform: translate3d(0, 80px, 0) scale(0.85) !important;
+  opacity: 0 !important;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.3, 1), opacity 0.3s ease !important;
+}
+
+.duo-stack-card.shake {
+  animation: duoCardShake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  border-color: var(--duo-red) !important;
+  border-bottom-color: var(--duo-red-shadow) !important;
+}
+
+@keyframes duoCardShake {
+  10%, 90% { transform: translate3d(-4px, 0, 0); }
+  20%, 80% { transform: translate3d(6px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-8px, 0, 0); }
+  40%, 60% { transform: translate3d(8px, 0, 0); }
+}
+
+/* Card internal elements */
+.duo-stack-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.duo-stack-card-term {
+  font-size: 25px;
+  font-weight: 900;
+  color: var(--duo-gray-900);
+  text-align: center;
+  margin: auto 0;
+  line-height: 1.25;
+}
+
+.duo-stack-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--duo-gray-400);
+}
+
+/* Feedback Notification Banner */
+.duo-deck-feedback {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: var(--duo-radius-lg);
+  margin-bottom: 8px;
+  animation: duoDeckSlideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes duoDeckSlideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.duo-deck-feedback.correct {
+  background: var(--duo-green-light);
+  border: 2px solid var(--duo-green-border);
+  color: var(--duo-green-text);
+}
+
+.duo-deck-feedback.incorrect {
+  background: var(--duo-red-light);
+  border: 2px solid var(--duo-red-border);
+  color: var(--duo-red-text);
+}
+
+.duo-deck-feedback.typo {
+  background: var(--duo-yellow-light);
+  border: 2px solid var(--duo-yellow);
+  color: var(--duo-yellow-text);
+}
+
+.duo-deck-feedback-icon {
+  font-size: 24px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.duo-deck-feedback-title {
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.duo-deck-feedback-msg {
+  font-size: 13px;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+/* Controls area */
+.duo-deck-controls-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.duo-deck-actions-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.btn-duo-mic {
+  flex: 2;
+  font-size: 16px;
+  padding: 14px 20px;
+  position: relative;
+  overflow: visible;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-duo-mic.recording {
+  background-color: var(--duo-red) !important;
+  box-shadow: 0 4px 0 var(--duo-red-shadow) !important;
+  animation: duoMicPulse 1.4s infinite;
+}
+
+@keyframes duoMicPulse {
+  0% { box-shadow: 0 4px 0 var(--duo-red-shadow), 0 0 0 0 rgba(234, 43, 43, 0.6); }
+  70% { box-shadow: 0 4px 0 var(--duo-red-shadow), 0 0 0 16px rgba(234, 43, 43, 0); }
+  100% { box-shadow: 0 4px 0 var(--duo-red-shadow), 0 0 0 0 rgba(234, 43, 43, 0); }
+}
+
+.duo-speech-status {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--duo-gray-400);
+  min-height: 20px;
+  transition: color 0.2s ease;
+}
+
+.duo-speech-status.listening {
+  color: var(--duo-red-text);
+}
+
+.duo-deck-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 18px;
+  border-radius: var(--duo-radius-lg);
+  border: 2px solid var(--duo-gray-200);
+  border-bottom-width: 4px;
+  font-family: var(--duo-font);
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--duo-gray-900);
+  background: #ffffff;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.duo-deck-input:focus {
+  border-color: var(--duo-blue);
+  box-shadow: 0 0 0 3px var(--duo-blue-light);
+}
+
+.duo-deck-mode-toggle-wrap {
+  text-align: center;
+  margin-top: 4px;
+}
+
+.duo-deck-mode-toggle-btn {
+  background: none;
+  border: none;
+  color: var(--duo-gray-400);
+  font-family: var(--duo-font);
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: var(--duo-radius-pill);
+  transition: all 0.15s ease;
+}
+
+.duo-deck-mode-toggle-btn:hover {
+  color: var(--duo-blue);
+  background: var(--duo-blue-light);
+}
+
+/* Dark Mode Overrides for 3D Stack */
+[data-theme="dark"] .duo-deck-modal-box {
+  background: #18272f;
+  border-color: #283d47;
+}
+
+[data-theme="dark"] .duo-stack-card {
+  background: #18272f;
+  border-color: #283d47;
+  border-bottom-color: #375362;
+}
+
+[data-theme="dark"] .duo-deck-input {
+  background: #131f24;
+  border-color: #283d47;
+  border-bottom-color: #375362;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .duo-deck-input:focus {
+  border-color: var(--duo-blue);
+  box-shadow: 0 0 0 3px rgba(28, 176, 246, 0.2);
+}
+
+[data-theme="dark"] .duo-deck-mode-toggle-btn:hover {
+  background: rgba(28, 176, 246, 0.2);
+  color: var(--duo-blue);
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .duo-deck-modal-box {
+    padding: 18px 14px;
+    max-width: 95vw;
+  }
+  .duo-stack-card {
+    max-width: 310px;
+    height: 205px;
+    padding: 16px 18px;
+  }
+  .duo-stack-card-term {
+    font-size: 22px;
+  }
+  .btn-duo-mic {
+    font-size: 14px;
+    padding: 12px 14px;
+  }
+}
+
 
 
 

@@ -119,6 +119,9 @@
           <button class="btn-duo btn-duo-blue" onclick="openMatchMadnessModal()">
             <span>⚡ COMBINAR PARES (DESAFIO RÁPIDO)</span>
           </button>
+          <button class="btn-duo btn-duo-purple" onclick="openTranslateDeckModal()">
+            <span>🎙️ TRADUZA AS PALAVRAS (DECK 3D)</span>
+          </button>
         </div>
       </div>
 
@@ -732,6 +735,124 @@
             <span>JOGAR NOVAMENTE 🔄</span>
           </button>
           <button class="btn-duo btn-duo-green" style="flex: 1; justify-content: center;" onclick="closeMatchMadnessModal()">
+            <span>CONCLUIR ➔</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TRANSLATE WORDS 3D DECK MODAL ("TRADUZA AS PALAVRAS")
+       ============================================================ -->
+  <div id="vocabTranslateDeckModal" class="duo-modal-overlay" onclick="closeTranslateDeckModal(event)">
+    <div class="duo-deck-modal-box" onclick="event.stopPropagation()">
+      <!-- Topbar: Close, Progress, Streak -->
+      <div class="duo-deck-header">
+        <button class="btn-close" onclick="closeTranslateDeckModal()" title="Fechar">✕</button>
+        <div class="duo-progress-track" style="flex: 1; height: 12px; margin: 0 14px;">
+          <div class="duo-progress-fill" id="translateDeckProgressFill" style="width: 0%;"></div>
+        </div>
+        <div class="duo-deck-streak" id="translateDeckStreakBadge" title="Sequência de acertos">
+          <span>🔥</span> <span id="translateDeckStreakCount">0</span>
+        </div>
+      </div>
+
+      <!-- Exercise Title -->
+      <div style="text-align: center; margin-bottom: 4px;">
+        <h3 style="font-size: 20px; font-weight: 900; color: var(--duo-gray-900); margin: 0;" id="translateDeckTitle">Traduza as palavras</h3>
+        <div style="font-size: 13px; font-weight: 700; color: var(--duo-gray-400);" id="translateDeckSubtitle">
+          Diga ou digite a tradução correta
+        </div>
+      </div>
+
+      <!-- Playing Stage -->
+      <div id="translateDeckStage">
+        <!-- 3D Card Stack Scene -->
+        <div class="duo-card-stack-scene" id="translateDeckStackScene">
+          <!-- Dynamically populated cards with layers 0 to 3+ -->
+        </div>
+
+        <!-- Feedback Notification Banner (Correct / Incorrect / Typo hint) -->
+        <div id="translateDeckFeedback" class="duo-deck-feedback" style="display: none;">
+          <div id="translateDeckFeedbackIcon" class="duo-deck-feedback-icon">✓</div>
+          <div style="flex: 1;">
+            <div id="translateDeckFeedbackTitle" class="duo-deck-feedback-title">Excelente!</div>
+            <div id="translateDeckFeedbackMsg" class="duo-deck-feedback-msg">A resposta é "apple"</div>
+          </div>
+          <button class="btn-speaker-mini" id="translateDeckFeedbackAudioBtn" onclick="speakCurrentDeckCardTarget()" title="Ouvir pronúncia correta">🔊</button>
+        </div>
+
+        <!-- Controls: Voice Mode (Default) -->
+        <div id="translateDeckVoiceControls" class="duo-deck-controls-block">
+          <div class="duo-deck-actions-row">
+            <button class="btn-duo btn-duo-blue btn-duo-mic" id="translateDeckMicBtn" onclick="toggleDeckSpeechRecording()">
+              <span id="translateDeckMicIcon">🎙️</span>
+              <span id="translateDeckMicLabel">Falar em Inglês</span>
+            </button>
+            <button class="btn-duo btn-duo-secondary" id="translateDeckSkipBtn" onclick="skipCurrentDeckCard()" title="Deixar para o final da pilha">
+              <span>⏩ Pular</span>
+            </button>
+          </div>
+          <div class="duo-speech-status" id="translateDeckSpeechStatus">
+            Toque no microfone e fale a tradução em voz alta
+          </div>
+        </div>
+
+        <!-- Controls: Typing Mode (Alternative) -->
+        <div id="translateDeckTypeControls" class="duo-deck-controls-block" style="display: none;">
+          <div style="position: relative; width: 100%;">
+            <input type="text" id="translateDeckTextInput" class="duo-deck-input" placeholder="Digite a tradução aqui..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" onkeydown="handleDeckInputKeydown(event)">
+          </div>
+          <div class="duo-deck-actions-row" style="margin-top: 6px;">
+            <button class="btn-duo btn-duo-green" style="flex: 2;" id="translateDeckCheckBtn" onclick="checkDeckTypedAnswer()">
+              <span>VERIFICAR (Enter)</span>
+            </button>
+            <button class="btn-duo btn-duo-secondary" style="flex: 1;" onclick="skipCurrentDeckCard()" title="Deixar para o final da pilha">
+              <span>⏩ Pular</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mode Toggle Footer -->
+        <div class="duo-deck-mode-toggle-wrap">
+          <button class="duo-deck-mode-toggle-btn" id="translateDeckModeToggleBtn" onclick="toggleTranslateDeckMode()">
+            ⌨️ Prefiro digitar no teclado
+          </button>
+        </div>
+      </div>
+
+      <!-- Completion Stage -->
+      <div id="translateDeckCompletedStage" style="display: none; text-align: center; padding: 20px 10px;">
+        <div style="font-size: 64px; margin-bottom: 12px; animation: duoMatchPop 0.5s ease;">🎉</div>
+        <h3 style="font-size: 24px; font-weight: 900; color: var(--duo-gray-900); margin-bottom: 6px;">Pilha Concluída!</h3>
+        <p style="font-size: 15px; font-weight: 700; color: var(--duo-gray-400); margin-bottom: 20px;">
+          Você traduziu todas as cartas da pilha e fortaleceu sua produção ativa!
+        </p>
+
+        <div style="display: flex; justify-content: center; gap: 16px; margin-bottom: 24px;">
+          <div class="duo-vocab-metric-card" style="flex: 0 1 160px;">
+            <div class="duo-vocab-metric-icon">⚡</div>
+            <div>
+              <div class="duo-vocab-metric-val" style="color: var(--duo-orange);">+35 XP</div>
+              <div class="duo-vocab-metric-lbl">Pontos</div>
+            </div>
+          </div>
+          <div class="duo-vocab-metric-card" style="flex: 0 1 160px;">
+            <div class="duo-vocab-metric-icon">💎</div>
+            <div>
+              <div class="duo-vocab-metric-val" style="color: var(--duo-blue);">+10</div>
+              <div class="duo-vocab-metric-lbl">Gemas</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 12px;">
+          <button class="btn-duo btn-duo-secondary" style="flex: 1; justify-content: center;" onclick="startTranslateDeckRound()">
+            <span>PRATICAR NOVAMENTE 🔄</span>
+          </button>
+          <button class="btn-duo btn-duo-green" style="flex: 1; justify-content: center;" onclick="closeTranslateDeckModal()">
             <span>CONCLUIR ➔</span>
           </button>
         </div>
@@ -3270,6 +3391,645 @@
       }
     }
     window.handleMatchTileClick = handleMatchTileClick;
+
+    /* ============================================================
+     * TRANSLATE WORDS 3D DECK ENGINE ("TRADUZA AS PALAVRAS")
+     * ============================================================ */
+    let translateDeck = [];
+    let translateDeckTotal = 0;
+    let translateDeckCompleted = 0;
+    let translateDeckStreak = 0;
+    let translateDeckMode = 'voice'; // 'voice' | 'typing'
+    let translateDeckIsProcessing = false;
+    let translateDeckFeedbackTimeout = null;
+
+    // String normalization for answer evaluation
+    function normalizeDeckAnswer(str) {
+      if (!str) return '';
+      return str
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "") // remove diacritics / accents
+        .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"'’]/g, "") // remove punctuation
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    // Levenshtein distance for typo forgiveness
+    function getLevenshteinDistance(a, b) {
+      const matrix = [];
+      for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+      for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+
+      for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+          if (b.charAt(i - 1) === a.charAt(j - 1)) {
+            matrix[i][j] = matrix[i - 1][j - 1];
+          } else {
+            matrix[i][j] = Math.min(
+              matrix[i - 1][j - 1] + 1, // substitution
+              matrix[i][j - 1] + 1,     // insertion
+              matrix[i - 1][j] + 1      // deletion
+            );
+          }
+        }
+      }
+      return matrix[b.length][a.length];
+    }
+
+    // Extract all valid target forms and synonyms for a given card
+    function getValidTargetsForCard(card) {
+      if (!card || !card.term) return [];
+      const targets = [card.term];
+
+      // Handle slash alternatives in term: "at the moment / right now"
+      if (card.term.includes('/')) {
+        card.term.split('/').forEach(part => {
+          if (part.trim()) targets.push(part.trim());
+        });
+      }
+
+      // Handle synonyms array if present
+      if (Array.isArray(card.synonyms)) {
+        card.synonyms.forEach(syn => {
+          if (syn) targets.push(syn);
+        });
+      }
+
+      // Add article-less and infinitive-less variations
+      targets.forEach(t => {
+        const lower = t.toLowerCase();
+        // English articles & infinitive
+        if (lower.startsWith('to ')) targets.push(t.slice(3).trim());
+        if (lower.startsWith('the ')) targets.push(t.slice(4).trim());
+        if (lower.startsWith('a ')) targets.push(t.slice(2).trim());
+        if (lower.startsWith('an ')) targets.push(t.slice(3).trim());
+
+        // Spanish articles
+        if (lower.startsWith('el ')) targets.push(t.slice(3).trim());
+        if (lower.startsWith('la ')) targets.push(t.slice(3).trim());
+        if (lower.startsWith('los ')) targets.push(t.slice(4).trim());
+        if (lower.startsWith('las ')) targets.push(t.slice(4).trim());
+        if (lower.startsWith('un ')) targets.push(t.slice(3).trim());
+        if (lower.startsWith('una ')) targets.push(t.slice(4).trim());
+      });
+
+      return targets;
+    }
+
+    // Evaluate user answer against card targets
+    function evaluateDeckAnswer(userRaw, alternatives, card) {
+      const validTargets = getValidTargetsForCard(card);
+      const normTargets = validTargets.map(t => normalizeDeckAnswer(t)).filter(Boolean);
+
+      const normUser = normalizeDeckAnswer(userRaw);
+      const allNormUsers = [normUser];
+
+      if (Array.isArray(alternatives)) {
+        alternatives.forEach(alt => {
+          const normAlt = normalizeDeckAnswer(alt);
+          if (normAlt && !allNormUsers.includes(normAlt)) {
+            allNormUsers.push(normAlt);
+          }
+        });
+      }
+
+      // Check 1: Exact match with any user variation
+      for (const u of allNormUsers) {
+        if (!u) continue;
+        if (normTargets.includes(u)) {
+          return { match: true, typo: false, matchedTarget: u };
+        }
+        // Voice recognition tolerance: check if phrase contains target or target contains user
+        for (const t of normTargets) {
+          if (u === t) return { match: true, typo: false, matchedTarget: t };
+          // If word is multi-word or target is long, allow contained string
+          if (t.length >= 4 && u.split(' ').includes(t)) {
+            return { match: true, typo: false, matchedTarget: t };
+          }
+        }
+      }
+
+      // Check 2: Typo forgiveness (Levenshtein distance <= 1 for single words >= 5 chars)
+      for (const t of normTargets) {
+        if (t.length >= 5 && !t.includes(' ')) {
+          for (const u of allNormUsers) {
+            if (u.length >= 4 && !u.includes(' ') && getLevenshteinDistance(u, t) === 1) {
+              return { match: true, typo: true, matchedTarget: t };
+            }
+          }
+        }
+      }
+
+      return { match: false, typo: false };
+    }
+
+    // Format Portuguese prompt cleanly (separates notes like "(não largo!)")
+    function formatPtPrompt(translation) {
+      if (!translation) return { main: '', hint: '' };
+      const match = translation.match(/^(.*?)\s*(\([^)]+\))\s*$/);
+      if (match) {
+        return { main: match[1].trim(), hint: match[2].trim() };
+      }
+      return { main: translation, hint: '' };
+    }
+
+    // Open 3D Translate Deck Modal
+    function openTranslateDeckModal() {
+      if (window.duoAudio) duoAudio.playTap();
+
+      const lang = currentLanguage || 'en';
+      const list = VOCABULARY_DATA[lang] || [];
+      if (list.length === 0) {
+        alert('Nenhum vocabulário disponível no momento.');
+        return;
+      }
+
+      startTranslateDeckRound();
+
+      const modal = document.getElementById('vocabTranslateDeckModal');
+      if (modal) modal.classList.add('active');
+    }
+    window.openTranslateDeckModal = openTranslateDeckModal;
+
+    // Start or restart a round
+    function startTranslateDeckRound() {
+      const lang = currentLanguage || 'en';
+      const isEnglish = (lang === 'en');
+      const list = [...(VOCABULARY_DATA[lang] || [])];
+      if (list.length === 0) return;
+
+      // Shuffle and pick 10 cards
+      list.sort(() => 0.5 - Math.random());
+      const selected = list.slice(0, 10);
+
+      translateDeck = selected;
+      translateDeckTotal = selected.length;
+      translateDeckCompleted = 0;
+      translateDeckStreak = 0;
+      translateDeckIsProcessing = false;
+
+      // Update Header Text & Placeholders based on Target Language
+      const titleEl = document.getElementById('translateDeckTitle');
+      const subEl = document.getElementById('translateDeckSubtitle');
+      const micLbl = document.getElementById('translateDeckMicLabel');
+      const inputEl = document.getElementById('translateDeckTextInput');
+
+      if (titleEl) titleEl.innerText = 'Traduza as palavras';
+      if (subEl) {
+        subEl.innerText = isEnglish
+          ? 'Traduza do Português para o Inglês 🇺🇸'
+          : 'Traduza do Português para o Espanhol 🇪🇸';
+      }
+      if (micLbl) {
+        micLbl.innerText = isEnglish ? 'Falar em Inglês' : 'Falar em Espanhol';
+      }
+      if (inputEl) {
+        inputEl.placeholder = isEnglish
+          ? 'Digite a tradução em inglês...'
+          : 'Digite a tradução em espanhol...';
+        inputEl.value = '';
+      }
+
+      // Check Speech Recognition capability
+      const hasSpeech = window.duoSpeech && window.duoSpeech.isSupported;
+      if (!hasSpeech) {
+        setTranslateDeckMode('typing', true);
+      } else {
+        setTranslateDeckMode('voice');
+      }
+
+      // Reset Streak & Progress Fill
+      updateTranslateDeckStreak(0);
+      updateTranslateDeckProgress();
+
+      // Show stage and hide completed
+      const stageEl = document.getElementById('translateDeckStage');
+      const compEl = document.getElementById('translateDeckCompletedStage');
+      if (stageEl) stageEl.style.display = 'block';
+      if (compEl) compEl.style.display = 'none';
+
+      hideTranslateDeckFeedback();
+      renderTranslateDeckStack();
+    }
+    window.startTranslateDeckRound = startTranslateDeckRound;
+
+    // Close Modal
+    function closeTranslateDeckModal(event) {
+      if (event && event.target !== event.currentTarget && !event.target.classList.contains('btn-close')) {
+        return;
+      }
+      if (window.duoAudio) duoAudio.playTap();
+      if (window.duoSpeech) duoSpeech.stopListening();
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+      if (translateDeckFeedbackTimeout) {
+        clearTimeout(translateDeckFeedbackTimeout);
+        translateDeckFeedbackTimeout = null;
+      }
+
+      const modal = document.getElementById('vocabTranslateDeckModal');
+      if (modal) modal.classList.remove('active');
+      renderVocabView();
+    }
+    window.closeTranslateDeckModal = closeTranslateDeckModal;
+
+    // Update Progress Bar
+    function updateTranslateDeckProgress() {
+      const fillEl = document.getElementById('translateDeckProgressFill');
+      if (!fillEl) return;
+      const pct = (translateDeckTotal > 0) ? (translateDeckCompleted / translateDeckTotal) * 100 : 0;
+      fillEl.style.width = pct + '%';
+    }
+
+    // Update Streak Badge
+    function updateTranslateDeckStreak(streak) {
+      translateDeckStreak = streak;
+      const countEl = document.getElementById('translateDeckStreakCount');
+      if (countEl) countEl.innerText = streak;
+    }
+
+    // Switch between voice and typing mode
+    function setTranslateDeckMode(mode, fallbackNotice = false) {
+      translateDeckMode = mode;
+      const voiceBlock = document.getElementById('translateDeckVoiceControls');
+      const typeBlock = document.getElementById('translateDeckTypeControls');
+      const toggleBtn = document.getElementById('translateDeckModeToggleBtn');
+      const statusEl = document.getElementById('translateDeckSpeechStatus');
+
+      if (window.duoSpeech && window.duoSpeech.isListening) {
+        window.duoSpeech.stopListening();
+      }
+
+      if (mode === 'voice') {
+        if (voiceBlock) voiceBlock.style.display = 'flex';
+        if (typeBlock) typeBlock.style.display = 'none';
+        if (toggleBtn) {
+          toggleBtn.style.display = 'inline-block';
+          toggleBtn.innerText = '⌨️ Prefiro digitar no teclado';
+        }
+        if (statusEl) {
+          statusEl.innerText = 'Toque no microfone e fale a tradução em voz alta';
+          statusEl.classList.remove('listening');
+        }
+      } else {
+        if (voiceBlock) voiceBlock.style.display = 'none';
+        if (typeBlock) typeBlock.style.display = 'flex';
+        if (toggleBtn) {
+          if (fallbackNotice) {
+            toggleBtn.style.display = 'inline-block';
+            toggleBtn.innerText = '🎙️ Microfone indisponível (Modo digitação ativo)';
+            toggleBtn.disabled = true;
+          } else {
+            toggleBtn.style.display = 'inline-block';
+            toggleBtn.innerText = '🎙️ Prefiro responder por voz';
+            toggleBtn.disabled = false;
+          }
+        }
+        const inputEl = document.getElementById('translateDeckTextInput');
+        if (inputEl) {
+          setTimeout(() => inputEl.focus(), 150);
+        }
+      }
+    }
+
+    function toggleTranslateDeckMode() {
+      if (window.duoAudio) duoAudio.playTap();
+      if (!window.duoSpeech || !window.duoSpeech.isSupported) {
+        alert('Seu navegador atual não oferece suporte ao reconhecimento de voz. Por favor, utilize o modo digitação ou experimente no Google Chrome.');
+        return;
+      }
+      const newMode = (translateDeckMode === 'voice') ? 'typing' : 'voice';
+      setTranslateDeckMode(newMode);
+    }
+    window.toggleTranslateDeckMode = toggleTranslateDeckMode;
+
+    // Render physical 3D card stack
+    function renderTranslateDeckStack() {
+      const scene = document.getElementById('translateDeckStackScene');
+      if (!scene) return;
+
+      if (translateDeck.length === 0) {
+        showTranslateDeckCompletion();
+        return;
+      }
+
+      const lang = currentLanguage || 'en';
+      const targetLangName = (lang === 'en') ? 'Inglês 🇺🇸' : 'Espanhol 🇪🇸';
+
+      // Render visible cards up to 4 layers
+      const visibleCount = Math.min(translateDeck.length, 4);
+      let html = '';
+
+      for (let i = 0; i < visibleCount; i++) {
+        const card = translateDeck[i];
+        const layerClass = `layer-${i}`;
+        const ptData = formatPtPrompt(card.translation);
+
+        html += `
+          <div class="duo-stack-card ${layerClass}" id="deckCard-${i}">
+            <div class="duo-stack-card-header">
+              <span class="duo-vocab-tag">
+                ${card.icon ? card.icon + ' ' : ''}${card.category || 'Vocabulário'}
+              </span>
+              <span class="duo-vocab-tag level">${card.level || 'A1'}</span>
+            </div>
+
+            <div style="text-align: center; margin: auto 0;">
+              <div class="duo-stack-card-term">${ptData.main}</div>
+              ${ptData.hint ? `<div style="font-size: 13px; font-weight: 700; color: var(--duo-gray-400); margin-top: 4px;">${ptData.hint}</div>` : ''}
+            </div>
+
+            <div class="duo-stack-card-footer">
+              <span>🇧🇷 Português</span>
+              <span>➔</span>
+              <span style="color: var(--duo-blue);">${targetLangName}</span>
+            </div>
+          </div>
+        `;
+      }
+
+      scene.innerHTML = html;
+
+      // Clear input
+      const inputEl = document.getElementById('translateDeckTextInput');
+      if (inputEl) {
+        inputEl.value = '';
+        if (translateDeckMode === 'typing') {
+          inputEl.focus();
+        }
+      }
+
+      // Reset speech status text
+      const statusEl = document.getElementById('translateDeckSpeechStatus');
+      const micBtn = document.getElementById('translateDeckMicBtn');
+      if (statusEl) {
+        statusEl.innerText = 'Toque no microfone e fale a tradução em voz alta';
+        statusEl.classList.remove('listening');
+      }
+      if (micBtn) {
+        micBtn.classList.remove('recording');
+      }
+    }
+
+    // Toggle Microphone Recording
+    function toggleDeckSpeechRecording() {
+      if (translateDeckIsProcessing || translateDeck.length === 0) return;
+
+      if (!window.duoSpeech || !window.duoSpeech.isSupported) {
+        setTranslateDeckMode('typing', true);
+        return;
+      }
+
+      const micBtn = document.getElementById('translateDeckMicBtn');
+      const statusEl = document.getElementById('translateDeckSpeechStatus');
+      const langCode = (currentLanguage === 'es') ? 'es-ES' : 'en-US';
+      const targetLangName = (currentLanguage === 'es') ? 'Espanhol' : 'Inglês';
+
+      if (window.duoSpeech.isListening) {
+        window.duoSpeech.stopListening();
+        if (micBtn) micBtn.classList.remove('recording');
+        if (statusEl) {
+          statusEl.innerText = 'Toque no microfone e fale a tradução em voz alta';
+          statusEl.classList.remove('listening');
+        }
+        return;
+      }
+
+      if (window.duoAudio) duoAudio.playTap();
+      if (micBtn) micBtn.classList.add('recording');
+      if (statusEl) {
+        statusEl.innerText = `🎙️ Ouvindo... fale em ${targetLangName}!`;
+        statusEl.classList.add('listening');
+      }
+
+      const currentCard = translateDeck[0];
+
+      window.duoSpeech.startListening(
+        langCode,
+        // onResult
+        (finalText, alternatives) => {
+          if (micBtn) micBtn.classList.remove('recording');
+          if (statusEl) {
+            statusEl.innerText = `Você disse: "${finalText}"`;
+            statusEl.classList.remove('listening');
+          }
+
+          const result = evaluateDeckAnswer(finalText, alternatives, currentCard);
+          if (result.match) {
+            handleDeckAnswerSuccess(result.typo, result.matchedTarget);
+          } else {
+            handleDeckAnswerError(finalText);
+          }
+        },
+        // onError
+        (err) => {
+          if (micBtn) micBtn.classList.remove('recording');
+          if (statusEl) statusEl.classList.remove('listening');
+          console.warn('Speech recognition error:', err);
+
+          if (err && (err.error === 'not-allowed' || err.error === 'service-not-allowed')) {
+            if (statusEl) statusEl.innerText = 'Permissão de microfone negada. Alternando para digitação...';
+            setTimeout(() => setTranslateDeckMode('typing'), 1000);
+          } else if (err && err.error === 'no-speech') {
+            if (statusEl) statusEl.innerText = 'Nenhuma fala detectada. Toque para tentar novamente.';
+          } else {
+            if (statusEl) statusEl.innerText = 'Não foi possível ouvir com clareza. Tente de novo.';
+          }
+        },
+        // onEnd
+        () => {
+          if (micBtn) micBtn.classList.remove('recording');
+          if (statusEl) statusEl.classList.remove('listening');
+        },
+        // onInterim
+        (interimText) => {
+          if (statusEl) statusEl.innerText = `Ouvindo: "${interimText}"...`;
+        }
+      );
+    }
+    window.toggleDeckSpeechRecording = toggleDeckSpeechRecording;
+
+    // Check typed answer
+    function checkDeckTypedAnswer() {
+      if (translateDeckIsProcessing || translateDeck.length === 0) return;
+
+      const inputEl = document.getElementById('translateDeckTextInput');
+      if (!inputEl) return;
+      const val = inputEl.value.trim();
+
+      if (!val) {
+        inputEl.focus();
+        return;
+      }
+
+      const currentCard = translateDeck[0];
+      const result = evaluateDeckAnswer(val, [], currentCard);
+
+      if (result.match) {
+        handleDeckAnswerSuccess(result.typo, result.matchedTarget);
+      } else {
+        handleDeckAnswerError(val);
+      }
+    }
+    window.checkDeckTypedAnswer = checkDeckTypedAnswer;
+
+    function handleDeckInputKeydown(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        checkDeckTypedAnswer();
+      }
+    }
+    window.handleDeckInputKeydown = handleDeckInputKeydown;
+
+    // Handle correct answer
+    function handleDeckAnswerSuccess(isTypo, matchedTarget) {
+      if (translateDeckIsProcessing || translateDeck.length === 0) return;
+      translateDeckIsProcessing = true;
+
+      const card = translateDeck[0];
+      const langCode = (currentLanguage === 'es') ? 'es-ES' : 'en-US';
+
+      if (window.duoAudio) {
+        duoAudio.playSuccess();
+        setTimeout(() => duoAudio.speak(card.term, langCode), 200);
+      }
+
+      // Swipe top card to right
+      const topCardEl = document.getElementById('deckCard-0');
+      if (topCardEl) {
+        topCardEl.classList.add('swipe-right');
+      }
+
+      updateTranslateDeckStreak(translateDeckStreak + 1);
+      translateDeckCompleted++;
+      updateTranslateDeckProgress();
+
+      // Show success feedback
+      showTranslateDeckFeedback({
+        type: isTypo ? 'typo' : 'correct',
+        title: isTypo ? 'Quase perfeito! (Atenção à digitação)' : 'Excelente!',
+        msg: `Tradução correta: "${card.term}" ${card.ipa ? `• ${card.ipa}` : ''}`
+      });
+
+      setTimeout(() => {
+        // Discard card from deck
+        translateDeck.shift();
+        hideTranslateDeckFeedback();
+        translateDeckIsProcessing = false;
+
+        if (translateDeck.length === 0) {
+          showTranslateDeckCompletion();
+        } else {
+          renderTranslateDeckStack();
+        }
+      }, 700);
+    }
+
+    // Handle incorrect answer
+    function handleDeckAnswerError(userSaid) {
+      if (translateDeckIsProcessing || translateDeck.length === 0) return;
+      translateDeckIsProcessing = true;
+
+      const card = translateDeck[0];
+      const langCode = (currentLanguage === 'es') ? 'es-ES' : 'en-US';
+
+      if (window.duoAudio) {
+        duoAudio.playError();
+        setTimeout(() => duoAudio.speak(card.term, langCode), 350);
+      }
+
+      // Shake top card
+      const topCardEl = document.getElementById('deckCard-0');
+      if (topCardEl) {
+        topCardEl.classList.add('shake');
+      }
+
+      updateTranslateDeckStreak(0);
+
+      // Show incorrect feedback with correct answer
+      showTranslateDeckFeedback({
+        type: 'incorrect',
+        title: 'Resposta correta:',
+        msg: `"${card.term}" ${card.ipa ? `• ${card.ipa}` : ''}`
+      });
+
+      // Move top card to back of deck for review
+      setTimeout(() => {
+        if (topCardEl) topCardEl.classList.remove('shake');
+        const wrongCard = translateDeck.shift();
+        translateDeck.push(wrongCard);
+        hideTranslateDeckFeedback();
+        translateDeckIsProcessing = false;
+        renderTranslateDeckStack();
+      }, 1500);
+    }
+
+    // Skip card (send to back of deck)
+    function skipCurrentDeckCard() {
+      if (translateDeckIsProcessing || translateDeck.length === 0) return;
+      translateDeckIsProcessing = true;
+
+      if (window.duoAudio) duoAudio.playTap();
+      if (window.duoSpeech && window.duoSpeech.isListening) {
+        window.duoSpeech.stopListening();
+      }
+
+      const topCardEl = document.getElementById('deckCard-0');
+      if (topCardEl) {
+        topCardEl.classList.add('send-back');
+      }
+
+      setTimeout(() => {
+        const skipped = translateDeck.shift();
+        translateDeck.push(skipped);
+        hideTranslateDeckFeedback();
+        translateDeckIsProcessing = false;
+        renderTranslateDeckStack();
+      }, 350);
+    }
+    window.skipCurrentDeckCard = skipCurrentDeckCard;
+
+    // Feedback Banner Display
+    function showTranslateDeckFeedback({ type, title, msg }) {
+      const fb = document.getElementById('translateDeckFeedback');
+      const iconEl = document.getElementById('translateDeckFeedbackIcon');
+      const titleEl = document.getElementById('translateDeckFeedbackTitle');
+      const msgEl = document.getElementById('translateDeckFeedbackMsg');
+
+      if (!fb || !iconEl || !titleEl || !msgEl) return;
+
+      fb.className = `duo-deck-feedback ${type}`;
+      iconEl.innerText = (type === 'incorrect') ? '✕' : (type === 'typo' ? '⚠️' : '✓');
+      titleEl.innerText = title;
+      msgEl.innerText = msg;
+      fb.style.display = 'flex';
+    }
+
+    function hideTranslateDeckFeedback() {
+      const fb = document.getElementById('translateDeckFeedback');
+      if (fb) fb.style.display = 'none';
+    }
+
+    function speakCurrentDeckCardTarget() {
+      if (translateDeck.length === 0) return;
+      const card = translateDeck[0];
+      const langCode = (currentLanguage === 'es') ? 'es-ES' : 'en-US';
+      if (window.duoAudio) duoAudio.speak(card.term, langCode);
+    }
+    window.speakCurrentDeckCardTarget = speakCurrentDeckCardTarget;
+
+    // Show completion stage
+    function showTranslateDeckCompletion() {
+      const stageEl = document.getElementById('translateDeckStage');
+      const compEl = document.getElementById('translateDeckCompletedStage');
+      if (stageEl) stageEl.style.display = 'none';
+      if (compEl) compEl.style.display = 'block';
+
+      // Recompensa: +35 XP e +10 Gemas
+      addRewards(35, 10);
+      if (window.duoAudio) duoAudio.playSuccess();
+    }
+    window.showTranslateDeckCompletion = showTranslateDeckCompletion;
 
     // Handle initial load
     window.addEventListener('DOMContentLoaded', () => {
