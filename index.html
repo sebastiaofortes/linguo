@@ -3408,6 +3408,7 @@
     /* ============================================================
      * TRANSLATE WORDS 3D DECK ENGINE ("TRADUZA AS PALAVRAS")
      * ============================================================ */
+    const TRANSLATE_DECK_SIZE = 7;
     let translateDeck = [];
     let translateDeckTotal = 0;
     let translateDeckCompleted = 0;
@@ -3630,7 +3631,7 @@
       unreviewed.sort(() => 0.5 - Math.random());
       others.sort(() => 0.5 - Math.random());
 
-      const selected = [...due, ...unreviewed, ...others].slice(0, 10);
+      const selected = [...due, ...unreviewed, ...others].slice(0, TRANSLATE_DECK_SIZE);
 
       translateDeck = selected;
       translateDeckTotal = selected.length;
@@ -3691,6 +3692,7 @@
       renderTranslateDeckStack();
     }
     window.startTranslateDeckRound = startTranslateDeckRound;
+    window.buildTranslateDeck = startTranslateDeckRound;
 
     // Close Modal
     function closeTranslateDeckModal(event) {
