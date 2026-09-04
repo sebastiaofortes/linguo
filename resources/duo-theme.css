@@ -3103,10 +3103,21 @@ html, body {
    3D TRANSLATE DECK MODAL ("TRADUZA AS PALAVRAS")
    ============================================================ */
 
+#vocabTranslateDeckModal.duo-modal-overlay {
+  align-items: center;
+  justify-content: center;
+  padding: 16px 12px;
+}
+
 .duo-deck-modal-box {
   background: #ffffff;
   width: 100%;
   max-width: 520px;
+  max-height: 92vh;
+  max-height: 92dvh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   border-radius: var(--duo-radius-xl);
   padding: 24px;
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
@@ -3118,7 +3129,7 @@ html, body {
   flex-direction: column;
   gap: 16px;
   position: relative;
-  overflow: hidden;
+  margin: auto 0;
 }
 
 .duo-modal-overlay.active .duo-deck-modal-box {
@@ -3438,11 +3449,69 @@ html, body {
   color: var(--duo-blue);
 }
 
+/* Deck 3D Completion Stage */
+.duo-deck-completed-stage {
+  text-align: center;
+  padding: 16px 8px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.duo-deck-completed-icon {
+  font-size: 56px;
+  margin-bottom: 8px;
+  animation: duoMatchPop 0.5s ease;
+  line-height: 1;
+}
+
+.duo-deck-completed-title {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--duo-gray-900);
+  margin-bottom: 6px;
+}
+
+.duo-deck-completed-desc {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--duo-gray-400);
+  margin-bottom: 18px;
+  max-width: 360px;
+  line-height: 1.4;
+}
+
+.duo-deck-completed-metrics {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 22px;
+  width: 100%;
+  max-width: 360px;
+}
+
+.duo-deck-completed-actions {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+[data-theme="dark"] .duo-deck-completed-title {
+  color: #ffffff;
+}
+
 /* Responsive adjustments */
 @media (max-width: 480px) {
+  #vocabTranslateDeckModal.duo-modal-overlay {
+    padding: 10px 8px;
+    align-items: center;
+  }
   .duo-deck-modal-box {
-    padding: 18px 14px;
-    max-width: 95vw;
+    padding: 16px 14px;
+    max-width: 100%;
+    max-height: 94dvh;
+    max-height: 94vh;
+    gap: 12px;
   }
   .duo-stack-card {
     max-width: 310px;
@@ -3455,6 +3524,44 @@ html, body {
   .btn-duo-mic {
     font-size: 14px;
     padding: 12px 14px;
+  }
+
+  /* Completion stage adjustments for mobile */
+  .duo-deck-completed-stage {
+    padding: 8px 4px 4px;
+  }
+  .duo-deck-completed-icon {
+    font-size: 44px;
+    margin-bottom: 6px;
+  }
+  .duo-deck-completed-title {
+    font-size: 20px;
+    margin-bottom: 4px;
+  }
+  .duo-deck-completed-desc {
+    font-size: 13px;
+    margin-bottom: 14px;
+    line-height: 1.35;
+  }
+  .duo-deck-completed-metrics {
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .duo-deck-completed-metrics .duo-vocab-metric-card {
+    padding: 10px 8px;
+  }
+  .duo-deck-completed-metrics .duo-vocab-metric-val {
+    font-size: 18px;
+  }
+  .duo-deck-completed-metrics .duo-vocab-metric-lbl {
+    font-size: 11px;
+  }
+  .duo-deck-completed-actions {
+    gap: 8px;
+  }
+  .duo-deck-completed-actions .btn-duo {
+    font-size: 13px;
+    padding: 12px 8px;
   }
 }
 

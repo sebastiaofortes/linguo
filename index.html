@@ -759,29 +759,29 @@
         </div>
       </div>
 
-      <!-- Exercise Title -->
-      <div style="text-align: center; margin-bottom: 4px;">
-        <h3 style="font-size: 20px; font-weight: 900; color: var(--duo-gray-900); margin: 0;" id="translateDeckTitle">Traduza as palavras</h3>
-        <div style="font-size: 13px; font-weight: 700; color: var(--duo-gray-400);" id="translateDeckSubtitle">
-          Diga ou digite a tradução correta
-        </div>
-      </div>
-
-      <!-- Type Selector (Mini-Pills) -->
-      <div class="duo-deck-type-selector">
-        <button class="duo-deck-pill" id="deckTypePill-word" onclick="setTranslateDeckType('word')">
-          <span>🔤</span> Palavras
-        </button>
-        <button class="duo-deck-pill" id="deckTypePill-chunk" onclick="setTranslateDeckType('chunk')">
-          <span>💬</span> Chunks
-        </button>
-        <button class="duo-deck-pill active" id="deckTypePill-all" onclick="setTranslateDeckType('all')">
-          <span>🌐</span> Todas
-        </button>
-      </div>
-
       <!-- Playing Stage -->
       <div id="translateDeckStage">
+        <!-- Exercise Title -->
+        <div style="text-align: center; margin-bottom: 4px;">
+          <h3 style="font-size: 20px; font-weight: 900; color: var(--duo-gray-900); margin: 0;" id="translateDeckTitle">Traduza as palavras</h3>
+          <div style="font-size: 13px; font-weight: 700; color: var(--duo-gray-400);" id="translateDeckSubtitle">
+            Diga ou digite a tradução correta
+          </div>
+        </div>
+
+        <!-- Type Selector (Mini-Pills) -->
+        <div class="duo-deck-type-selector">
+          <button class="duo-deck-pill" id="deckTypePill-word" onclick="setTranslateDeckType('word')">
+            <span>🔤</span> Palavras
+          </button>
+          <button class="duo-deck-pill" id="deckTypePill-chunk" onclick="setTranslateDeckType('chunk')">
+            <span>💬</span> Chunks
+          </button>
+          <button class="duo-deck-pill active" id="deckTypePill-all" onclick="setTranslateDeckType('all')">
+            <span>🌐</span> Todas
+          </button>
+        </div>
+
         <!-- 3D Card Stack Scene -->
         <div class="duo-card-stack-scene" id="translateDeckStackScene">
           <!-- Dynamically populated cards with layers 0 to 3+ -->
@@ -837,22 +837,22 @@
       </div>
 
       <!-- Completion Stage -->
-      <div id="translateDeckCompletedStage" style="display: none; text-align: center; padding: 20px 10px;">
-        <div style="font-size: 64px; margin-bottom: 12px; animation: duoMatchPop 0.5s ease;">🎉</div>
-        <h3 style="font-size: 24px; font-weight: 900; color: var(--duo-gray-900); margin-bottom: 6px;">Pilha Concluída!</h3>
-        <p style="font-size: 15px; font-weight: 700; color: var(--duo-gray-400); margin-bottom: 20px;">
+      <div id="translateDeckCompletedStage" class="duo-deck-completed-stage" style="display: none;">
+        <div class="duo-deck-completed-icon">🎉</div>
+        <h3 class="duo-deck-completed-title">Pilha Concluída!</h3>
+        <p class="duo-deck-completed-desc">
           Você traduziu todas as cartas da pilha e fortaleceu sua produção ativa!
         </p>
 
-        <div style="display: flex; justify-content: center; gap: 16px; margin-bottom: 24px;">
-          <div class="duo-vocab-metric-card" style="flex: 0 1 160px;">
+        <div class="duo-deck-completed-metrics">
+          <div class="duo-vocab-metric-card" style="flex: 1; max-width: 160px;">
             <div class="duo-vocab-metric-icon">⚡</div>
             <div>
               <div class="duo-vocab-metric-val" style="color: var(--duo-orange);">+35 XP</div>
               <div class="duo-vocab-metric-lbl">Pontos</div>
             </div>
           </div>
-          <div class="duo-vocab-metric-card" style="flex: 0 1 160px;">
+          <div class="duo-vocab-metric-card" style="flex: 1; max-width: 160px;">
             <div class="duo-vocab-metric-icon">💎</div>
             <div>
               <div class="duo-vocab-metric-val" style="color: var(--duo-blue);">+10</div>
@@ -861,7 +861,7 @@
           </div>
         </div>
 
-        <div style="display: flex; gap: 12px;">
+        <div class="duo-deck-completed-actions">
           <button class="btn-duo btn-duo-secondary" style="flex: 1; justify-content: center;" onclick="startTranslateDeckRound()">
             <span>PRATICAR NOVAMENTE 🔄</span>
           </button>
