@@ -4,9 +4,11 @@
 class DuoAudioEngine {
   constructor() {
     this.ctx = null;
+    this.voiceCache = {};
     if (typeof window !== 'undefined' && window.speechSynthesis) {
       // Warm up voices when ready (especially on Chrome)
       window.speechSynthesis.onvoiceschanged = () => {
+        this.voiceCache = {};
         this.getBestVoice();
       };
     }
@@ -134,6 +136,9 @@ class DuoAudioEngine {
    * Selects the highest quality natural/studio voice available for English or Spanish
    */
   getBestVoice(lang = 'en-US') {
+    if (this.voiceCache && this.voiceCache[lang]) {
+      return this.voiceCache[lang];
+    }
     if (!window.speechSynthesis) return null;
     const voices = window.speechSynthesis.getVoices();
     if (!voices || voices.length === 0) return null;
@@ -156,12 +161,12 @@ class DuoAudioEngine {
       return isTargetLang && !isBanned;
     });
 
+    let resolvedVoice = null;
+
     if (cleanVoices.length === 0) {
       const fallbackVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith(isSpanishTarget ? 'es' : 'en'));
-      return fallbackVoice || voices[0] || null;
-    }
-
-    if (isSpanishTarget) {
+      resolvedVoice = fallbackVoice || voices[0] || null;
+    } else if (isSpanishTarget) {
       // Prioritize natural Spanish voices (Google Español, Apple Monica/Paulina/Jorge Enhanced)
       const preferredSpanish = [
         'google español',
@@ -182,43 +187,57 @@ class DuoAudioEngine {
       ];
       for (const name of preferredSpanish) {
         const match = cleanVoices.find(v => v.name.toLowerCase().includes(name));
-        if (match) return match;
+        if (match) {
+          resolvedVoice = match;
+          break;
+        }
       }
-      return cleanVoices.find(v => v.lang === 'es-ES' || v.lang === 'es-MX') || cleanVoices[0];
+      if (!resolvedVoice) {
+        resolvedVoice = cleanVoices.find(v => v.lang === 'es-ES' || v.lang === 'es-MX') || cleanVoices[0];
+      }
+    } else {
+      // Prioritize ultra-clear, natural modern English voices (Google Neural, Apple Enhanced/Premium)
+      const preferredNames = [
+        'google us english',
+        'samantha (enhanced)',
+        'ava (premium)',
+        'ava (enhanced)',
+        'allison (enhanced)',
+        'tom (enhanced)',
+        'samantha',
+        'ava',
+        'allison',
+        'serena',
+        'karen',
+        'daniel',
+        'victoria',
+        'zoe',
+        'moira',
+        'fiona',
+        'tessa',
+        'natural'
+      ];
+
+      for (const name of preferredNames) {
+        const match = cleanVoices.find(v => v.name.toLowerCase().includes(name));
+        if (match) {
+          resolvedVoice = match;
+          break;
+        }
+      }
+
+      if (!resolvedVoice) {
+        // Next preference: clean en-US voice avoiding the gravelly legacy Alex voice
+        const nonAlex = cleanVoices.find(v => v.lang === 'en-US' && !v.name.toLowerCase().includes('alex'));
+        resolvedVoice = nonAlex || cleanVoices.find(v => v.lang === 'en-US') || cleanVoices[0];
+      }
     }
 
-    // Prioritize ultra-clear, natural modern English voices (Google Neural, Apple Enhanced/Premium)
-    const preferredNames = [
-      'google us english',
-      'samantha (enhanced)',
-      'ava (premium)',
-      'ava (enhanced)',
-      'allison (enhanced)',
-      'tom (enhanced)',
-      'samantha',
-      'ava',
-      'allison',
-      'serena',
-      'karen',
-      'daniel',
-      'victoria',
-      'zoe',
-      'moira',
-      'fiona',
-      'tessa',
-      'natural'
-    ];
-
-    for (const name of preferredNames) {
-      const match = cleanVoices.find(v => v.name.toLowerCase().includes(name));
-      if (match) return match;
+    if (resolvedVoice) {
+      if (!this.voiceCache) this.voiceCache = {};
+      this.voiceCache[lang] = resolvedVoice;
     }
-
-    // Next preference: clean en-US voice avoiding the gravelly legacy Alex voice
-    const nonAlex = cleanVoices.find(v => v.lang === 'en-US' && !v.name.toLowerCase().includes('alex'));
-    if (nonAlex) return nonAlex;
-
-    return cleanVoices.find(v => v.lang === 'en-US') || cleanVoices[0];
+    return resolvedVoice;
   }
 
   /**

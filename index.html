@@ -2748,18 +2748,29 @@
       return d.toISOString().split('T')[0];
     }
 
+    let srsMemoryCache = {};
+
     function getSRSStore(lang) {
-      const key = 'linguo-vocab-srs-' + (lang || currentLanguage);
+      const langKey = lang || currentLanguage;
+      if (srsMemoryCache[langKey]) {
+        return srsMemoryCache[langKey];
+      }
+      const key = 'linguo-vocab-srs-' + langKey;
       try {
         const raw = localStorage.getItem(key);
-        return raw ? JSON.parse(raw) : {};
+        const parsed = raw ? JSON.parse(raw) : {};
+        srsMemoryCache[langKey] = parsed;
+        return parsed;
       } catch(e) {
-        return {};
+        srsMemoryCache[langKey] = {};
+        return srsMemoryCache[langKey];
       }
     }
 
     function saveSRSStore(lang, store) {
-      const key = 'linguo-vocab-srs-' + (lang || currentLanguage);
+      const langKey = lang || currentLanguage;
+      srsMemoryCache[langKey] = store;
+      const key = 'linguo-vocab-srs-' + langKey;
       try {
         localStorage.setItem(key, JSON.stringify(store));
       } catch(e) {}
@@ -2884,6 +2895,8 @@
     }
     window.setVocabCategory = setVocabCategory;
 
+    let vocabSearchDebounceTimer = null;
+
     function handleVocabSearch(query) {
       activeVocabSearch = (query || '').toLowerCase().trim();
       const clearBtn = document.getElementById('vocabSearchClear');
@@ -2894,11 +2907,18 @@
           clearBtn.classList.remove('visible');
         }
       }
-      renderVocabCards();
+      if (vocabSearchDebounceTimer) clearTimeout(vocabSearchDebounceTimer);
+      vocabSearchDebounceTimer = setTimeout(() => {
+        renderVocabCards();
+      }, 180);
     }
     window.handleVocabSearch = handleVocabSearch;
 
     function clearVocabSearch() {
+      if (vocabSearchDebounceTimer) {
+        clearTimeout(vocabSearchDebounceTimer);
+        vocabSearchDebounceTimer = null;
+      }
       if (window.duoAudio) duoAudio.playTap();
       const input = document.getElementById('vocabSearchInput');
       if (input) input.value = '';
