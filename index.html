@@ -68,36 +68,22 @@
         </div>
 
         <div class="duo-srs-hero-counter" id="srsHeroCounter">
-          🔥 <span id="srsHeroDueCount">0</span> palavras para reforçar hoje
-        </div>
-        <div class="duo-srs-hero-subtitle" id="srsHeroSubtitle">
-          Baseado na Curva de Esquecimento de Ebbinghaus para fixação duradoura
+          🔥 <span id="srsHeroDueCount">0</span> palavras para reforçar hoje • Curva de Ebbinghaus
         </div>
 
         <button class="btn-duo btn-duo-purple" id="srsHeroActionBtn" style="width: 100%; justify-content: center; font-size: 16px; padding: 14px 20px;" onclick="startSmartDailyReview()">
-          <span id="srsHeroActionBtnText">🎙️ INICIAR REVISÃO GERAL ➔</span>
+          <span id="srsHeroActionBtnText">🎙️ INICIAR REVISÃO GERAL (0 CARTAS) ➔</span>
         </button>
       </div>
 
-      <!-- 2. Barra de Maestria Léxica Total -->
-      <div class="duo-mastery-card" id="courseMasteryCard">
-        <div class="duo-mastery-header">
-          <span class="duo-mastery-title">📊 MAESTRIA TOTAL DO CURSO</span>
-          <span class="duo-mastery-stats" id="courseMasteryStats">0 / 0 termos (0%)</span>
-        </div>
-        <div class="duo-progress-track" style="height: 12px;">
-          <div class="duo-progress-fill" id="courseMasteryProgressFill" style="width: 0%;"></div>
-        </div>
-      </div>
-
-      <!-- 3. Barra de Busca Global -->
+      <!-- 2. Barra de Busca Global -->
       <div class="duo-vocab-search-wrap" style="margin-bottom: 20px;">
         <span class="duo-vocab-search-icon">🔍</span>
-        <input type="text" id="vocabSearchInput" class="duo-vocab-search-input" placeholder="Buscar palavra, IPA (/.../) ou tradução em todas as coleções..." oninput="handleVocabSearch(this.value)">
+        <input type="text" id="vocabSearchInput" class="duo-vocab-search-input" placeholder="Buscar palavra, pronúncia IPA ou tradução em tudo..." oninput="handleVocabSearch(this.value)">
         <button id="vocabSearchClear" class="duo-vocab-search-clear" onclick="clearVocabSearch()" title="Limpar busca">✕</button>
       </div>
 
-      <!-- 4. Grade de Coleções Temáticas (Thematic Decks Grid) -->
+      <!-- 3. Grade de Coleções Temáticas (Thematic Decks Grid) -->
       <div class="duo-collections-grid" id="collectionsGridContainer">
         <!-- Renderizado dinamicamente por renderVocabView() -->
       </div>
@@ -1326,7 +1312,10 @@
      */
     function switchTab(tabName, event) {
       if (event) event.preventDefault();
-      if (window.duoAudio) duoAudio.playTap();
+      if (window.duoAudio) {
+        duoAudio.stopAllSpeech();
+        duoAudio.playTap();
+      }
 
       // Alias 'home' to 'vocab' (Vocab is now the official Home Page)
       if (tabName === 'home') {
@@ -1459,8 +1448,9 @@
         return srsMemoryCache[langKey];
       }
       const key = 'linguo-vocab-srs-' + langKey;
+      const altKey = 'linguo_srs_data_' + langKey;
       try {
-        const raw = localStorage.getItem(key);
+        const raw = localStorage.getItem(key) || localStorage.getItem(altKey);
         const parsed = raw ? JSON.parse(raw) : {};
         srsMemoryCache[langKey] = parsed;
         return parsed;
@@ -1492,10 +1482,11 @@
         const srs = store[item.id];
         if (!srs || !srs.lastReviewed) {
           unreviewedCount++;
+          dueCount++;
         } else if (!srs.nextReview || srs.nextReview <= today) {
           dueCount++;
         }
-        if (srs && srs.level >= 3) {
+        if (srs && (srs.level >= 3 || (srs.interval && srs.interval >= 3))) {
           masteredCount++;
         }
       });
@@ -1520,34 +1511,21 @@
       // 1. Update Hero Card: Revisão Diária Inteligente
       const dueCountEl = document.getElementById('srsHeroDueCount');
       const heroCounterEl = document.getElementById('srsHeroCounter');
-      const heroSubtitleEl = document.getElementById('srsHeroSubtitle');
       const heroBtnText = document.getElementById('srsHeroActionBtnText');
 
       if (dueCountEl) dueCountEl.innerText = metrics.due;
 
-      if (heroCounterEl && heroSubtitleEl && heroBtnText) {
+      if (heroCounterEl && heroBtnText) {
         if (metrics.due > 0) {
-          heroCounterEl.innerHTML = `🔥 <span>${metrics.due}</span> palavras para reforçar hoje`;
-          heroSubtitleEl.innerText = 'Baseado na Curva de Esquecimento de Ebbinghaus para fixação duradoura';
+          heroCounterEl.innerHTML = `🔥 <span id="srsHeroDueCount">${metrics.due}</span> palavras para reforçar hoje • Curva de Ebbinghaus`;
           heroBtnText.innerText = `🎙️ INICIAR REVISÃO GERAL (${metrics.due} CARTAS) ➔`;
         } else {
-          heroCounterEl.innerHTML = `✨ Tudo em dia com suas revisões!`;
-          heroSubtitleEl.innerText = 'Você não tem cartas vencidas hoje. Pratique qualquer tema abaixo para reforçar!';
+          heroCounterEl.innerHTML = `✨ Todas as palavras em dia • Curva de Ebbinghaus`;
           heroBtnText.innerText = `🎙️ PRATICAR DECK GERAL ➔`;
         }
       }
 
-      // 2. Update Overall Course Mastery Card
-      const masteryStatsEl = document.getElementById('courseMasteryStats');
-      const masteryFillEl = document.getElementById('courseMasteryProgressFill');
-      if (masteryStatsEl) {
-        masteryStatsEl.innerText = `${metrics.mastered} / ${metrics.total} termos (${metrics.masteryPct}%)`;
-      }
-      if (masteryFillEl) {
-        masteryFillEl.style.width = `${metrics.masteryPct}%`;
-      }
-
-      // 3. Render Collections Grid
+      // 2. Render Collections Grid
       renderCollectionsGrid();
     }
     window.renderVocabView = renderVocabView;
@@ -1651,52 +1629,30 @@
         const items = categoriesMap[cat];
         const totalCount = items.length;
         let masteredCount = 0;
-        let dueCount = 0;
-        let unreviewedCount = 0;
 
         items.forEach(item => {
           const srs = store[item.id];
-          if (!srs || !srs.lastReviewed) {
-            unreviewedCount++;
-          } else if (!srs.nextReview || srs.nextReview <= today) {
-            dueCount++;
-          }
-          if (srs && srs.level >= 3) {
+          if (srs && (srs.level >= 3 || (srs.interval && srs.interval >= 3))) {
             masteredCount++;
           }
         });
 
-        const masteryPct = totalCount > 0 ? Math.round((masteredCount / totalCount) * 100) : 0;
-        const isGolden = (masteryPct === 100 && totalCount > 0);
+        const isGolden = (masteredCount === totalCount && totalCount > 0);
         const catIcon = CATEGORY_ICON_MAP[cat] || (items[0] && items[0].icon) || '📖';
         const catEncoded = encodeURIComponent(cat);
 
         html += `
           <div class="duo-collection-card ${isGolden ? 'golden' : ''}">
-            <div>
-              <div class="duo-collection-header">
-                <span class="duo-collection-icon">${catIcon}</span>
-                <div class="duo-collection-title-wrap">
+            <div class="duo-collection-header">
+              <span class="duo-collection-icon">${catIcon}</span>
+              <div class="duo-collection-title-wrap">
+                <div class="duo-collection-title-row">
                   <div class="duo-collection-title" title="${cat}">${cat}</div>
-                  <div class="duo-collection-count-badge">${totalCount} termos</div>
+                  ${isGolden ? `<span class="duo-collection-star" title="Coleção 100% dominada!">⭐</span>` : ''}
                 </div>
-                ${isGolden ? `<span class="duo-collection-gold-badge">🏆 Dominada!</span>` : ''}
-              </div>
-
-              <div class="duo-collection-progress-wrap">
-                <div class="duo-collection-progress-info">
-                  <span>Maestria</span>
-                  <span style="color: ${isGolden ? 'var(--duo-yellow-text)' : 'var(--duo-green-text)'}; font-weight: 900;">${masteryPct}%</span>
+                <div class="duo-collection-micro-summary">
+                  ${totalCount} ${totalCount === 1 ? 'termo' : 'termos'} • <span class="duo-mastered-text">${masteredCount} dominados</span>
                 </div>
-                <div class="duo-progress-track" style="height: 10px;">
-                  <div class="duo-progress-fill" style="width: ${masteryPct}%; background: ${isGolden ? 'var(--duo-yellow)' : 'var(--duo-green)'};"></div>
-                </div>
-              </div>
-
-              <div class="duo-collection-stats-row">
-                <span class="duo-collection-stats-pill" style="color: var(--duo-green-text);">🟢 ${masteredCount} dominadas</span>
-                ${dueCount > 0 ? `<span class="duo-collection-stats-pill" style="color: var(--duo-orange);">🟡 ${dueCount} a revisar</span>` : ''}
-                ${unreviewedCount > 0 ? `<span class="duo-collection-stats-pill" style="color: var(--duo-gray-400);">⚪ ${unreviewedCount} novas</span>` : ''}
               </div>
             </div>
 
@@ -1793,9 +1749,8 @@
       let masteredCount = 0;
       categoryItems.forEach(item => {
         const srs = store[item.id];
-        if (srs && srs.level >= 3) masteredCount++;
+        if (srs && (srs.level >= 3 || (srs.interval && srs.interval >= 3))) masteredCount++;
       });
-      const masteryPct = categoryItems.length > 0 ? Math.round((masteredCount / categoryItems.length) * 100) : 0;
 
       // Header Elements
       const iconEl = document.getElementById('drawerCategoryIcon');
@@ -1803,7 +1758,7 @@
       const statsEl = document.getElementById('drawerCategoryStats');
       if (iconEl) iconEl.innerText = catIcon;
       if (titleEl) titleEl.innerText = currentDrawerCategory;
-      if (statsEl) statsEl.innerText = `${categoryItems.length} termos • ${masteryPct}% Dominado (${masteredCount} dominadas)`;
+      if (statsEl) statsEl.innerText = `${categoryItems.length} termos • ${masteredCount} dominados`;
 
       // Filter terms by drawer search query
       const filteredTerms = categoryItems.filter(item => {
@@ -1830,19 +1785,33 @@
 
       listContainer.innerHTML = filteredTerms.map(item => {
         const srs = store[item.id];
-        let srsBadge = '<span class="duo-badge" style="background: var(--duo-gray-200); color: var(--duo-gray-700); font-size: 11px;">⚪ Nova palavra</span>';
+        let srsBadge = '<span class="duo-badge" style="background: var(--duo-gray-200); color: var(--duo-gray-700); font-size: 11px;">⚪ Não praticada</span>';
 
-        if (srs && srs.level >= 3) {
-          srsBadge = '<span class="duo-badge" style="background: var(--duo-green); color: #fff; font-size: 11px;">🟢 Dominada (Nível ' + srs.level + ')</span>';
-        } else if (srs && srs.lastReviewed && (!srs.nextReview || srs.nextReview <= today)) {
-          srsBadge = '<span class="duo-badge" style="background: var(--duo-orange); color: #fff; font-size: 11px;">🟡 Revisar Hoje</span>';
-        } else if (srs && srs.lastReviewed) {
-          srsBadge = '<span class="duo-badge" style="background: var(--duo-blue); color: #fff; font-size: 11px;">🔵 Em progresso (Nível ' + (srs.level || 1) + ')</span>';
+        if (srs && srs.lastReviewed) {
+          const isMastered = (srs.level >= 3 || (srs.interval && srs.interval >= 3));
+          let daysDiff = 0;
+          if (srs.nextReview) {
+            try {
+              const nextD = new Date(srs.nextReview + 'T00:00:00');
+              const todayD = new Date(today + 'T00:00:00');
+              daysDiff = Math.round((nextD - todayD) / (1000 * 60 * 60 * 24));
+            } catch(e) { daysDiff = 0; }
+          }
+
+          if (srs.nextReview && srs.nextReview <= today) {
+            srsBadge = '<span class="duo-badge" style="background: var(--duo-orange); color: #fff; font-size: 11px;">🟡 Revisar Hoje</span>';
+          } else if (isMastered) {
+            const daysTxt = daysDiff > 0 ? ` (Revisão em ${daysDiff} ${daysDiff === 1 ? 'dia' : 'dias'})` : '';
+            srsBadge = `<span class="duo-badge" style="background: var(--duo-green); color: #fff; font-size: 11px;">🟢 Dominada${daysTxt}</span>`;
+          } else {
+            const daysTxt = daysDiff > 0 ? ` (Revisão em ${daysDiff} ${daysDiff === 1 ? 'dia' : 'dias'})` : '';
+            srsBadge = `<span class="duo-badge" style="background: var(--duo-blue); color: #fff; font-size: 11px;">🔵 Em aprendizado${daysTxt}</span>`;
+          }
         }
 
         const audioLang = (lang === 'en') ? 'en-US' : 'es-ES';
-        const termSafe = (item.audioText || item.term).replace(/'/g, "\'");
-        const exSafe = item.example ? item.example.replace(/'/g, "\'") : '';
+        const termSafe = (item.audioText || item.term).replace(/'/g, "\\'");
+        const exSafe = item.example ? item.example.replace(/'/g, "\\'") : '';
 
         return `
           <div class="duo-drawer-term-card" onclick="openVocabDetailModal('${item.id}')" style="cursor: pointer;" title="Ver detalhes">
