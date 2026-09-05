@@ -2,8 +2,9 @@
  * Centralized Vocabulary Data for Linguo
  * Contains categorized terms, IPA phonetics, chunks, and examples for English (en) and Spanish (es)
  */
-    let VOCABULARY_DATA = {
-      en: [
+(function(global) {
+  const VOCABULARY_DATA = {
+    en: [
       {
             "id": "en_apple",
             "type": "word",
@@ -1046,12 +1047,11 @@
             "example": "Pasamos dos horas haciendo sobremesa los domingos.",
             "examplePt": "Passamos duas horas conversando à mesa aos domingos."
       }
-]
-    };
+    ]
+  };
 
-if (typeof window !== "undefined") {
-  window.VOCABULARY_DATA = VOCABULARY_DATA;
-}
-if (typeof module !== "undefined" && module.exports) {
-  module.exports = VOCABULARY_DATA;
-}
+  global.VOCABULARY_DATA = VOCABULARY_DATA;
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = VOCABULARY_DATA;
+  }
+})(typeof window !== 'undefined' ? window : (typeof global !== 'undefined' ? global : globalThis));
