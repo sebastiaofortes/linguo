@@ -2578,6 +2578,19 @@ html, body {
   gap: 6px;
 }
 
+.duo-flashcard-sentence-box {
+  margin-top: 12px;
+  background: var(--duo-gray-100);
+  border: 1px solid var(--duo-gray-200);
+  border-radius: var(--duo-radius-md);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  text-align: left;
+}
+
 .duo-srs-rating-container {
   display: flex;
   flex-direction: column;
@@ -2838,6 +2851,20 @@ html, body {
   background: #152229;
   border-color: var(--duo-blue);
   border-bottom-color: var(--duo-blue-shadow);
+}
+
+[data-theme="dark"] .duo-flashcard-sentence-box {
+  background: #18272f !important;
+  border-color: #283d47 !important;
+}
+
+[data-theme="dark"] #fcBackExample,
+[data-theme="dark"] #fcFrontCloze {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] #fcBackExamplePt {
+  color: var(--duo-gray-400) !important;
 }
 
 [data-theme="dark"] .duo-match-tile {

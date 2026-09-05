@@ -64,9 +64,28 @@
       border-radius: 50%;
       transition: all 0.15s ease;
     }
-    .btn-close:hover {
-      background: var(--duo-gray-100, #f0f0f0);
-      color: var(--duo-gray-800, #333333);
+    .duo-flashcard-sentence-box {
+      margin-top: 12px;
+      background: var(--duo-gray-100);
+      border: 1px solid var(--duo-gray-200);
+      border-radius: var(--duo-radius-md);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      text-align: left;
+    }
+    [data-theme="dark"] .duo-flashcard-sentence-box {
+      background: #18272f !important;
+      border-color: #283d47 !important;
+    }
+    [data-theme="dark"] #fcBackExample,
+    [data-theme="dark"] #fcFrontCloze {
+      color: #ffffff !important;
+    }
+    [data-theme="dark"] #fcBackExamplePt {
+      color: var(--duo-gray-400) !important;
     }
   </style>
 </head>
@@ -109,8 +128,14 @@
               <button class="btn-speaker-sm" style="margin: 12px auto 0;" id="fcFrontAudioBtn" onclick="speakFlashcard(event)" title="Ouvir pronúncia">
                 🔊
               </button>
-              <div style="margin-top: 14px; font-size: 14px; font-weight: 700; color: var(--duo-gray-700); background: var(--duo-gray-100); padding: 10px 14px; border-radius: var(--duo-radius-md); line-height: 1.4;" id="fcFrontCloze">
-                "I work for two hours and then I _____."
+              <!-- Caixa de Frase de Exemplo (Frente com Cloze) -->
+              <div class="duo-flashcard-sentence-box">
+                <div style="flex: 1;" id="fcFrontCloze">
+                  "I work for two hours and then I _____."
+                </div>
+                <button class="btn-speaker-mini" onclick="speakFlashcardExample(event)" title="Ouvir frase completa" style="width: 28px; height: 28px; font-size: 12px; flex-shrink: 0;">
+                  🔊
+                </button>
               </div>
             </div>
 
@@ -130,11 +155,19 @@
               <div style="font-size: 22px; font-weight: 900; color: var(--duo-green-text); text-align: center;" id="fcBackTranslation">
                 fazer uma pausa / descansar
               </div>
-              <div style="margin-top: 10px; font-size: 14px; font-weight: 700; color: var(--duo-gray-900); background: #ffffff; border: 1px solid var(--duo-gray-200); padding: 10px 14px; border-radius: var(--duo-radius-md);" id="fcBackExample">
-                I work for two hours and then I take a break.
-              </div>
-              <div style="font-size: 12px; font-weight: 600; color: var(--duo-gray-400); margin-top: 4px; padding-left: 4px;" id="fcBackExamplePt">
-                Eu trabalho por duas horas e depois faço uma pausa.
+              <!-- Caixa de Frase de Exemplo (Verso Resolvido) -->
+              <div class="duo-flashcard-sentence-box">
+                <div style="flex: 1;">
+                  <div id="fcBackExample" style="font-size: 14px; font-weight: 700; color: var(--duo-gray-900); line-height: 1.4;">
+                    What is your favorite food?
+                  </div>
+                  <div id="fcBackExamplePt" style="font-size: 12px; font-weight: 600; color: var(--duo-gray-400); margin-top: 4px;">
+                    Qual é a sua comida favorita?
+                  </div>
+                </div>
+                <button class="btn-speaker-mini" onclick="speakFlashcardExample(event)" title="Ouvir frase completa" style="width: 28px; height: 28px; font-size: 12px; flex-shrink: 0;">
+                  🔊
+                </button>
               </div>
               <div class="duo-vocab-tip" style="margin-top: 10px;" id="fcBackTip">
                 💡 Colocação fixa: em inglês não dizemos 'make a break', mas sim 'take a break'.
@@ -386,6 +419,21 @@
       const lang = (currentLanguage === "en") ? "en-US" : "es-ES";
       if (window.duoAudio) duoAudio.speak(card.audioText || card.term, lang);
     }
+    window.speakFlashcard = speakFlashcard;
+
+    function speakFlashcardExample(event) {
+      if (event) event.stopPropagation();
+      if (!activeFlashcardsDeck || !activeFlashcardsDeck[currentFlashcardIndex]) return;
+      const card = activeFlashcardsDeck[currentFlashcardIndex];
+      if (!card.example) return;
+
+      const lang = (currentLanguage === "en") ? "en-US" : "es-ES";
+      if (window.duoAudio) {
+        duoAudio.stopAllSpeech();
+        duoAudio.speak(card.example, lang);
+      }
+    }
+    window.speakFlashcardExample = speakFlashcardExample;
 
     function rateFlashcard(rating) {
       if (window.duoAudio) duoAudio.playTap();
