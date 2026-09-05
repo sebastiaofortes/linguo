@@ -1557,36 +1557,52 @@
     }
 
     function calculateVocabMetrics(lang) {
-      const list = (window.VOCABULARY_DATA && window.VOCABULARY_DATA[lang || currentLanguage]) || [];
-      const store = getSRSStore(lang || currentLanguage);
+      const l = lang || currentLanguage || 'en';
+      const list = (window.VOCABULARY_DATA && window.VOCABULARY_DATA[l]) || [];
+      
+      if (window.LinguoSRS && window.LinguoSRS.getSRSSummary) {
+        return window.LinguoSRS.getSRSSummary(l, list);
+      }
+
+      const store = getSRSStore(l);
       const today = getTodayString();
 
       let dueCount = 0;
       let masteredCount = 0;
+      let studyingCount = 0;
       let unreviewedCount = 0;
 
       list.forEach(item => {
         const srs = store[item.id];
-        if (!srs || !srs.lastReviewed) {
+        const isStudied = srs && srs.timesReviewed && srs.timesReviewed >= 1;
+
+        if (!isStudied) {
           unreviewedCount++;
-          dueCount++;
-        } else if (!srs.nextReview || srs.nextReview <= today) {
+          return;
+        }
+
+        studyingCount++;
+
+        // REGRA ESTRITA: Apenas palavras já estudadas com nextReview <= hoje
+        if (srs.nextReview && srs.nextReview <= today) {
           dueCount++;
         }
-        if (srs && (srs.level >= 3 || (srs.interval && srs.interval >= 3))) {
+
+        if (srs.status === 'mastered' || (srs.box && srs.box >= 3)) {
           masteredCount++;
         }
       });
 
       const total = list.length;
-      const masteryPct = total > 0 ? Math.round((masteredCount / total) * 100) : 0;
+      const retentionPct = studyingCount > 0 ? Math.round((masteredCount / studyingCount) * 100) : 0;
 
       return {
         total,
-        due: dueCount,
+        studying: studyingCount,
         mastered: masteredCount,
+        due: dueCount,
         unreviewed: unreviewedCount,
-        masteryPct
+        retentionPct
       };
     }
 
@@ -1595,24 +1611,25 @@
       const lang = currentLanguage || 'en';
       const metrics = calculateVocabMetrics(lang);
 
-      // 1. Update Hero Card: Revisão Diária Inteligente
-      const dueCountEl = document.getElementById('srsHeroDueCount');
       const heroCounterEl = document.getElementById('srsHeroCounter');
       const heroBtnText = document.getElementById('srsHeroActionBtnText');
 
-      if (dueCountEl) dueCountEl.innerText = metrics.due;
-
       if (heroCounterEl && heroBtnText) {
         if (metrics.due > 0) {
-          heroCounterEl.innerHTML = `🔥 <span id="srsHeroDueCount">${metrics.due}</span> palavras para reforçar hoje • Curva de Ebbinghaus`;
-          heroBtnText.innerText = `🎙️ INICIAR REVISÃO GERAL (${metrics.due} CARTAS) ➔`;
+          // Caso 1: Existem palavras com revisão vencida hoje
+          const wordTxt = metrics.due === 1 ? 'palavra para reforçar' : 'palavras para reforçar';
+          const cardTxt = metrics.due === 1 ? '1 CARTA' : `${metrics.due} CARTAS`;
+          
+          heroCounterEl.innerHTML = `🔥 <span id="srsHeroDueCount">${metrics.due}</span> ${wordTxt} hoje • Curva de Ebbinghaus`;
+          heroBtnText.innerText = `🎙️ INICIAR REVISÃO GERAL (${cardTxt}) ➔`;
         } else {
-          heroCounterEl.innerHTML = `✨ Todas as palavras em dia • Curva de Ebbinghaus`;
-          heroBtnText.innerText = `🎙️ PRATICAR DECK GERAL ➔`;
+          // Caso 2: Nenhuma palavra vencida hoje (Todas em dia)
+          heroCounterEl.innerHTML = `✨ Todas as revisões em dia! Que tal praticar novos termos?`;
+          heroBtnText.innerText = `🎙️ PRATICAR NOVAS PALAVRAS (DECK 3D) ➔`;
         }
       }
 
-      // 2. Render Collections Grid
+      // Renderizar a grade de coleções
       renderCollectionsGrid();
     }
     window.renderVocabView = renderVocabView;
@@ -2450,10 +2467,14 @@
     }
     window.handleResetProgress = handleResetProgress;
 
-    // Listen for SRS update events from other pages / modals
+    // Listen for SRS update events from other pages / modals and page restores
     window.addEventListener('linguo_srs_updated', () => {
       renderVocabView();
-      renderStatsView();
+      if (typeof renderStatsView === 'function') renderStatsView();
+    });
+    window.addEventListener('pageshow', () => {
+      renderVocabView();
+      if (typeof renderStatsView === 'function') renderStatsView();
     });
 
     /* ============================================================

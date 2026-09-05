@@ -377,9 +377,14 @@
 
       filtered.forEach(item => {
         const srs = store[item.id];
-        if (!srs || !srs.lastReviewed) unreviewed.push(item);
-        else if (!srs.nextReview || srs.nextReview <= today) due.push(item);
-        else others.push(item);
+        const isStudied = srs && srs.timesReviewed && srs.timesReviewed >= 1;
+        if (!isStudied) {
+          unreviewed.push(item);
+        } else if (srs.nextReview && srs.nextReview <= today) {
+          due.push(item);
+        } else {
+          others.push(item);
+        }
       });
 
       due.sort(() => 0.5 - Math.random());
@@ -390,7 +395,13 @@
       if (activeMode === "critical") {
         selected = filtered.slice(0, TRANSLATE_DECK_SIZE);
       } else if (activeMode === "due_all") {
-        selected = due.length > 0 ? due : [...unreviewed, ...others].slice(0, TRANSLATE_DECK_SIZE);
+        if (due.length > 0) {
+          selected = due;
+          if (titleEl) titleEl.innerText = "Revisão Diária Inteligente";
+        } else {
+          selected = unreviewed.length > 0 ? unreviewed.slice(0, 7) : fullList.slice(0, 7);
+          if (titleEl) titleEl.innerText = "Praticar Novas Palavras";
+        }
       } else {
         selected = [...due, ...unreviewed, ...others].slice(0, TRANSLATE_DECK_SIZE);
       }
