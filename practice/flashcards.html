@@ -128,14 +128,11 @@
               <button class="btn-speaker-sm" style="margin: 12px auto 0;" id="fcFrontAudioBtn" onclick="speakFlashcard(event)" title="Ouvir pronúncia">
                 🔊
               </button>
-              <!-- Caixa de Frase de Exemplo (Frente com Cloze) -->
-              <div class="duo-flashcard-sentence-box">
-                <div style="flex: 1;" id="fcFrontCloze">
+              <!-- Frente: Frase com Cloze Limpa (Sem botão de som para evitar spoiler) -->
+              <div class="duo-flashcard-sentence-box" style="justify-content: center; text-align: center;">
+                <div id="fcFrontCloze" style="font-size: 14px; font-weight: 700; color: var(--duo-gray-700); line-height: 1.4;">
                   "I work for two hours and then I _____."
                 </div>
-                <button class="btn-speaker-mini" onclick="speakFlashcardExample(event)" title="Ouvir frase completa" style="width: 28px; height: 28px; font-size: 12px; flex-shrink: 0;">
-                  🔊
-                </button>
               </div>
             </div>
 
