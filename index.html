@@ -3410,6 +3410,28 @@
     let translateDeckIsProcessing = false;
     let translateDeckFeedbackTimeout = null;
     let activeTranslateDeckType = 'all'; // 'word' | 'chunk' | 'all'
+    let translateDeckHintVisible = false;
+
+    // Toggle Hint Visibility on Active Card
+    function toggleTranslateDeckHint(event) {
+      if (event) event.stopPropagation();
+      if (window.duoAudio) duoAudio.playTap();
+      translateDeckHintVisible = !translateDeckHintVisible;
+      renderTranslateDeckStack();
+    }
+    window.toggleTranslateDeckHint = toggleTranslateDeckHint;
+
+    // Speak Current Deck Card Hint Audio
+    function speakCurrentDeckHintAudio(event) {
+      if (event) event.stopPropagation();
+      if (translateDeck.length === 0) return;
+      const card = translateDeck[0];
+      const langCode = (currentLanguage === 'es') ? 'es-ES' : 'en-US';
+      if (window.duoAudio) {
+        duoAudio.speak(card.audioText || card.term, langCode);
+      }
+    }
+    window.speakCurrentDeckHintAudio = speakCurrentDeckHintAudio;
 
     // Set filter type for 3D translate deck
     function setTranslateDeckType(type) {
@@ -3622,6 +3644,7 @@
       translateDeckCompleted = 0;
       translateDeckStreak = 0;
       translateDeckIsProcessing = false;
+      translateDeckHintVisible = false;
 
       // Update Header Text & Placeholders based on Target Language and Type
       const titleEl = document.getElementById('translateDeckTitle');
@@ -3771,6 +3794,8 @@
         const card = translateDeck[i];
         const layerClass = `layer-${i}`;
         const ptData = formatPtPrompt(card.translation);
+        const isTopCard = (i === 0);
+        const ipaText = card.ipa || card.phonetic || '';
 
         html += `
           <div class="duo-stack-card ${layerClass}" id="deckCard-${i}">
@@ -3780,11 +3805,20 @@
                 <span class="dot">•</span>
                 <span class="level">${card.level || 'A1'}</span>
               </div>
+              ${isTopCard ? `
+                <button class="btn-deck-hint ${translateDeckHintVisible ? 'active' : ''}" onclick="toggleTranslateDeckHint(event)" title="Ver pronúncia IPA e ouvir áudio">${translateDeckHintVisible ? '✕' : '?'}</button>
+              ` : ''}
             </div>
 
             <div style="text-align: center; margin: auto 0;">
               <div class="duo-stack-card-term">${ptData.main}</div>
               ${ptData.hint ? `<div style="font-size: 13px; font-weight: 700; color: var(--duo-gray-400); margin-top: 4px;">${ptData.hint}</div>` : ''}
+              ${isTopCard && translateDeckHintVisible ? `
+                <div class="duo-deck-hint-box">
+                  <button class="btn-speaker-mini" onclick="speakCurrentDeckHintAudio(event)" title="Ouvir pronúncia nativa">🔊</button>
+                  ${ipaText ? `<span class="duo-deck-hint-ipa">${ipaText}</span>` : ''}
+                </div>
+              ` : ''}
             </div>
           </div>
         `;
@@ -3955,6 +3989,7 @@
 
       setTimeout(() => {
         // Discard card from deck
+        translateDeckHintVisible = false;
         translateDeck.shift();
         hideTranslateDeckFeedback();
         translateDeckIsProcessing = false;
@@ -3998,6 +4033,7 @@
       // Move top card to back of deck for review
       setTimeout(() => {
         if (topCardEl) topCardEl.classList.remove('shake');
+        translateDeckHintVisible = false;
         const wrongCard = translateDeck.shift();
         translateDeck.push(wrongCard);
         hideTranslateDeckFeedback();
@@ -4022,6 +4058,7 @@
       }
 
       setTimeout(() => {
+        translateDeckHintVisible = false;
         const skipped = translateDeck.shift();
         translateDeck.push(skipped);
         hideTranslateDeckFeedback();
