@@ -208,7 +208,7 @@
   }
 
   /**
-   * Returns list of terms due for review today or never reviewed
+   * Returns list of terms strictly due for review today (studied and nextReview <= today)
    */
   function getDueWords(lang, fullVocabList) {
     const l = lang || 'en';
@@ -218,8 +218,8 @@
 
     return list.filter(item => {
       const srs = store[item.id];
-      if (!srs || !srs.lastReviewed) return true;
-      return !srs.nextReview || srs.nextReview <= today;
+      if (!srs || !srs.timesReviewed || srs.timesReviewed < 1) return false;
+      return srs.nextReview && srs.nextReview <= today;
     });
   }
 
@@ -233,6 +233,7 @@
     const today = getTodayString();
 
     let total = list.length;
+    let studyingCount = 0;
     let masteredCount = 0;
     let learningCount = 0;
     let criticalCount = 0;
@@ -248,20 +249,23 @@
 
     list.forEach(item => {
       const srs = store[item.id];
-      if (!srs || !srs.lastReviewed) {
+      const isStudied = srs && srs.timesReviewed && srs.timesReviewed >= 1;
+
+      if (!isStudied) {
         unreviewedCount++;
-        dueCount++;
-        boxes.box1++;
         return;
       }
 
-      if (!srs.nextReview || srs.nextReview <= today) {
+      studyingCount++;
+
+      // Strict due rule: only studied words with nextReview <= today
+      if (srs.nextReview && srs.nextReview <= today) {
         dueCount++;
       }
 
       if (srs.status === 'critical' || (srs.incorrectCount && srs.incorrectCount >= 2)) {
         criticalCount++;
-      } else if (srs.status === 'mastered' || srs.box >= 3) {
+      } else if (srs.status === 'mastered' || (srs.box && srs.box >= 3)) {
         masteredCount++;
       } else {
         learningCount++;
@@ -274,20 +278,21 @@
       else boxes.box4Plus++;
     });
 
-    const retentionPct = total > 0 ? Math.round((masteredCount / total) * 100) : 0;
+    const retentionPct = studyingCount > 0 ? Math.round((masteredCount / studyingCount) * 100) : 0;
 
     // CEFR badge calculation
     let cefrLevel = 'NÍVEL A1 INICIANTE';
-    if (masteredCount >= 60 || retentionPct >= 85) {
+    if (masteredCount >= 60 || (studyingCount >= 40 && retentionPct >= 85)) {
       cefrLevel = 'NÍVEL B1 CONSOLIDADO 🏆';
-    } else if (masteredCount >= 35 || retentionPct >= 50) {
+    } else if (masteredCount >= 30 || (studyingCount >= 20 && retentionPct >= 60)) {
       cefrLevel = 'NÍVEL A2 INTERMEDIÁRIO ⭐';
-    } else if (masteredCount >= 15 || retentionPct >= 20) {
+    } else if (masteredCount >= 10 || studyingCount >= 10) {
       cefrLevel = 'NÍVEL A1-A2 EM PROGRESSO';
     }
 
     return {
       total,
+      studying: studyingCount,
       mastered: masteredCount,
       learning: learningCount,
       critical: criticalCount,

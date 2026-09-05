@@ -200,24 +200,8 @@
   <div id="view-stats" class="duo-tab-view">
     <div class="duo-tab-content-wrapper">
       
-      <!-- Profile Summary Header -->
-      <div class="duo-profile-header">
-        <div class="duo-avatar-circle">
-          <span>🧑‍🎓</span>
-        </div>
-        <div style="flex: 1;">
-          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
-            <h2 id="profileStudentTitle" style="font-size: 24px; font-weight: 900; color: var(--duo-gray-900);">Estudante de Inglês</h2>
-            <span id="profileLevelBadge" class="duo-badge" style="background: var(--duo-green);">NÍVEL A1 INICIANTE</span>
-          </div>
-          <p id="profileSubtitle" style="font-size: 14px; font-weight: 700; color: var(--duo-gray-400); margin-top: 2px;">
-            🇺🇸 Aprendendo Inglês • No Linguo desde Agosto 2026
-          </p>
-        </div>
-      </div>
-
       <!-- A. HERO DE RETENÇÃO LÉXICA -->
-      <div class="duo-stats-hero-card">
+      <div class="duo-stats-hero-card" style="margin-top: 10px;">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
           <div>
             <div style="font-size: 13px; font-weight: 900; letter-spacing: 0.5px; color: var(--duo-purple-shadow); text-transform: uppercase;">
@@ -235,10 +219,10 @@
         <!-- 3 Quick Metrics Cards -->
         <div class="duo-stats-metrics-row">
           <div class="duo-stats-mini-metric">
-            <span class="metric-icon">📚</span>
+            <span class="metric-icon">📖</span>
             <div>
-              <div class="metric-val" id="statsTotalWordsCount">0</div>
-              <div class="metric-lbl">Total no Baú</div>
+              <div class="metric-val" id="statsStudyingWordsCount">0</div>
+              <div class="metric-lbl">Em Estudo</div>
             </div>
           </div>
           <div class="duo-stats-mini-metric">
@@ -252,7 +236,7 @@
             <span class="metric-icon">🔥</span>
             <div>
               <div class="metric-val" id="statsDueWordsCount" style="color: var(--duo-orange-shadow);">0</div>
-              <div class="metric-lbl">A Revisar Hoje</div>
+              <div class="metric-lbl">Vencidas Hoje</div>
             </div>
           </div>
         </div>
@@ -260,11 +244,11 @@
         <!-- Global Retention Progress Bar -->
         <div style="margin-top: 18px;">
           <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 800; margin-bottom: 6px;">
-            <span style="color: var(--duo-gray-700);">Taxa de Retenção Global</span>
-            <span id="statsGlobalRetentionPct" style="color: var(--duo-purple-shadow); font-weight: 900;">0%</span>
+            <span style="color: var(--duo-gray-700);">Taxa de Domínio Global</span>
+            <span id="statsGlobalRetentionPct" style="color: var(--duo-green-text); font-weight: 900;">0%</span>
           </div>
           <div class="duo-progress-track" style="height: 14px;">
-            <div class="duo-progress-fill" id="statsGlobalRetentionFill" style="width: 0%; background: linear-gradient(90deg, var(--duo-blue), var(--duo-purple));"></div>
+            <div class="duo-progress-fill" id="statsGlobalRetentionFill" style="width: 0%; background: var(--duo-green); box-shadow: 0 2px 0 var(--duo-green-shadow);"></div>
           </div>
         </div>
       </div>
@@ -286,8 +270,8 @@
             <span class="box-interval">1 dia</span>
           </div>
           <div class="leitner-count" id="leitnerCountBox1">0</div>
-          <div class="leitner-label">Memória de Curto Prazo</div>
-          <div class="leitner-desc">Termos novos ou com erro recente</div>
+          <div class="leitner-label">Curto Prazo</div>
+          <div class="leitner-desc">Palavras novas ou com erro recente</div>
         </div>
 
         <div class="duo-leitner-box-card box-2">
@@ -296,8 +280,8 @@
             <span class="box-interval">3 dias</span>
           </div>
           <div class="leitner-count" id="leitnerCountBox2">0</div>
-          <div class="leitner-label">Fixação Intermediária</div>
-          <div class="leitner-desc">Em processo de consolidação</div>
+          <div class="leitner-label">Médio Prazo</div>
+          <div class="leitner-desc">Em fixação intermediária</div>
         </div>
 
         <div class="duo-leitner-box-card box-3">
@@ -306,8 +290,8 @@
             <span class="box-interval">7 dias</span>
           </div>
           <div class="leitner-count" id="leitnerCountBox3">0</div>
-          <div class="leitner-label">Memória de Longo Prazo</div>
-          <div class="leitner-desc">Termos retidos com alta precisão</div>
+          <div class="leitner-label">Longo Prazo</div>
+          <div class="leitner-desc">Palavras consolidadas</div>
         </div>
 
         <div class="duo-leitner-box-card box-4">
@@ -316,8 +300,8 @@
             <span class="box-interval">14d - 30d</span>
           </div>
           <div class="leitner-count" id="leitnerCountBox4">0</div>
-          <div class="leitner-label">Consolidação Permanente 🏆</div>
-          <div class="leitner-desc">Fluência e domínio automático</div>
+          <div class="leitner-label">Memória Permanente 🏆</div>
+          <div class="leitner-desc">Domínio automático consolidado</div>
         </div>
       </div>
 
@@ -357,16 +341,16 @@
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
           <div>
             <h3 style="font-size: 20px; font-weight: 900; color: var(--duo-gray-900); display: flex; align-items: center; gap: 8px;">
-              <span>📋</span> Tabela Interativa de Termos & SRS
+              <span>📋</span> Tabela Interativa de Termos
             </h3>
             <p style="font-size: 13px; font-weight: 700; color: var(--duo-gray-400); margin-top: 2px;">
-              Consulte e ouça o status individual de cada palavra
+              Consulte e ouça a pronúncia dos seus termos em estudo
             </p>
           </div>
         </div>
       </div>
 
-      <!-- Search & Pills Filter Container -->
+      <!-- Search & Pills Filter Container (Sem a opção 'Todas') -->
       <div class="duo-terms-control-box">
         <div class="duo-vocab-search-wrap" style="margin-bottom: 12px;">
           <span class="search-icon">🔍</span>
@@ -375,17 +359,14 @@
         </div>
 
         <div class="duo-stats-filter-pills">
-          <button class="stats-filter-pill active" id="statsFilterPill-all" onclick="setStatsTermsFilter('all')">
-            🌐 Todas (<span id="statsFilterCount-all">0</span>)
+          <button class="stats-filter-pill" id="statsFilterPill-critical" onclick="setStatsTermsFilter('critical')">
+            🔴 Críticas (<span id="statsFilterCount-critical">0</span>)
+          </button>
+          <button class="stats-filter-pill active" id="statsFilterPill-learning" onclick="setStatsTermsFilter('learning')">
+            🟡 Aprendendo (<span id="statsFilterCount-learning">0</span>)
           </button>
           <button class="stats-filter-pill" id="statsFilterPill-mastered" onclick="setStatsTermsFilter('mastered')">
             🟢 Dominadas (<span id="statsFilterCount-mastered">0</span>)
-          </button>
-          <button class="stats-filter-pill" id="statsFilterPill-learning" onclick="setStatsTermsFilter('learning')">
-            🟡 Aprendendo (<span id="statsFilterCount-learning">0</span>)
-          </button>
-          <button class="stats-filter-pill" id="statsFilterPill-critical" onclick="setStatsTermsFilter('critical')">
-            🔴 Críticas (<span id="statsFilterCount-critical">0</span>)
           </button>
         </div>
       </div>
@@ -2067,7 +2048,7 @@
     /* ============================================================
      * LEXICAL RETENTION & EBBINGHAUS DASHBOARD CONTROLLER (STATS)
      * ============================================================ */
-    let activeStatsTermsFilter = 'all'; // 'all' | 'mastered' | 'learning' | 'critical'
+    let activeStatsTermsFilter = 'learning'; // 'critical' | 'learning' | 'mastered'
     let activeStatsTermsSearch = '';
     let statsTermsSearchDebounceTimer = null;
 
@@ -2076,24 +2057,22 @@
       const list = (window.VOCABULARY_DATA && window.VOCABULARY_DATA[lang]) || [];
       const summary = (window.LinguoSRS && window.LinguoSRS.getSRSSummary) 
         ? window.LinguoSRS.getSRSSummary(lang, list) 
-        : { total: list.length, mastered: 0, learning: 0, critical: 0, due: list.length, retentionPct: 0, cefrLevel: 'NÍVEL A1 INICIANTE', boxes: { box1: list.length, box2: 0, box3: 0, box4Plus: 0 } };
+        : { total: list.length, studying: 0, mastered: 0, learning: 0, critical: 0, due: 0, retentionPct: 0, cefrLevel: 'NÍVEL A1 INICIANTE', boxes: { box1: 0, box2: 0, box3: 0, box4Plus: 0 } };
 
       // 1. Hero Metrics
-      const totalWordsEl = document.getElementById('statsTotalWordsCount');
+      const studyingWordsEl = document.getElementById('statsStudyingWordsCount');
       const masteredWordsEl = document.getElementById('statsMasteredWordsCount');
       const dueWordsEl = document.getElementById('statsDueWordsCount');
       const retentionPctEl = document.getElementById('statsGlobalRetentionPct');
       const retentionFillEl = document.getElementById('statsGlobalRetentionFill');
       const globalCefrBadge = document.getElementById('statsGlobalCefrBadge');
-      const profileLevelBadge = document.getElementById('profileLevelBadge');
 
-      if (totalWordsEl) totalWordsEl.innerText = summary.total;
-      if (masteredWordsEl) masteredWordsEl.innerText = summary.mastered;
-      if (dueWordsEl) dueWordsEl.innerText = summary.due;
-      if (retentionPctEl) retentionPctEl.innerText = summary.retentionPct + '%';
-      if (retentionFillEl) retentionFillEl.style.width = summary.retentionPct + '%';
+      if (studyingWordsEl) studyingWordsEl.innerText = summary.studying || 0;
+      if (masteredWordsEl) masteredWordsEl.innerText = summary.mastered || 0;
+      if (dueWordsEl) dueWordsEl.innerText = summary.due || 0;
+      if (retentionPctEl) retentionPctEl.innerText = (summary.retentionPct || 0) + '%';
+      if (retentionFillEl) retentionFillEl.style.width = (summary.retentionPct || 0) + '%';
       if (globalCefrBadge) globalCefrBadge.innerText = summary.cefrLevel;
-      if (profileLevelBadge) profileLevelBadge.innerText = summary.cefrLevel;
 
       // 2. Leitner Boxes
       const b1El = document.getElementById('leitnerCountBox1');
@@ -2120,6 +2099,11 @@
         } else {
           criticalBanner.style.display = 'none';
         }
+      }
+
+      // Auto-select initial pill: critical if criticalWords > 0, else learning
+      if (!activeStatsTermsFilter || activeStatsTermsFilter === 'all') {
+        activeStatsTermsFilter = (criticalWords.length > 0) ? 'critical' : 'learning';
       }
 
       // 4. Progress by Thematic Collection
@@ -2261,73 +2245,90 @@
 
       list.forEach(item => {
         const srs = store[item.id];
-        if (srs) {
+        if (srs && srs.timesReviewed && srs.timesReviewed >= 1) {
           if (srs.status === 'critical' || (srs.incorrectCount && srs.incorrectCount >= 2)) {
             criticalCount++;
           } else if (srs.status === 'mastered' || (srs.box && srs.box >= 3)) {
             masteredCount++;
-          } else if (srs.timesReviewed > 0) {
+          } else {
             learningCount++;
           }
         }
       });
 
       // Update Pill Count Badges
-      const countAll = document.getElementById('statsFilterCount-all');
-      const countMastered = document.getElementById('statsFilterCount-mastered');
-      const countLearning = document.getElementById('statsFilterCount-learning');
       const countCritical = document.getElementById('statsFilterCount-critical');
+      const countLearning = document.getElementById('statsFilterCount-learning');
+      const countMastered = document.getElementById('statsFilterCount-mastered');
 
-      if (countAll) countAll.innerText = list.length;
-      if (countMastered) countMastered.innerText = masteredCount;
-      if (countLearning) countLearning.innerText = learningCount;
       if (countCritical) countCritical.innerText = criticalCount;
+      if (countLearning) countLearning.innerText = learningCount;
+      if (countMastered) countMastered.innerText = masteredCount;
+
+      // Update active state on pills
+      document.querySelectorAll('.stats-filter-pill').forEach(btn => btn.classList.remove('active'));
+      const currentActiveBtn = document.getElementById('statsFilterPill-' + activeStatsTermsFilter);
+      if (currentActiveBtn) currentActiveBtn.classList.add('active');
 
       // Filter list
       let filtered = list.filter(item => {
         const srs = store[item.id];
-        
-        // Filter by Pill
-        if (activeStatsTermsFilter === 'mastered') {
-          if (!srs || (srs.status !== 'mastered' && (!srs.box || srs.box < 3))) return false;
-        } else if (activeStatsTermsFilter === 'learning') {
-          if (!srs || srs.timesReviewed === 0 || srs.status === 'mastered' || srs.status === 'critical' || (srs.box && srs.box >= 3)) return false;
-        } else if (activeStatsTermsFilter === 'critical') {
-          if (!srs || (srs.status !== 'critical' && (!srs.incorrectCount || srs.incorrectCount < 2))) return false;
-        }
+        const isStudied = srs && srs.timesReviewed && srs.timesReviewed >= 1;
 
-        // Filter by Search
+        // If search is active, match any studied word (or word matching search)
         if (activeStatsTermsSearch.length > 0) {
           const matchTerm = (item.term || '').toLowerCase().includes(activeStatsTermsSearch);
           const matchTrans = (item.translation || '').toLowerCase().includes(activeStatsTermsSearch);
           const matchIpa = (item.ipa || '').toLowerCase().includes(activeStatsTermsSearch);
           const matchCat = (item.category || '').toLowerCase().includes(activeStatsTermsSearch);
           if (!matchTerm && !matchTrans && !matchIpa && !matchCat) return false;
+          return true;
         }
 
-        return true;
+        // If no search, filter by active pill
+        if (activeStatsTermsFilter === 'critical') {
+          return isStudied && (srs.status === 'critical' || (srs.incorrectCount && srs.incorrectCount >= 2));
+        } else if (activeStatsTermsFilter === 'learning') {
+          return isStudied && srs.status !== 'mastered' && srs.status !== 'critical' && (!srs.box || srs.box < 3);
+        } else if (activeStatsTermsFilter === 'mastered') {
+          return isStudied && (srs.status === 'mastered' || (srs.box && srs.box >= 3));
+        }
+
+        return false;
       });
 
       if (filtered.length === 0) {
+        let emptyMsg = 'Nenhuma palavra neste status ainda.';
+        if (activeStatsTermsSearch.length > 0) {
+          emptyMsg = 'Nenhuma palavra encontrada para "' + activeStatsTermsSearch + '".';
+        } else if (activeStatsTermsFilter === 'critical') {
+          emptyMsg = '🎉 Nenhuma palavra crítica! Sua taxa de acertos está excelente.';
+        } else if (activeStatsTermsFilter === 'learning') {
+          emptyMsg = 'Pratique novas palavras no Deck 3D ou Flashcards para começar o aprendizado!';
+        } else if (activeStatsTermsFilter === 'mastered') {
+          emptyMsg = 'Palavras acertadas consecutivamente por 3+ vezes aparecerão aqui.';
+        }
+
         container.innerHTML = `
-          <div style="text-align: center; padding: 36px 20px; background: var(--duo-gray-100); border: 2px dashed var(--duo-gray-300); border-radius: var(--duo-radius-lg);">
-            <div style="font-size: 36px; margin-bottom: 8px;">🔍</div>
-            <h4 style="font-size: 16px; font-weight: 800; color: var(--duo-gray-900);">Nenhuma palavra encontrada</h4>
-            <p style="font-size: 13px; font-weight: 600; color: var(--duo-gray-400); margin-top: 4px;">
-              Tente ajustar os termos de busca ou mudar a categoria selecionada.
-            </p>
+          <div style="text-align: center; padding: 32px 20px; background: var(--duo-gray-100); border: 2px dashed var(--duo-gray-300); border-radius: var(--duo-radius-lg);">
+            <div style="font-size: 32px; margin-bottom: 6px;">${activeStatsTermsFilter === 'critical' ? '✨' : '🔍'}</div>
+            <h4 style="font-size: 15px; font-weight: 800; color: var(--duo-gray-900);">${emptyMsg}</h4>
           </div>
         `;
         return;
       }
 
+      // Limit DOM render to max 20 elements for performance
+      const MAX_RENDER_ITEMS = 20;
+      const totalMatches = filtered.length;
+      const visibleItems = filtered.slice(0, MAX_RENDER_ITEMS);
       const langCode = (lang === 'en') ? 'en-US' : 'es-ES';
 
-      container.innerHTML = filtered.map(item => {
+      let html = visibleItems.map(item => {
         const srs = store[item.id];
         let statusBadgeHtml = '';
 
-        if (!srs || !srs.lastReviewed) {
+        if (!srs || !srs.timesReviewed) {
           statusBadgeHtml = `<span class="duo-term-badge status-new">⚪ Caixa 1 • Nova</span>`;
         } else if (srs.status === 'critical' || (srs.incorrectCount && srs.incorrectCount >= 2)) {
           statusBadgeHtml = `<span class="duo-term-badge status-critical">🔴 Caixa 1 • ${srs.incorrectCount} erros</span>`;
@@ -2361,6 +2362,16 @@
           </div>
         `;
       }).join('');
+
+      if (totalMatches > MAX_RENDER_ITEMS) {
+        html += `
+          <div style="text-align: center; font-size: 12px; font-weight: 700; color: var(--duo-gray-400); padding: 8px;">
+            Exibindo os primeiros ${MAX_RENDER_ITEMS} de ${totalMatches} termos. Use a busca 🔍 para refinar.
+          </div>
+        `;
+      }
+
+      container.innerHTML = html;
     }
 
     function speakTermAudio(text, langCode) {
