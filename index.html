@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="resources/duo-theme.css">
   <script src="resources/vocab-data.js"></script>
+  <script src="resources/vocab-srs.js"></script>
   <script src="resources/duo-sfx.js"></script>
 </head>
 <body>
@@ -194,7 +195,7 @@
   </div>
 
   <!-- ============================================================
-       TAB 3: ESTATÍSTICAS & PERFIL (STATS)
+       TAB 3: ESTATÍSTICAS & RETENÇÃO LÉXICA (STATS)
        ============================================================ -->
   <div id="view-stats" class="duo-tab-view">
     <div class="duo-tab-content-wrapper">
@@ -205,9 +206,9 @@
           <span>🧑‍🎓</span>
         </div>
         <div style="flex: 1;">
-          <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
             <h2 id="profileStudentTitle" style="font-size: 24px; font-weight: 900; color: var(--duo-gray-900);">Estudante de Inglês</h2>
-            <span id="profileLevelBadge" class="duo-badge" style="background: var(--duo-green);">NÍVEL BÁSICO A1-A2</span>
+            <span id="profileLevelBadge" class="duo-badge" style="background: var(--duo-green);">NÍVEL A1 INICIANTE</span>
           </div>
           <p id="profileSubtitle" style="font-size: 14px; font-weight: 700; color: var(--duo-gray-400); margin-top: 2px;">
             🇺🇸 Aprendendo Inglês • No Linguo desde Agosto 2026
@@ -215,122 +216,208 @@
         </div>
       </div>
 
-      <!-- Streak Widget in Stats -->
-      <div class="duo-widget" style="margin-bottom: 24px;">
-        <div class="duo-widget-header">
-          <div class="duo-widget-title">
-            <span style="font-size: 24px;">🔥</span>
-            <span style="font-size: 20px;">3 Dias de Ofensiva</span>
+      <!-- A. HERO DE RETENÇÃO LÉXICA -->
+      <div class="duo-stats-hero-card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+          <div>
+            <div style="font-size: 13px; font-weight: 900; letter-spacing: 0.5px; color: var(--duo-purple-shadow); text-transform: uppercase;">
+              📊 Painel de Retenção Léxica
+            </div>
+            <h3 style="font-size: 22px; font-weight: 900; color: var(--duo-gray-900); margin-top: 2px;">
+              Memória & Spaced Repetition (SRS)
+            </h3>
           </div>
-          <span style="font-size: 13px; font-weight: 800; color: var(--duo-orange); background: var(--duo-orange-light); padding: 4px 10px; border-radius: var(--duo-radius-pill);">
-            EM CHAMAS!
-          </span>
+          <div id="statsGlobalCefrBadge" class="duo-badge" style="background: var(--duo-purple); font-size: 12px; padding: 6px 12px;">
+            NÍVEL A1 INICIANTE
+          </div>
         </div>
-        <p style="font-size: 14px; font-weight: 600; color: var(--duo-gray-700); margin-bottom: 16px;">
-          Você praticou consecutivamente nos últimos 3 dias. Continue assim para manter o ritmo!
+
+        <!-- 3 Quick Metrics Cards -->
+        <div class="duo-stats-metrics-row">
+          <div class="duo-stats-mini-metric">
+            <span class="metric-icon">📚</span>
+            <div>
+              <div class="metric-val" id="statsTotalWordsCount">0</div>
+              <div class="metric-lbl">Total no Baú</div>
+            </div>
+          </div>
+          <div class="duo-stats-mini-metric">
+            <span class="metric-icon">🟢</span>
+            <div>
+              <div class="metric-val" id="statsMasteredWordsCount" style="color: var(--duo-green-text);">0</div>
+              <div class="metric-lbl">Dominadas</div>
+            </div>
+          </div>
+          <div class="duo-stats-mini-metric">
+            <span class="metric-icon">🔥</span>
+            <div>
+              <div class="metric-val" id="statsDueWordsCount" style="color: var(--duo-orange-shadow);">0</div>
+              <div class="metric-lbl">A Revisar Hoje</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Global Retention Progress Bar -->
+        <div style="margin-top: 18px;">
+          <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 800; margin-bottom: 6px;">
+            <span style="color: var(--duo-gray-700);">Taxa de Retenção Global</span>
+            <span id="statsGlobalRetentionPct" style="color: var(--duo-purple-shadow); font-weight: 900;">0%</span>
+          </div>
+          <div class="duo-progress-track" style="height: 14px;">
+            <div class="duo-progress-fill" id="statsGlobalRetentionFill" style="width: 0%; background: linear-gradient(90deg, var(--duo-blue), var(--duo-purple));"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- B. CURVA DE EBBINGHAUS (DISTRIBUIÇÃO NAS 4 CAIXAS LEITNER) -->
+      <div style="margin: 28px 0 16px;">
+        <h3 style="font-size: 20px; font-weight: 900; color: var(--duo-gray-900); display: flex; align-items: center; gap: 8px;">
+          <span>🧠</span> Curva de Ebbinghaus & Caixas Leitner
+        </h3>
+        <p style="font-size: 13px; font-weight: 700; color: var(--duo-gray-400); margin-top: 2px;">
+          Distribuição dos termos conforme a fixação na sua memória de longo prazo
         </p>
-        <div class="duo-streak-days">
-          <div class="duo-streak-day-item">
-            <div class="duo-streak-day-circle">D</div>
-            <span>DOM</span>
+      </div>
+
+      <div class="duo-leitner-grid">
+        <div class="duo-leitner-box-card box-1">
+          <div class="leitner-header">
+            <span class="box-tag">Caixa 1</span>
+            <span class="box-interval">1 dia</span>
           </div>
-          <div class="duo-streak-day-item active">
-            <div class="duo-streak-day-circle">🔥</div>
-            <span>SEG</span>
+          <div class="leitner-count" id="leitnerCountBox1">0</div>
+          <div class="leitner-label">Memória de Curto Prazo</div>
+          <div class="leitner-desc">Termos novos ou com erro recente</div>
+        </div>
+
+        <div class="duo-leitner-box-card box-2">
+          <div class="leitner-header">
+            <span class="box-tag">Caixa 2</span>
+            <span class="box-interval">3 dias</span>
           </div>
-          <div class="duo-streak-day-item active">
-            <div class="duo-streak-day-circle">🔥</div>
-            <span>TER</span>
+          <div class="leitner-count" id="leitnerCountBox2">0</div>
+          <div class="leitner-label">Fixação Intermediária</div>
+          <div class="leitner-desc">Em processo de consolidação</div>
+        </div>
+
+        <div class="duo-leitner-box-card box-3">
+          <div class="leitner-header">
+            <span class="box-tag">Caixa 3</span>
+            <span class="box-interval">7 dias</span>
           </div>
-          <div class="duo-streak-day-item active">
-            <div class="duo-streak-day-circle">🔥</div>
-            <span>QUA</span>
+          <div class="leitner-count" id="leitnerCountBox3">0</div>
+          <div class="leitner-label">Memória de Longo Prazo</div>
+          <div class="leitner-desc">Termos retidos com alta precisão</div>
+        </div>
+
+        <div class="duo-leitner-box-card box-4">
+          <div class="leitner-header">
+            <span class="box-tag">Caixa 4+</span>
+            <span class="box-interval">14d - 30d</span>
           </div>
-          <div class="duo-streak-day-item">
-            <div class="duo-streak-day-circle">Q</div>
-            <span>QUI</span>
+          <div class="leitner-count" id="leitnerCountBox4">0</div>
+          <div class="leitner-label">Consolidação Permanente 🏆</div>
+          <div class="leitner-desc">Fluência e domínio automático</div>
+        </div>
+      </div>
+
+      <!-- C. AÇÃO RÁPIDA: REFORÇO DE PALAVRAS CRÍTICAS -->
+      <div id="statsCriticalBanner" class="duo-critical-words-banner" style="display: none;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span style="font-size: 32px;">🎯</span>
+          <div style="flex: 1;">
+            <h4 style="font-size: 16px; font-weight: 900; color: var(--duo-red-text);" id="statsCriticalTitle">
+              Existem 0 palavras com taxa de erro elevada
+            </h4>
+            <p style="font-size: 13px; font-weight: 700; color: var(--duo-gray-700); margin-top: 2px;">
+              Fortaleça a memória ativa dessas palavras no Deck 3D de Tradução por Voz.
+            </p>
           </div>
-          <div class="duo-streak-day-item">
-            <div class="duo-streak-day-circle">S</div>
-            <span>SEX</span>
-          </div>
-          <div class="duo-streak-day-item">
-            <div class="duo-streak-day-circle">S</div>
-            <span>SÁB</span>
+        </div>
+        <button class="btn-duo btn-duo-red" style="margin-top: 14px; width: 100%; justify-content: center;" onclick="practiceCriticalWords()">
+          <span>🎙️ PRATICAR PALAVRAS CRÍTICAS (DECK DE VOZ) ➔</span>
+        </button>
+      </div>
+
+      <!-- D. PROGRESSO POR COLEÇÃO TEMÁTICA -->
+      <div style="margin: 28px 0 16px;">
+        <h3 style="font-size: 20px; font-weight: 900; color: var(--duo-gray-900); display: flex; align-items: center; gap: 8px;">
+          <span>🗂️</span> Progresso por Coleção Temática
+        </h3>
+        <p style="font-size: 13px; font-weight: 700; color: var(--duo-gray-400); margin-top: 2px;">
+          Domínio de vocabulário categorizado por tópicos
+        </p>
+      </div>
+      <div id="statsCollectionsListContainer" class="duo-stats-collections-list">
+        <!-- Dynamically rendered -->
+      </div>
+
+      <!-- E. TABELA INTERATIVA DE TERMOS -->
+      <div style="margin: 28px 0 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <h3 style="font-size: 20px; font-weight: 900; color: var(--duo-gray-900); display: flex; align-items: center; gap: 8px;">
+              <span>📋</span> Tabela Interativa de Termos & SRS
+            </h3>
+            <p style="font-size: 13px; font-weight: 700; color: var(--duo-gray-400); margin-top: 2px;">
+              Consulte e ouça o status individual de cada palavra
+            </p>
           </div>
         </div>
       </div>
 
-      <!-- Performance Grid (XP, Accuracy, Lessons, Gems) -->
-      <h3 style="font-size: 20px; font-weight: 900; color: var(--duo-gray-900); margin-bottom: 14px;">Estatísticas Gerais</h3>
-      <div class="duo-stats-grid">
-        <div class="duo-stat-card">
-          <div class="duo-stat-card-icon" style="color: var(--duo-orange);">⚡</div>
-          <div>
-            <div class="duo-stat-card-value" id="profileXpDisplay">200</div>
-            <div class="duo-stat-card-label">Total de XP</div>
-          </div>
+      <!-- Search & Pills Filter Container -->
+      <div class="duo-terms-control-box">
+        <div class="duo-vocab-search-wrap" style="margin-bottom: 12px;">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="statsTermsSearchInput" class="duo-vocab-search-input" placeholder="Buscar palavra, fonética ou tradução..." oninput="handleStatsTermsSearch(this.value)">
+          <button class="duo-vocab-search-clear" id="statsTermsSearchClear" onclick="clearStatsTermsSearch()" title="Limpar busca">✕</button>
         </div>
 
-        <div class="duo-stat-card">
-          <div class="duo-stat-card-icon" style="color: var(--duo-green);">🎯</div>
-          <div>
-            <div class="duo-stat-card-value">96%</div>
-            <div class="duo-stat-card-label">Precisão Média</div>
-          </div>
-        </div>
-
-        <div class="duo-stat-card">
-          <div class="duo-stat-card-icon" style="color: var(--duo-blue);">📚</div>
-          <div>
-            <div class="duo-stat-card-value" id="profileLessonsCount">9</div>
-            <div class="duo-stat-card-label">Lições Criadas</div>
-          </div>
-        </div>
-
-        <div class="duo-stat-card">
-          <div class="duo-stat-card-icon" style="color: var(--duo-purple);">💎</div>
-          <div>
-            <div class="duo-stat-card-value" id="profileGemsDisplay">200</div>
-            <div class="duo-stat-card-label">Gemas Acumuladas</div>
-          </div>
+        <div class="duo-stats-filter-pills">
+          <button class="stats-filter-pill active" id="statsFilterPill-all" onclick="setStatsTermsFilter('all')">
+            🌐 Todas (<span id="statsFilterCount-all">0</span>)
+          </button>
+          <button class="stats-filter-pill" id="statsFilterPill-mastered" onclick="setStatsTermsFilter('mastered')">
+            🟢 Dominadas (<span id="statsFilterCount-mastered">0</span>)
+          </button>
+          <button class="stats-filter-pill" id="statsFilterPill-learning" onclick="setStatsTermsFilter('learning')">
+            🟡 Aprendendo (<span id="statsFilterCount-learning">0</span>)
+          </button>
+          <button class="stats-filter-pill" id="statsFilterPill-critical" onclick="setStatsTermsFilter('critical')">
+            🔴 Críticas (<span id="statsFilterCount-critical">0</span>)
+          </button>
         </div>
       </div>
 
-      <!-- Achievements Section -->
-      <h3 style="font-size: 20px; font-weight: 900; color: var(--duo-gray-900); margin-bottom: 14px;">Conquistas Desbloqueadas</h3>
-      
-      <div class="duo-achievement-item">
-        <div class="duo-achievement-icon" style="background: var(--duo-orange-light); color: var(--duo-orange-shadow);">🔥</div>
-        <div style="flex: 1;">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h4 style="font-size: 16px; font-weight: 800; color: var(--duo-gray-900);">Na Sequência</h4>
-            <span style="font-size: 12px; font-weight: 800; color: var(--duo-orange-shadow);">NÍVEL 1</span>
-          </div>
-          <p style="font-size: 13px; font-weight: 600; color: var(--duo-gray-400);">Mantenha uma ofensiva de 3 dias consecutivos.</p>
-        </div>
+      <!-- Interactive Terms Table / List -->
+      <div id="statsTermsTableContainer" class="duo-terms-table">
+        <!-- Rendered dynamically -->
       </div>
 
-      <div class="duo-achievement-item">
-        <div class="duo-achievement-icon" style="background: var(--duo-blue-light); color: var(--duo-blue-shadow);">👑</div>
-        <div style="flex: 1;">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h4 style="font-size: 16px; font-weight: 800; color: var(--duo-gray-900);">Mestre do Presente</h4>
-            <span style="font-size: 12px; font-weight: 800; color: var(--duo-blue-shadow);">DESBLOQUEADO</span>
-          </div>
-          <p style="font-size: 13px; font-weight: 600; color: var(--duo-gray-400);">Complete as 5 lições da Unidade 2 do Present Simple.</p>
-        </div>
+      <!-- F. GERENCIAMENTO & BACKUP DE DADOS -->
+      <div style="margin: 32px 0 16px;">
+        <h3 style="font-size: 20px; font-weight: 900; color: var(--duo-gray-900); display: flex; align-items: center; gap: 8px;">
+          <span>💾</span> Gerenciamento & Backup de Dados
+        </h3>
+        <p style="font-size: 13px; font-weight: 700; color: var(--duo-gray-400); margin-top: 2px;">
+          Exporte seu histórico de SRS para salvar seu progresso ou transfira entre dispositivos
+        </p>
       </div>
 
-      <div class="duo-achievement-item">
-        <div class="duo-achievement-icon" style="background: var(--duo-green-light); color: var(--duo-green-text);">🎯</div>
-        <div style="flex: 1;">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h4 style="font-size: 16px; font-weight: 800; color: var(--duo-gray-900);">Na Mosca</h4>
-            <span style="font-size: 12px; font-weight: 800; color: var(--duo-green-text);">DESBLOQUEADO</span>
-          </div>
-          <p style="font-size: 13px; font-weight: 600; color: var(--duo-gray-400);">Conclua exercícios sem errar nenhuma questão.</p>
+      <div class="duo-widget" style="margin-bottom: 24px;">
+        <div class="duo-backup-actions-grid">
+          <button class="btn-duo btn-duo-secondary" onclick="handleExportBackup()" title="Baixar arquivo JSON com seu histórico">
+            <span>📥 Exportar Backup (JSON)</span>
+          </button>
+          <button class="btn-duo btn-duo-secondary" onclick="triggerImportBackup()" title="Carregar arquivo JSON de backup">
+            <span>📤 Restaurar Backup</span>
+          </button>
+          <button class="btn-duo btn-duo-danger" onclick="handleResetProgress()" title="Limpar dados do idioma ativo">
+            <span>🔄 Resetar Progresso</span>
+          </button>
         </div>
+        <input type="file" id="statsBackupFileInput" accept=".json" style="display: none;" onchange="handleFileImportBackup(event)">
       </div>
 
       <!-- Settings & Theme Card -->
@@ -1259,6 +1346,7 @@
       updateLanguageUI();
       renderPath();
       renderVocabView();
+      if (typeof renderStatsView === 'function') renderStatsView();
       closeCourseModal();
     }
     window.selectLanguage = selectLanguage;
@@ -1340,6 +1428,8 @@
           renderVocabView();
         } else if (tabName === 'path') {
           renderPath();
+        } else if (tabName === 'stats') {
+          if (typeof renderStatsView === 'function') renderStatsView();
         }
       }
 
@@ -1434,6 +1524,7 @@
         console.info('Vocabulary JSON loaded via fallback/embedded cache.');
       }
       renderVocabView();
+      if (typeof renderStatsView === 'function') renderStatsView();
     }
 
     // SRS Date Helpers
@@ -1972,6 +2063,379 @@
       if (window.duoAudio) duoAudio.speak(currentDetailModalItem.example, lang);
     }
     window.speakDetailModalExample = speakDetailModalExample;
+
+    /* ============================================================
+     * LEXICAL RETENTION & EBBINGHAUS DASHBOARD CONTROLLER (STATS)
+     * ============================================================ */
+    let activeStatsTermsFilter = 'all'; // 'all' | 'mastered' | 'learning' | 'critical'
+    let activeStatsTermsSearch = '';
+    let statsTermsSearchDebounceTimer = null;
+
+    function renderStatsView() {
+      const lang = currentLanguage || 'en';
+      const list = (window.VOCABULARY_DATA && window.VOCABULARY_DATA[lang]) || [];
+      const summary = (window.LinguoSRS && window.LinguoSRS.getSRSSummary) 
+        ? window.LinguoSRS.getSRSSummary(lang, list) 
+        : { total: list.length, mastered: 0, learning: 0, critical: 0, due: list.length, retentionPct: 0, cefrLevel: 'NÍVEL A1 INICIANTE', boxes: { box1: list.length, box2: 0, box3: 0, box4Plus: 0 } };
+
+      // 1. Hero Metrics
+      const totalWordsEl = document.getElementById('statsTotalWordsCount');
+      const masteredWordsEl = document.getElementById('statsMasteredWordsCount');
+      const dueWordsEl = document.getElementById('statsDueWordsCount');
+      const retentionPctEl = document.getElementById('statsGlobalRetentionPct');
+      const retentionFillEl = document.getElementById('statsGlobalRetentionFill');
+      const globalCefrBadge = document.getElementById('statsGlobalCefrBadge');
+      const profileLevelBadge = document.getElementById('profileLevelBadge');
+
+      if (totalWordsEl) totalWordsEl.innerText = summary.total;
+      if (masteredWordsEl) masteredWordsEl.innerText = summary.mastered;
+      if (dueWordsEl) dueWordsEl.innerText = summary.due;
+      if (retentionPctEl) retentionPctEl.innerText = summary.retentionPct + '%';
+      if (retentionFillEl) retentionFillEl.style.width = summary.retentionPct + '%';
+      if (globalCefrBadge) globalCefrBadge.innerText = summary.cefrLevel;
+      if (profileLevelBadge) profileLevelBadge.innerText = summary.cefrLevel;
+
+      // 2. Leitner Boxes
+      const b1El = document.getElementById('leitnerCountBox1');
+      const b2El = document.getElementById('leitnerCountBox2');
+      const b3El = document.getElementById('leitnerCountBox3');
+      const b4El = document.getElementById('leitnerCountBox4');
+
+      if (b1El) b1El.innerText = summary.boxes.box1;
+      if (b2El) b2El.innerText = summary.boxes.box2;
+      if (b3El) b3El.innerText = summary.boxes.box3;
+      if (b4El) b4El.innerText = summary.boxes.box4Plus;
+
+      // 3. Critical Words Alert Banner
+      const criticalBanner = document.getElementById('statsCriticalBanner');
+      const criticalTitle = document.getElementById('statsCriticalTitle');
+      const criticalWords = (window.LinguoSRS && window.LinguoSRS.getCriticalWords)
+        ? window.LinguoSRS.getCriticalWords(lang, list)
+        : [];
+
+      if (criticalBanner && criticalTitle) {
+        if (criticalWords.length > 0) {
+          criticalTitle.innerText = `Existem ${criticalWords.length} palavras com taxa de erro elevada`;
+          criticalBanner.style.display = 'block';
+        } else {
+          criticalBanner.style.display = 'none';
+        }
+      }
+
+      // 4. Progress by Thematic Collection
+      renderStatsCollectionsList();
+
+      // 5. Interactive Terms Table
+      renderStatsTermsTable();
+    }
+    window.renderStatsView = renderStatsView;
+
+    function renderStatsCollectionsList() {
+      const container = document.getElementById('statsCollectionsListContainer');
+      if (!container) return;
+
+      const lang = currentLanguage || 'en';
+      const list = (window.VOCABULARY_DATA && window.VOCABULARY_DATA[lang]) || [];
+      const store = (window.LinguoSRS && window.LinguoSRS.getSRSStore) ? window.LinguoSRS.getSRSStore(lang) : {};
+
+      if (list.length === 0) {
+        container.innerHTML = `<div style="text-align: center; color: var(--duo-gray-400); padding: 20px;">Nenhuma coleção disponível.</div>`;
+        return;
+      }
+
+      // Group terms by category
+      const catMap = {};
+      list.forEach(item => {
+        const cat = item.category || 'Geral';
+        if (!catMap[cat]) catMap[cat] = [];
+        catMap[cat].push(item);
+      });
+
+      const categories = Object.keys(catMap);
+      container.innerHTML = categories.map(cat => {
+        const items = catMap[cat];
+        const icon = CATEGORY_ICON_MAP[cat] || '📖';
+        const total = items.length;
+        let mastered = 0;
+
+        items.forEach(it => {
+          const srs = store[it.id];
+          if (srs && (srs.status === 'mastered' || (srs.box && srs.box >= 3))) {
+            mastered++;
+          }
+        });
+
+        const pct = total > 0 ? Math.round((mastered / total) * 100) : 0;
+        const isCompleted = (mastered === total && total > 0);
+
+        return `
+          <div class="duo-stats-collection-row">
+            <div class="cat-icon">${icon}</div>
+            <div class="cat-info">
+              <div class="cat-title-row">
+                <span class="cat-name">${cat}</span>
+                <span class="cat-stats-text" style="${isCompleted ? 'color: var(--duo-green-text); font-weight: 900;' : ''}">
+                  ${mastered}/${total} dominadas • ${pct}%
+                </span>
+              </div>
+              <div class="duo-progress-track" style="height: 8px;">
+                <div class="duo-progress-fill" style="width: ${pct}%; background: ${isCompleted ? 'var(--duo-yellow)' : 'var(--duo-green)'};"></div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function practiceCriticalWords() {
+      if (window.duoAudio) {
+        duoAudio.stopAllSpeech();
+        duoAudio.playTap();
+      }
+      const lang = currentLanguage || 'en';
+      window.location.href = 'practice/deck.html?lang=' + lang + '&mode=critical';
+    }
+    window.practiceCriticalWords = practiceCriticalWords;
+
+    function handleStatsTermsSearch(val) {
+      activeStatsTermsSearch = (val || '').toLowerCase().trim();
+      const clearBtn = document.getElementById('statsTermsSearchClear');
+      if (clearBtn) {
+        if (activeStatsTermsSearch.length > 0) clearBtn.classList.add('visible');
+        else clearBtn.classList.remove('visible');
+      }
+      if (statsTermsSearchDebounceTimer) clearTimeout(statsTermsSearchDebounceTimer);
+      statsTermsSearchDebounceTimer = setTimeout(() => {
+        renderStatsTermsTable();
+      }, 150);
+    }
+    window.handleStatsTermsSearch = handleStatsTermsSearch;
+
+    function clearStatsTermsSearch() {
+      if (statsTermsSearchDebounceTimer) clearTimeout(statsTermsSearchDebounceTimer);
+      if (window.duoAudio) duoAudio.playTap();
+      const input = document.getElementById('statsTermsSearchInput');
+      if (input) input.value = '';
+      activeStatsTermsSearch = '';
+      const clearBtn = document.getElementById('statsTermsSearchClear');
+      if (clearBtn) clearBtn.classList.remove('visible');
+      renderStatsTermsTable();
+    }
+    window.clearStatsTermsSearch = clearStatsTermsSearch;
+
+    function setStatsTermsFilter(filter) {
+      if (window.duoAudio) duoAudio.playTap();
+      activeStatsTermsFilter = filter;
+
+      document.querySelectorAll('.stats-filter-pill').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById('statsFilterPill-' + filter);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      renderStatsTermsTable();
+    }
+    window.setStatsTermsFilter = setStatsTermsFilter;
+
+    function formatReviewDateShort(dateStr) {
+      if (!dateStr) return 'Hoje';
+      const parts = dateStr.split('-');
+      if (parts.length === 3) {
+        const day = parts[2];
+        const monthNum = parseInt(parts[1], 10);
+        const months = ['', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+        return `${day}/${months[monthNum] || parts[1]}`;
+      }
+      return dateStr;
+    }
+
+    function renderStatsTermsTable() {
+      const container = document.getElementById('statsTermsTableContainer');
+      if (!container) return;
+
+      const lang = currentLanguage || 'en';
+      const list = (window.VOCABULARY_DATA && window.VOCABULARY_DATA[lang]) || [];
+      const store = (window.LinguoSRS && window.LinguoSRS.getSRSStore) ? window.LinguoSRS.getSRSStore(lang) : {};
+
+      let masteredCount = 0;
+      let learningCount = 0;
+      let criticalCount = 0;
+
+      list.forEach(item => {
+        const srs = store[item.id];
+        if (srs) {
+          if (srs.status === 'critical' || (srs.incorrectCount && srs.incorrectCount >= 2)) {
+            criticalCount++;
+          } else if (srs.status === 'mastered' || (srs.box && srs.box >= 3)) {
+            masteredCount++;
+          } else if (srs.timesReviewed > 0) {
+            learningCount++;
+          }
+        }
+      });
+
+      // Update Pill Count Badges
+      const countAll = document.getElementById('statsFilterCount-all');
+      const countMastered = document.getElementById('statsFilterCount-mastered');
+      const countLearning = document.getElementById('statsFilterCount-learning');
+      const countCritical = document.getElementById('statsFilterCount-critical');
+
+      if (countAll) countAll.innerText = list.length;
+      if (countMastered) countMastered.innerText = masteredCount;
+      if (countLearning) countLearning.innerText = learningCount;
+      if (countCritical) countCritical.innerText = criticalCount;
+
+      // Filter list
+      let filtered = list.filter(item => {
+        const srs = store[item.id];
+        
+        // Filter by Pill
+        if (activeStatsTermsFilter === 'mastered') {
+          if (!srs || (srs.status !== 'mastered' && (!srs.box || srs.box < 3))) return false;
+        } else if (activeStatsTermsFilter === 'learning') {
+          if (!srs || srs.timesReviewed === 0 || srs.status === 'mastered' || srs.status === 'critical' || (srs.box && srs.box >= 3)) return false;
+        } else if (activeStatsTermsFilter === 'critical') {
+          if (!srs || (srs.status !== 'critical' && (!srs.incorrectCount || srs.incorrectCount < 2))) return false;
+        }
+
+        // Filter by Search
+        if (activeStatsTermsSearch.length > 0) {
+          const matchTerm = (item.term || '').toLowerCase().includes(activeStatsTermsSearch);
+          const matchTrans = (item.translation || '').toLowerCase().includes(activeStatsTermsSearch);
+          const matchIpa = (item.ipa || '').toLowerCase().includes(activeStatsTermsSearch);
+          const matchCat = (item.category || '').toLowerCase().includes(activeStatsTermsSearch);
+          if (!matchTerm && !matchTrans && !matchIpa && !matchCat) return false;
+        }
+
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 36px 20px; background: var(--duo-gray-100); border: 2px dashed var(--duo-gray-300); border-radius: var(--duo-radius-lg);">
+            <div style="font-size: 36px; margin-bottom: 8px;">🔍</div>
+            <h4 style="font-size: 16px; font-weight: 800; color: var(--duo-gray-900);">Nenhuma palavra encontrada</h4>
+            <p style="font-size: 13px; font-weight: 600; color: var(--duo-gray-400); margin-top: 4px;">
+              Tente ajustar os termos de busca ou mudar a categoria selecionada.
+            </p>
+          </div>
+        `;
+        return;
+      }
+
+      const langCode = (lang === 'en') ? 'en-US' : 'es-ES';
+
+      container.innerHTML = filtered.map(item => {
+        const srs = store[item.id];
+        let statusBadgeHtml = '';
+
+        if (!srs || !srs.lastReviewed) {
+          statusBadgeHtml = `<span class="duo-term-badge status-new">⚪ Caixa 1 • Nova</span>`;
+        } else if (srs.status === 'critical' || (srs.incorrectCount && srs.incorrectCount >= 2)) {
+          statusBadgeHtml = `<span class="duo-term-badge status-critical">🔴 Caixa 1 • ${srs.incorrectCount} erros</span>`;
+        } else if (srs.status === 'mastered' || (srs.box && srs.box >= 3)) {
+          statusBadgeHtml = `<span class="duo-term-badge status-mastered">🟢 Caixa ${srs.box || 3} • ${srs.correctStreak || 3} acertos • Próx: ${formatReviewDateShort(srs.nextReview)}</span>`;
+        } else {
+          statusBadgeHtml = `<span class="duo-term-badge status-learning">🟡 Caixa ${srs.box || 1} • Próx: ${formatReviewDateShort(srs.nextReview)}</span>`;
+        }
+
+        const safeAudioText = (item.audioText || item.term).replace(/'/g, "\\'");
+
+        return `
+          <div class="duo-term-row">
+            <div class="duo-term-main">
+              <button class="btn-speaker-mini" onclick="speakTermAudio('${safeAudioText}', '${langCode}')" title="Ouvir pronúncia">
+                🔊
+              </button>
+              <div style="flex: 1; min-width: 0;">
+                <div style="display: flex; align-items: baseline; flex-wrap: wrap;">
+                  <span class="duo-term-word">${item.icon ? item.icon + ' ' : ''}${item.term}</span>
+                  ${item.ipa ? `<span class="duo-term-ipa">${item.ipa}</span>` : ''}
+                </div>
+                <div class="duo-term-trans">
+                  ${item.translation} <span style="font-size: 11px; font-weight: 700; color: var(--duo-gray-400);">• ${item.pos || item.category}</span>
+                </div>
+              </div>
+            </div>
+            <div class="duo-term-meta">
+              ${statusBadgeHtml}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function speakTermAudio(text, langCode) {
+      if (window.duoAudio) {
+        duoAudio.speak(text, langCode);
+      }
+    }
+    window.speakTermAudio = speakTermAudio;
+
+    // Data Management & Backup Controllers
+    function handleExportBackup() {
+      if (window.duoAudio) duoAudio.playTap();
+      const lang = currentLanguage || 'en';
+      if (window.LinguoSRS && window.LinguoSRS.exportSRSBackup) {
+        window.LinguoSRS.exportSRSBackup(lang);
+      }
+    }
+    window.handleExportBackup = handleExportBackup;
+
+    function triggerImportBackup() {
+      if (window.duoAudio) duoAudio.playTap();
+      const fileInput = document.getElementById('statsBackupFileInput');
+      if (fileInput) fileInput.click();
+    }
+    window.triggerImportBackup = triggerImportBackup;
+
+    function handleFileImportBackup(event) {
+      const file = event && event.target && event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const content = e.target.result;
+        const lang = currentLanguage || 'en';
+        if (window.LinguoSRS && window.LinguoSRS.importSRSBackup) {
+          const result = window.LinguoSRS.importSRSBackup(lang, content);
+          if (result.success) {
+            if (window.duoAudio) duoAudio.playSuccess();
+            alert(`Backup restaurado com sucesso! ${result.count} termos carregados.`);
+            renderStatsView();
+            renderVocabView();
+          } else {
+            alert('Falha ao restaurar backup: ' + (result.error || 'Arquivo inválido'));
+          }
+        }
+      };
+      reader.readAsText(file);
+      // Reset input
+      if (event.target) event.target.value = '';
+    }
+    window.handleFileImportBackup = handleFileImportBackup;
+
+    function handleResetProgress() {
+      if (window.duoAudio) duoAudio.playTap();
+      const lang = currentLanguage || 'en';
+      const langName = (lang === 'es') ? 'Espanhol' : 'Inglês';
+
+      const confirmed = confirm(`Tem certeza que deseja resetar todo o progresso de SRS em ${langName}?\nEsta ação não poderá ser desfeita.`);
+      if (confirmed) {
+        if (window.LinguoSRS && window.LinguoSRS.resetSRSProgress) {
+          window.LinguoSRS.resetSRSProgress(lang);
+        }
+        if (window.duoAudio) duoAudio.playTap();
+        alert(`O progresso de ${langName} foi resetado com sucesso.`);
+        renderStatsView();
+        renderVocabView();
+      }
+    }
+    window.handleResetProgress = handleResetProgress;
+
+    // Listen for SRS update events from other pages / modals
+    window.addEventListener('linguo_srs_updated', () => {
+      renderVocabView();
+      renderStatsView();
+    });
 
     /* ============================================================
      * PRACTICE MODES ROUTERS (DEDICATED PAGES)

@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../resources/duo-theme.css">
   <script src="../resources/vocab-data.js"></script>
+  <script src="../resources/vocab-srs.js"></script>
   <script src="../resources/duo-sfx.js"></script>
   <style>
     body {
@@ -273,6 +274,10 @@
         first.tile.matched = true;
         second.tile.matched = true;
 
+        if (window.LinguoSRS && window.LinguoSRS.recordWordReview) {
+          window.LinguoSRS.recordWordReview(first.tile.pairId, true, "match_madness", currentLanguage);
+        }
+
         matchPairsRemaining--;
         const badge = document.getElementById("matchPairsBadge");
         if (badge) badge.innerText = `${matchPairsRemaining} / 5`;
@@ -292,6 +297,11 @@
         first.el.classList.add("wrong");
         second.el.classList.add("wrong");
         matchIsProcessing = true;
+
+        if (window.LinguoSRS && window.LinguoSRS.recordWordReview) {
+          window.LinguoSRS.recordWordReview(first.tile.pairId, false, "match_madness", currentLanguage);
+          window.LinguoSRS.recordWordReview(second.tile.pairId, false, "match_madness", currentLanguage);
+        }
 
         setTimeout(() => {
           first.el.classList.remove("selected", "wrong");

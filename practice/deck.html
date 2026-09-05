@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../resources/duo-theme.css">
   <script src="../resources/vocab-data.js"></script>
+  <script src="../resources/vocab-srs.js"></script>
   <script src="../resources/duo-sfx.js"></script>
   <style>
     body {
@@ -340,7 +341,10 @@
       }
 
       let filtered = fullList;
-      if (activeCategory) {
+      if (activeMode === "critical") {
+        const criticals = (window.LinguoSRS && window.LinguoSRS.getCriticalWords) ? window.LinguoSRS.getCriticalWords(currentLanguage, fullList) : [];
+        filtered = criticals.length > 0 ? criticals : fullList;
+      } else if (activeCategory) {
         filtered = fullList.filter(item => item.category === activeCategory);
       } else if (activeTranslateDeckType !== "all") {
         filtered = fullList.filter(item => item.type === activeTranslateDeckType);
@@ -351,7 +355,9 @@
       // Update exercise title
       const titleEl = document.getElementById("translateDeckTitle");
       if (titleEl) {
-        if (activeMode === "due_all") {
+        if (activeMode === "critical") {
+          titleEl.innerText = "🎯 Praticar Palavras Críticas";
+        } else if (activeMode === "due_all") {
           titleEl.innerText = "Revisão Diária Inteligente";
         } else if (activeCategory) {
           titleEl.innerText = "Traduza: " + activeCategory;
@@ -362,7 +368,7 @@
         }
       }
 
-      const store = getSRSStore(currentLanguage);
+      const store = (window.LinguoSRS && window.LinguoSRS.getSRSStore) ? window.LinguoSRS.getSRSStore(currentLanguage) : getSRSStore(currentLanguage);
       const today = getTodayString();
 
       const due = [];
@@ -381,7 +387,9 @@
       others.sort(() => 0.5 - Math.random());
 
       let selected = [];
-      if (activeMode === "due_all") {
+      if (activeMode === "critical") {
+        selected = filtered.slice(0, TRANSLATE_DECK_SIZE);
+      } else if (activeMode === "due_all") {
         selected = due.length > 0 ? due : [...unreviewed, ...others].slice(0, TRANSLATE_DECK_SIZE);
       } else {
         selected = [...due, ...unreviewed, ...others].slice(0, TRANSLATE_DECK_SIZE);
@@ -651,6 +659,11 @@
       currentDeckFeedbackTarget = card.audioText || card.term;
       const langCode = (currentLanguage === "es") ? "es-ES" : "en-US";
 
+      // Record SRS review success
+      if (window.LinguoSRS && window.LinguoSRS.recordWordReview) {
+        window.LinguoSRS.recordWordReview(card.id, true, translateDeckMode === "voice" ? "voice_deck" : "typed_deck", currentLanguage);
+      }
+
       if (window.duoAudio) {
         duoAudio.playSuccess();
         setTimeout(() => duoAudio.speak(card.term, langCode), 200);
@@ -690,6 +703,11 @@
       const card = translateDeck[0];
       currentDeckFeedbackTarget = card.audioText || card.term;
       const langCode = (currentLanguage === "es") ? "es-ES" : "en-US";
+
+      // Record SRS review mistake
+      if (window.LinguoSRS && window.LinguoSRS.recordWordReview) {
+        window.LinguoSRS.recordWordReview(card.id, false, translateDeckMode === "voice" ? "voice_deck" : "typed_deck", currentLanguage);
+      }
 
       if (window.duoAudio) {
         duoAudio.playError();
