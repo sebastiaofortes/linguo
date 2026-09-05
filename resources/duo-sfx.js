@@ -5,6 +5,7 @@ class DuoAudioEngine {
   constructor() {
     this.ctx = null;
     this.voiceCache = {};
+    this.currentUtterance = null;
     if (typeof window !== 'undefined' && window.speechSynthesis) {
       // Warm up voices when ready (especially on Chrome)
       window.speechSynthesis.onvoiceschanged = () => {
@@ -241,12 +242,25 @@ class DuoAudioEngine {
   }
 
   /**
+   * Safely cancel any active or queued speech synthesis
+   */
+  stopAllSpeech() {
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      try {
+        window.speechSynthesis.cancel();
+      } catch (e) {}
+    }
+    this.currentUtterance = null;
+  }
+
+  /**
    * Pronounce text using native Browser SpeechSynthesis with studio clarity
    * Supports both English (en-US) and Spanish (es-ES)
+   * Hardened against Chromium / WebKit Garbage Collection dropping onend/onerror
    */
   speak(text, langOrRate = 'en-US', rateOpt = 0.92) {
-    if (!window.speechSynthesis) return;
-    window.speechSynthesis.cancel(); // Stop prior speech
+    if (typeof window === 'undefined' || !window.speechSynthesis) return;
+    this.stopAllSpeech(); // Stop prior speech safely
 
     let lang = 'en-US';
     let rate = 0.92;
@@ -268,7 +282,27 @@ class DuoAudioEngine {
       utterance.voice = bestVoice;
     }
 
-    window.speechSynthesis.speak(utterance);
+    // Retain reference on instance to prevent Chromium/WebKit Garbage Collection bug
+    this.currentUtterance = utterance;
+
+    utterance.onend = () => {
+      if (this.currentUtterance === utterance) {
+        this.currentUtterance = null;
+      }
+    };
+
+    utterance.onerror = (e) => {
+      if (this.currentUtterance === utterance) {
+        this.currentUtterance = null;
+      }
+    };
+
+    try {
+      window.speechSynthesis.speak(utterance);
+    } catch (err) {
+      console.warn('SpeechSynthesis error:', err);
+      this.currentUtterance = null;
+    }
   }
 }
 

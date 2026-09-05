@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Linguo - Match Madness (Combine os Pares)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../resources/duo-theme.css">
+  <script src="../resources/vocab-data.js"></script>
+  <script src="../resources/duo-sfx.js"></script>
+  <style>
+    body {
+      background-color: var(--duo-bg, #f7f7f7);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .practice-container {
+      width: 100%;
+      max-width: 580px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 16px 20px 24px;
+      box-sizing: border-box;
+      justify-content: space-between;
+    }
+    @media (min-width: 640px) {
+      .practice-container {
+        min-height: auto;
+        background: var(--duo-card-bg, #ffffff);
+        border: 2px solid var(--duo-gray-200, #e5e5e5);
+        border-radius: var(--duo-radius-xl, 24px);
+        box-shadow: 0 12px 32px rgba(0,0,0,0.06);
+        padding: 24px 28px;
+        margin: 20px;
+      }
+    }
+    .duo-match-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .btn-close {
+      background: none;
+      border: none;
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--duo-gray-400, #afafaf);
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.15s ease;
+    }
+    .btn-close:hover {
+      background: var(--duo-gray-100, #f0f0f0);
+      color: var(--duo-gray-800, #333333);
+    }
+  </style>
+</head>
+<body>
+  <div class="practice-container">
+    <!-- Header -->
+    <div class="duo-match-header">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 26px;">⚡</span>
+        <div>
+          <h2 style="font-size: 19px; font-weight: 900; color: var(--duo-gray-900); margin: 0;">Combine os Pares</h2>
+          <div style="font-size: 13px; font-weight: 700; color: var(--duo-gray-400);">
+            Toque no termo e na sua respectiva tradução
+          </div>
+        </div>
+      </div>
+      <button class="btn-close" onclick="exitPractice()" title="Voltar ao Baú">✕</button>
+    </div>
+
+    <!-- Match Game Stage -->
+    <div id="matchGameStage" style="flex: 1; display: flex; flex-direction: column;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <span style="font-size: 14px; font-weight: 800; color: var(--duo-gray-700);">Pares Restantes:</span>
+        <span class="duo-badge" id="matchPairsBadge" style="background: var(--duo-blue); font-size: 13px;">5 / 5</span>
+      </div>
+
+      <div class="duo-match-board" id="matchBoardContainer">
+        <!-- Tiles rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- Match Victory Stage -->
+    <div id="matchVictoryStage" style="display: none; text-align: center; padding: 24px 10px;">
+      <div style="font-size: 64px; margin-bottom: 12px; animation: duoMatchPop 0.5s ease;">🏆</div>
+      <h2 style="font-size: 24px; font-weight: 900; color: var(--duo-gray-900); margin-bottom: 6px;">Sensacional!</h2>
+      <p style="font-size: 15px; font-weight: 700; color: var(--duo-gray-400); margin-bottom: 20px;">
+        Você combinou todos os pares com agilidade e precisão!
+      </p>
+
+      <div style="display: flex; justify-content: center; gap: 16px; margin-bottom: 24px;">
+        <div class="duo-vocab-metric-card" style="flex: 0 1 160px;">
+          <div class="duo-vocab-metric-icon">⚡</div>
+          <div>
+            <div class="duo-vocab-metric-val" style="color: var(--duo-orange);">+25 XP</div>
+            <div class="duo-vocab-metric-lbl">Pontos</div>
+          </div>
+        </div>
+        <div class="duo-vocab-metric-card" style="flex: 0 1 160px;">
+          <div class="duo-vocab-metric-icon">💎</div>
+          <div>
+            <div class="duo-vocab-metric-val" style="color: var(--duo-blue);">+5</div>
+            <div class="duo-vocab-metric-lbl">Gemas</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 12px;">
+        <button class="btn-duo btn-duo-secondary" style="flex: 1; justify-content: center;" onclick="startMatchMadnessRound()">
+          <span>JOGAR NOVAMENTE 🔄</span>
+        </button>
+        <button class="btn-duo btn-duo-green" style="flex: 1; justify-content: center;" onclick="exitPractice()">
+          <span>CONCLUIR ➔</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Theme setup
+    const savedTheme = localStorage.getItem("linguo-theme") || "light";
+    if (savedTheme === "dark") {
+      document.documentElement.setAttribute("data-theme", "dark");
+      document.body.classList.add("dark-mode");
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentLanguage = urlParams.get("lang") || localStorage.getItem("linguo-current-language") || "en";
+
+    let currentMatchTiles = [];
+    let matchPairsRemaining = 5;
+    let matchSelectedTile = null;
+    let matchIsProcessing = false;
+
+    function exitPractice() {
+      if (window.duoAudio) duoAudio.stopAllSpeech();
+      window.location.href = "../index.html#vocab";
+    }
+
+    function addRewards(xp, gems) {
+      let currentXp = parseInt(localStorage.getItem("linguo-user-xp") || "0", 10);
+      let currentGems = parseInt(localStorage.getItem("linguo-user-gems") || "0", 10);
+      localStorage.setItem("linguo-user-xp", currentXp + xp);
+      localStorage.setItem("linguo-user-gems", currentGems + gems);
+    }
+
+    function startMatchMadnessRound() {
+      const fullList = [...((window.VOCABULARY_DATA && window.VOCABULARY_DATA[currentLanguage]) || [])];
+      if (fullList.length < 5) {
+        alert("São necessários pelo menos 5 termos cadastrados para jogar o Combine os Pares.");
+        exitPractice();
+        return;
+      }
+
+      const shuffled = [...fullList].sort(() => 0.5 - Math.random());
+      const selected = shuffled.slice(0, 5);
+
+      const tiles = [];
+      selected.forEach(item => {
+        tiles.push({
+          pairId: item.id,
+          type: "term",
+          text: (item.icon ? item.icon + " " : "") + item.term,
+          audioText: item.audioText || item.term,
+          matched: false
+        });
+        tiles.push({
+          pairId: item.id,
+          type: "trans",
+          text: item.translation,
+          matched: false
+        });
+      });
+
+      tiles.sort(() => 0.5 - Math.random());
+      currentMatchTiles = tiles;
+      matchPairsRemaining = 5;
+      matchSelectedTile = null;
+      matchIsProcessing = false;
+
+      const badge = document.getElementById("matchPairsBadge");
+      if (badge) badge.innerText = "5 / 5";
+
+      document.getElementById("matchGameStage").style.display = "block";
+      document.getElementById("matchVictoryStage").style.display = "none";
+
+      renderMatchBoard();
+    }
+
+    function renderMatchBoard() {
+      const board = document.getElementById("matchBoardContainer");
+      if (!board) return;
+
+      board.innerHTML = currentMatchTiles.map((tile, idx) => `
+        <button class="duo-match-tile ${tile.matched ? "matched" : ""}" id="matchTile-${idx}" onclick="handleMatchTileClick(${idx})">
+          ${tile.text}
+        </button>
+      `).join("");
+    }
+
+    function handleMatchTileClick(idx) {
+      if (matchIsProcessing) return;
+      const tile = currentMatchTiles[idx];
+      if (!tile || tile.matched) return;
+
+      const tileEl = document.getElementById("matchTile-" + idx);
+      if (!tileEl) return;
+
+      const lang = (currentLanguage === "en") ? "en-US" : "es-ES";
+
+      if (!matchSelectedTile) {
+        matchSelectedTile = { idx, tile, el: tileEl };
+        tileEl.classList.add("selected");
+        if (tile.type === "term") {
+          if (window.duoAudio) duoAudio.speak(tile.audioText, lang);
+        } else {
+          if (window.duoAudio) duoAudio.playTap();
+        }
+        return;
+      }
+
+      if (matchSelectedTile.idx === idx) {
+        tileEl.classList.remove("selected");
+        matchSelectedTile = null;
+        if (window.duoAudio) duoAudio.playTap();
+        return;
+      }
+
+      if (matchSelectedTile.tile.type === tile.type) {
+        matchSelectedTile.el.classList.remove("selected");
+        matchSelectedTile = { idx, tile, el: tileEl };
+        tileEl.classList.add("selected");
+        if (tile.type === "term") {
+          if (window.duoAudio) duoAudio.speak(tile.audioText, lang);
+        } else {
+          if (window.duoAudio) duoAudio.playTap();
+        }
+        return;
+      }
+
+      const first = matchSelectedTile;
+      const second = { idx, tile, el: tileEl };
+
+      if (first.tile.pairId === second.tile.pairId) {
+        if (window.duoAudio) duoAudio.playSuccess();
+        first.el.classList.remove("selected");
+        first.el.classList.add("matched");
+        second.el.classList.add("matched");
+        first.tile.matched = true;
+        second.tile.matched = true;
+
+        matchPairsRemaining--;
+        const badge = document.getElementById("matchPairsBadge");
+        if (badge) badge.innerText = `${matchPairsRemaining} / 5`;
+
+        matchSelectedTile = null;
+
+        if (matchPairsRemaining === 0) {
+          setTimeout(() => {
+            document.getElementById("matchGameStage").style.display = "none";
+            document.getElementById("matchVictoryStage").style.display = "block";
+            addRewards(25, 5);
+            if (window.duoAudio) duoAudio.playSuccess();
+          }, 450);
+        }
+      } else {
+        if (window.duoAudio) duoAudio.playError();
+        first.el.classList.add("wrong");
+        second.el.classList.add("wrong");
+        matchIsProcessing = true;
+
+        setTimeout(() => {
+          first.el.classList.remove("selected", "wrong");
+          second.el.classList.remove("wrong");
+          matchSelectedTile = null;
+          matchIsProcessing = false;
+        }, 450);
+      }
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      startMatchMadnessRound();
+    });
+  </script>
+</body>
+</html>

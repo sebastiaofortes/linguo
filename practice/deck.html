@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Linguo - Traduza as Palavras (Deck 3D)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../resources/duo-theme.css">
+  <script src="../resources/vocab-data.js"></script>
+  <script src="../resources/duo-sfx.js"></script>
+  <style>
+    body {
+      background-color: var(--duo-bg, #f7f7f7);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .practice-container {
+      width: 100%;
+      max-width: 580px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 16px 20px 24px;
+      box-sizing: border-box;
+      justify-content: space-between;
+    }
+    @media (min-width: 640px) {
+      .practice-container {
+        min-height: auto;
+        background: var(--duo-card-bg, #ffffff);
+        border: 2px solid var(--duo-gray-200, #e5e5e5);
+        border-radius: var(--duo-radius-xl, 24px);
+        box-shadow: 0 12px 32px rgba(0,0,0,0.06);
+        padding: 24px 28px;
+        margin: 20px;
+      }
+    }
+    .duo-deck-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .btn-close {
+      background: none;
+      border: none;
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--duo-gray-400, #afafaf);
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.15s ease;
+    }
+    .btn-close:hover {
+      background: var(--duo-gray-100, #f0f0f0);
+      color: var(--duo-gray-800, #333333);
+    }
+  </style>
+</head>
+<body>
+  <div class="practice-container">
+    <!-- Topbar -->
+    <div class="duo-deck-header">
+      <button class="btn-close" onclick="exitPractice()" title="Voltar ao Baú">✕</button>
+      <div class="duo-progress-track" style="flex: 1; height: 12px; margin: 0 14px;">
+        <div class="duo-progress-fill" id="translateDeckProgressFill" style="width: 0%;"></div>
+      </div>
+      <div class="duo-deck-streak" id="translateDeckStreakBadge" title="Sequência de acertos">
+        <span>🔥</span> <span id="translateDeckStreakCount">0</span>
+      </div>
+    </div>
+
+    <!-- Playing Stage -->
+    <div id="translateDeckStage" style="flex: 1; display: flex; flex-direction: column;">
+      <!-- Exercise Title -->
+      <div style="text-align: center; margin-bottom: 12px;">
+        <h2 style="font-size: 20px; font-weight: 900; color: var(--duo-gray-900); margin: 0;" id="translateDeckTitle">Traduza as palavras</h2>
+      </div>
+
+      <!-- 3D Card Stack Scene -->
+      <div class="duo-card-stack-scene" id="translateDeckStackScene">
+        <!-- Dynamically populated cards -->
+      </div>
+
+      <!-- Feedback Banner -->
+      <div id="translateDeckFeedback" class="duo-deck-feedback" style="display: none;">
+        <div id="translateDeckFeedbackIcon" class="duo-deck-feedback-icon">✓</div>
+        <div style="flex: 1;">
+          <div id="translateDeckFeedbackTitle" class="duo-deck-feedback-title">Excelente!</div>
+          <div id="translateDeckFeedbackMsg" class="duo-deck-feedback-msg">A resposta é "apple"</div>
+        </div>
+        <button class="btn-speaker-mini" id="translateDeckFeedbackAudioBtn" onclick="speakCurrentDeckCardTarget()" title="Ouvir pronúncia correta">🔊</button>
+      </div>
+
+      <!-- Controls: Voice Mode -->
+      <div id="translateDeckVoiceControls" class="duo-deck-controls-block">
+        <div class="duo-deck-actions-row" style="justify-content: center; gap: 12px;">
+          <button class="btn-duo btn-duo-blue btn-duo-mic" id="translateDeckMicBtn" onclick="toggleDeckSpeechRecording()" title="Falar em voz alta" aria-label="Falar em voz alta">
+            <span id="translateDeckMicIcon">🎙️</span>
+          </button>
+          <button class="btn-duo btn-duo-secondary btn-duo-skip" id="translateDeckSkipBtn" onclick="skipCurrentDeckCard()" title="Deixar para o final da pilha" aria-label="Pular">
+            <span>⏩</span>
+          </button>
+        </div>
+        <div class="duo-speech-status" id="translateDeckSpeechStatus"></div>
+      </div>
+
+      <!-- Controls: Typing Mode -->
+      <div id="translateDeckTypeControls" class="duo-deck-controls-block" style="display: none;">
+        <div style="position: relative; width: 100%;">
+          <input type="text" id="translateDeckTextInput" class="duo-deck-input" placeholder="Digite a tradução aqui..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" onkeydown="handleDeckInputKeydown(event)">
+        </div>
+        <div class="duo-deck-actions-row" style="margin-top: 8px;">
+          <button class="btn-duo btn-duo-green" style="flex: 2;" id="translateDeckCheckBtn" onclick="checkDeckTypedAnswer()">
+            <span>VERIFICAR (Enter)</span>
+          </button>
+          <button class="btn-duo btn-duo-secondary" style="flex: 1;" onclick="skipCurrentDeckCard()" title="Deixar para o final da pilha">
+            <span>⏩ Pular</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mode Toggle Footer -->
+      <div class="duo-deck-mode-toggle-wrap">
+        <button class="duo-deck-mode-toggle-btn" id="translateDeckModeToggleBtn" onclick="toggleTranslateDeckMode()">
+          ⌨️ Prefiro digitar no teclado
+        </button>
+      </div>
+    </div>
+
+    <!-- Completion Stage -->
+    <div id="translateDeckCompletedStage" class="duo-deck-completed-stage" style="display: none; padding: 20px 10px; text-align: center;">
+      <div class="duo-deck-completed-icon" style="font-size: 64px; margin-bottom: 12px; animation: duoMatchPop 0.5s ease;">🎉</div>
+      <h2 class="duo-deck-completed-title" style="font-size: 24px; font-weight: 900; color: var(--duo-gray-900); margin-bottom: 6px;">Pilha Concluída!</h2>
+      <p class="duo-deck-completed-desc" style="font-size: 15px; font-weight: 700; color: var(--duo-gray-400); margin-bottom: 20px;">
+        Você traduziu todas as cartas da pilha e fortaleceu sua produção ativa!
+      </p>
+
+      <div class="duo-deck-completed-metrics" style="display: flex; justify-content: center; gap: 16px; margin-bottom: 24px;">
+        <div class="duo-vocab-metric-card" style="flex: 0 1 160px;">
+          <div class="duo-vocab-metric-icon">⚡</div>
+          <div>
+            <div class="duo-vocab-metric-val" style="color: var(--duo-orange);">+35 XP</div>
+            <div class="duo-vocab-metric-lbl">Pontos</div>
+          </div>
+        </div>
+        <div class="duo-vocab-metric-card" style="flex: 0 1 160px;">
+          <div class="duo-vocab-metric-icon">💎</div>
+          <div>
+            <div class="duo-vocab-metric-val" style="color: var(--duo-blue);">+10</div>
+            <div class="duo-vocab-metric-lbl">Gemas</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="duo-deck-completed-actions" style="display: flex; gap: 12px;">
+        <button class="btn-duo btn-duo-secondary" style="flex: 1; justify-content: center;" onclick="startTranslateDeckRound()">
+          <span>PRATICAR NOVAMENTE 🔄</span>
+        </button>
+        <button class="btn-duo btn-duo-green" style="flex: 1; justify-content: center;" onclick="exitPractice()">
+          <span>CONCLUIR ➔</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Theme setup
+    const savedTheme = localStorage.getItem("linguo-theme") || "light";
+    if (savedTheme === "dark") {
+      document.documentElement.setAttribute("data-theme", "dark");
+      document.body.classList.add("dark-mode");
+    }
+
+    // URL Params & State
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentLanguage = urlParams.get("lang") || localStorage.getItem("linguo-current-language") || "en";
+    let activeTranslateDeckType = urlParams.get("type") || "all";
+
+    const TRANSLATE_DECK_SIZE = 7;
+    let translateDeck = [];
+    let translateDeckTotal = 0;
+    let translateDeckCompleted = 0;
+    let translateDeckStreak = 0;
+    let translateDeckMode = "voice"; // "voice" | "typing"
+    let translateDeckIsProcessing = false;
+    let translateDeckFeedbackTimeout = null;
+    let translateDeckHintVisible = false;
+    let currentDeckFeedbackTarget = null;
+
+    function exitPractice() {
+      if (window.duoAudio) duoAudio.stopAllSpeech();
+      if (window.duoSpeech) duoSpeech.stopListening();
+      window.location.href = "../index.html#vocab";
+    }
+
+    function addRewards(xp, gems) {
+      let currentXp = parseInt(localStorage.getItem("linguo-user-xp") || "0", 10);
+      let currentGems = parseInt(localStorage.getItem("linguo-user-gems") || "0", 10);
+      localStorage.setItem("linguo-user-xp", currentXp + xp);
+      localStorage.setItem("linguo-user-gems", currentGems + gems);
+    }
+
+    function getTodayString() {
+      return new Date().toISOString().split("T")[0];
+    }
+
+    function getSRSStore(lang) {
+      const key = "linguo-vocab-srs-" + lang;
+      try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function normalizeText(text) {
+      if (!text) return "";
+      return text
+        .toLowerCase()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"'’]/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function getLevenshteinDistance(a, b) {
+      const matrix = [];
+      for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+      for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+
+      for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+          if (b.charAt(i - 1) === a.charAt(j - 1)) {
+            matrix[i][j] = matrix[i - 1][j - 1];
+          } else {
+            matrix[i][j] = Math.min(
+              matrix[i - 1][j - 1] + 1,
+              Math.min(matrix[i][j - 1] + 1, matrix[i - 1][j] + 1)
+            );
+          }
+        }
+      }
+      return matrix[b.length][a.length];
+    }
+
+    function evaluateDeckAnswer(userInput, alternatives = [], card) {
+      if (!userInput || !card) return { match: false, typo: false };
+
+      const normUser = normalizeText(userInput);
+      const allNormUsers = [normUser, ...alternatives.map(a => normalizeText(a))].filter(Boolean);
+
+      const targetOptions = [
+        card.term,
+        card.audioText,
+        card.altTerm,
+        card.collocation
+      ].filter(Boolean);
+
+      let cleanTargets = [];
+      targetOptions.forEach(t => {
+        cleanTargets.push(t);
+        const withoutParen = t.replace(/\s*\([^)]*\)/g, "").trim();
+        if (withoutParen && withoutParen !== t) cleanTargets.push(withoutParen);
+        const withoutArticles = t.replace(/^(to|el|la|the|un|una|los|las)\s+/i, "").trim();
+        if (withoutArticles && withoutArticles !== t) cleanTargets.push(withoutArticles);
+      });
+
+      const normTargets = cleanTargets.map(t => normalizeText(t)).filter(Boolean);
+
+      for (const u of allNormUsers) {
+        for (const t of normTargets) {
+          if (u === t) return { match: true, typo: false, matchedTarget: t };
+          if (t.includes(" ") ? u.includes(t) : (t.length >= 4 && u.split(" ").includes(t))) {
+            return { match: true, typo: false, matchedTarget: t };
+          }
+        }
+      }
+
+      for (const t of normTargets) {
+        if (t.length >= 5 && !t.includes(" ")) {
+          for (const u of allNormUsers) {
+            if (u.length >= 4 && !u.includes(" ") && getLevenshteinDistance(u, t) === 1) {
+              return { match: true, typo: true, matchedTarget: t };
+            }
+          }
+        }
+      }
+
+      return { match: false, typo: false };
+    }
+
+    function formatPtPrompt(translation) {
+      if (!translation) return { main: "", hint: "" };
+      const match = translation.match(/^(.*?)\s*(\([^)]+\))\s*$/);
+      if (match) {
+        return { main: match[1].trim(), hint: match[2].trim() };
+      }
+      return { main: translation, hint: "" };
+    }
+
+    function toggleTranslateDeckHint(event) {
+      if (event) event.stopPropagation();
+      if (window.duoAudio) duoAudio.playTap();
+      translateDeckHintVisible = !translateDeckHintVisible;
+      renderTranslateDeckStack();
+    }
+
+    function speakCurrentDeckHintAudio(event) {
+      if (event) event.stopPropagation();
+      if (translateDeck.length === 0) return;
+      const card = translateDeck[0];
+      const langCode = (currentLanguage === "es") ? "es-ES" : "en-US";
+      if (window.duoAudio) {
+        duoAudio.speak(card.audioText || card.term, langCode);
+      }
+    }
+
+    function startTranslateDeckRound() {
+      const isEnglish = (currentLanguage === "en");
+      const fullList = [...((window.VOCABULARY_DATA && window.VOCABULARY_DATA[currentLanguage]) || [])];
+      if (fullList.length === 0) {
+        alert("Nenhum vocabulário disponível no momento.");
+        return;
+      }
+
+      let filtered = (activeTranslateDeckType === "all")
+        ? fullList
+        : fullList.filter(item => item.type === activeTranslateDeckType);
+
+      if (filtered.length === 0) filtered = fullList;
+
+      const store = getSRSStore(currentLanguage);
+      const today = getTodayString();
+
+      const due = [];
+      const unreviewed = [];
+      const others = [];
+
+      filtered.forEach(item => {
+        const srs = store[item.id];
+        if (!srs || !srs.lastReviewed) unreviewed.push(item);
+        else if (!srs.nextReview || srs.nextReview <= today) due.push(item);
+        else others.push(item);
+      });
+
+      due.sort(() => 0.5 - Math.random());
+      unreviewed.sort(() => 0.5 - Math.random());
+      others.sort(() => 0.5 - Math.random());
+
+      const selected = [...due, ...unreviewed, ...others].slice(0, TRANSLATE_DECK_SIZE);
+
+      translateDeck = selected;
+      translateDeckTotal = selected.length;
+      translateDeckCompleted = 0;
+      translateDeckStreak = 0;
+      translateDeckIsProcessing = false;
+      translateDeckHintVisible = false;
+
+      const titleEl = document.getElementById("translateDeckTitle");
+      const inputEl = document.getElementById("translateDeckTextInput");
+
+      if (titleEl) {
+        titleEl.innerText = (activeTranslateDeckType === "chunk") ? "Traduza as expressões" : "Traduza as palavras";
+      }
+      if (inputEl) {
+        inputEl.placeholder = isEnglish ? "Digite a tradução em inglês..." : "Digite a tradução em espanhol...";
+        inputEl.value = "";
+      }
+
+      const hasSpeech = window.duoSpeech && window.duoSpeech.isSupported;
+      if (!hasSpeech) {
+        setTranslateDeckMode("typing", true);
+      } else {
+        setTranslateDeckMode("voice");
+      }
+
+      updateTranslateDeckStreak(0);
+      updateTranslateDeckProgress();
+
+      document.getElementById("translateDeckStage").style.display = "block";
+      document.getElementById("translateDeckCompletedStage").style.display = "none";
+
+      hideTranslateDeckFeedback();
+      renderTranslateDeckStack();
+    }
+
+    function updateTranslateDeckProgress() {
+      const fillEl = document.getElementById("translateDeckProgressFill");
+      if (!fillEl) return;
+      const pct = (translateDeckTotal > 0) ? (translateDeckCompleted / translateDeckTotal) * 100 : 0;
+      fillEl.style.width = pct + "%";
+    }
+
+    function updateTranslateDeckStreak(streak) {
+      translateDeckStreak = streak;
+      const countEl = document.getElementById("translateDeckStreakCount");
+      if (countEl) countEl.innerText = streak;
+    }
+
+    function setTranslateDeckMode(mode, fallbackNotice = false) {
+      translateDeckMode = mode;
+      const voiceBlock = document.getElementById("translateDeckVoiceControls");
+      const typeBlock = document.getElementById("translateDeckTypeControls");
+      const toggleBtn = document.getElementById("translateDeckModeToggleBtn");
+      const statusEl = document.getElementById("translateDeckSpeechStatus");
+
+      if (window.duoSpeech && window.duoSpeech.isListening) {
+        window.duoSpeech.stopListening();
+      }
+
+      if (mode === "voice") {
+        if (voiceBlock) voiceBlock.style.display = "flex";
+        if (typeBlock) typeBlock.style.display = "none";
+        if (toggleBtn) {
+          toggleBtn.style.display = "inline-block";
+          toggleBtn.innerText = "⌨️ Prefiro digitar no teclado";
+        }
+        if (statusEl) {
+          statusEl.innerText = "";
+          statusEl.classList.remove("listening");
+        }
+      } else {
+        if (voiceBlock) voiceBlock.style.display = "none";
+        if (typeBlock) typeBlock.style.display = "flex";
+        if (toggleBtn) {
+          if (fallbackNotice) {
+            toggleBtn.style.display = "inline-block";
+            toggleBtn.innerText = "🎙️ Microfone indisponível (Modo digitação ativo)";
+            toggleBtn.disabled = true;
+          } else {
+            toggleBtn.style.display = "inline-block";
+            toggleBtn.innerText = "🎙️ Prefiro responder por voz";
+            toggleBtn.disabled = false;
+          }
+        }
+        const inputEl = document.getElementById("translateDeckTextInput");
+        if (inputEl) setTimeout(() => inputEl.focus(), 150);
+      }
+    }
+
+    function toggleTranslateDeckMode() {
+      if (window.duoAudio) duoAudio.playTap();
+      if (!window.duoSpeech || !window.duoSpeech.isSupported) {
+        alert("Seu navegador atual não oferece suporte ao reconhecimento de voz. Por favor, utilize o modo digitação ou experimente no Google Chrome.");
+        return;
+      }
+      const newMode = (translateDeckMode === "voice") ? "typing" : "voice";
+      setTranslateDeckMode(newMode);
+    }
+
+    function renderTranslateDeckStack() {
+      const scene = document.getElementById("translateDeckStackScene");
+      if (!scene) return;
+
+      if (translateDeck.length === 0) {
+        showTranslateDeckCompletion();
+        return;
+      }
+
+      const visibleCount = Math.min(translateDeck.length, 4);
+      let html = "";
+
+      for (let i = 0; i < visibleCount; i++) {
+        const card = translateDeck[i];
+        const layerClass = "layer-" + i;
+        const ptData = formatPtPrompt(card.translation);
+        const isTopCard = (i === 0);
+        const ipaText = card.ipa || card.phonetic || "";
+
+        html += `
+          <div class="duo-stack-card ${layerClass}" id="deckCard-${i}">
+            <div class="duo-stack-card-header">
+              <div class="duo-deck-card-unified-badge">
+                <span>${card.icon ? card.icon + " " : ""}${card.category || "Vocabulário"}</span>
+                <span class="dot">•</span>
+                <span class="level">${card.level || "A1"}</span>
+              </div>
+              ${isTopCard ? `
+                <button class="btn-deck-hint ${translateDeckHintVisible ? "active" : ""}" onclick="toggleTranslateDeckHint(event)" title="Ver pronúncia IPA e ouvir áudio">${translateDeckHintVisible ? "✕" : "?"}</button>
+              ` : ""}
+            </div>
+
+            <div style="text-align: center; margin: auto 0;">
+              <div class="duo-stack-card-term">${ptData.main}</div>
+              ${ptData.hint ? `<div style="font-size: 13px; font-weight: 700; color: var(--duo-gray-400); margin-top: 4px;">${ptData.hint}</div>` : ""}
+              ${isTopCard && translateDeckHintVisible ? `
+                <div class="duo-deck-hint-box">
+                  <button class="btn-speaker-mini" onclick="speakCurrentDeckHintAudio(event)" title="Ouvir pronúncia nativa">🔊</button>
+                  ${ipaText ? `<span class="duo-deck-hint-ipa">${ipaText}</span>` : ""}
+                </div>
+              ` : ""}
+            </div>
+          </div>
+        `;
+      }
+
+      scene.innerHTML = html;
+
+      const inputEl = document.getElementById("translateDeckTextInput");
+      if (inputEl) {
+        inputEl.value = "";
+        if (translateDeckMode === "typing") inputEl.focus();
+      }
+
+      const statusEl = document.getElementById("translateDeckSpeechStatus");
+      const micBtn = document.getElementById("translateDeckMicBtn");
+      if (statusEl) {
+        statusEl.innerText = "";
+        statusEl.classList.remove("listening");
+      }
+      if (micBtn) micBtn.classList.remove("recording");
+    }
+
+    function toggleDeckSpeechRecording() {
+      if (translateDeckIsProcessing || translateDeck.length === 0) return;
+
+      if (!window.duoSpeech || !window.duoSpeech.isSupported) {
+        setTranslateDeckMode("typing", true);
+        return;
+      }
+
+      const micBtn = document.getElementById("translateDeckMicBtn");
+      const statusEl = document.getElementById("translateDeckSpeechStatus");
+      const langCode = (currentLanguage === "es") ? "es-ES" : "en-US";
+      const targetLangName = (currentLanguage === "es") ? "Espanhol" : "Inglês";
+
+      if (window.duoSpeech.isListening) {
+        window.duoSpeech.stopListening();
+        if (micBtn) micBtn.classList.remove("recording");
+        if (statusEl) {
+          statusEl.innerText = "";
+          statusEl.classList.remove("listening");
+        }
+        return;
+      }
+
+      if (window.duoAudio) duoAudio.playTap();
+      if (micBtn) micBtn.classList.add("recording");
+      if (statusEl) {
+        statusEl.innerText = `🎙️ Ouvindo... fale em ${targetLangName}!`;
+        statusEl.classList.add("listening");
+      }
+
+      const currentCard = translateDeck[0];
+
+      window.duoSpeech.startListening(
+        langCode,
+        (finalText, alternatives) => {
+          if (micBtn) micBtn.classList.remove("recording");
+          if (statusEl) {
+            statusEl.innerText = `Você disse: "${finalText}"`;
+            statusEl.classList.remove("listening");
+          }
+
+          const result = evaluateDeckAnswer(finalText, alternatives, currentCard);
+          if (result.match) {
+            handleDeckAnswerSuccess(result.typo, result.matchedTarget);
+          } else {
+            handleDeckAnswerError(finalText);
+          }
+        },
+        (err) => {
+          if (micBtn) micBtn.classList.remove("recording");
+          if (statusEl) statusEl.classList.remove("listening");
+          if (err && (err.error === "not-allowed" || err.error === "service-not-allowed")) {
+            if (statusEl) statusEl.innerText = "Permissão de microfone negada. Alternando para digitação...";
+            setTimeout(() => setTranslateDeckMode("typing"), 1000);
+          } else if (err && err.error === "no-speech") {
+            if (statusEl) statusEl.innerText = "Nenhuma fala detectada. Toque para tentar novamente.";
+          } else {
+            if (statusEl) statusEl.innerText = "Não foi possível ouvir com clareza. Tente de novo.";
+          }
+        },
+        () => {
+          if (micBtn) micBtn.classList.remove("recording");
+          if (statusEl) statusEl.classList.remove("listening");
+        },
+        (interimText) => {
+          if (statusEl) statusEl.innerText = `Ouvindo: "${interimText}"...`;
+        }
+      );
+    }
+
+    function checkDeckTypedAnswer() {
+      if (translateDeckIsProcessing || translateDeck.length === 0) return;
+
+      const inputEl = document.getElementById("translateDeckTextInput");
+      if (!inputEl) return;
+      const val = inputEl.value.trim();
+
+      if (!val) {
+        inputEl.focus();
+        return;
+      }
+
+      const currentCard = translateDeck[0];
+      const result = evaluateDeckAnswer(val, [], currentCard);
+
+      if (result.match) {
+        handleDeckAnswerSuccess(result.typo, result.matchedTarget);
+      } else {
+        handleDeckAnswerError(val);
+      }
+    }
+
+    function handleDeckInputKeydown(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        checkDeckTypedAnswer();
+      }
+    }
+
+    function handleDeckAnswerSuccess(isTypo, matchedTarget) {
+      if (translateDeckIsProcessing || translateDeck.length === 0) return;
+      translateDeckIsProcessing = true;
+
+      const card = translateDeck[0];
+      currentDeckFeedbackTarget = card.audioText || card.term;
+      const langCode = (currentLanguage === "es") ? "es-ES" : "en-US";
+
+      if (window.duoAudio) {
+        duoAudio.playSuccess();
+        setTimeout(() => duoAudio.speak(card.term, langCode), 200);
+      }
+
+      const topCardEl = document.getElementById("deckCard-0");
+      if (topCardEl) topCardEl.classList.add("swipe-right");
+
+      updateTranslateDeckStreak(translateDeckStreak + 1);
+      translateDeckCompleted++;
+      updateTranslateDeckProgress();
+
+      showTranslateDeckFeedback({
+        type: isTypo ? "typo" : "correct",
+        title: isTypo ? "Quase perfeito! (Atenção à digitação)" : "Excelente!",
+        msg: `Tradução correta: "${card.term}" ${card.ipa ? `• ${card.ipa}` : ""}`
+      });
+
+      translateDeckFeedbackTimeout = setTimeout(() => {
+        translateDeckHintVisible = false;
+        translateDeck.shift();
+        hideTranslateDeckFeedback();
+        translateDeckIsProcessing = false;
+
+        if (translateDeck.length === 0) {
+          showTranslateDeckCompletion();
+        } else {
+          renderTranslateDeckStack();
+        }
+      }, 700);
+    }
+
+    function handleDeckAnswerError(userSaid) {
+      if (translateDeckIsProcessing || translateDeck.length === 0) return;
+      translateDeckIsProcessing = true;
+
+      const card = translateDeck[0];
+      currentDeckFeedbackTarget = card.audioText || card.term;
+      const langCode = (currentLanguage === "es") ? "es-ES" : "en-US";
+
+      if (window.duoAudio) {
+        duoAudio.playError();
+        setTimeout(() => duoAudio.speak(card.term, langCode), 350);
+      }
+
+      const topCardEl = document.getElementById("deckCard-0");
+      if (topCardEl) topCardEl.classList.add("shake");
+
+      updateTranslateDeckStreak(0);
+
+      showTranslateDeckFeedback({
+        type: "incorrect",
+        title: "Resposta correta:",
+        msg: `"${card.term}" ${card.ipa ? `• ${card.ipa}` : ""}`
+      });
+
+      translateDeckFeedbackTimeout = setTimeout(() => {
+        if (topCardEl) topCardEl.classList.remove("shake");
+        translateDeckHintVisible = false;
+        const wrongCard = translateDeck.shift();
+        translateDeck.push(wrongCard);
+        hideTranslateDeckFeedback();
+        translateDeckIsProcessing = false;
+        renderTranslateDeckStack();
+      }, 1500);
+    }
+
+    function skipCurrentDeckCard() {
+      if (translateDeckIsProcessing || translateDeck.length === 0) return;
+      translateDeckIsProcessing = true;
+
+      if (window.duoAudio) duoAudio.playTap();
+      if (window.duoSpeech && window.duoSpeech.isListening) {
+        window.duoSpeech.stopListening();
+      }
+
+      const topCardEl = document.getElementById("deckCard-0");
+      if (topCardEl) topCardEl.classList.add("send-back");
+
+      translateDeckFeedbackTimeout = setTimeout(() => {
+        translateDeckHintVisible = false;
+        const skipped = translateDeck.shift();
+        translateDeck.push(skipped);
+        hideTranslateDeckFeedback();
+        translateDeckIsProcessing = false;
+        renderTranslateDeckStack();
+      }, 350);
+    }
+
+    function showTranslateDeckFeedback({ type, title, msg }) {
+      const fb = document.getElementById("translateDeckFeedback");
+      const iconEl = document.getElementById("translateDeckFeedbackIcon");
+      const titleEl = document.getElementById("translateDeckFeedbackTitle");
+      const msgEl = document.getElementById("translateDeckFeedbackMsg");
+
+      if (!fb || !iconEl || !titleEl || !msgEl) return;
+
+      fb.className = "duo-deck-feedback " + type;
+      iconEl.innerText = (type === "incorrect") ? "✕" : (type === "typo" ? "⚠️" : "✓");
+      titleEl.innerText = title;
+      msgEl.innerText = msg;
+      fb.style.display = "flex";
+    }
+
+    function hideTranslateDeckFeedback() {
+      const fb = document.getElementById("translateDeckFeedback");
+      if (fb) fb.style.display = "none";
+    }
+
+    function speakCurrentDeckCardTarget() {
+      const termToSpeak = currentDeckFeedbackTarget || (translateDeck[0] && (translateDeck[0].audioText || translateDeck[0].term));
+      if (!termToSpeak) return;
+      const langCode = (currentLanguage === "es") ? "es-ES" : "en-US";
+      if (window.duoAudio) duoAudio.speak(termToSpeak, langCode);
+    }
+
+    function showTranslateDeckCompletion() {
+      document.getElementById("translateDeckStage").style.display = "none";
+      document.getElementById("translateDeckCompletedStage").style.display = "block";
+      addRewards(35, 10);
+      if (window.duoAudio) duoAudio.playSuccess();
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      startTranslateDeckRound();
+    });
+  </script>
+</body>
+</html>
