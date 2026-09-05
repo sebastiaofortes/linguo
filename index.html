@@ -636,7 +636,7 @@
             <span id="drawerCategoryIcon" style="font-size: 32px; line-height: 1;">🍎</span>
             <div>
               <h3 id="drawerCategoryTitle" style="font-size: 20px; font-weight: 900; color: var(--duo-gray-900); margin: 0;">Alimentos & Bebidas</h3>
-              <div id="drawerCategoryStats" style="font-size: 13px; font-weight: 800; color: var(--duo-gray-400);">16 termos • 75% Dominado</div>
+              <div id="drawerCategoryStats" style="font-size: 13px; font-weight: 800; color: var(--duo-gray-400);">0 de 0 praticados • 0 dominados</div>
             </div>
           </div>
           <button class="btn-duo btn-duo-purple" id="drawerPracticeActionBtn" onclick="practiceCurrentDrawerCategory()">
@@ -1732,18 +1732,24 @@
       filteredCategories.forEach(cat => {
         const items = categoriesMap[cat];
         const totalCount = items.length;
+        let practicedCount = 0;
         let masteredCount = 0;
 
         items.forEach(item => {
           const srs = store[item.id];
-          if (srs && (srs.level >= 3 || (srs.interval && srs.interval >= 3))) {
-            masteredCount++;
-          }
+          const isPracticed = srs && srs.timesReviewed && srs.timesReviewed >= 1;
+          const isMastered = srs && (srs.status === 'mastered' || (srs.box && srs.box >= 3) || (srs.interval && srs.interval >= 3));
+
+          if (isPracticed) practicedCount++;
+          if (isMastered) masteredCount++;
         });
 
         const isGolden = (masteredCount === totalCount && totalCount > 0);
         const catIcon = CATEGORY_ICON_MAP[cat] || (items[0] && items[0].icon) || '📖';
         const catEncoded = encodeURIComponent(cat);
+
+        // Texto do Micro-Resumo formatado
+        const summaryText = `${practicedCount} de ${totalCount} praticados • <span class="duo-mastered-text">${masteredCount} dominados</span>`;
 
         html += `
           <div class="duo-collection-card ${isGolden ? 'golden' : ''}">
@@ -1755,7 +1761,7 @@
                   ${isGolden ? `<span class="duo-collection-star" title="Coleção 100% dominada!">⭐</span>` : ''}
                 </div>
                 <div class="duo-collection-micro-summary">
-                  ${totalCount} ${totalCount === 1 ? 'termo' : 'termos'} • <span class="duo-mastered-text">${masteredCount} dominados</span>
+                  ${summaryText}
                 </div>
               </div>
             </div>
@@ -1850,10 +1856,12 @@
       const categoryItems = list.filter(item => item.category === currentDrawerCategory);
       const catIcon = CATEGORY_ICON_MAP[currentDrawerCategory] || (categoryItems[0] && categoryItems[0].icon) || '📖';
 
+      let practicedCount = 0;
       let masteredCount = 0;
       categoryItems.forEach(item => {
         const srs = store[item.id];
-        if (srs && (srs.level >= 3 || (srs.interval && srs.interval >= 3))) masteredCount++;
+        if (srs && srs.timesReviewed && srs.timesReviewed >= 1) practicedCount++;
+        if (srs && (srs.status === 'mastered' || (srs.box && srs.box >= 3) || (srs.interval && srs.interval >= 3))) masteredCount++;
       });
 
       // Header Elements
@@ -1862,7 +1870,7 @@
       const statsEl = document.getElementById('drawerCategoryStats');
       if (iconEl) iconEl.innerText = catIcon;
       if (titleEl) titleEl.innerText = currentDrawerCategory;
-      if (statsEl) statsEl.innerText = `${categoryItems.length} termos • ${masteredCount} dominados`;
+      if (statsEl) statsEl.innerText = `${practicedCount} de ${categoryItems.length} praticados • ${masteredCount} dominados`;
 
       // Filter terms by drawer search query
       const filteredTerms = categoryItems.filter(item => {

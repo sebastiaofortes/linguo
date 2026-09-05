@@ -4007,17 +4007,18 @@ html, body {
 
 .duo-collection-micro-summary {
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--duo-gray-400);
-  margin-top: 4px;
+  margin-top: 2px;
   display: flex;
   align-items: center;
   gap: 4px;
 }
 
-.duo-collection-micro-summary .duo-mastered-text {
+.duo-collection-micro-summary .duo-mastered-text,
+.duo-mastered-text {
   color: var(--duo-green-text);
-  font-weight: 900;
+  font-weight: 800;
 }
 
 .duo-collection-actions-row {
@@ -4244,6 +4245,15 @@ html, body {
 [data-theme="dark"] .duo-collection-title,
 [data-theme="dark"] .duo-drawer-term-name {
   color: #ffffff !important;
+}
+
+[data-theme="dark"] .duo-collection-micro-summary {
+  color: var(--duo-gray-700);
+}
+
+[data-theme="dark"] .duo-mastered-text,
+[data-theme="dark"] .duo-collection-micro-summary .duo-mastered-text {
+  color: var(--duo-green);
 }
 
 [data-theme="dark"] .duo-drawer-header {
