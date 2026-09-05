@@ -15,7 +15,7 @@
 
   <!-- Top Header Navigation -->
   <header class="duo-header">
-    <a href="index.html" class="duo-logo-area" onclick="switchTab('home', event)">
+    <a href="index.html" class="duo-logo-area" onclick="switchTab('vocab', event)">
       <svg width="36" height="36" viewBox="0 0 32 32" fill="none">
         <circle cx="16" cy="16" r="15" fill="#58CC02"/>
         <circle cx="11" cy="13" r="5" fill="#ffffff"/>
@@ -51,112 +51,69 @@
   </header>
 
   <!-- ============================================================
-       TAB 1: TRILHA DE APRENDIZADO (HOME)
+       TAB 1: VOCABULÁRIO & COLEÇÕES TEMÁTICAS (HOME PAGE)
        ============================================================ -->
-  <div id="view-home" class="duo-tab-view active">
+  <div id="view-vocab" class="duo-tab-view active">
+    <div class="duo-tab-content-wrapper">
+      
+      <!-- 1. Hero Card: Revisão Diária Inteligente (Smart SRS Daily Deck) -->
+      <div class="duo-srs-hero-card" id="srsDailyHeroCard">
+        <div class="duo-srs-hero-header">
+          <div class="duo-srs-hero-title">
+            <span>⚡</span> REVISÃO DIÁRIA INTELIGENTE
+          </div>
+          <div class="duo-badge" style="background: var(--duo-purple); font-size: 11px; padding: 4px 10px; color: #fff;">
+            🧠 EBBINGHAUS SRS
+          </div>
+        </div>
+
+        <div class="duo-srs-hero-counter" id="srsHeroCounter">
+          🔥 <span id="srsHeroDueCount">0</span> palavras para reforçar hoje
+        </div>
+        <div class="duo-srs-hero-subtitle" id="srsHeroSubtitle">
+          Baseado na Curva de Esquecimento de Ebbinghaus para fixação duradoura
+        </div>
+
+        <button class="btn-duo btn-duo-purple" id="srsHeroActionBtn" style="width: 100%; justify-content: center; font-size: 16px; padding: 14px 20px;" onclick="startSmartDailyReview()">
+          <span id="srsHeroActionBtnText">🎙️ INICIAR REVISÃO GERAL ➔</span>
+        </button>
+      </div>
+
+      <!-- 2. Barra de Maestria Léxica Total -->
+      <div class="duo-mastery-card" id="courseMasteryCard">
+        <div class="duo-mastery-header">
+          <span class="duo-mastery-title">📊 MAESTRIA TOTAL DO CURSO</span>
+          <span class="duo-mastery-stats" id="courseMasteryStats">0 / 0 termos (0%)</span>
+        </div>
+        <div class="duo-progress-track" style="height: 12px;">
+          <div class="duo-progress-fill" id="courseMasteryProgressFill" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <!-- 3. Barra de Busca Global -->
+      <div class="duo-vocab-search-wrap" style="margin-bottom: 20px;">
+        <span class="duo-vocab-search-icon">🔍</span>
+        <input type="text" id="vocabSearchInput" class="duo-vocab-search-input" placeholder="Buscar palavra, IPA (/.../) ou tradução em todas as coleções..." oninput="handleVocabSearch(this.value)">
+        <button id="vocabSearchClear" class="duo-vocab-search-clear" onclick="clearVocabSearch()" title="Limpar busca">✕</button>
+      </div>
+
+      <!-- 4. Grade de Coleções Temáticas (Thematic Decks Grid) -->
+      <div class="duo-collections-grid" id="collectionsGridContainer">
+        <!-- Renderizado dinamicamente por renderVocabView() -->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TAB 2: TRILHA DE APRENDIZADO (PATH)
+       ============================================================ -->
+  <div id="view-path" class="duo-tab-view">
     <div class="duo-home-layout">
       <!-- Centered Snake Learning Path -->
       <main class="duo-main-path" id="unitsContainer">
         <!-- Rendered dynamically by JavaScript from UNITS_DATA -->
       </main>
-    </div>
-  </div>
-
-  <!-- ============================================================
-       TAB: VOCABULÁRIO & PRÁTICA SRS (VOCAB)
-       ============================================================ -->
-  <div id="view-vocab" class="duo-tab-view">
-    <div class="duo-tab-content-wrapper">
-      
-      <!-- Header de Status Léxico & Curva de Ebbinghaus -->
-      <div class="duo-vocab-header">
-        <div class="duo-vocab-header-top">
-          <div class="duo-vocab-header-info">
-            <h2>
-              <span>🎴</span>
-              <span id="vocabHeaderTitle">Meu Baú de Vocabulário</span>
-            </h2>
-            <p id="vocabHeaderSubtitle">
-              Dicionário visual com fonética IPA e pronúncia nativa
-            </p>
-          </div>
-          <div class="duo-badge" style="background: var(--duo-purple); font-size: 13px; padding: 6px 14px;">
-            🧠 CURVA DE EBBINGHAUS
-          </div>
-        </div>
-
-        <!-- Indicadores SRS -->
-        <div class="duo-vocab-metrics-row">
-          <div class="duo-vocab-metric-card">
-            <div class="duo-vocab-metric-icon">📚</div>
-            <div>
-              <div class="duo-vocab-metric-val" id="vocabTotalCount">0</div>
-              <div class="duo-vocab-metric-lbl">Total no Baú</div>
-            </div>
-          </div>
-
-          <div class="duo-vocab-metric-card">
-            <div class="duo-vocab-metric-icon">🔥</div>
-            <div>
-              <div class="duo-vocab-metric-val" style="color: var(--duo-orange);" id="vocabDueCount">0</div>
-              <div class="duo-vocab-metric-lbl">Revisão Hoje</div>
-            </div>
-          </div>
-
-          <div class="duo-vocab-metric-card">
-            <div class="duo-vocab-metric-icon">⭐</div>
-            <div>
-              <div class="duo-vocab-metric-val" style="color: var(--duo-green-text);" id="vocabMasteredCount">0</div>
-              <div class="duo-vocab-metric-lbl">Dominadas</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Botões de Ação 3D -->
-        <div class="duo-vocab-actions-row">
-          <button class="btn-duo btn-duo-green" onclick="openFlashcardsModal()">
-            <span>🎴 PRATICAR FLASHCARDS DO DIA ➔</span>
-          </button>
-          <button class="btn-duo btn-duo-blue" onclick="openMatchMadnessModal()">
-            <span>⚡ COMBINAR PARES (DESAFIO RÁPIDO)</span>
-          </button>
-          <button class="btn-duo btn-duo-purple" id="vocabDeckActionBtn" onclick="openTranslateDeckModal()">
-            <span id="vocabDeckActionBtnText">🎙️ TRADUZA AS PALAVRAS (DECK 3D)</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Seletor de Tipo (Pills de Alto Contraste) -->
-      <div class="duo-type-selector">
-        <button class="duo-type-pill active" id="typePill-word" onclick="setVocabType('word')">
-          <span>🔤</span> Palavras Isoladas (IPA)
-        </button>
-        <button class="duo-type-pill" id="typePill-chunk" onclick="setVocabType('chunk')">
-          <span>💬</span> Expressões & Chunks
-        </button>
-        <button class="duo-type-pill" id="typePill-all" onclick="setVocabType('all')">
-          <span>🌐</span> Todas
-        </button>
-      </div>
-
-      <!-- Barra de Busca & Filtros por Categoria -->
-      <div class="duo-vocab-controls">
-        <div class="duo-vocab-search-wrap">
-          <span class="duo-vocab-search-icon">🔍</span>
-          <input type="text" id="vocabSearchInput" class="duo-vocab-search-input" placeholder="Buscar por termo, IPA (/.../) ou tradução..." oninput="handleVocabSearch(this.value)">
-          <button id="vocabSearchClear" class="duo-vocab-search-clear" onclick="clearVocabSearch()" title="Limpar busca">✕</button>
-        </div>
-
-        <div class="duo-filter-chips-scroll" id="vocabCategoryChips">
-          <!-- Renderizado dinamicamente -->
-        </div>
-      </div>
-
-      <!-- Grade de Cards Compactos (Dicionário Visual) -->
-      <div class="duo-vocab-grid-compact" id="vocabGridContainer">
-        <!-- Renderizado dinamicamente -->
-      </div>
-
     </div>
   </div>
 
@@ -463,18 +420,8 @@
        ============================================================ -->
   <nav class="duo-bottom-nav">
     
-    <!-- Tab 1: Home / Trilha -->
-    <button class="duo-nav-item active" id="nav-home" onclick="switchTab('home')">
-      <div class="duo-nav-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-        </svg>
-      </div>
-      <span class="duo-nav-label">Trilha</span>
-    </button>
-
-    <!-- Tab: Vocabulário (SRS) -->
-    <button class="duo-nav-item" id="nav-vocab" onclick="switchTab('vocab')">
+    <!-- Tab 1: Vocabulário & Coleções (Home - Ativa) -->
+    <button class="duo-nav-item active" id="nav-vocab" onclick="switchTab('vocab')">
       <div class="duo-nav-icon">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
           <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12zm-8-3h8v-2h-8v2zm0-4h8V9h-8v2zm0-4h8V5h-8v2z"/>
@@ -483,7 +430,17 @@
       <span class="duo-nav-label">Vocabulário</span>
     </button>
 
-    <!-- Tab 2: Missões (Quests) -->
+    <!-- Tab 2: Trilha de Aulas (Path) -->
+    <button class="duo-nav-item" id="nav-path" onclick="switchTab('path')">
+      <div class="duo-nav-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        </svg>
+      </div>
+      <span class="duo-nav-label">Trilha</span>
+    </button>
+
+    <!-- Tab 3: Missões (Quests) -->
     <button class="duo-nav-item" id="nav-quests" onclick="switchTab('quests')">
       <div class="duo-nav-icon">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
@@ -494,7 +451,7 @@
       <span class="duo-nav-label">Missões</span>
     </button>
 
-    <!-- Tab 3: Estatísticas & Perfil -->
+    <!-- Tab 4: Estatísticas & Perfil -->
     <button class="duo-nav-item" id="nav-stats" onclick="switchTab('stats')">
       <div class="duo-nav-icon">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
@@ -504,7 +461,7 @@
       <span class="duo-nav-label">Perfil</span>
     </button>
 
-    <!-- Tab 4: Duo AI Tutor -->
+    <!-- Tab 5: Duo AI Tutor -->
     <button class="duo-nav-item" id="nav-tutor" onclick="switchTab('tutor')">
       <div class="duo-nav-icon">
         <svg width="28" height="28" viewBox="0 0 32 32" fill="currentColor">
@@ -601,6 +558,90 @@
         </div>
         <button class="btn-duo btn-duo-green" style="padding: 10px 22px; font-size: 14px;" onclick="closeVocabDetailModal()">
           <span>ENTENDI ✓</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       DRAWER DE TERMOS DA COLEÇÃO (THEMATIC COLLECTION DRAWER)
+       ============================================================ -->
+  <div id="collectionTermsDrawer" class="duo-modal-overlay" onclick="closeCollectionDrawer(event)">
+    <div class="duo-collection-drawer-box" onclick="event.stopPropagation()">
+      <!-- Header -->
+      <div class="duo-drawer-header">
+        <div class="duo-drawer-top-row">
+          <button class="duo-drawer-back-btn" onclick="closeCollectionDrawer()">
+            ← Voltar às Coleções
+          </button>
+          <button class="btn-close" onclick="closeCollectionDrawer()" title="Fechar">✕</button>
+        </div>
+
+        <div class="duo-drawer-title-row">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span id="drawerCategoryIcon" style="font-size: 32px; line-height: 1;">🍎</span>
+            <div>
+              <h3 id="drawerCategoryTitle" style="font-size: 20px; font-weight: 900; color: var(--duo-gray-900); margin: 0;">Alimentos & Bebidas</h3>
+              <div id="drawerCategoryStats" style="font-size: 13px; font-weight: 800; color: var(--duo-gray-400);">16 termos • 75% Dominado</div>
+            </div>
+          </div>
+          <button class="btn-duo btn-duo-purple" id="drawerPracticeActionBtn" onclick="practiceCurrentDrawerCategory()">
+            <span>🎙️ PRATICAR (DECK 3D) ➔</span>
+          </button>
+        </div>
+
+        <!-- Quick Filter Input -->
+        <div class="duo-vocab-search-wrap" style="margin-top: 14px;">
+          <span class="duo-vocab-search-icon">🔍</span>
+          <input type="text" id="drawerSearchInput" class="duo-vocab-search-input" placeholder="Filtrar termos desta coleção..." oninput="handleDrawerSearch(this.value)">
+          <button id="drawerSearchClear" class="duo-vocab-search-clear" onclick="clearDrawerSearch()" title="Limpar busca">✕</button>
+        </div>
+      </div>
+
+      <!-- Terms List -->
+      <div class="duo-drawer-terms-list" id="drawerTermsList">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MODAL SELETOR DE MODO DE PRÁTICA DO TEMA
+       ============================================================ -->
+  <div id="practiceModeSelectorModal" class="duo-modal-overlay" onclick="closePracticeModeSelector(event)">
+    <div class="duo-practice-selector-box" onclick="event.stopPropagation()">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+        <div style="font-size: 13px; font-weight: 800; color: var(--duo-gray-400); text-transform: uppercase; letter-spacing: 0.5px;">Escolha o Modo de Prática</div>
+        <button class="btn-close" onclick="closePracticeModeSelector()" title="Fechar">✕</button>
+      </div>
+      <h3 id="practiceSelectorTitle" style="font-size: 22px; font-weight: 900; color: var(--duo-gray-900); margin: 0 0 16px;">Alimentos & Bebidas</h3>
+
+      <div class="duo-practice-options-list">
+        <button class="duo-practice-option-btn opt-deck" onclick="startSelectedPracticeMode('deck')">
+          <span style="font-size: 28px;">🎙️</span>
+          <div style="flex: 1;">
+            <div style="font-size: 16px; font-weight: 900; color: var(--duo-purple-shadow);">Deck 3D de Tradução</div>
+            <div style="font-size: 13px; font-weight: 700; color: var(--duo-gray-400);">Pratique fala por voz ou digitação com tolerância fonética</div>
+          </div>
+          <span style="font-size: 18px; color: var(--duo-purple);">➔</span>
+        </button>
+
+        <button class="duo-practice-option-btn opt-flashcards" onclick="startSelectedPracticeMode('flashcards')">
+          <span style="font-size: 28px;">🎴</span>
+          <div style="flex: 1;">
+            <div style="font-size: 16px; font-weight: 900; color: var(--duo-green-text);">Flashcards SRS 3D</div>
+            <div style="font-size: 13px; font-weight: 700; color: var(--duo-gray-400);">Repetição espaçada inteligente de Leitner com frases Cloze</div>
+          </div>
+          <span style="font-size: 18px; color: var(--duo-green-text);">➔</span>
+        </button>
+
+        <button class="duo-practice-option-btn opt-match" onclick="startSelectedPracticeMode('match')">
+          <span style="font-size: 28px;">⚡</span>
+          <div style="flex: 1;">
+            <div style="font-size: 16px; font-weight: 900; color: var(--duo-blue);">Combine os Pares</div>
+            <div style="font-size: 13px; font-weight: 700; color: var(--duo-gray-400);">Desafio rápido de fixação auditiva e visual (Match Madness)</div>
+          </div>
+          <span style="font-size: 18px; color: var(--duo-blue);">➔</span>
         </button>
       </div>
     </div>
@@ -1287,6 +1328,11 @@
       if (event) event.preventDefault();
       if (window.duoAudio) duoAudio.playTap();
 
+      // Alias 'home' to 'vocab' (Vocab is now the official Home Page)
+      if (tabName === 'home') {
+        tabName = 'vocab';
+      }
+
       // Hide all views
       document.querySelectorAll('.duo-tab-view').forEach(view => {
         view.classList.remove('active');
@@ -1303,6 +1349,8 @@
         targetView.classList.add('active');
         if (tabName === 'vocab') {
           renderVocabView();
+        } else if (tabName === 'path') {
+          renderPath();
         }
       }
 
@@ -1359,10 +1407,23 @@
 
     var VOCABULARY_DATA = window.VOCABULARY_DATA || { en: [], es: [] };
 
-    let activeVocabType = 'word'; // "word" | "chunk" | "all"
-    let activeVocabCategory = 'all';
     let activeVocabSearch = '';
     let currentDetailModalItem = null;
+    let currentDrawerCategory = null;
+    let activeDrawerSearch = '';
+    let currentPracticeCategory = null;
+
+    const CATEGORY_ICON_MAP = {
+      'Alimentos & Bebidas': '🍎',
+      'Viagem & Aeroporto': '✈️',
+      'Trabalho & Negócios': '💼',
+      'Chunks do Dia a Dia': '💬',
+      'Casa & Rotina': '🏠',
+      'Verbos de Ação': '⚡',
+      'Falsos Cognatos / Pegadinhas': '🗣️',
+      'Sentimentos & Emoções': '❤️',
+      'Tecnologia & Comunicação': '💻'
+    };
 
     // Load vocabulary from JSON files with graceful fallback
     async function initVocabularyData() {
@@ -1419,17 +1480,19 @@
     }
 
     function calculateVocabMetrics(lang) {
-      const list = VOCABULARY_DATA[lang || currentLanguage] || [];
+      const list = (window.VOCABULARY_DATA && window.VOCABULARY_DATA[lang || currentLanguage]) || [];
       const store = getSRSStore(lang || currentLanguage);
       const today = getTodayString();
 
       let dueCount = 0;
       let masteredCount = 0;
+      let unreviewedCount = 0;
 
       list.forEach(item => {
         const srs = store[item.id];
-        // Apenas conta como due se já tiver sido revisada pelo menos 1 vez
-        if (srs && srs.lastReviewed && (!srs.nextReview || srs.nextReview <= today)) {
+        if (!srs || !srs.lastReviewed) {
+          unreviewedCount++;
+        } else if (!srs.nextReview || srs.nextReview <= today) {
           dueCount++;
         }
         if (srs && srs.level >= 3) {
@@ -1437,106 +1500,57 @@
         }
       });
 
+      const total = list.length;
+      const masteryPct = total > 0 ? Math.round((masteredCount / total) * 100) : 0;
+
       return {
-        total: list.length,
+        total,
         due: dueCount,
-        mastered: masteredCount
+        mastered: masteredCount,
+        unreviewed: unreviewedCount,
+        masteryPct
       };
     }
 
-    // Set active vocabulary type (word, chunk, all)
-    function setVocabType(type) {
-      if (window.duoAudio) duoAudio.playTap();
-      activeVocabType = type;
-      document.querySelectorAll('.duo-type-pill').forEach(pill => {
-        pill.classList.remove('active');
-      });
-      const targetPill = document.getElementById('typePill-' + type);
-      if (targetPill) targetPill.classList.add('active');
-      activeVocabCategory = 'all';
-      renderVocabView();
-    }
-    window.setVocabType = setVocabType;
-
-    // Render Vocabulary View
+    // Render Main Vocabulary & Thematic Collections View
     function renderVocabView() {
       const lang = currentLanguage || 'en';
-      const isEnglish = (lang === 'en');
-      const list = VOCABULARY_DATA[lang] || [];
-
-      // Update Header Info
-      const titleEl = document.getElementById('vocabHeaderTitle');
-      const subEl = document.getElementById('vocabHeaderSubtitle');
-      if (titleEl) {
-        titleEl.innerText = isEnglish ? 'Meu Baú de Vocabulário (Inglês 🇺🇸)' : 'Meu Baú de Vocabulário (Espanhol 🇪🇸)';
-      }
-      if (subEl) {
-        subEl.innerText = `${list.length} palavras e expressões catalogadas • 🔊 Áudio nativo e fonética IPA`;
-      }
-
-      // Update Metrics
       const metrics = calculateVocabMetrics(lang);
-      const totalEl = document.getElementById('vocabTotalCount');
-      const dueEl = document.getElementById('vocabDueCount');
-      const masteredEl = document.getElementById('vocabMasteredCount');
-      if (totalEl) totalEl.innerText = metrics.total;
-      if (dueEl) dueEl.innerText = metrics.due;
-      if (masteredEl) masteredEl.innerText = metrics.mastered;
 
-      // Update 3D Deck Action Button Text according to active tab
-      const deckActionBtnText = document.getElementById('vocabDeckActionBtnText');
-      if (deckActionBtnText) {
-        if (activeVocabType === 'word') {
-          deckActionBtnText.innerText = '🎙️ PRATICAR PALAVRAS (DECK 3D)';
-        } else if (activeVocabType === 'chunk') {
-          deckActionBtnText.innerText = '🎙️ PRATICAR EXPRESSÕES (DECK 3D)';
+      // 1. Update Hero Card: Revisão Diária Inteligente
+      const dueCountEl = document.getElementById('srsHeroDueCount');
+      const heroCounterEl = document.getElementById('srsHeroCounter');
+      const heroSubtitleEl = document.getElementById('srsHeroSubtitle');
+      const heroBtnText = document.getElementById('srsHeroActionBtnText');
+
+      if (dueCountEl) dueCountEl.innerText = metrics.due;
+
+      if (heroCounterEl && heroSubtitleEl && heroBtnText) {
+        if (metrics.due > 0) {
+          heroCounterEl.innerHTML = `🔥 <span>${metrics.due}</span> palavras para reforçar hoje`;
+          heroSubtitleEl.innerText = 'Baseado na Curva de Esquecimento de Ebbinghaus para fixação duradoura';
+          heroBtnText.innerText = `🎙️ INICIAR REVISÃO GERAL (${metrics.due} CARTAS) ➔`;
         } else {
-          deckActionBtnText.innerText = '🎙️ TRADUZA AS PALAVRAS (DECK 3D)';
+          heroCounterEl.innerHTML = `✨ Tudo em dia com suas revisões!`;
+          heroSubtitleEl.innerText = 'Você não tem cartas vencidas hoje. Pratique qualquer tema abaixo para reforçar!';
+          heroBtnText.innerText = `🎙️ PRATICAR DECK GERAL ➔`;
         }
       }
 
-      // Extract unique categories based on active type
-      const listForCategories = (activeVocabType === 'all')
-        ? list
-        : list.filter(i => i.type === activeVocabType);
-
-      const categories = ['all'];
-      listForCategories.forEach(item => {
-        if (item.category && !categories.includes(item.category)) {
-          categories.push(item.category);
-        }
-      });
-
-      if (!categories.includes(activeVocabCategory)) {
-        activeVocabCategory = 'all';
+      // 2. Update Overall Course Mastery Card
+      const masteryStatsEl = document.getElementById('courseMasteryStats');
+      const masteryFillEl = document.getElementById('courseMasteryProgressFill');
+      if (masteryStatsEl) {
+        masteryStatsEl.innerText = `${metrics.mastered} / ${metrics.total} termos (${metrics.masteryPct}%)`;
+      }
+      if (masteryFillEl) {
+        masteryFillEl.style.width = `${metrics.masteryPct}%`;
       }
 
-      // Render Category Chips
-      const chipsContainer = document.getElementById('vocabCategoryChips');
-      if (chipsContainer) {
-        chipsContainer.innerHTML = categories.map(cat => {
-          const isActive = (cat === activeVocabCategory);
-          const label = (cat === 'all') ? 'Todas' : cat;
-          const count = (cat === 'all') 
-            ? listForCategories.length 
-            : listForCategories.filter(i => i.category === cat).length;
-          return `
-            <button class="duo-filter-chip ${isActive ? 'active' : ''}" onclick="setVocabCategory('${cat}')">
-              ${label} (${count})
-            </button>
-          `;
-        }).join('');
-      }
-
-      renderVocabCards();
+      // 3. Render Collections Grid
+      renderCollectionsGrid();
     }
-
-    function setVocabCategory(cat) {
-      if (window.duoAudio) duoAudio.playTap();
-      activeVocabCategory = cat;
-      renderVocabView();
-    }
-    window.setVocabCategory = setVocabCategory;
+    window.renderVocabView = renderVocabView;
 
     let vocabSearchDebounceTimer = null;
 
@@ -1552,7 +1566,7 @@
       }
       if (vocabSearchDebounceTimer) clearTimeout(vocabSearchDebounceTimer);
       vocabSearchDebounceTimer = setTimeout(() => {
-        renderVocabCards();
+        renderCollectionsGrid();
       }, 180);
     }
     window.handleVocabSearch = handleVocabSearch;
@@ -1568,83 +1582,357 @@
       activeVocabSearch = '';
       const clearBtn = document.getElementById('vocabSearchClear');
       if (clearBtn) clearBtn.classList.remove('visible');
-      renderVocabCards();
+      renderCollectionsGrid();
     }
     window.clearVocabSearch = clearVocabSearch;
 
-    // Render Compact Visual Dictionary Cards
-    function renderVocabCards() {
-      const grid = document.getElementById('vocabGridContainer');
+    // Render Thematic Collections Grid
+    function renderCollectionsGrid() {
+      const grid = document.getElementById('collectionsGridContainer');
       if (!grid) return;
 
       const lang = currentLanguage || 'en';
-      const list = VOCABULARY_DATA[lang] || [];
+      const list = (window.VOCABULARY_DATA && window.VOCABULARY_DATA[lang]) || [];
+      const store = getSRSStore(lang);
+      const today = getTodayString();
 
-      const filtered = list.filter(item => {
-        if (activeVocabType !== 'all' && item.type !== activeVocabType) return false;
-        if (activeVocabCategory !== 'all' && item.category !== activeVocabCategory) return false;
-        if (!activeVocabSearch) return true;
+      if (list.length === 0) {
+        grid.innerHTML = `
+          <div class="duo-vocab-empty" style="grid-column: 1 / -1; text-align: center; padding: 40px 20px;">
+            <div style="font-size: 48px; margin-bottom: 10px;">🔍</div>
+            <h3 style="font-size: 18px; font-weight: 800; color: var(--duo-gray-900);">Nenhum vocabulário disponível</h3>
+          </div>
+        `;
+        return;
+      }
 
-        const termMatch = (item.term || '').toLowerCase().includes(activeVocabSearch);
-        const ipaMatch = (item.ipa || item.phonetic || '').toLowerCase().includes(activeVocabSearch);
-        const transMatch = (item.translation || '').toLowerCase().includes(activeVocabSearch);
-        const exMatch = (item.example || '').toLowerCase().includes(activeVocabSearch);
-        const posMatch = (item.pos || '').toLowerCase().includes(activeVocabSearch);
-        return termMatch || ipaMatch || transMatch || exMatch || posMatch;
+      // Group terms by category
+      const categoriesMap = {};
+      list.forEach(item => {
+        const cat = item.category || 'Geral';
+        if (!categoriesMap[cat]) {
+          categoriesMap[cat] = [];
+        }
+        categoriesMap[cat].push(item);
       });
 
-      if (filtered.length === 0) {
+      const categories = Object.keys(categoriesMap);
+
+      // If search is active, filter categories
+      let filteredCategories = categories;
+      if (activeVocabSearch) {
+        filteredCategories = categories.filter(cat => {
+          const items = categoriesMap[cat];
+          return items.some(item => {
+            const termMatch = (item.term || '').toLowerCase().includes(activeVocabSearch);
+            const ipaMatch = (item.ipa || item.phonetic || '').toLowerCase().includes(activeVocabSearch);
+            const transMatch = (item.translation || '').toLowerCase().includes(activeVocabSearch);
+            const exMatch = (item.example || '').toLowerCase().includes(activeVocabSearch);
+            return termMatch || ipaMatch || transMatch || exMatch;
+          });
+        });
+      }
+
+      if (filteredCategories.length === 0) {
         grid.innerHTML = `
-          <div class="duo-vocab-empty" style="grid-column: 1 / -1;">
+          <div class="duo-vocab-empty" style="grid-column: 1 / -1; text-align: center; padding: 40px 20px;">
             <div style="font-size: 48px; margin-bottom: 10px;">🔍</div>
-            <h3 style="font-size: 18px; font-weight: 800; color: var(--duo-gray-900);">Nenhum termo encontrado</h3>
+            <h3 style="font-size: 18px; font-weight: 800; color: var(--duo-gray-900);">Nenhuma coleção ou palavra encontrada</h3>
             <p style="font-size: 14px; color: var(--duo-gray-400); margin-top: 4px;">
-              Tente buscar por outra palavra ou selecione o filtro "Todas".
+              Tente buscar por outro termo ou limpe o campo de busca.
             </p>
           </div>
         `;
         return;
       }
 
-      grid.innerHTML = filtered.map(item => {
-        return `
-          <div class="duo-word-compact-card" onclick="openVocabDetailModal('${item.id}')" title="Toque para ver exemplo contextual">
-            <div class="duo-card-top-row">
-              <span class="duo-card-icon-emoji">${item.icon || '📖'}</span>
-              <button class="btn-speaker-mini" onclick="speakVocabTermById(event, '${item.id}')" title="Ouvir pronúncia">
-                🔊
+      let html = '';
+      filteredCategories.forEach(cat => {
+        const items = categoriesMap[cat];
+        const totalCount = items.length;
+        let masteredCount = 0;
+        let dueCount = 0;
+        let unreviewedCount = 0;
+
+        items.forEach(item => {
+          const srs = store[item.id];
+          if (!srs || !srs.lastReviewed) {
+            unreviewedCount++;
+          } else if (!srs.nextReview || srs.nextReview <= today) {
+            dueCount++;
+          }
+          if (srs && srs.level >= 3) {
+            masteredCount++;
+          }
+        });
+
+        const masteryPct = totalCount > 0 ? Math.round((masteredCount / totalCount) * 100) : 0;
+        const isGolden = (masteryPct === 100 && totalCount > 0);
+        const catIcon = CATEGORY_ICON_MAP[cat] || (items[0] && items[0].icon) || '📖';
+        const catEncoded = encodeURIComponent(cat);
+
+        html += `
+          <div class="duo-collection-card ${isGolden ? 'golden' : ''}">
+            <div>
+              <div class="duo-collection-header">
+                <span class="duo-collection-icon">${catIcon}</span>
+                <div class="duo-collection-title-wrap">
+                  <div class="duo-collection-title" title="${cat}">${cat}</div>
+                  <div class="duo-collection-count-badge">${totalCount} termos</div>
+                </div>
+                ${isGolden ? `<span class="duo-collection-gold-badge">🏆 Dominada!</span>` : ''}
+              </div>
+
+              <div class="duo-collection-progress-wrap">
+                <div class="duo-collection-progress-info">
+                  <span>Maestria</span>
+                  <span style="color: ${isGolden ? 'var(--duo-yellow-text)' : 'var(--duo-green-text)'}; font-weight: 900;">${masteryPct}%</span>
+                </div>
+                <div class="duo-progress-track" style="height: 10px;">
+                  <div class="duo-progress-fill" style="width: ${masteryPct}%; background: ${isGolden ? 'var(--duo-yellow)' : 'var(--duo-green)'};"></div>
+                </div>
+              </div>
+
+              <div class="duo-collection-stats-row">
+                <span class="duo-collection-stats-pill" style="color: var(--duo-green-text);">🟢 ${masteredCount} dominadas</span>
+                ${dueCount > 0 ? `<span class="duo-collection-stats-pill" style="color: var(--duo-orange);">🟡 ${dueCount} a revisar</span>` : ''}
+                ${unreviewedCount > 0 ? `<span class="duo-collection-stats-pill" style="color: var(--duo-gray-400);">⚪ ${unreviewedCount} novas</span>` : ''}
+              </div>
+            </div>
+
+            <div class="duo-collection-actions-row">
+              <button class="btn-duo btn-duo-purple" onclick="openPracticeModeSelector('${catEncoded}')" title="Treinar este tema">
+                <span>🎙️ Treinar</span>
+              </button>
+              <button class="btn-duo btn-duo-secondary" onclick="openCollectionDrawer('${catEncoded}')" title="Ver palavras deste tema">
+                <span>📖 Termos</span>
               </button>
             </div>
-            <div class="duo-card-body">
-              <div class="duo-compact-term">${item.term}</div>
-              <div class="duo-compact-ipa">${item.ipa || item.phonetic || ''}</div>
-              <div class="duo-pos-badge">${item.pos || 'Termo'} • ${item.level || 'A1'}</div>
+          </div>
+        `;
+      });
+
+      grid.innerHTML = html;
+    }
+
+    // Drawer de Termos da Coleção
+    function openCollectionDrawer(encodedCategory) {
+      const category = decodeURIComponent(encodedCategory);
+      currentDrawerCategory = category;
+      activeDrawerSearch = '';
+
+      const drawer = document.getElementById('collectionTermsDrawer');
+      const searchInput = document.getElementById('drawerSearchInput');
+      if (searchInput) searchInput.value = '';
+
+      renderDrawerContent();
+
+      if (drawer) {
+        drawer.classList.add('active');
+      }
+    }
+    window.openCollectionDrawer = openCollectionDrawer;
+
+    function closeCollectionDrawer(event) {
+      if (event && event.target !== event.currentTarget && !event.target.classList.contains('btn-close') && !event.target.classList.contains('duo-drawer-back-btn') && !event.target.closest('.duo-drawer-back-btn')) {
+        return;
+      }
+      if (window.duoAudio) {
+        duoAudio.stopAllSpeech();
+        duoAudio.playTap();
+      }
+      const drawer = document.getElementById('collectionTermsDrawer');
+      if (drawer) {
+        drawer.classList.remove('active');
+      }
+    }
+    window.closeCollectionDrawer = closeCollectionDrawer;
+
+    function practiceCurrentDrawerCategory() {
+      if (!currentDrawerCategory) return;
+      if (window.duoAudio) {
+        duoAudio.stopAllSpeech();
+        duoAudio.playTap();
+      }
+      const lang = currentLanguage || 'en';
+      window.location.href = 'practice/deck.html?lang=' + lang + '&category=' + encodeURIComponent(currentDrawerCategory);
+    }
+    window.practiceCurrentDrawerCategory = practiceCurrentDrawerCategory;
+
+    function handleDrawerSearch(val) {
+      activeDrawerSearch = (val || '').toLowerCase().trim();
+      const clearBtn = document.getElementById('drawerSearchClear');
+      if (clearBtn) {
+        if (activeDrawerSearch.length > 0) clearBtn.classList.add('visible');
+        else clearBtn.classList.remove('visible');
+      }
+      renderDrawerContent();
+    }
+    window.handleDrawerSearch = handleDrawerSearch;
+
+    function clearDrawerSearch() {
+      const searchInput = document.getElementById('drawerSearchInput');
+      if (searchInput) searchInput.value = '';
+      activeDrawerSearch = '';
+      const clearBtn = document.getElementById('drawerSearchClear');
+      if (clearBtn) clearBtn.classList.remove('visible');
+      renderDrawerContent();
+    }
+    window.clearDrawerSearch = clearDrawerSearch;
+
+    function renderDrawerContent() {
+      if (!currentDrawerCategory) return;
+      const lang = currentLanguage || 'en';
+      const list = (window.VOCABULARY_DATA && window.VOCABULARY_DATA[lang]) || [];
+      const store = getSRSStore(lang);
+      const today = getTodayString();
+
+      const categoryItems = list.filter(item => item.category === currentDrawerCategory);
+      const catIcon = CATEGORY_ICON_MAP[currentDrawerCategory] || (categoryItems[0] && categoryItems[0].icon) || '📖';
+
+      let masteredCount = 0;
+      categoryItems.forEach(item => {
+        const srs = store[item.id];
+        if (srs && srs.level >= 3) masteredCount++;
+      });
+      const masteryPct = categoryItems.length > 0 ? Math.round((masteredCount / categoryItems.length) * 100) : 0;
+
+      // Header Elements
+      const iconEl = document.getElementById('drawerCategoryIcon');
+      const titleEl = document.getElementById('drawerCategoryTitle');
+      const statsEl = document.getElementById('drawerCategoryStats');
+      if (iconEl) iconEl.innerText = catIcon;
+      if (titleEl) titleEl.innerText = currentDrawerCategory;
+      if (statsEl) statsEl.innerText = `${categoryItems.length} termos • ${masteryPct}% Dominado (${masteredCount} dominadas)`;
+
+      // Filter terms by drawer search query
+      const filteredTerms = categoryItems.filter(item => {
+        if (!activeDrawerSearch) return true;
+        const termMatch = (item.term || '').toLowerCase().includes(activeDrawerSearch);
+        const ipaMatch = (item.ipa || item.phonetic || '').toLowerCase().includes(activeDrawerSearch);
+        const transMatch = (item.translation || '').toLowerCase().includes(activeDrawerSearch);
+        const exMatch = (item.example || '').toLowerCase().includes(activeDrawerSearch);
+        return termMatch || ipaMatch || transMatch || exMatch;
+      });
+
+      const listContainer = document.getElementById('drawerTermsList');
+      if (!listContainer) return;
+
+      if (filteredTerms.length === 0) {
+        listContainer.innerHTML = `
+          <div style="text-align: center; padding: 30px 10px; color: var(--duo-gray-400);">
+            <div style="font-size: 36px; margin-bottom: 8px;">🔍</div>
+            <div style="font-size: 16px; font-weight: 800; color: var(--duo-gray-900);">Nenhum termo encontrado nesta coleção</div>
+          </div>
+        `;
+        return;
+      }
+
+      listContainer.innerHTML = filteredTerms.map(item => {
+        const srs = store[item.id];
+        let srsBadge = '<span class="duo-badge" style="background: var(--duo-gray-200); color: var(--duo-gray-700); font-size: 11px;">⚪ Nova palavra</span>';
+
+        if (srs && srs.level >= 3) {
+          srsBadge = '<span class="duo-badge" style="background: var(--duo-green); color: #fff; font-size: 11px;">🟢 Dominada (Nível ' + srs.level + ')</span>';
+        } else if (srs && srs.lastReviewed && (!srs.nextReview || srs.nextReview <= today)) {
+          srsBadge = '<span class="duo-badge" style="background: var(--duo-orange); color: #fff; font-size: 11px;">🟡 Revisar Hoje</span>';
+        } else if (srs && srs.lastReviewed) {
+          srsBadge = '<span class="duo-badge" style="background: var(--duo-blue); color: #fff; font-size: 11px;">🔵 Em progresso (Nível ' + (srs.level || 1) + ')</span>';
+        }
+
+        const audioLang = (lang === 'en') ? 'en-US' : 'es-ES';
+        const termSafe = (item.audioText || item.term).replace(/'/g, "\'");
+        const exSafe = item.example ? item.example.replace(/'/g, "\'") : '';
+
+        return `
+          <div class="duo-drawer-term-card" onclick="openVocabDetailModal('${item.id}')" style="cursor: pointer;" title="Ver detalhes">
+            <div class="duo-drawer-term-top">
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <span style="font-size: 20px;">${item.icon || '📖'}</span>
+                <span class="duo-drawer-term-name">${item.term}</span>
+                ${item.ipa || item.phonetic ? `<span class="duo-drawer-term-ipa">${item.ipa || item.phonetic}</span>` : ''}
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                ${srsBadge}
+                <button class="btn-speaker-mini" onclick="event.stopPropagation(); if(window.duoAudio) duoAudio.speak('${termSafe}', '${audioLang}')" title="Ouvir pronúncia">
+                  🔊
+                </button>
+              </div>
             </div>
-            <div class="duo-compact-translation">
+
+            <div class="duo-drawer-term-trans">
               ${item.translation}
             </div>
+
+            ${item.example ? `
+              <div class="duo-drawer-term-ex">
+                <div style="flex: 1;">
+                  <div>"${item.example}"</div>
+                  ${item.examplePt ? `<div style="font-size: 12px; font-weight: 600; color: var(--duo-gray-400); margin-top: 2px;">${item.examplePt}</div>` : ''}
+                </div>
+                <button class="btn-speaker-mini" onclick="event.stopPropagation(); if(window.duoAudio) duoAudio.speak('${exSafe}', '${audioLang}')" title="Ouvir frase de exemplo" style="width: 28px; height: 28px; font-size: 12px;">
+                  🔊
+                </button>
+              </div>
+            ` : ''}
           </div>
         `;
       }).join('');
     }
 
-    function speakVocabTermById(event, id) {
-      if (event) event.stopPropagation();
-      const lang = currentLanguage || 'en';
-      const list = VOCABULARY_DATA[lang] || [];
-      const item = list.find(i => i.id === id);
-      if (!item) return;
-      const audioLang = (lang === 'en') ? 'en-US' : 'es-ES';
-      if (window.duoAudio) duoAudio.speak(item.audioText || item.term, audioLang);
-    }
-    window.speakVocabTermById = speakVocabTermById;
+    // Practice Mode Selector Modal
+    function openPracticeModeSelector(encodedCategory) {
+      const category = decodeURIComponent(encodedCategory);
+      currentPracticeCategory = category;
 
-    function speakVocabTerm(event, text) {
-      if (event) event.stopPropagation();
-      const lang = (currentLanguage === 'en') ? 'en-US' : 'es-ES';
-      if (window.duoAudio) duoAudio.speak(text, lang);
+      if (window.duoAudio) duoAudio.playTap();
+
+      const titleEl = document.getElementById('practiceSelectorTitle');
+      if (titleEl) titleEl.innerText = category;
+
+      const modal = document.getElementById('practiceModeSelectorModal');
+      if (modal) modal.classList.add('active');
     }
-    window.speakVocabTerm = speakVocabTerm;
+    window.openPracticeModeSelector = openPracticeModeSelector;
+
+    function closePracticeModeSelector(event) {
+      if (event && event.target !== event.currentTarget && !event.target.classList.contains('btn-close')) {
+        return;
+      }
+      if (window.duoAudio) duoAudio.playTap();
+      const modal = document.getElementById('practiceModeSelectorModal');
+      if (modal) modal.classList.remove('active');
+    }
+    window.closePracticeModeSelector = closePracticeModeSelector;
+
+    function startSelectedPracticeMode(mode) {
+      if (!currentPracticeCategory) return;
+      if (window.duoAudio) {
+        duoAudio.stopAllSpeech();
+        duoAudio.playTap();
+      }
+      const lang = currentLanguage || 'en';
+      const cat = encodeURIComponent(currentPracticeCategory);
+
+      if (mode === 'deck') {
+        window.location.href = 'practice/deck.html?lang=' + lang + '&category=' + cat;
+      } else if (mode === 'flashcards') {
+        window.location.href = 'practice/flashcards.html?lang=' + lang + '&category=' + cat;
+      } else if (mode === 'match') {
+        window.location.href = 'practice/match.html?lang=' + lang + '&category=' + cat;
+      }
+    }
+    window.startSelectedPracticeMode = startSelectedPracticeMode;
+
+    function startSmartDailyReview() {
+      if (window.duoAudio) {
+        duoAudio.stopAllSpeech();
+        duoAudio.playTap();
+      }
+      const lang = currentLanguage || 'en';
+      window.location.href = 'practice/deck.html?lang=' + lang + '&mode=due_all';
+    }
+    window.startSmartDailyReview = startSmartDailyReview;
 
     // Vocab Detail Modal Controller
     function openVocabDetailModal(id) {
@@ -1675,7 +1963,7 @@
       if (transEl) transEl.innerText = item.translation;
       if (exEl) exEl.innerText = item.example ? `"${item.example}"` : `"${item.term}"`;
       if (exPtEl) exPtEl.innerText = item.examplePt || '';
-      if (catEl) catEl.innerText = `🏷️ ${item.category}`;
+      if (catEl) catEl.innerText = '🏷️ ' + item.category;
 
       const modal = document.getElementById('vocabDetailModal');
       if (modal) modal.classList.add('active');
@@ -1747,8 +2035,10 @@
       renderPath();
       initVocabularyData();
       const initialHash = window.location.hash.replace('#', '');
-      if (['home', 'vocab', 'quests', 'stats', 'tutor'].includes(initialHash)) {
+      if (['path', 'quests', 'stats', 'tutor'].includes(initialHash)) {
         switchTab(initialHash);
+      } else {
+        switchTab('vocab');
       }
     });
   </script>

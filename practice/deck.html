@@ -188,6 +188,8 @@
     const urlParams = new URLSearchParams(window.location.search);
     const currentLanguage = urlParams.get("lang") || localStorage.getItem("linguo-current-language") || "en";
     let activeTranslateDeckType = urlParams.get("type") || "all";
+    const activeCategory = urlParams.get("category");
+    const activeMode = urlParams.get("mode");
 
     const TRANSLATE_DECK_SIZE = 7;
     let translateDeck = [];
@@ -337,11 +339,28 @@
         return;
       }
 
-      let filtered = (activeTranslateDeckType === "all")
-        ? fullList
-        : fullList.filter(item => item.type === activeTranslateDeckType);
+      let filtered = fullList;
+      if (activeCategory) {
+        filtered = fullList.filter(item => item.category === activeCategory);
+      } else if (activeTranslateDeckType !== "all") {
+        filtered = fullList.filter(item => item.type === activeTranslateDeckType);
+      }
 
       if (filtered.length === 0) filtered = fullList;
+
+      // Update exercise title
+      const titleEl = document.getElementById("translateDeckTitle");
+      if (titleEl) {
+        if (activeMode === "due_all") {
+          titleEl.innerText = "Revisão Diária Inteligente";
+        } else if (activeCategory) {
+          titleEl.innerText = "Traduza: " + activeCategory;
+        } else if (activeTranslateDeckType === "chunk") {
+          titleEl.innerText = "Traduza as expressões";
+        } else {
+          titleEl.innerText = "Traduza as palavras";
+        }
+      }
 
       const store = getSRSStore(currentLanguage);
       const today = getTodayString();
@@ -361,7 +380,12 @@
       unreviewed.sort(() => 0.5 - Math.random());
       others.sort(() => 0.5 - Math.random());
 
-      const selected = [...due, ...unreviewed, ...others].slice(0, TRANSLATE_DECK_SIZE);
+      let selected = [];
+      if (activeMode === "due_all") {
+        selected = due.length > 0 ? due : [...unreviewed, ...others].slice(0, TRANSLATE_DECK_SIZE);
+      } else {
+        selected = [...due, ...unreviewed, ...others].slice(0, TRANSLATE_DECK_SIZE);
+      }
 
       translateDeck = selected;
       translateDeckTotal = selected.length;
@@ -370,12 +394,7 @@
       translateDeckIsProcessing = false;
       translateDeckHintVisible = false;
 
-      const titleEl = document.getElementById("translateDeckTitle");
       const inputEl = document.getElementById("translateDeckTextInput");
-
-      if (titleEl) {
-        titleEl.innerText = (activeTranslateDeckType === "chunk") ? "Traduza as expressões" : "Traduza as palavras";
-      }
       if (inputEl) {
         inputEl.placeholder = isEnglish ? "Digite a tradução em inglês..." : "Digite a tradução em espanhol...";
         inputEl.value = "";

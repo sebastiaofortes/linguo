@@ -143,6 +143,7 @@
 
     const urlParams = new URLSearchParams(window.location.search);
     const currentLanguage = urlParams.get("lang") || localStorage.getItem("linguo-current-language") || "en";
+    const activeCategory = urlParams.get("category");
 
     let currentMatchTiles = [];
     let matchPairsRemaining = 5;
@@ -163,13 +164,19 @@
 
     function startMatchMadnessRound() {
       const fullList = [...((window.VOCABULARY_DATA && window.VOCABULARY_DATA[currentLanguage]) || [])];
-      if (fullList.length < 5) {
+      let listToUse = fullList;
+      if (activeCategory) {
+        listToUse = fullList.filter(item => item.category === activeCategory);
+      }
+      if (listToUse.length < 5) listToUse = fullList;
+
+      if (listToUse.length < 5) {
         alert("São necessários pelo menos 5 termos cadastrados para jogar o Combine os Pares.");
         exitPractice();
         return;
       }
 
-      const shuffled = [...fullList].sort(() => 0.5 - Math.random());
+      const shuffled = [...listToUse].sort(() => 0.5 - Math.random());
       const selected = shuffled.slice(0, 5);
 
       const tiles = [];

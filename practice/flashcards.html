@@ -212,6 +212,7 @@
 
     const urlParams = new URLSearchParams(window.location.search);
     const currentLanguage = urlParams.get("lang") || localStorage.getItem("linguo-current-language") || "en";
+    const activeCategory = urlParams.get("category");
 
     let activeFlashcardsDeck = [];
     let currentFlashcardIndex = 0;
@@ -265,6 +266,12 @@
         return;
       }
 
+      let listToUse = fullList;
+      if (activeCategory) {
+        listToUse = fullList.filter(item => item.category === activeCategory);
+      }
+      if (listToUse.length === 0) listToUse = fullList;
+
       const store = getSRSStore(currentLanguage);
       const today = getTodayString();
 
@@ -272,7 +279,7 @@
       const unreviewed = [];
       const otherCards = [];
 
-      fullList.forEach(item => {
+      listToUse.forEach(item => {
         const srs = store[item.id];
         if (!srs || !srs.lastReviewed) {
           unreviewed.push(item);
@@ -288,7 +295,7 @@
       otherCards.sort(() => 0.5 - Math.random());
 
       let deck = [...dueCards, ...unreviewed, ...otherCards].slice(0, 10);
-      if (deck.length === 0) deck = fullList.slice(0, 10);
+      if (deck.length === 0) deck = listToUse.slice(0, 10);
 
       activeFlashcardsDeck = deck;
       currentFlashcardIndex = 0;

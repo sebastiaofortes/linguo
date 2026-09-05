@@ -3838,6 +3838,462 @@ html, body {
   color: var(--duo-blue);
 }
 
+/* ============================================================
+   PROPOSTA 3: COLEÇÕES & DECKS TEMÁTICOS (THEMATIC DECKS UI)
+   ============================================================ */
+
+/* Hero Card: Revisão Diária Inteligente */
+.duo-srs-hero-card {
+  background: linear-gradient(135deg, rgba(206, 130, 255, 0.12), rgba(28, 176, 246, 0.08));
+  border: 2px solid var(--duo-purple);
+  border-radius: var(--duo-radius-xl);
+  box-shadow: 0 6px 0 var(--duo-purple-shadow), 0 12px 24px rgba(206, 130, 255, 0.12);
+  padding: 22px 26px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.duo-srs-hero-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.duo-srs-hero-title {
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--duo-purple);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.duo-srs-hero-counter {
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--duo-gray-900);
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.duo-srs-hero-subtitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--duo-gray-400);
+  margin-bottom: 18px;
+}
+
+/* Overall Course Mastery Card */
+.duo-mastery-card {
+  background: #ffffff;
+  border: 2px solid var(--duo-gray-200);
+  border-radius: var(--duo-radius-lg);
+  box-shadow: 0 4px 0 var(--duo-gray-200);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+
+.duo-mastery-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.duo-mastery-title {
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--duo-gray-400);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.duo-mastery-stats {
+  font-size: 15px;
+  font-weight: 900;
+  color: var(--duo-green-text);
+}
+
+/* Collections Grid */
+.duo-collections-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 18px;
+  margin-top: 18px;
+}
+
+/* Collection Card */
+.duo-collection-card {
+  background: #ffffff;
+  border: 2px solid var(--duo-gray-200);
+  border-radius: var(--duo-radius-xl);
+  box-shadow: 0 4px 0 var(--duo-gray-200);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  position: relative;
+}
+
+.duo-collection-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 var(--duo-gray-200);
+}
+
+/* Golden State: 100% Mastery */
+.duo-collection-card.golden {
+  background: linear-gradient(135deg, rgba(255, 200, 0, 0.14), rgba(255, 150, 0, 0.06));
+  border-color: var(--duo-yellow);
+  box-shadow: 0 4px 0 var(--duo-yellow-shadow), 0 8px 20px rgba(255, 200, 0, 0.15);
+}
+
+.duo-collection-card.golden:hover {
+  box-shadow: 0 6px 0 var(--duo-yellow-shadow), 0 10px 24px rgba(255, 200, 0, 0.2);
+}
+
+.duo-collection-gold-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--duo-yellow-light);
+  color: var(--duo-yellow-text);
+  border: 1.5px solid var(--duo-yellow);
+  border-radius: var(--duo-radius-pill);
+  font-size: 11px;
+  font-weight: 900;
+  padding: 3px 8px;
+  letter-spacing: 0.3px;
+}
+
+.duo-collection-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.duo-collection-icon {
+  font-size: 36px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.duo-collection-title-wrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.duo-collection-title {
+  font-size: 17px;
+  font-weight: 900;
+  color: var(--duo-gray-900);
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.duo-collection-count-badge {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--duo-gray-400);
+  margin-top: 2px;
+}
+
+.duo-collection-progress-wrap {
+  margin: 10px 0 12px;
+}
+
+.duo-collection-progress-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--duo-gray-400);
+  margin-bottom: 4px;
+}
+
+.duo-collection-stats-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--duo-gray-700);
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.duo-collection-stats-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.duo-collection-actions-row {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.duo-collection-actions-row .btn-duo {
+  flex: 1;
+  padding: 10px 12px;
+  font-size: 14px;
+  justify-content: center;
+}
+
+/* Terms Drawer / Modal */
+.duo-collection-drawer-box {
+  width: 100%;
+  max-width: 680px;
+  max-height: 88vh;
+  background: #ffffff;
+  border-radius: var(--duo-radius-xl);
+  border: 2px solid var(--duo-gray-200);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: duoModalPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.duo-drawer-header {
+  padding: 20px 24px;
+  border-bottom: 2px solid var(--duo-gray-200);
+  background: var(--duo-gray-100);
+}
+
+.duo-drawer-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.duo-drawer-back-btn {
+  background: none;
+  border: none;
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--duo-blue);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: var(--duo-radius-md);
+  transition: all 0.15s ease;
+}
+
+.duo-drawer-back-btn:hover {
+  background: rgba(28, 176, 246, 0.1);
+}
+
+.duo-drawer-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.duo-drawer-terms-list {
+  padding: 18px 24px;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.duo-drawer-term-card {
+  background: #ffffff;
+  border: 2px solid var(--duo-gray-200);
+  border-radius: var(--duo-radius-lg);
+  padding: 14px 18px;
+  box-shadow: 0 3px 0 var(--duo-gray-200);
+  transition: all 0.15s ease;
+}
+
+.duo-drawer-term-card:hover {
+  border-color: var(--duo-blue);
+}
+
+.duo-drawer-term-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.duo-drawer-term-name {
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--duo-gray-900);
+}
+
+.duo-drawer-term-ipa {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--duo-blue);
+  background: var(--duo-blue-light);
+  padding: 2px 8px;
+  border-radius: var(--duo-radius-sm);
+  margin-left: 8px;
+}
+
+.duo-drawer-term-trans {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--duo-green-text);
+  margin-bottom: 6px;
+}
+
+.duo-drawer-term-ex {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--duo-gray-700);
+  background: var(--duo-gray-100);
+  padding: 8px 12px;
+  border-radius: var(--duo-radius-md);
+  margin-top: 6px;
+  line-height: 1.4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/* Practice Selector Modal */
+.duo-practice-selector-box {
+  width: 100%;
+  max-width: 480px;
+  background: #ffffff;
+  border-radius: var(--duo-radius-xl);
+  border: 2px solid var(--duo-gray-200);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.2);
+  padding: 24px 26px;
+  animation: duoModalPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.duo-practice-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.duo-practice-option-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: var(--duo-radius-lg);
+  border: 2px solid var(--duo-gray-200);
+  background: #ffffff;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+  box-shadow: 0 4px 0 var(--duo-gray-200);
+}
+
+.duo-practice-option-btn:hover {
+  transform: translateY(-2px);
+}
+
+.duo-practice-option-btn.opt-deck:hover {
+  border-color: var(--duo-purple);
+  box-shadow: 0 4px 0 var(--duo-purple-shadow);
+  background: var(--duo-purple-light);
+}
+
+.duo-practice-option-btn.opt-flashcards:hover {
+  border-color: var(--duo-green);
+  box-shadow: 0 4px 0 var(--duo-green-shadow);
+  background: var(--duo-green-light);
+}
+
+.duo-practice-option-btn.opt-match:hover {
+  border-color: var(--duo-blue);
+  box-shadow: 0 4px 0 var(--duo-blue-shadow);
+  background: var(--duo-blue-light);
+}
+
+/* Dark Mode Overrides para Coleções & Decks */
+[data-theme="dark"] .duo-srs-hero-card {
+  background: linear-gradient(135deg, rgba(206, 130, 255, 0.2), rgba(28, 176, 246, 0.12));
+  border-color: var(--duo-purple);
+  box-shadow: 0 6px 0 var(--duo-purple-shadow), 0 12px 24px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .duo-srs-hero-counter {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .duo-mastery-card,
+[data-theme="dark"] .duo-collection-card,
+[data-theme="dark"] .duo-collection-drawer-box,
+[data-theme="dark"] .duo-practice-selector-box,
+[data-theme="dark"] .duo-drawer-term-card {
+  background: #18272f !important;
+  border-color: #283d47 !important;
+  box-shadow: 0 4px 0 #283d47;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .duo-collection-card:hover {
+  box-shadow: 0 6px 0 #375362;
+}
+
+[data-theme="dark"] .duo-collection-card.golden {
+  background: linear-gradient(135deg, rgba(255, 200, 0, 0.18), rgba(255, 150, 0, 0.08)) !important;
+  border-color: var(--duo-yellow) !important;
+  box-shadow: 0 4px 0 var(--duo-yellow-shadow);
+}
+
+[data-theme="dark"] .duo-collection-title,
+[data-theme="dark"] .duo-drawer-term-name {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .duo-drawer-header {
+  background: #131f24 !important;
+  border-bottom-color: #283d47 !important;
+}
+
+[data-theme="dark"] .duo-drawer-term-ex {
+  background: #131f24 !important;
+  color: var(--duo-gray-700) !important;
+}
+
+[data-theme="dark"] .duo-practice-option-btn {
+  background: #18272f;
+  border-color: #283d47;
+  box-shadow: 0 4px 0 #283d47;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .duo-practice-option-btn.opt-deck:hover {
+  background: #281938;
+}
+
+[data-theme="dark"] .duo-practice-option-btn.opt-flashcards:hover {
+  background: #18331d;
+}
+
+[data-theme="dark"] .duo-practice-option-btn.opt-match:hover {
+  background: #162f3d;
+}
+
+
 
 
 
