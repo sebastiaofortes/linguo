@@ -2786,7 +2786,8 @@
 
       list.forEach(item => {
         const srs = store[item.id];
-        if (!srs || !srs.nextReview || srs.nextReview <= today) {
+        // Apenas conta como due se já tiver sido revisada pelo menos 1 vez
+        if (srs && srs.lastReviewed && (!srs.nextReview || srs.nextReview <= today)) {
           dueCount++;
         }
         if (srs && srs.level >= 3) {
@@ -2964,12 +2965,11 @@
       }
 
       grid.innerHTML = filtered.map(item => {
-        const safeAudio = (item.audioText || item.term).replace(/'/g, "\\'");
         return `
           <div class="duo-word-compact-card" onclick="openVocabDetailModal('${item.id}')" title="Toque para ver exemplo contextual">
             <div class="duo-card-top-row">
               <span class="duo-card-icon-emoji">${item.icon || '📖'}</span>
-              <button class="btn-speaker-mini" onclick="speakVocabTerm(event, '${safeAudio}')" title="Ouvir pronúncia">
+              <button class="btn-speaker-mini" onclick="speakVocabTermById(event, '${item.id}')" title="Ouvir pronúncia">
                 🔊
               </button>
             </div>
@@ -2985,6 +2985,17 @@
         `;
       }).join('');
     }
+
+    function speakVocabTermById(event, id) {
+      if (event) event.stopPropagation();
+      const lang = currentLanguage || 'en';
+      const list = VOCABULARY_DATA[lang] || [];
+      const item = list.find(i => i.id === id);
+      if (!item) return;
+      const audioLang = (lang === 'en') ? 'en-US' : 'es-ES';
+      if (window.duoAudio) duoAudio.speak(item.audioText || item.term, audioLang);
+    }
+    window.speakVocabTermById = speakVocabTermById;
 
     function speakVocabTerm(event, text) {
       if (event) event.stopPropagation();
@@ -3121,6 +3132,11 @@
     }
     window.closeFlashcardsModal = closeFlashcardsModal;
 
+    function escapeRegExp(str) {
+      if (!str) return '';
+      return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
     function renderCurrentFlashcard() {
       if (activeFlashcardsDeck.length === 0 || currentFlashcardIndex >= activeFlashcardsDeck.length) {
         showFlashcardCompletion();
@@ -3156,8 +3172,19 @@
       if (fcCloze) {
         let sentence = card.example || card.collocation || card.term;
         try {
-          const regex = new RegExp(card.term, 'gi');
-          sentence = sentence.replace(regex, '_____');
+          let termToHide = card.term || '';
+          termToHide = termToHide.replace(/\s*\([^)]*\)/g, '').trim();
+
+          const lowerTerm = termToHide.toLowerCase();
+          if (lowerTerm.startsWith('to ') || lowerTerm.startsWith('el ') || lowerTerm.startsWith('la ') || lowerTerm.startsWith('the ') || lowerTerm.startsWith('un ') || lowerTerm.startsWith('una ') || lowerTerm.startsWith('los ') || lowerTerm.startsWith('las ')) {
+            const bareTerm = termToHide.replace(/^(to|el|la|the|un|una|los|las)\s+/i, '');
+            const regexFull = new RegExp(escapeRegExp(termToHide), 'gi');
+            const regexBare = new RegExp('\\b' + escapeRegExp(bareTerm) + '\\b', 'gi');
+            sentence = sentence.replace(regexFull, '_____').replace(regexBare, '_____');
+          } else {
+            const regex = new RegExp(escapeRegExp(termToHide), 'gi');
+            sentence = sentence.replace(regex, '_____');
+          }
         } catch(e) {
           sentence = '_____';
         }
@@ -3284,7 +3311,11 @@
     function startMatchMadnessRound() {
       const lang = currentLanguage || 'en';
       const list = VOCABULARY_DATA[lang] || [];
-      if (list.length < 5) return;
+      if (list.length < 5) {
+        alert('São necessários pelo menos 5 termos cadastrados para jogar o Combine os Pares.');
+        closeMatchMadnessModal();
+        return;
+      }
 
       const shuffled = [...list].sort(() => 0.5 - Math.random());
       const selected = shuffled.slice(0, 5);
@@ -3431,6 +3462,7 @@
     let translateDeckFeedbackTimeout = null;
     let activeTranslateDeckType = 'all'; // 'word' | 'chunk' | 'all'
     let translateDeckHintVisible = false;
+    let currentDeckFeedbackTarget = null;
 
     // Toggle Hint Visibility on Active Card
     function toggleTranslateDeckHint(event) {
@@ -3568,8 +3600,8 @@
         // Voice recognition tolerance: check if phrase contains target or target contains user
         for (const t of normTargets) {
           if (u === t) return { match: true, typo: false, matchedTarget: t };
-          // If word is multi-word or target is long, allow contained string
-          if (t.length >= 4 && u.split(' ').includes(t)) {
+          // Se for expressão multi-palavra, verifica se a fala contém a frase; se for palavra única, verifica por palavra isolada
+          if (t.includes(' ') ? u.includes(t) : (t.length >= 4 && u.split(' ').includes(t))) {
             return { match: true, typo: false, matchedTarget: t };
           }
         }
@@ -3716,6 +3748,7 @@
         clearTimeout(translateDeckFeedbackTimeout);
         translateDeckFeedbackTimeout = null;
       }
+      translateDeckIsProcessing = false;
 
       const modal = document.getElementById('vocabTranslateDeckModal');
       if (modal) modal.classList.remove('active');
@@ -3983,6 +4016,7 @@
       translateDeckIsProcessing = true;
 
       const card = translateDeck[0];
+      currentDeckFeedbackTarget = card.audioText || card.term;
       const langCode = (currentLanguage === 'es') ? 'es-ES' : 'en-US';
 
       if (window.duoAudio) {
@@ -4007,7 +4041,7 @@
         msg: `Tradução correta: "${card.term}" ${card.ipa ? `• ${card.ipa}` : ''}`
       });
 
-      setTimeout(() => {
+      translateDeckFeedbackTimeout = setTimeout(() => {
         // Discard card from deck
         translateDeckHintVisible = false;
         translateDeck.shift();
@@ -4028,6 +4062,7 @@
       translateDeckIsProcessing = true;
 
       const card = translateDeck[0];
+      currentDeckFeedbackTarget = card.audioText || card.term;
       const langCode = (currentLanguage === 'es') ? 'es-ES' : 'en-US';
 
       if (window.duoAudio) {
@@ -4051,7 +4086,7 @@
       });
 
       // Move top card to back of deck for review
-      setTimeout(() => {
+      translateDeckFeedbackTimeout = setTimeout(() => {
         if (topCardEl) topCardEl.classList.remove('shake');
         translateDeckHintVisible = false;
         const wrongCard = translateDeck.shift();
@@ -4077,7 +4112,7 @@
         topCardEl.classList.add('send-back');
       }
 
-      setTimeout(() => {
+      translateDeckFeedbackTimeout = setTimeout(() => {
         translateDeckHintVisible = false;
         const skipped = translateDeck.shift();
         translateDeck.push(skipped);
@@ -4110,10 +4145,10 @@
     }
 
     function speakCurrentDeckCardTarget() {
-      if (translateDeck.length === 0) return;
-      const card = translateDeck[0];
+      const termToSpeak = currentDeckFeedbackTarget || (translateDeck[0] && (translateDeck[0].audioText || translateDeck[0].term));
+      if (!termToSpeak) return;
       const langCode = (currentLanguage === 'es') ? 'es-ES' : 'en-US';
-      if (window.duoAudio) duoAudio.speak(card.term, langCode);
+      if (window.duoAudio) duoAudio.speak(termToSpeak, langCode);
     }
     window.speakCurrentDeckCardTarget = speakCurrentDeckCardTarget;
 
