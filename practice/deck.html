@@ -260,6 +260,60 @@
       return matrix[b.length][a.length];
     }
 
+    // Tabela de Homófonos e Transcrições Fonéticas Frequentes do Web Speech API
+    const PHONETIC_HOMOPHONES_MAP = {
+      // Inglês
+      "go": ["go", "goal", "gold", "gow", "gou", "to go", "goes", "goh"],
+      "push": ["push", "pushed", "posh", "bush", "to push", "pushing"],
+      "see": ["see", "sea", "c", "to see", "si"],
+      "be": ["be", "bee", "b", "to be"],
+      "to": ["to", "too", "two", "2"],
+      "for": ["for", "four", "4", "fore"],
+      "no": ["no", "know", "now"],
+      "know": ["know", "no", "now", "to know"],
+      "right": ["right", "write", "rite"],
+      "write": ["write", "right", "to write"],
+      "buy": ["buy", "by", "bye", "to buy"],
+      "by": ["by", "buy", "bye"],
+      "here": ["here", "hear"],
+      "hear": ["hear", "here", "to hear"],
+      "meet": ["meet", "meat", "to meet"],
+      "meat": ["meat", "meet"],
+      "son": ["son", "sun"],
+      "sun": ["sun", "son"],
+      "it": ["it", "eat", "at"],
+      "in": ["in", "inn", "an"],
+      "at": ["at", "act", "ad"],
+      "we": ["we", "wee"],
+      "he": ["he", "hi", "hee"],
+      "do": ["do", "due", "dew", "to do"],
+      "say": ["say", "sei", "to say"],
+      "get": ["get", "gate", "to get"],
+      "make": ["make", "to make"],
+      "take": ["take", "to take"],
+      "new": ["new", "knew"],
+      "one": ["one", "won", "1"],
+      "our": ["our", "hour", "are"],
+      "their": ["their", "there", "they're"],
+      "car": ["car", "cars"],
+      "dog": ["dog", "dogs"],
+      "cat": ["cat", "cats"],
+      "day": ["day", "days"],
+      "good": ["good", "goods"],
+      
+      // Espanhol
+      "el perro": ["el perro", "perro", "perros"],
+      "pero": ["pero"],
+      "el carro": ["el carro", "carro", "carros"],
+      "caro": ["caro"],
+      "rojo": ["rojo", "rojos"],
+      "la llave": ["la llave", "llave", "llaves"],
+      "la lluvia": ["la lluvia", "lluvia"],
+      "el pollo": ["el pollo", "pollo"],
+      "el jamon": ["el jamon", "jamon", "el jamón", "jamón"],
+      "jugar": ["jugar", "al jugar"]
+    };
+
     function evaluateDeckAnswer(userInput, alternatives = [], card) {
       if (!userInput || !card) return { match: false, typo: false };
 
@@ -282,22 +336,48 @@
         if (withoutArticles && withoutArticles !== t) cleanTargets.push(withoutArticles);
       });
 
-      const normTargets = cleanTargets.map(t => normalizeText(t)).filter(Boolean);
+      // Expandir com a tabela de homófonos para palavras curtas
+      const expandedTargets = [];
+      cleanTargets.forEach(t => {
+        expandedTargets.push(t);
+        const norm = normalizeText(t);
+        if (PHONETIC_HOMOPHONES_MAP[norm]) {
+          PHONETIC_HOMOPHONES_MAP[norm].forEach(h => expandedTargets.push(h));
+        }
+      });
 
+      const normTargets = expandedTargets.map(t => normalizeText(t)).filter(Boolean);
+
+      // 1. Verificação Exata e Inclusão em Frase (SEM restrição de comprimento mínimo)
       for (const u of allNormUsers) {
+        const userWords = u.split(" ");
         for (const t of normTargets) {
+          // Correspondência exata
           if (u === t) return { match: true, typo: false, matchedTarget: t };
-          if (t.includes(" ") ? u.includes(t) : (t.length >= 4 && u.split(" ").includes(t))) {
-            return { match: true, typo: false, matchedTarget: t };
+
+          // Se a palavra alvo estiver contida dentro da frase dita
+          if (t.includes(" ")) {
+            if (u.includes(t)) return { match: true, typo: false, matchedTarget: t };
+          } else {
+            if (userWords.includes(t)) return { match: true, typo: false, matchedTarget: t };
           }
         }
       }
 
+      // 2. Verificação Fuzzy / Tolerância a Typos Adaptativa
       for (const t of normTargets) {
-        if (t.length >= 5 && !t.includes(" ")) {
+        if (!t.includes(" ")) {
           for (const u of allNormUsers) {
-            if (u.length >= 4 && !u.includes(" ") && getLevenshteinDistance(u, t) === 1) {
-              return { match: true, typo: true, matchedTarget: t };
+            if (!u.includes(" ")) {
+              const dist = getLevenshteinDistance(u, t);
+              // Palavras com 4+ letras aceitam distância 1
+              if (t.length >= 4 && dist === 1) {
+                return { match: true, typo: true, matchedTarget: t };
+              }
+              // Palavras com 6+ letras aceitam distância até 2
+              if (t.length >= 6 && dist <= 2) {
+                return { match: true, typo: true, matchedTarget: t };
+              }
             }
           }
         }

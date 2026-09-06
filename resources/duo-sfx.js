@@ -332,7 +332,7 @@ class DuoSpeechRecognizer {
         this.recognition = new SpeechAPI();
         this.recognition.continuous = false;
         this.recognition.interimResults = true;
-        this.recognition.maxAlternatives = 4;
+        this.recognition.maxAlternatives = 8;
 
         this.recognition.onstart = () => {
           this.isListening = true;
