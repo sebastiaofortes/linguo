@@ -239,6 +239,7 @@
     let criticalCount = 0;
     let dueCount = 0;
     let unreviewedCount = 0;
+    let todayPracticedCount = 0;
 
     const boxes = {
       box1: 0, // 1 day
@@ -257,6 +258,11 @@
       }
 
       studyingCount++;
+
+      // Contagem de palavras praticadas hoje
+      if (srs.lastReviewed && srs.lastReviewed.startsWith(today)) {
+        todayPracticedCount++;
+      }
 
       // Strict due rule: only studied words with nextReview <= today
       if (srs.nextReview && srs.nextReview <= today) {
@@ -297,6 +303,7 @@
       learning: learningCount,
       critical: criticalCount,
       due: dueCount,
+      practicedToday: todayPracticedCount,
       unreviewed: unreviewedCount,
       retentionPct,
       cefrLevel,

@@ -216,7 +216,7 @@
           </div>
         </div>
 
-        <!-- 3 Quick Metrics Cards -->
+        <!-- Linha de 4 Métricas Rápidas -->
         <div class="duo-stats-metrics-row">
           <div class="duo-stats-mini-metric">
             <span class="metric-icon">📖</span>
@@ -237,6 +237,13 @@
             <div>
               <div class="metric-val" id="statsDueWordsCount" style="color: var(--duo-orange-shadow);">0</div>
               <div class="metric-lbl">Vencidas Hoje</div>
+            </div>
+          </div>
+          <div class="duo-stats-mini-metric">
+            <span class="metric-icon">⚡</span>
+            <div>
+              <div class="metric-val" id="statsPracticedTodayCount" style="color: var(--duo-blue);">0</div>
+              <div class="metric-lbl">Praticadas Hoje</div>
             </div>
           </div>
         </div>
@@ -1571,6 +1578,7 @@
       let masteredCount = 0;
       let studyingCount = 0;
       let unreviewedCount = 0;
+      let todayPracticedCount = 0;
 
       list.forEach(item => {
         const srs = store[item.id];
@@ -1582,6 +1590,11 @@
         }
 
         studyingCount++;
+
+        // Contagem de palavras praticadas hoje
+        if (srs.lastReviewed && srs.lastReviewed.startsWith(today)) {
+          todayPracticedCount++;
+        }
 
         // REGRA ESTRITA: Apenas palavras já estudadas com nextReview <= hoje
         if (srs.nextReview && srs.nextReview <= today) {
@@ -1601,6 +1614,7 @@
         studying: studyingCount,
         mastered: masteredCount,
         due: dueCount,
+        practicedToday: todayPracticedCount,
         unreviewed: unreviewedCount,
         retentionPct
       };
@@ -2090,12 +2104,13 @@
       const list = (window.VOCABULARY_DATA && window.VOCABULARY_DATA[lang]) || [];
       const summary = (window.LinguoSRS && window.LinguoSRS.getSRSSummary) 
         ? window.LinguoSRS.getSRSSummary(lang, list) 
-        : { total: list.length, studying: 0, mastered: 0, learning: 0, critical: 0, due: 0, retentionPct: 0, cefrLevel: 'NÍVEL A1 INICIANTE', boxes: { box1: 0, box2: 0, box3: 0, box4Plus: 0 } };
+        : { total: list.length, studying: 0, mastered: 0, learning: 0, critical: 0, due: 0, practicedToday: 0, retentionPct: 0, cefrLevel: 'NÍVEL A1 INICIANTE', boxes: { box1: 0, box2: 0, box3: 0, box4Plus: 0 } };
 
       // 1. Hero Metrics
       const studyingWordsEl = document.getElementById('statsStudyingWordsCount');
       const masteredWordsEl = document.getElementById('statsMasteredWordsCount');
       const dueWordsEl = document.getElementById('statsDueWordsCount');
+      const practicedTodayEl = document.getElementById('statsPracticedTodayCount');
       const retentionPctEl = document.getElementById('statsGlobalRetentionPct');
       const retentionFillEl = document.getElementById('statsGlobalRetentionFill');
       const globalCefrBadge = document.getElementById('statsGlobalCefrBadge');
@@ -2103,6 +2118,7 @@
       if (studyingWordsEl) studyingWordsEl.innerText = summary.studying || 0;
       if (masteredWordsEl) masteredWordsEl.innerText = summary.mastered || 0;
       if (dueWordsEl) dueWordsEl.innerText = summary.due || 0;
+      if (practicedTodayEl) practicedTodayEl.innerText = summary.practicedToday || 0;
       if (retentionPctEl) retentionPctEl.innerText = (summary.retentionPct || 0) + '%';
       if (retentionFillEl) retentionFillEl.style.width = (summary.retentionPct || 0) + '%';
       if (globalCefrBadge) globalCefrBadge.innerText = summary.cefrLevel;
