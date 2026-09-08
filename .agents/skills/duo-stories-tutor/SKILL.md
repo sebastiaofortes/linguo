@@ -64,7 +64,12 @@ Salvar o arquivo na pasta correspondente:
    - Barra de progresso dinâmica (`.duo-progress-track` e `.duo-progress-fill`).
    - Indicadores de ofensiva (🔥) e gemas (💎).
 3. Motor em JavaScript baseado no array linear de etapas `storySteps`:
-   - `type: 'dialogue'`: Exibe o avatar do personagem, nome, balão de fala com texto e aciona automaticamente `duoAudio.speak(line.text, lang)`. Inclui botão `btn-speaker-mini` para reouvir.
+   - `type: 'dialogue'`: Exibe o avatar do personagem, nome e o balão de fala no idioma de estudo.
+     - Toca automaticamente `duoAudio.speak(line.text, lang)`.
+     - Contém o grupo de ações com dois botões circulares:
+       1. **Áudio (`🔊`):** Botão para reouvir a fala (`replayStoryAudio(text)` ou `playAudio(text)`).
+       2. **Tradução (`🌐`):** Botão que alterna a exibição da tradução em português (`toggleStoryLineTranslation(idx)`).
+     - A tradução fica inicialmente oculta (`display: none`) e surge abaixo do texto com animação suave ao ser clicada.
    - `type: 'question'`: Pausa a história com uma pergunta de compreensão contextual e 3 alternativas clicáveis (`.duo-choice-card`). Ao selecionar a correta, toca `duoAudio.playCorrect()` e avança.
    - `type: 'fill_blank'`: Frase pausada com lacuna e banco de palavras (`.duo-word-chip`) para completar a fala falada.
    - `type: 'match_pairs'`: Desafio final de fixação onde o aluno conecta 5 pares de termos-chave aprendidos na história com sua respectiva tradução em português.

@@ -595,9 +595,15 @@
         lineEl.innerHTML = `
           <div class="story-line-avatar">${step.avatar}</div>
           <div class="story-line-bubble">
-            <div class="story-speaker-name">${step.speaker}</div>
-            <button class="story-btn-audio" onclick="playAudio('${encodeURIComponent(step.text)}')">🔊</button>
-            <span class="story-line-text">${step.text}</span>
+            <div class="duo-story-bubble-header">
+              <span class="duo-story-character-name">${step.speaker}</span>
+              <div class="duo-story-actions">
+                ${step.translation ? `<button class="btn-story-action btn-translate" onclick="toggleStoryLineTranslation(${currentStepIndex})" title="Ver tradução em português">🌐</button>` : ''}
+                <button class="btn-story-action btn-speaker" onclick="playAudio('${encodeURIComponent(step.text)}')" title="Ouvir novamente">🔊</button>
+              </div>
+            </div>
+            <div class="story-line-text">${step.text}</div>
+            ${step.translation ? `<div class="duo-story-translation" id="storyTrans-${currentStepIndex}" style="display: none;">${step.translation}</div>` : ''}
           </div>
         `;
         container.appendChild(lineEl);
@@ -639,9 +645,15 @@
           <div class="story-line-item" style="margin: 12px 0 16px;">
             <div class="story-line-avatar">${step.avatar}</div>
             <div class="story-line-bubble">
-              <div class="story-speaker-name">${step.speaker}</div>
-              <button class="story-btn-audio" onclick="playAudio('${encodeURIComponent(step.textFull)}')">🔊</button>
-              <span id="blankSentence">${step.textPrompt.replace('___', '<span style=\"display:inline-block; min-width: 60px; border-bottom: 2px dashed var(--duo-purple); text-align: center; color: var(--duo-purple); font-weight: 900;\">___</span>')}</span>
+              <div class="duo-story-bubble-header">
+                <span class="duo-story-character-name">${step.speaker}</span>
+                <div class="duo-story-actions">
+                  ${step.translation ? `<button class="btn-story-action btn-translate" onclick="toggleStoryLineTranslation(${currentStepIndex})" title="Ver tradução em português">🌐</button>` : ''}
+                  <button class="btn-story-action btn-speaker" onclick="playAudio('${encodeURIComponent(step.textFull)}')" title="Ouvir novamente">🔊</button>
+                </div>
+              </div>
+              <div id="blankSentence">${step.textPrompt.replace('___', '<span style=\"display:inline-block; min-width: 60px; border-bottom: 2px dashed var(--duo-purple); text-align: center; color: var(--duo-purple); font-weight: 900;\">___</span>')}</div>
+              ${step.translation ? `<div class="duo-story-translation" id="storyTrans-${currentStepIndex}" style="display: none;">${step.translation}</div>` : ''}
             </div>
           </div>
           <div class="story-chips-row">
@@ -833,12 +845,23 @@
       scrollToBottom();
     }
 
+    function toggleStoryLineTranslation(idx) {
+      const el = document.getElementById('storyTrans-' + idx);
+      if (!el) return;
+      const isHidden = (el.style.display === 'none' || !el.style.display);
+      el.style.display = isHidden ? 'block' : 'none';
+      if (window.duoAudio) duoAudio.playTap();
+    }
+    window.toggleStoryLineTranslation = toggleStoryLineTranslation;
+
     function playAudio(encodedText) {
       const text = decodeURIComponent(encodedText);
       if (window.duoAudio && typeof window.duoAudio.speak === 'function') {
         window.duoAudio.speak(text, STORY_DATA.speechLang);
       }
     }
+    window.playAudio = playAudio;
+    window.replayStoryAudio = playAudio;
 
     function scrollToBottom() {
       setTimeout(() => {

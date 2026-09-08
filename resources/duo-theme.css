@@ -4816,6 +4816,74 @@ html, body {
   margin-bottom: 6px;
 }
 
+/* Ações do Balão de Fala (Áudio + Tradução) */
+.duo-story-bubble-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.duo-story-character-name {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--duo-purple-shadow);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.duo-story-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-story-action {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--duo-gray-100);
+  border: 2px solid var(--duo-gray-200);
+  border-bottom: 3px solid var(--duo-gray-300);
+  color: var(--duo-gray-500);
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.btn-story-action:hover {
+  background: var(--duo-blue-light);
+  border-color: var(--duo-blue);
+  color: var(--duo-blue);
+  transform: scale(1.06);
+}
+
+.btn-story-action:active {
+  transform: translateY(1px);
+  border-bottom-width: 1px;
+}
+
+/* Área da tradução em português */
+.duo-story-translation {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1.5px dashed var(--duo-gray-200);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--duo-gray-500);
+  line-height: 1.4;
+  animation: duoFadeInText 0.25s ease;
+}
+
+@keyframes duoFadeInText {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .duo-story-bubble .btn-speaker-mini {
   margin-right: 8px;
   vertical-align: middle;
@@ -4885,6 +4953,28 @@ html, body {
 
 [data-theme="dark"] .duo-story-speaker-name {
   color: #7d96a5;
+}
+
+[data-theme="dark"] .duo-story-character-name {
+  color: var(--duo-purple);
+}
+
+[data-theme="dark"] .btn-story-action {
+  background: #19272e;
+  border-color: #283d47;
+  border-bottom-color: #375362;
+  color: #849fae;
+}
+
+[data-theme="dark"] .btn-story-action:hover {
+  background: rgba(28, 176, 246, 0.2);
+  border-color: var(--duo-blue);
+  color: var(--duo-blue);
+}
+
+[data-theme="dark"] .duo-story-translation {
+  border-top-color: #283d47;
+  color: #9ab4c2;
 }
 
 [data-theme="dark"] .duo-match-btn {
