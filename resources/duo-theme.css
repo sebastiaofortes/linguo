@@ -1376,27 +1376,29 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 74px;
+  height: 72px;
   background: #ffffff;
   border-top: 2px solid var(--duo-gray-200);
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   z-index: 999;
-  padding: 0 10px;
+  padding: 0 4px;
   box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.04);
 }
 
 .duo-nav-item {
+  flex: 1;                  /* Divide a barra igualmente entre os 5 botões (20% cada) */
+  min-width: 0;             /* Permite encolher sem estourar o container */
   background: none;
   border: none;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
+  gap: 2px;
   cursor: pointer;
-  padding: 6px 14px;
+  padding: 6px 2px;         /* Reduz o padding lateral de 14px para 2px */
   border-radius: var(--duo-radius-lg);
   color: var(--duo-gray-400);
   transition: all 0.15s ease;
@@ -1413,8 +1415,8 @@ body {
 }
 
 .duo-nav-icon {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1431,10 +1433,14 @@ body {
 }
 
 .duo-nav-label {
-  font-size: 11px;
+  font-size: 10px;          /* Ajustado de 11px para 10px */
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .duo-nav-dot {
