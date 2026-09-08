@@ -38,6 +38,22 @@
         path: "stories/en/i-can-do-it-myself/index.html",
         url: "stories/en/i-can-do-it-myself/index.html",
         xp: 25
+      },
+      {
+        id: "the_missing_pizza",
+        title: "The Missing Pizza",
+        translation: "A Pizza Desaparecida",
+        originalTitle: "The Missing Pizza",
+        grammarFocus: "Simple Past",
+        lang: "en",
+        set: 1,
+        level: "A1",
+        coverIcon: "🍕",
+        icon: "🍕",
+        characters: ["Junior", "Eddy"],
+        path: "stories/en/the-missing-pizza/index.html",
+        url: "stories/en/the-missing-pizza/index.html",
+        xp: 25
       }
     ],
     es: [
