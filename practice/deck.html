@@ -598,6 +598,11 @@
         const ptData = formatPtPrompt(card.translation);
         const isTopCard = (i === 0);
         const ipaText = card.ipa || card.phonetic || "";
+        
+        // Verifica se a dica está ativa no card do topo
+        const isHintActive = isTopCard && translateDeckHintVisible;
+        const displayText = isHintActive ? (card.term || "") : ptData.main;
+        const displayHint = isHintActive ? "" : ptData.hint;
 
         html += `
           <div class="duo-stack-card ${layerClass}" id="deckCard-${i}">
@@ -608,14 +613,18 @@
                 <span class="level">${card.level || "A1"}</span>
               </div>
               ${isTopCard ? `
-                <button class="btn-deck-hint ${translateDeckHintVisible ? "active" : ""}" onclick="toggleTranslateDeckHint(event)" title="Ver pronúncia IPA e ouvir áudio">${translateDeckHintVisible ? "✕" : "?"}</button>
+                <button class="btn-deck-hint ${translateDeckHintVisible ? "active" : ""}" 
+                        onclick="toggleTranslateDeckHint(event)" 
+                        title="${translateDeckHintVisible ? "Ocultar dica" : "Ver escrita e pronúncia"}">
+                  ${translateDeckHintVisible ? "✕" : "?"}
+                </button>
               ` : ""}
             </div>
 
             <div style="text-align: center; margin: auto 0;">
-              <div class="duo-stack-card-term">${ptData.main}</div>
-              ${ptData.hint ? `<div style="font-size: 13px; font-weight: 700; color: var(--duo-gray-400); margin-top: 4px;">${ptData.hint}</div>` : ""}
-              ${isTopCard && translateDeckHintVisible ? `
+              <div class="duo-stack-card-term ${isHintActive ? "hint-active-term" : ""}">${displayText}</div>
+              ${displayHint ? `<div style="font-size: 13px; font-weight: 700; color: var(--duo-gray-400); margin-top: 4px;">${displayHint}</div>` : ""}
+              ${isHintActive ? `
                 <div class="duo-deck-hint-box">
                   <button class="btn-speaker-mini" onclick="speakCurrentDeckHintAudio(event)" title="Ouvir pronúncia nativa">🔊</button>
                   ${ipaText ? `<span class="duo-deck-hint-ipa">${ipaText}</span>` : ""}

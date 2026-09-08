@@ -3807,6 +3807,27 @@ html, body {
   color: var(--duo-blue);
 }
 
+/* Termo em destaque no estado de ajuda */
+.duo-stack-card-term {
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.duo-stack-card-term.hint-active-term {
+  color: var(--duo-blue);
+  animation: duoFadeInText 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes duoFadeInText {
+  0% {
+    opacity: 0.4;
+    transform: scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 /* Box da Dica (Áudio nativo + IPA) */
 .duo-deck-hint-box {
   display: inline-flex;
@@ -3863,6 +3884,10 @@ html, body {
 
 [data-theme="dark"] .duo-deck-hint-ipa {
   color: var(--duo-blue);
+}
+
+[data-theme="dark"] .duo-stack-card-term.hint-active-term {
+  color: #49c0f8;
 }
 
 /* ============================================================
