@@ -105,97 +105,7 @@
   </div>
 
   <!-- ============================================================
-       TAB 2: MISSÕES DIÁRIAS (QUESTS)
-       ============================================================ -->
-  <div id="view-quests" class="duo-tab-view">
-    <div class="duo-tab-content-wrapper">
-      
-      <!-- Quests Hero Header -->
-      <div class="duo-unit-banner theme-orange" style="margin-bottom: 24px;">
-        <div class="duo-unit-info">
-          <h2>Desafios Diários</h2>
-          <h3>Missões & Recompensas</h3>
-          <p style="font-size: 14px; opacity: 0.95; font-weight: 600; margin-top: 4px;">
-            Complete as missões todos os dias para ganhar gemas e manter o ritmo!
-          </p>
-        </div>
-        <div style="font-size: 44px;">🎁</div>
-      </div>
-
-      <!-- Quest 1 -->
-      <div class="duo-quest-card">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-          <div style="display: flex; align-items: center; gap: 14px;">
-            <div style="font-size: 32px;">🎯</div>
-            <div>
-              <h4 style="font-size: 18px; font-weight: 800; color: var(--duo-gray-900);">Complete 2 lições</h4>
-              <p style="font-size: 13px; font-weight: 600; color: var(--duo-gray-400); margin-top: 2px;">Pratique qualquer tema na trilha</p>
-            </div>
-          </div>
-          <div style="background: var(--duo-green-light); color: var(--duo-green-text); font-weight: 900; font-size: 13px; padding: 4px 10px; border-radius: var(--duo-radius-pill);">
-            ✓ CONCLUÍDO
-          </div>
-        </div>
-        <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 800; margin-bottom: 6px;">
-          <span>Progresso</span>
-          <span style="color: var(--duo-green-text);">2 / 2</span>
-        </div>
-        <div class="duo-progress-track" style="height: 14px;">
-          <div class="duo-progress-fill" style="width: 100%;"></div>
-        </div>
-      </div>
-
-      <!-- Quest 2 -->
-      <div class="duo-quest-card">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-          <div style="display: flex; align-items: center; gap: 14px;">
-            <div style="font-size: 32px;">⚡</div>
-            <div>
-              <h4 style="font-size: 18px; font-weight: 800; color: var(--duo-gray-900);">Ganhe 50 XP</h4>
-              <p style="font-size: 13px; font-weight: 600; color: var(--duo-gray-400); margin-top: 2px;">Acumule pontos resolvendo exercícios</p>
-            </div>
-          </div>
-          <div style="background: var(--duo-green-light); color: var(--duo-green-text); font-weight: 900; font-size: 13px; padding: 4px 10px; border-radius: var(--duo-radius-pill);">
-            ✓ CONCLUÍDO
-          </div>
-        </div>
-        <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 800; margin-bottom: 6px;">
-          <span>Progresso</span>
-          <span style="color: var(--duo-green-text);">50 / 50 XP</span>
-        </div>
-        <div class="duo-progress-track" style="height: 14px;">
-          <div class="duo-progress-fill" style="width: 100%;"></div>
-        </div>
-      </div>
-
-      <!-- Quest 3 (Weekly) -->
-      <div class="duo-quest-card">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-          <div style="display: flex; align-items: center; gap: 14px;">
-            <div style="font-size: 32px;">🔥</div>
-            <div>
-              <h4 style="font-size: 18px; font-weight: 800; color: var(--duo-gray-900);">Mantenha a Ofensiva</h4>
-              <p style="font-size: 13px; font-weight: 600; color: var(--duo-gray-400); margin-top: 2px;">Pratique por 5 dias nesta semana</p>
-            </div>
-          </div>
-          <div style="background: var(--duo-orange-light); color: var(--duo-orange-shadow); font-weight: 900; font-size: 13px; padding: 4px 10px; border-radius: var(--duo-radius-pill);">
-            🔥 3 / 5 DIAS
-          </div>
-        </div>
-        <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 800; margin-bottom: 6px;">
-          <span>Progresso Semanal</span>
-          <span style="color: var(--duo-orange-shadow);">60%</span>
-        </div>
-        <div class="duo-progress-track" style="height: 14px;">
-          <div class="duo-progress-fill" style="width: 60%; background: var(--duo-orange);"></div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ============================================================
-       TAB 3: ESTATÍSTICAS & RETENÇÃO LÉXICA (STATS)
+       TAB 2: TRILHA DE AULAS (PATH)
        ============================================================ -->
   <div id="view-stats" class="duo-tab-view">
     <div class="duo-tab-content-wrapper">
@@ -501,18 +411,7 @@
       <span class="duo-nav-label">Trilha</span>
     </button>
 
-    <!-- Tab 3: Missões (Quests) -->
-    <button class="duo-nav-item" id="nav-quests" onclick="switchTab('quests')">
-      <div class="duo-nav-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
-        </svg>
-        <span class="duo-nav-dot"></span>
-      </div>
-      <span class="duo-nav-label">Missões</span>
-    </button>
-
-    <!-- Tab 4: Estatísticas & Perfil -->
+    <!-- Tab 3: Estatísticas & Perfil -->
     <button class="duo-nav-item" id="nav-stats" onclick="switchTab('stats')">
       <div class="duo-nav-icon">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
@@ -522,7 +421,7 @@
       <span class="duo-nav-label">Perfil</span>
     </button>
 
-    <!-- Tab 5: Duo AI Tutor -->
+    <!-- Tab 4: Duo AI Tutor -->
     <button class="duo-nav-item" id="nav-tutor" onclick="switchTab('tutor')">
       <div class="duo-nav-icon">
         <svg width="28" height="28" viewBox="0 0 32 32" fill="currentColor">
@@ -2539,7 +2438,7 @@
       renderPath();
       initVocabularyData();
       const initialHash = window.location.hash.replace('#', '');
-      if (['path', 'quests', 'stats', 'tutor'].includes(initialHash)) {
+      if (['path', 'stats', 'tutor'].includes(initialHash)) {
         switchTab(initialHash);
       } else {
         switchTab('vocab');
