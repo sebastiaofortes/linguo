@@ -22,6 +22,22 @@
         path: "stories/en/can-you-help-me/index.html",
         url: "stories/en/can-you-help-me/index.html",
         xp: 25
+      },
+      {
+        id: "i_can_do_it_myself",
+        title: "I Can Do It Myself!",
+        translation: "Eu Consigo Fazer Sozinha!",
+        originalTitle: "I Can Do It Myself!",
+        grammarFocus: "Pronomes Reflexivos",
+        lang: "en",
+        set: 1,
+        level: "A1",
+        coverIcon: "🪞",
+        icon: "🪞",
+        characters: ["Lin", "Lucy"],
+        path: "stories/en/i-can-do-it-myself/index.html",
+        url: "stories/en/i-can-do-it-myself/index.html",
+        xp: 25
       }
     ],
     es: [
