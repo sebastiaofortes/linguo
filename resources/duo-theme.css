@@ -4906,6 +4906,118 @@ html, body {
   box-shadow: none;
 }
 
+/* ============================================================
+   ABA DE HISTÓRIAS INTERATIVAS (STORIES TAB UI)
+   ============================================================ */
+.duo-stories-set-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.duo-set-title {
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  color: var(--duo-gray-500);
+}
+
+.duo-stories-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.duo-story-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: #ffffff;
+  border: 2px solid var(--duo-gray-200);
+  border-bottom: 5px solid var(--duo-gray-300);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.duo-story-card:hover {
+  border-color: var(--duo-purple);
+  border-bottom-color: var(--duo-purple-shadow);
+  transform: translateY(-2px);
+}
+
+.duo-story-card:active {
+  transform: translateY(2px);
+  border-bottom-width: 2px;
+}
+
+.duo-story-card-icon {
+  font-size: 34px;
+  flex-shrink: 0;
+}
+
+.duo-story-card-info {
+  flex: 1;
+}
+
+.duo-story-card-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--duo-gray-900);
+}
+
+.duo-story-card-subtitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--duo-gray-400);
+  margin-top: 2px;
+}
+
+.duo-story-card-chars {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--duo-purple-shadow);
+  margin-top: 4px;
+}
+
+.duo-story-card-badge .status-xp {
+  background: var(--duo-orange-light);
+  color: var(--duo-orange-shadow);
+  font-weight: 900;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: var(--duo-radius-pill);
+}
+
+.duo-story-card-badge .status-done {
+  background: var(--duo-green-light);
+  color: var(--duo-green-text);
+  font-weight: 900;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: var(--duo-radius-pill);
+}
+
+/* Dark Mode para Stories Cards */
+[data-theme="dark"] .duo-story-card {
+  background: #19272e;
+  border-color: #283d47;
+  border-bottom-color: #375362;
+}
+
+[data-theme="dark"] .duo-story-card:hover {
+  border-color: var(--duo-purple);
+  border-bottom-color: var(--duo-purple);
+}
+
+[data-theme="dark"] .duo-story-card-title {
+  color: #f1f7fb;
+}
+
+
 
 
 

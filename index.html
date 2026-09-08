@@ -11,6 +11,7 @@
   <script src="resources/vocab-data.js"></script>
   <script src="resources/vocab-srs.js"></script>
   <script src="resources/duo-sfx.js"></script>
+  <script src="stories/stories-data.js"></script>
 </head>
 <body>
 
@@ -105,7 +106,33 @@
   </div>
 
   <!-- ============================================================
-       TAB 2: TRILHA DE AULAS (PATH)
+       TAB 3: HISTÓRIAS INTERATIVAS (STORIES)
+       ============================================================ -->
+  <div id="view-stories" class="duo-tab-view">
+    <div class="duo-tab-content-wrapper">
+      
+      <!-- Stories Hero Banner -->
+      <div class="duo-unit-banner theme-purple" style="margin-bottom: 24px;">
+        <div class="duo-unit-info">
+          <h2>Histórias Interativas</h2>
+          <h3>Conversação & Escuta Ativa</h3>
+          <p style="font-size: 14px; opacity: 0.95; font-weight: 600; margin-top: 4px;">
+            Mergulhe em diálogos do dia a dia com personagens nativos, pratique escuta em tempo real e consolide vocabulário!
+          </p>
+        </div>
+        <div style="font-size: 46px;">🎭</div>
+      </div>
+
+      <!-- Container dinâmico das histórias -->
+      <div id="storiesContainer">
+        <!-- Preenchido via renderStoriesView() -->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TAB 4: ESTATÍSTICAS & PERFIL (STATS)
        ============================================================ -->
   <div id="view-stats" class="duo-tab-view">
     <div class="duo-tab-content-wrapper">
@@ -411,7 +438,17 @@
       <span class="duo-nav-label">Trilha</span>
     </button>
 
-    <!-- Tab 3: Estatísticas & Perfil -->
+    <!-- Tab 3: Histórias Interativas (Stories) -->
+    <button class="duo-nav-item" id="nav-stories" onclick="switchTab('stories')">
+      <div class="duo-nav-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M18 2H6c-1.2 0-2 .8-2 2v16c0 1.2.8 2 2 2h12c1.2 0 2-.8 2-2V4c0-1.2-.8-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/>
+        </svg>
+      </div>
+      <span class="duo-nav-label">Histórias</span>
+    </button>
+
+    <!-- Tab 4: Estatísticas & Perfil -->
     <button class="duo-nav-item" id="nav-stats" onclick="switchTab('stats')">
       <div class="duo-nav-icon">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
@@ -421,7 +458,7 @@
       <span class="duo-nav-label">Perfil</span>
     </button>
 
-    <!-- Tab 4: Duo AI Tutor -->
+    <!-- Tab 5: Duo AI Tutor -->
     <button class="duo-nav-item" id="nav-tutor" onclick="switchTab('tutor')">
       <div class="duo-nav-icon">
         <svg width="28" height="28" viewBox="0 0 32 32" fill="currentColor">
@@ -1234,6 +1271,7 @@
       renderPath();
       renderVocabView();
       if (typeof renderStatsView === 'function') renderStatsView();
+      if (typeof renderStoriesView === 'function') renderStoriesView();
       closeCourseModal();
     }
     window.selectLanguage = selectLanguage;
@@ -1315,6 +1353,8 @@
           renderVocabView();
         } else if (tabName === 'path') {
           renderPath();
+        } else if (tabName === 'stories') {
+          if (typeof renderStoriesView === 'function') renderStoriesView();
         } else if (tabName === 'stats') {
           if (typeof renderStatsView === 'function') renderStatsView();
         }
@@ -2394,11 +2434,87 @@
     window.addEventListener('linguo_srs_updated', () => {
       renderVocabView();
       if (typeof renderStatsView === 'function') renderStatsView();
+      if (typeof renderStoriesView === 'function') renderStoriesView();
     });
     window.addEventListener('pageshow', () => {
       renderVocabView();
       if (typeof renderStatsView === 'function') renderStatsView();
+      if (typeof renderStoriesView === 'function') renderStoriesView();
     });
+
+    /* ============================================================
+     * INTERACTIVE STORIES CONTROLLER
+     * ============================================================ */
+    function renderStoriesView() {
+      const container = document.getElementById('storiesContainer');
+      if (!container) return;
+
+      const lang = currentLanguage || 'en';
+      const storiesList = (window.STORIES_DATA && window.STORIES_DATA[lang]) || [];
+
+      if (storiesList.length === 0) {
+        container.innerHTML = `
+          <div class="duo-empty-card" style="text-align: center; padding: 40px 20px;">
+            <div style="font-size: 52px; margin-bottom: 12px;">🦉📖</div>
+            <h3 style="font-size: 20px; font-weight: 800; color: var(--duo-gray-900);">Nenhuma história cadastrada ainda</h3>
+            <p style="font-size: 14px; color: var(--duo-gray-400); max-width: 360px; margin: 8px auto 0; font-weight: 600;">
+              Peça ao assistente para gerar histórias interativas para o curso de ${lang === 'es' ? 'Espanhol' : 'Inglês'} utilizando a skill <strong>duo-stories-tutor</strong>!
+            </p>
+          </div>
+        `;
+        return;
+      }
+
+      // Agrupar por Sets (Set 1, Set 2, etc.)
+      const setsMap = {};
+      storiesList.forEach(story => {
+        const setNum = story.set || 1;
+        if (!setsMap[setNum]) setsMap[setNum] = [];
+        setsMap[setNum].push(story);
+      });
+
+      let html = '';
+      Object.keys(setsMap).sort((a, b) => a - b).forEach(setNum => {
+        const items = setsMap[setNum];
+        const levelLabel = items[0]?.level || 'A1';
+
+        html += `
+          <div class="duo-stories-set-section" style="margin-bottom: 28px;">
+            <div class="duo-stories-set-header">
+              <span class="duo-set-title">SET ${setNum}</span>
+              <span class="duo-badge duo-badge-sm" style="background: var(--duo-purple); color: #fff;">NÍVEL ${levelLabel}</span>
+            </div>
+            <div class="duo-stories-grid">
+              ${items.map(story => {
+                const isCompleted = !!localStorage.getItem('linguo-story-completed-' + story.id);
+                const chars = (story.characters || []).join(' & ');
+                const storyLink = story.url || story.path || '#';
+                const storyIcon = story.coverIcon || story.icon || '📖';
+                const storySub = story.translation || story.originalTitle || '';
+                return `
+                  <div class="duo-story-card ${isCompleted ? 'completed' : ''}" onclick="window.location.href='${storyLink}'">
+                    <div class="duo-story-card-icon">${storyIcon}</div>
+                    <div class="duo-story-card-info">
+                      <div class="duo-story-card-title">${story.title}</div>
+                      ${storySub ? `<div class="duo-story-card-subtitle">${storySub}</div>` : ''}
+                      ${chars ? `<div class="duo-story-card-chars">👥 ${chars}</div>` : ''}
+                    </div>
+                    <div class="duo-story-card-badge">
+                      ${isCompleted 
+                        ? '<span class="status-done">✓ Feita</span>' 
+                        : `<span class="status-xp">+${story.xp || 25} XP</span>`}
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+    window.renderStoriesView = renderStoriesView;
 
     /* ============================================================
      * PRACTICE MODES ROUTERS (DEDICATED PAGES)
@@ -2438,7 +2554,7 @@
       renderPath();
       initVocabularyData();
       const initialHash = window.location.hash.replace('#', '');
-      if (['path', 'stats', 'tutor'].includes(initialHash)) {
+      if (['path', 'stories', 'stats', 'tutor'].includes(initialHash)) {
         switchTab(initialHash);
       } else {
         switchTab('vocab');
