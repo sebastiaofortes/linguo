@@ -7,7 +7,21 @@
 
   const STORIES_DATA = {
     en: [
-      // Histórias em Inglês serão registradas aqui
+      {
+        id: "can_you_help_me",
+        title: "Can You Help Me?",
+        translation: "Você Pode Me Ajudar?",
+        originalTitle: "Can You Help Me?",
+        lang: "en",
+        set: 1,
+        level: "A1",
+        coverIcon: "🔑",
+        icon: "🔑",
+        characters: ["Junior", "Eddy", "Lucy"],
+        path: "stories/en/can-you-help-me/index.html",
+        url: "stories/en/can-you-help-me/index.html",
+        xp: 25
+      }
     ],
     es: [
       // Histórias em Espanhol serão registradas aqui
