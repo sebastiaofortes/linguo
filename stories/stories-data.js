@@ -54,6 +54,38 @@
         path: "stories/en/the-missing-pizza/index.html",
         url: "stories/en/the-missing-pizza/index.html",
         xp: 25
+      },
+      {
+        id: "i_will_be_famous",
+        title: "I Will Be Famous!",
+        translation: "Eu Serei Famoso!",
+        originalTitle: "I Will Be Famous!",
+        grammarFocus: "Simple Future",
+        lang: "en",
+        set: 1,
+        level: "A1",
+        coverIcon: "🎨",
+        icon: "🎨",
+        characters: ["Oscar", "Bea"],
+        path: "stories/en/i-will-be-famous/index.html",
+        url: "stories/en/i-will-be-famous/index.html",
+        xp: 25
+      },
+      {
+        id: "what_are_you_doing",
+        title: "What Are You Doing?",
+        translation: "O Que Você Está Fazendo?",
+        originalTitle: "What Are You Doing?",
+        grammarFocus: "Present Continuous",
+        lang: "en",
+        set: 1,
+        level: "A1",
+        coverIcon: "🍳",
+        icon: "🍳",
+        characters: ["Vikram", "Eddy"],
+        path: "stories/en/what-are-you-doing/index.html",
+        url: "stories/en/what-are-you-doing/index.html",
+        xp: 25
       }
     ],
     es: [
