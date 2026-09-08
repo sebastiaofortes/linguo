@@ -2491,13 +2491,20 @@
                 const storyLink = story.url || story.path || '#';
                 const storyIcon = story.coverIcon || story.icon || '📖';
                 const storySub = story.translation || story.originalTitle || '';
+                const grammarFocus = story.grammarFocus || '';
+
                 return `
                   <div class="duo-story-card ${isCompleted ? 'completed' : ''}" onclick="window.location.href='${storyLink}'">
                     <div class="duo-story-card-icon">${storyIcon}</div>
                     <div class="duo-story-card-info">
                       <div class="duo-story-card-title">${story.title}</div>
                       ${storySub ? `<div class="duo-story-card-subtitle">${storySub}</div>` : ''}
-                      ${chars ? `<div class="duo-story-card-chars">👥 ${chars}</div>` : ''}
+                      
+                      <!-- Linha de Metadados: Foco Gramatical + Personagens -->
+                      <div class="duo-story-card-meta">
+                        ${grammarFocus ? `<span class="duo-story-grammar-tag">🧠 ${grammarFocus}</span>` : ''}
+                        ${chars ? `<span class="duo-story-card-chars">👥 ${chars}</span>` : ''}
+                      </div>
                     </div>
                     <div class="duo-story-card-badge">
                       ${isCompleted 

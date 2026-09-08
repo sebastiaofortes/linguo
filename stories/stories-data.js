@@ -12,6 +12,7 @@
         title: "Can You Help Me?",
         translation: "Você Pode Me Ajudar?",
         originalTitle: "Can You Help Me?",
+        grammarFocus: "Pronomes Objeto",
         lang: "en",
         set: 1,
         level: "A1",

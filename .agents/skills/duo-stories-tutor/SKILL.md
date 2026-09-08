@@ -84,13 +84,17 @@ Ao criar uma nova história, registrar o metadado no objeto `window.STORIES_DATA
 {
   id: "story_slug",
   title: "Título da História em Português",
+  translation: "Tradução em Português",
   originalTitle: "Original Title / Título Original",
+  grammarFocus: "Foco Gramatical (ex: Pronomes Objeto, Simple Past, Verbo To Be)",
   lang: "en", // ou "es"
   set: 1,
   level: "A1",
+  coverIcon: "🔑",
   icon: "🔑",
   characters: ["Junior", "Eddy"],
   path: "stories/en/story-slug/index.html",
+  url: "stories/en/story-slug/index.html",
   xp: 25
 }
 ```

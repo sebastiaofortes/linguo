@@ -5076,7 +5076,28 @@ html, body {
   font-size: 12px;
   font-weight: 700;
   color: var(--duo-purple-shadow);
-  margin-top: 4px;
+}
+
+/* Metadados do Card de História */
+.duo-story-card-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.duo-story-grammar-tag {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--duo-purple-shadow);
+  background: var(--duo-purple-light, #f3e8ff);
+  padding: 3px 8px;
+  border-radius: var(--duo-radius-pill);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  letter-spacing: 0.2px;
 }
 
 .duo-story-card-badge .status-xp {
@@ -5111,6 +5132,11 @@ html, body {
 
 [data-theme="dark"] .duo-story-card-title {
   color: #f1f7fb;
+}
+
+[data-theme="dark"] .duo-story-grammar-tag {
+  background: rgba(168, 85, 247, 0.18);
+  color: #c084fc;
 }
 
 
