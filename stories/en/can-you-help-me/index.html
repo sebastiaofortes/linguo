@@ -696,7 +696,7 @@
       const targetBtn = buttons[index];
 
       if (isCorrect) {
-        if (window.duoAudio) duoAudio.playCorrect();
+        if (window.duoAudio) (duoAudio.playCorrect ? duoAudio.playCorrect() : duoAudio.playSuccess());
         targetBtn.classList.add('selected-correct');
         buttons.forEach(b => b.disabled = true);
 
@@ -706,7 +706,7 @@
           handleNextStep();
         }, 1000);
       } else {
-        if (window.duoAudio) duoAudio.playWrong();
+        if (window.duoAudio) (duoAudio.playWrong ? duoAudio.playWrong() : duoAudio.playError());
         targetBtn.classList.add('selected-wrong');
         setTimeout(() => {
           targetBtn.classList.remove('selected-wrong');
@@ -716,7 +716,7 @@
 
     function checkFillBlank(selectedWord, correctWord, buttonEl) {
       if (selectedWord === correctWord) {
-        if (window.duoAudio) duoAudio.playCorrect();
+        if (window.duoAudio) (duoAudio.playCorrect ? duoAudio.playCorrect() : duoAudio.playSuccess());
         buttonEl.classList.add('used');
         const sentenceSpan = document.getElementById('blankSentence');
         if (sentenceSpan) {
@@ -729,7 +729,7 @@
           handleNextStep();
         }, 1000);
       } else {
-        if (window.duoAudio) duoAudio.playWrong();
+        if (window.duoAudio) (duoAudio.playWrong ? duoAudio.playWrong() : duoAudio.playError());
         buttonEl.style.borderColor = 'var(--duo-red)';
         setTimeout(() => {
           buttonEl.style.borderColor = '';
@@ -760,7 +760,7 @@
 
         if (key1 === key2 && type1 !== type2) {
           // Correct match!
-          if (window.duoAudio) duoAudio.playCorrect();
+          if (window.duoAudio) (duoAudio.playCorrect ? duoAudio.playCorrect() : duoAudio.playSuccess());
           first.classList.remove('selected');
           first.classList.add('matched');
           buttonEl.classList.add('matched');
@@ -776,7 +776,7 @@
           }
         } else {
           // Wrong match
-          if (window.duoAudio) duoAudio.playWrong();
+          if (window.duoAudio) (duoAudio.playWrong ? duoAudio.playWrong() : duoAudio.playError());
           buttonEl.classList.add('selected');
           setTimeout(() => {
             first.classList.remove('selected');

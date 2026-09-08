@@ -57,6 +57,35 @@ class DuoAudioEngine {
   }
 
   /**
+   * Quick bright chime for answering questions correctly (C5 -> G5)
+   */
+  playCorrect() {
+    this.initContext();
+    if (!this.ctx) return;
+
+    const notes = [523.25, 783.99]; // C5, G5
+    const startTime = this.ctx.currentTime;
+
+    notes.forEach((freq, index) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, startTime + index * 0.08);
+
+      gain.gain.setValueAtTime(0.001, startTime + index * 0.08);
+      gain.gain.exponentialRampToValueAtTime(0.22, startTime + index * 0.08 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + index * 0.08 + 0.22);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start(startTime + index * 0.08);
+      osc.stop(startTime + index * 0.08 + 0.25);
+    });
+  }
+
+  /**
    * Gentle incorrect feedback sound (Downward muffled notes)
    */
   playError() {
@@ -83,6 +112,13 @@ class DuoAudioEngine {
       osc.start(startTime + index * 0.15);
       osc.stop(startTime + index * 0.15 + 0.28);
     });
+  }
+
+  /**
+   * Alias for incorrect feedback sound
+   */
+  playWrong() {
+    this.playError();
   }
 
   /**
