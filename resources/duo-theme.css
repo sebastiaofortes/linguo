@@ -4741,6 +4741,171 @@ html, body {
   box-shadow: 0 5px 0 var(--duo-red-shadow);
 }
 
+/* ============================================================
+   Linguo Interactive Stories UI (Estilo Duolingo Stories)
+   ============================================================ */
+
+.duo-story-container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px 20px 140px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.duo-story-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  animation: storyLineAppear 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 1;
+}
+
+@keyframes storyLineAppear {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.duo-story-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--duo-gray-100);
+  border: 3px solid var(--duo-gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 0 var(--duo-gray-200);
+}
+
+.duo-story-bubble {
+  position: relative;
+  background: #ffffff;
+  border: 2px solid var(--duo-gray-200);
+  border-radius: var(--duo-radius-xl);
+  padding: 16px 20px;
+  box-shadow: 0 4px 0 var(--duo-gray-200);
+  flex: 1;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--duo-gray-900);
+}
+
+.duo-story-speaker-name {
+  font-size: 13px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--duo-gray-400);
+  margin-bottom: 6px;
+}
+
+.duo-story-bubble .btn-speaker-mini {
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.duo-match-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.duo-match-btn {
+  background: #ffffff;
+  border: 2px solid var(--duo-gray-200);
+  border-radius: var(--duo-radius-lg);
+  padding: 14px 16px;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--duo-gray-800);
+  box-shadow: 0 4px 0 var(--duo-gray-200);
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.1s ease;
+  user-select: none;
+}
+
+.duo-match-btn:hover {
+  background: var(--duo-gray-100);
+}
+
+.duo-match-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--duo-gray-200);
+}
+
+.duo-match-btn.selected {
+  border-color: var(--duo-blue);
+  background: #f0f8ff;
+  color: var(--duo-blue-shadow);
+  box-shadow: 0 4px 0 var(--duo-blue);
+}
+
+.duo-match-btn.matched {
+  border-color: var(--duo-gray-300);
+  background: var(--duo-gray-100);
+  color: var(--duo-gray-300);
+  box-shadow: none;
+  cursor: default;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Dark Mode Overrides for Stories */
+[data-theme="dark"] .duo-story-bubble {
+  background: #18272f;
+  border-color: #283d47;
+  color: #ffffff;
+  box-shadow: 0 4px 0 #283d47;
+}
+
+[data-theme="dark"] .duo-story-avatar {
+  background: #131f24;
+  border-color: #283d47;
+  box-shadow: 0 4px 0 #283d47;
+}
+
+[data-theme="dark"] .duo-story-speaker-name {
+  color: #7d96a5;
+}
+
+[data-theme="dark"] .duo-match-btn {
+  background: #18272f;
+  border-color: #283d47;
+  color: #ffffff;
+  box-shadow: 0 4px 0 #283d47;
+}
+
+[data-theme="dark"] .duo-match-btn:hover {
+  background: #1e313b;
+}
+
+[data-theme="dark"] .duo-match-btn.selected {
+  background: #16364a;
+  border-color: var(--duo-blue);
+  color: #ffffff;
+  box-shadow: 0 4px 0 var(--duo-blue);
+}
+
+[data-theme="dark"] .duo-match-btn.matched {
+  background: #131f24;
+  border-color: #203038;
+  color: #3e5360;
+  box-shadow: none;
+}
+
 
 
 
