@@ -153,7 +153,22 @@
       }
     ],
     es: [
-      // Histórias em Espanhol serão registradas aqui
+      {
+        id: "un_regalo_especial",
+        title: "Un Regalo Especial",
+        translation: "Um Presente Especial",
+        originalTitle: "Un Regalo Especial",
+        grammarFocus: "Duplicação Clítica",
+        lang: "es",
+        set: 1,
+        level: "A1",
+        coverIcon: "🎁",
+        icon: "🎁",
+        characters: ["Junior", "Eddy"],
+        path: "stories/es/un-regalo-especial/index.html",
+        url: "stories/es/un-regalo-especial/index.html",
+        xp: 25
+      }
     ]
   };
 
