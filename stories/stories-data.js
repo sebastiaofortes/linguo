@@ -134,6 +134,22 @@
         path: "stories/en/this-time-tomorrow/index.html",
         url: "stories/en/this-time-tomorrow/index.html",
         xp: 25
+      },
+      {
+        id: "yesterday",
+        title: "Yesterday",
+        translation: "Ontem (The Beatles)",
+        originalTitle: "Yesterday",
+        grammarFocus: "Simple Past & Canções",
+        lang: "en",
+        set: 1,
+        level: "A1",
+        coverIcon: "🎸",
+        icon: "🎸",
+        characters: ["Oscar", "Vikram"],
+        path: "stories/en/yesterday/index.html",
+        url: "stories/en/yesterday/index.html",
+        xp: 25
       }
     ],
     es: [
