@@ -235,7 +235,8 @@
       return text
         .toLowerCase()
         .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-        .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"'’]/g, "")
+        .replace(/[-_\\/]/g, " ") // Hífens e barras viram espaço (ex: "carry-on" -> "carry on")
+        .replace(/[.,#!$%\^&\*;:{}=`~()?"'’]/g, "")
         .replace(/\s+/g, " ")
         .trim();
     }
@@ -263,6 +264,19 @@
     // Tabela de Homófonos e Transcrições Fonéticas Frequentes do Web Speech API
     const PHONETIC_HOMOPHONES_MAP = {
       // Inglês
+      "few": ["few", "phew", "view", "a few", "fuel", "fiu", "pew", "hue", "the few"],
+      "in": ["in", "inn", "an", "and", "en", "end", "it", "n"],
+      "into": ["into", "in to", "in two", "in 2", "in too", "unto", "enter", "inner"],
+      "carry on luggage": [
+        "carry on luggage",
+        "carry-on luggage",
+        "carry on",
+        "carry-on",
+        "carrion luggage",
+        "carry on baggage",
+        "carry on bag"
+      ],
+      "carry on": ["carry on", "carry-on", "carry on luggage", "carrion"],
       "go": ["go", "goal", "gold", "gow", "gou", "to go", "goes", "goh"],
       "push": ["push", "pushed", "posh", "bush", "to push", "pushing"],
       "see": ["see", "sea", "c", "to see", "si"],
@@ -282,7 +296,6 @@
       "son": ["son", "sun"],
       "sun": ["sun", "son"],
       "it": ["it", "eat", "at"],
-      "in": ["in", "inn", "an"],
       "at": ["at", "act", "ad"],
       "we": ["we", "wee"],
       "he": ["he", "hi", "hee"],
@@ -348,12 +361,20 @@
 
       const normTargets = expandedTargets.map(t => normalizeText(t)).filter(Boolean);
 
-      // 1. Verificação Exata e Inclusão em Frase (SEM restrição de comprimento mínimo)
+      // 1. Verificação Exata, Inclusão em Frase e Comparação sem Espaços
       for (const u of allNormUsers) {
         const userWords = u.split(" ");
+        const userNoSpaces = u.replace(/\s+/g, "");
+
         for (const t of normTargets) {
           // Correspondência exata
           if (u === t) return { match: true, typo: false, matchedTarget: t };
+
+          // Correspondência agnóstica a espaços (ex: "in to" === "into", "carry on" === "carryon")
+          const targetNoSpaces = t.replace(/\s+/g, "");
+          if (userNoSpaces && userNoSpaces === targetNoSpaces) {
+            return { match: true, typo: false, matchedTarget: t };
+          }
 
           // Se a palavra alvo estiver contida dentro da frase dita
           if (t.includes(" ")) {
@@ -370,10 +391,12 @@
           for (const u of allNormUsers) {
             if (!u.includes(" ")) {
               const dist = getLevenshteinDistance(u, t);
-              // Palavras com 4+ letras aceitam distância 1
-              if (t.length >= 4 && dist === 1) {
+              
+              // Palavras com 3+ letras aceitam distância 1 (cobre "few" -> "view", "phew")
+              if (t.length >= 3 && dist === 1) {
                 return { match: true, typo: true, matchedTarget: t };
               }
+              
               // Palavras com 6+ letras aceitam distância até 2
               if (t.length >= 6 && dist <= 2) {
                 return { match: true, typo: true, matchedTarget: t };
