@@ -150,6 +150,22 @@
         path: "stories/en/yesterday/index.html",
         url: "stories/en/yesterday/index.html",
         xp: 25
+      },
+      {
+        id: "its_my_life",
+        title: "It's My Life",
+        translation: "É a Minha Vida (Bon Jovi)",
+        originalTitle: "It's My Life",
+        grammarFocus: "Expressões & Canções",
+        lang: "en",
+        set: 1,
+        level: "A1",
+        coverIcon: "🎸",
+        icon: "🎸",
+        characters: ["Eddy", "Junior"],
+        path: "stories/en/its-my-life/index.html",
+        url: "stories/en/its-my-life/index.html",
+        xp: 25
       }
     ],
     es: [

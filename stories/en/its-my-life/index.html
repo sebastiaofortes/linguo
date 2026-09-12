@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Linguo Stories - It's My Life (Bon Jovi)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../resources/duo-theme.css">
+  <script src="../../../resources/duo-sfx.js"></script>
+  <style>
+    body {
+      background-color: var(--duo-bg, #f7f7f7);
+      margin: 0;
+      padding: 0;
+      font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Fixed Top App Header */
+    .duo-story-header {
+      position: sticky;
+      top: 0;
+      background: #ffffff;
+      border-bottom: 2px solid var(--duo-gray-200);
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      z-index: 100;
+    }
+
+    .duo-story-header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+      max-width: 520px;
+    }
+
+    .btn-close-story {
+      background: none;
+      border: none;
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--duo-gray-400);
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.15s ease;
+      flex-shrink: 0;
+    }
+
+    .btn-close-story:hover {
+      background: var(--duo-gray-100);
+      color: var(--duo-gray-800);
+    }
+
+    .duo-story-progress-track {
+      flex: 1;
+      height: 14px;
+      background: var(--duo-gray-200);
+      border-radius: var(--duo-radius-pill);
+      overflow: hidden;
+    }
+
+    .duo-story-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--duo-green);
+      border-radius: var(--duo-radius-pill);
+      box-shadow: 0 2px 0 var(--duo-green-shadow);
+      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .duo-story-header-stats {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 14px;
+      color: var(--duo-gray-700);
+      margin-left: 12px;
+    }
+
+    /* Content Area */
+    .duo-story-main {
+      flex: 1;
+      max-width: 620px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 16px 140px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .duo-story-title-card {
+      text-align: center;
+      padding: 20px 16px;
+      background: #ffffff;
+      border: 2px solid var(--duo-gray-200);
+      border-radius: var(--duo-radius-xl);
+      box-shadow: 0 4px 0 var(--duo-gray-200);
+      margin-bottom: 10px;
+    }
+
+    .duo-story-title-card h1 {
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--duo-gray-900);
+      margin: 0 0 6px;
+    }
+
+    .duo-story-title-card p {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--duo-gray-400);
+      margin: 0;
+    }
+
+    /* Active & Past dialogue lines */
+    .story-line-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      animation: lineFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes lineFadeIn {
+      from { opacity: 0; transform: translateY(12px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .story-line-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: var(--duo-gray-100);
+      border: 3px solid var(--duo-gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      flex-shrink: 0;
+      box-shadow: 0 3px 0 var(--duo-gray-200);
+    }
+
+    .story-line-bubble {
+      position: relative;
+      background: #ffffff;
+      border: 2px solid var(--duo-gray-200);
+      border-radius: var(--duo-radius-xl);
+      padding: 14px 18px;
+      box-shadow: 0 4px 0 var(--duo-gray-200);
+      flex: 1;
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.45;
+      color: var(--duo-gray-900);
+    }
+
+    .story-line-text {
+      display: inline;
+    }
+
+    /* Checkpoint Question Card */
+    .story-checkpoint-card {
+      background: #ffffff;
+      border: 2px solid var(--duo-purple);
+      border-radius: var(--duo-radius-xl);
+      padding: 20px;
+      box-shadow: 0 5px 0 var(--duo-purple-shadow);
+      margin: 10px 0;
+      animation: lineFadeIn 0.3s ease;
+    }
+
+    .story-checkpoint-title {
+      font-size: 14px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--duo-purple);
+      margin-bottom: 8px;
+    }
+
+    .story-checkpoint-question {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--duo-gray-900);
+      margin-bottom: 16px;
+      line-height: 1.35;
+    }
+
+    .story-choice-btn {
+      width: 100%;
+      background: #ffffff;
+      border: 2px solid var(--duo-gray-200);
+      border-radius: var(--duo-radius-lg);
+      padding: 14px 16px;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--duo-gray-800);
+      box-shadow: 0 4px 0 var(--duo-gray-200);
+      margin-bottom: 10px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s ease;
+      box-sizing: border-box;
+      font-family: inherit;
+    }
+
+    .story-choice-btn:hover:not(:disabled) {
+      background: var(--duo-gray-100);
+    }
+
+    .story-choice-btn:active:not(:disabled) {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 var(--duo-gray-200);
+    }
+
+    .story-choice-btn.selected-correct {
+      background: var(--duo-green-light);
+      border-color: var(--duo-green);
+      color: var(--duo-green-text);
+      box-shadow: 0 4px 0 var(--duo-green-shadow);
+    }
+
+    .story-choice-btn.selected-wrong {
+      background: var(--duo-red-light);
+      border-color: var(--duo-red);
+      color: var(--duo-red-text);
+      box-shadow: 0 4px 0 var(--duo-red-shadow);
+    }
+
+    /* Word bank / chips */
+    .story-chips-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .story-word-chip {
+      background: #ffffff;
+      border: 2px solid var(--duo-gray-200);
+      border-radius: var(--duo-radius-md);
+      padding: 10px 18px;
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--duo-gray-800);
+      box-shadow: 0 4px 0 var(--duo-gray-200);
+      cursor: pointer;
+      transition: all 0.1s ease;
+      user-select: none;
+      font-family: inherit;
+    }
+
+    .story-word-chip:hover {
+      background: var(--duo-gray-100);
+    }
+
+    .story-word-chip:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 var(--duo-gray-200);
+    }
+
+    .story-word-chip.used {
+      opacity: 0.4;
+      pointer-events: none;
+      box-shadow: none;
+    }
+
+    /* Fixed Bottom Footer Action Drawer */
+    .story-footer-action {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      border-top: 2px solid var(--duo-gray-200);
+      padding: 16px 20px calc(16px + env(safe-area-inset-bottom, 0px));
+      display: flex;
+      justify-content: center;
+      z-index: 99;
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.05);
+    }
+
+    .story-footer-container {
+      max-width: 620px;
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .story-footer-container .btn-duo {
+      width: 100%;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    /* End Victory Screen */
+    .story-victory-container {
+      text-align: center;
+      padding: 40px 20px;
+      background: #ffffff;
+      border: 2px solid var(--duo-green);
+      border-radius: var(--duo-radius-xl);
+      box-shadow: 0 8px 0 var(--duo-green-shadow);
+      animation: lineFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Dark Mode Overrides */
+    [data-theme="dark"] .duo-story-header {
+      background: #131f24;
+      border-color: #283d47;
+    }
+    [data-theme="dark"] .duo-story-title-card,
+    [data-theme="dark"] .story-line-bubble,
+    [data-theme="dark"] .story-checkpoint-card,
+    [data-theme="dark"] .story-choice-btn,
+    [data-theme="dark"] .story-word-chip,
+    [data-theme="dark"] .story-footer-action,
+    [data-theme="dark"] .story-victory-container {
+      background: #18272f;
+      border-color: #283d47;
+      color: #ffffff;
+      box-shadow: 0 4px 0 #283d47;
+    }
+    [data-theme="dark"] .story-line-avatar {
+      background: #131f24;
+      border-color: #283d47;
+      box-shadow: 0 3px 0 #283d47;
+    }
+    [data-theme="dark"] .story-line-text,
+    [data-theme="dark"] .story-checkpoint-question,
+    [data-theme="dark"] .duo-story-title-card h1 {
+      color: #ffffff;
+    }
+    [data-theme="dark"] .story-choice-btn {
+      color: #ffffff;
+    }
+    [data-theme="dark"] .story-word-chip {
+      color: #ffffff;
+    }
+    [data-theme="dark"] .story-choice-btn:hover:not(:disabled),
+    [data-theme="dark"] .story-word-chip:hover {
+      background: #1e313b;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Navigation -->
+  <header class="duo-story-header">
+    <div class="duo-story-header-left">
+      <button class="btn-close-story" onclick="exitStory()" title="Sair da história">✕</button>
+      <div class="duo-story-progress-track">
+        <div class="duo-story-progress-fill" id="storyProgressBar"></div>
+      </div>
+    </div>
+    <div class="duo-story-header-stats">
+      <span>🔥 <span id="storyStreak">3</span></span>
+      <span>💎 <span id="storyGems">200</span></span>
+    </div>
+  </header>
+
+  <!-- Main Story Content Stream -->
+  <main class="duo-story-main" id="storyStreamContainer">
+    <!-- Story Title Card -->
+    <div class="duo-story-title-card">
+      <div style="font-size: 40px; margin-bottom: 8px;">🎸🕶️🧔🏻👦🏼</div>
+      <h1>It's My Life</h1>
+      <p>É a Minha Vida • Bon Jovi • Set 1 (A1) • Foco: Expressões & Canções</p>
+    </div>
+
+    <!-- Dynamic steps will be appended here -->
+    <div id="storyStepsContainer" style="display: flex; flex-direction: column; gap: 16px;"></div>
+  </main>
+
+  <!-- Sticky Footer Action -->
+  <footer class="story-footer-action">
+    <div class="story-footer-container">
+      <button class="btn-duo btn-duo-green" id="btnStoryNext" onclick="handleNextStep()">
+        <span>CONTINUAR ➔</span>
+      </button>
+    </div>
+  </footer>
+
+  <script>
+    // Story script definition adapting "It's My Life" (Bon Jovi)
+    const STORY_DATA = {
+      id: "its_my_life",
+      title: "It's My Life",
+      translation: "É a Minha Vida (Bon Jovi)",
+      originalTitle: "It's My Life",
+      grammarFocus: "Expressões & Canções",
+      lang: "en",
+      speechLang: "en-US",
+      xp: 25,
+      gems: 5,
+      steps: [
+        {
+          type: "dialogue",
+          speaker: "Eddy",
+          avatar: "🧔🏻",
+          text: "It's my life! It's now or never! I ain't gonna live forever!",
+          translation: "É a minha vida! É agora ou nunca! Eu não vou viver para sempre!"
+        },
+        {
+          type: "dialogue",
+          speaker: "Junior",
+          avatar: "👦🏼",
+          text: "Dad? Why are you wearing a black leather jacket and sunglasses indoors?",
+          translation: "Pai? Por que você está usando uma jaqueta de couro preta e óculos escuros dentro de casa?"
+        },
+        {
+          type: "dialogue",
+          speaker: "Eddy",
+          avatar: "🧔🏻",
+          text: "Because I just want to live while I'm alive! It's my life!",
+          translation: "Porque eu só quero viver enquanto estou vivo! É a minha vida!"
+        },
+        {
+          type: "question",
+          prompt: "Por que o Eddy está usando jaqueta de couro e óculos escuros?",
+          choices: [
+            { text: "Porque ele está cantando Bon Jovi e se sentindo um astro do rock.", correct: true },
+            { text: "Porque está muito frio dentro de casa.", correct: false },
+            { text: "Porque ele perdeu os sapatos de corrida.", correct: false }
+          ]
+        },
+        {
+          type: "dialogue",
+          speaker: "Junior",
+          avatar: "👦🏼",
+          text: "Are you listening to Bon Jovi again?",
+          translation: "Você está ouvindo Bon Jovi de novo?"
+        },
+        {
+          type: "dialogue",
+          speaker: "Eddy",
+          avatar: "🧔🏻",
+          text: "Yes! My heart is like an open highway! Like Frankie said, I did it my way!",
+          translation: "Sim! Meu coração é como uma estrada aberta! Como o Frankie disse, eu fiz do meu jeito!"
+        },
+        {
+          type: "fill_blank",
+          speaker: "Junior",
+          avatar: "👦🏼",
+          textPrompt: "Dad, it is ___ to clean your room, not start a rock band!",
+          textFull: "Dad, it is time to clean your room, not start a rock band!",
+          blankWord: "time",
+          options: ["time", "today", "talk"],
+          translation: "Pai, está na hora de arrumar seu quarto, não de começar uma banda de rock!"
+        },
+        {
+          type: "dialogue",
+          speaker: "Eddy",
+          avatar: "🧔🏻",
+          text: "I am going to buy a fast motorcycle right now!",
+          translation: "Eu vou comprar uma moto rápida agora mesmo!"
+        },
+        {
+          type: "dialogue",
+          speaker: "Junior",
+          avatar: "👦🏼",
+          text: "Dad... you don't have a motorcycle. You ride a bicycle!",
+          translation: "Pai... você não tem moto. Você anda de bicicleta!"
+        },
+        {
+          type: "dialogue",
+          speaker: "Eddy",
+          avatar: "🧔🏻",
+          text: "Then my bicycle is my open highway! Come on Junior, let's ride!",
+          translation: "Então a minha bicicleta é a minha estrada aberta! Vamos Junior, vamos andar de bike!"
+        },
+        {
+          type: "match_pairs",
+          prompt: "Combine as palavras e expressões da música com suas traduções:",
+          pairs: [
+            { en: "now or never", pt: "agora ou nunca" },
+            { en: "forever", pt: "para sempre" },
+            { en: "alive", pt: "vivo" },
+            { en: "highway", pt: "estrada" },
+            { en: "my way", pt: "do meu jeito" }
+          ]
+        }
+      ]
+    };
+
+    let currentStepIndex = -1;
+    let isWaitingInteraction = false;
+    let selectedMatchFirst = null;
+    let matchesFound = 0;
+
+    // Initialize state & stats
+    function initStory() {
+      // Sync theme
+      const savedTheme = localStorage.getItem('linguo-theme') || localStorage.getItem('linguo_theme');
+      if (savedTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+
+      // Sync stats
+      const savedGems = localStorage.getItem('linguo-user-gems') || 200;
+      const savedStreak = localStorage.getItem('linguo-user-streak') || 3;
+      document.getElementById('storyGems').textContent = savedGems;
+      document.getElementById('storyStreak').textContent = savedStreak;
+
+      // Start with first dialogue
+      handleNextStep();
+    }
+
+    function updateProgress() {
+      const pct = Math.min(100, Math.round(((currentStepIndex + 1) / (STORY_DATA.steps.length + 1)) * 100));
+      document.getElementById('storyProgressBar').style.width = pct + '%';
+    }
+
+    function exitStory() {
+      if (window.duoAudio) duoAudio.playTap();
+      window.location.href = '../../../index.html#stories';
+    }
+
+    function handleNextStep() {
+      if (isWaitingInteraction) return;
+      if (window.duoAudio) duoAudio.playTap();
+
+      currentStepIndex++;
+      updateProgress();
+
+      if (currentStepIndex >= STORY_DATA.steps.length) {
+        showVictoryScreen();
+        return;
+      }
+
+      const step = STORY_DATA.steps[currentStepIndex];
+      renderStep(step);
+    }
+
+    function renderStep(step) {
+      const container = document.getElementById('storyStepsContainer');
+
+      if (step.type === 'dialogue') {
+        const lineEl = document.createElement('div');
+        lineEl.className = 'story-line-item';
+        lineEl.innerHTML = `
+          <div class="story-line-avatar">${step.avatar}</div>
+          <div class="story-line-bubble">
+            <div class="duo-story-bubble-header">
+              <span class="duo-story-character-name">${step.speaker}</span>
+              <div class="duo-story-actions">
+                ${step.translation ? `<button class="btn-story-action btn-translate" onclick="toggleStoryLineTranslation(${currentStepIndex})" title="Ver tradução em português">🌐</button>` : ''}
+                <button class="btn-story-action btn-speaker" onclick="playAudio('${encodeURIComponent(step.text)}')" title="Ouvir novamente">🔊</button>
+              </div>
+            </div>
+            <div class="story-line-text">${step.text}</div>
+            ${step.translation ? `<div class="duo-story-translation" id="storyTrans-${currentStepIndex}" style="display: none;">${step.translation}</div>` : ''}
+          </div>
+        `;
+        container.appendChild(lineEl);
+        scrollToBottom();
+
+        // Speak automatically
+        playAudio(encodeURIComponent(step.text));
+
+      } else if (step.type === 'question') {
+        isWaitingInteraction = true;
+        document.getElementById('btnStoryNext').style.display = 'none';
+
+        const card = document.createElement('div');
+        card.className = 'story-checkpoint-card';
+        card.id = 'checkpoint-' + currentStepIndex;
+        card.innerHTML = `
+          <div class="story-checkpoint-title">💡 Pergunta de Compreensão</div>
+          <div class="story-checkpoint-question">${step.prompt}</div>
+          <div class="story-choices-list">
+            ${step.choices.map((c, i) => `
+              <button class="story-choice-btn" onclick="checkChoice(${i}, ${c.correct})">
+                ${c.text}
+              </button>
+            `).join('')}
+          </div>
+        `;
+        container.appendChild(card);
+        scrollToBottom();
+
+      } else if (step.type === 'fill_blank') {
+        isWaitingInteraction = true;
+        document.getElementById('btnStoryNext').style.display = 'none';
+
+        const card = document.createElement('div');
+        card.className = 'story-checkpoint-card';
+        card.id = 'fillblank-' + currentStepIndex;
+        card.innerHTML = `
+          <div class="story-checkpoint-title">🧩 Complete a Frase</div>
+          <div class="story-line-item" style="margin: 12px 0 16px;">
+            <div class="story-line-avatar">${step.avatar}</div>
+            <div class="story-line-bubble">
+              <div class="duo-story-bubble-header">
+                <span class="duo-story-character-name">${step.speaker}</span>
+                <div class="duo-story-actions">
+                  ${step.translation ? `<button class="btn-story-action btn-translate" onclick="toggleStoryLineTranslation(${currentStepIndex})" title="Ver tradução em português">🌐</button>` : ''}
+                  <button class="btn-story-action btn-speaker" onclick="playAudio('${encodeURIComponent(step.textFull)}')" title="Ouvir novamente">🔊</button>
+                </div>
+              </div>
+              <div id="blankSentence">${step.textPrompt.replace('___', '<span style="display:inline-block; min-width: 60px; border-bottom: 2px dashed var(--duo-purple); text-align: center; color: var(--duo-purple); font-weight: 900;">___</span>')}</div>
+              ${step.translation ? `<div class="duo-story-translation" id="storyTrans-${currentStepIndex}" style="display: none;">${step.translation}</div>` : ''}
+            </div>
+          </div>
+          <div class="story-chips-row">
+            ${step.options.map(opt => `
+              <button class="story-word-chip" onclick="checkFillBlank('${opt}', '${step.blankWord}', this)">
+                ${opt}
+              </button>
+            `).join('')}
+          </div>
+        `;
+        container.appendChild(card);
+        scrollToBottom();
+        playAudio(encodeURIComponent(step.textFull));
+
+      } else if (step.type === 'match_pairs') {
+        isWaitingInteraction = true;
+        document.getElementById('btnStoryNext').style.display = 'none';
+        matchesFound = 0;
+        selectedMatchFirst = null;
+
+        // Shuffle pairs
+        const leftItems = step.pairs.map(p => ({ key: p.en, label: p.en, type: 'en' })).sort(() => Math.random() - 0.5);
+        const rightItems = step.pairs.map(p => ({ key: p.en, label: p.pt, type: 'pt' })).sort(() => Math.random() - 0.5);
+        const allButtons = [];
+
+        for (let i = 0; i < step.pairs.length; i++) {
+          allButtons.push(leftItems[i]);
+          allButtons.push(rightItems[i]);
+        }
+
+        const card = document.createElement('div');
+        card.className = 'story-checkpoint-card';
+        card.innerHTML = `
+          <div class="story-checkpoint-title">🎯 Desafio Final de Vocabulário</div>
+          <div class="story-checkpoint-question">${step.prompt}</div>
+          <div class="duo-match-grid" id="storyMatchGrid">
+            ${allButtons.map((item, idx) => `
+              <button class="duo-match-btn" id="match-tile-${idx}" data-key="${item.key}" data-type="${item.type}" onclick="handleMatchClick(this)">
+                ${item.label}
+              </button>
+            `).join('')}
+          </div>
+        `;
+        container.appendChild(card);
+        scrollToBottom();
+      }
+    }
+
+    function checkChoice(index, isCorrect) {
+      const card = document.getElementById('checkpoint-' + currentStepIndex);
+      const buttons = card.querySelectorAll('.story-choice-btn');
+      const targetBtn = buttons[index];
+
+      if (isCorrect) {
+        if (window.duoAudio) (duoAudio.playCorrect ? duoAudio.playCorrect() : duoAudio.playSuccess());
+        targetBtn.classList.add('selected-correct');
+        buttons.forEach(b => b.disabled = true);
+
+        setTimeout(() => {
+          isWaitingInteraction = false;
+          document.getElementById('btnStoryNext').style.display = 'inline-flex';
+          handleNextStep();
+        }, 1000);
+      } else {
+        if (window.duoAudio) (duoAudio.playWrong ? duoAudio.playWrong() : duoAudio.playError());
+        targetBtn.classList.add('selected-wrong');
+        setTimeout(() => {
+          targetBtn.classList.remove('selected-wrong');
+        }, 600);
+      }
+    }
+
+    function checkFillBlank(selectedWord, correctWord, buttonEl) {
+      if (selectedWord === correctWord) {
+        if (window.duoAudio) (duoAudio.playCorrect ? duoAudio.playCorrect() : duoAudio.playSuccess());
+        buttonEl.classList.add('used');
+        const sentenceSpan = document.getElementById('blankSentence');
+        if (sentenceSpan) {
+          sentenceSpan.innerHTML = STORY_DATA.steps[currentStepIndex].textFull;
+        }
+
+        setTimeout(() => {
+          isWaitingInteraction = false;
+          document.getElementById('btnStoryNext').style.display = 'inline-flex';
+          handleNextStep();
+        }, 1000);
+      } else {
+        if (window.duoAudio) (duoAudio.playWrong ? duoAudio.playWrong() : duoAudio.playError());
+        buttonEl.style.borderColor = 'var(--duo-red)';
+        setTimeout(() => {
+          buttonEl.style.borderColor = '';
+        }, 600);
+      }
+    }
+
+    function handleMatchClick(buttonEl) {
+      if (buttonEl.classList.contains('matched') || buttonEl.classList.contains('selected')) return;
+
+      if (window.duoAudio) duoAudio.playTap();
+
+      // Speak if it's English
+      if (buttonEl.getAttribute('data-type') === 'en') {
+        playAudio(encodeURIComponent(buttonEl.getAttribute('data-key')));
+      }
+
+      if (!selectedMatchFirst) {
+        selectedMatchFirst = buttonEl;
+        buttonEl.classList.add('selected');
+      } else {
+        // Compare
+        const first = selectedMatchFirst;
+        const key1 = first.getAttribute('data-key');
+        const key2 = buttonEl.getAttribute('data-key');
+        const type1 = first.getAttribute('data-type');
+        const type2 = buttonEl.getAttribute('data-type');
+
+        if (key1 === key2 && type1 !== type2) {
+          // Correct match!
+          if (window.duoAudio) (duoAudio.playCorrect ? duoAudio.playCorrect() : duoAudio.playSuccess());
+          first.classList.remove('selected');
+          first.classList.add('matched');
+          buttonEl.classList.add('matched');
+          selectedMatchFirst = null;
+          matchesFound++;
+
+          if (matchesFound >= 5) {
+            setTimeout(() => {
+              isWaitingInteraction = false;
+              document.getElementById('btnStoryNext').style.display = 'inline-flex';
+              handleNextStep();
+            }, 1000);
+          }
+        } else {
+          // Wrong match
+          if (window.duoAudio) (duoAudio.playWrong ? duoAudio.playWrong() : duoAudio.playError());
+          buttonEl.classList.add('selected');
+          setTimeout(() => {
+            first.classList.remove('selected');
+            buttonEl.classList.remove('selected');
+            selectedMatchFirst = null;
+          }, 500);
+        }
+      }
+    }
+
+    function showVictoryScreen() {
+      if (window.duoAudio) duoAudio.playSuccess();
+      updateProgress();
+
+      // Persist completion and rewards
+      try {
+        localStorage.setItem('linguo-story-completed-' + STORY_DATA.id, 'true');
+        const curXp = parseInt(localStorage.getItem('linguo-user-xp') || '200', 10);
+        const curGems = parseInt(localStorage.getItem('linguo-user-gems') || '200', 10);
+        localStorage.setItem('linguo-user-xp', curXp + STORY_DATA.xp);
+        localStorage.setItem('linguo-user-gems', curGems + STORY_DATA.gems);
+      } catch(e) {}
+
+      const container = document.getElementById('storyStepsContainer');
+      const victoryCard = document.createElement('div');
+      victoryCard.className = 'story-victory-container';
+      victoryCard.innerHTML = `
+        <div style="font-size: 64px; margin-bottom: 12px;">🎸🦉🎉</div>
+        <h2 style="font-size: 26px; font-weight: 900; color: var(--duo-green-text); margin: 0 0 6px;">
+          História Concluída!
+        </h2>
+        <p style="font-size: 15px; font-weight: 700; color: var(--duo-gray-700); margin: 0 0 24px;">
+          Parabéns! Você praticou a história inspirada na música <strong>It's My Life</strong> do Bon Jovi e aprendeu novas expressões em inglês.
+        </p>
+
+        <div style="display: flex; justify-content: center; gap: 16px; margin-bottom: 28px;">
+          <div style="background: var(--duo-orange-light); border: 2px solid var(--duo-orange); border-radius: var(--duo-radius-lg); padding: 12px 20px;">
+            <div style="font-size: 20px; font-weight: 900; color: var(--duo-orange-shadow);">+${STORY_DATA.xp} XP</div>
+            <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--duo-orange-shadow);">Experiência</div>
+          </div>
+          <div style="background: var(--duo-blue-light, #eaf6ff); border: 2px solid var(--duo-blue); border-radius: var(--duo-radius-lg); padding: 12px 20px;">
+            <div style="font-size: 20px; font-weight: 900; color: var(--duo-blue-shadow);">+${STORY_DATA.gems} Gemas</div>
+            <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--duo-blue-shadow);">Recompensa</div>
+          </div>
+        </div>
+
+        <button class="btn-duo btn-duo-green" style="width: 100%; justify-content: center;" onclick="exitStory()">
+          <span>CONCLUIR HISTÓRIA ➔</span>
+        </button>
+      `;
+
+      container.appendChild(victoryCard);
+      document.querySelector('.story-footer-action').style.display = 'none';
+      scrollToBottom();
+    }
+
+    function toggleStoryLineTranslation(idx) {
+      const el = document.getElementById('storyTrans-' + idx);
+      if (!el) return;
+      const isHidden = (el.style.display === 'none' || !el.style.display);
+      el.style.display = isHidden ? 'block' : 'none';
+      if (window.duoAudio) duoAudio.playTap();
+    }
+    window.toggleStoryLineTranslation = toggleStoryLineTranslation;
+
+    function playAudio(encodedText) {
+      const text = decodeURIComponent(encodedText);
+      if (window.duoAudio && typeof window.duoAudio.speak === 'function') {
+        window.duoAudio.speak(text, STORY_DATA.speechLang);
+      }
+    }
+    window.playAudio = playAudio;
+    window.replayStoryAudio = playAudio;
+
+    function scrollToBottom() {
+      setTimeout(() => {
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: 'smooth'
+        });
+      }, 100);
+    }
+
+    window.addEventListener('DOMContentLoaded', initStory);
+  </script>
+</body>
+</html>
