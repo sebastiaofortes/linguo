@@ -1,0 +1,1776 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linguo - Carrossel Gramatical de Perguntas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="resources/duo-theme.css">
+  <script src="resources/duo-sfx.js"></script>
+
+  <style>
+    :root {
+      --duo-green: #58cc02;
+      --duo-green-shadow: #58a700;
+      --duo-green-light: #d7ffb8;
+      --duo-blue: #1cb0f6;
+      --duo-blue-shadow: #1899d6;
+      --duo-blue-light: #ddf4ff;
+      --duo-yellow: #ffc800;
+      --duo-yellow-shadow: #e5a400;
+      --duo-yellow-light: #fff8d6;
+      --duo-red: #ff4b4b;
+      --duo-red-shadow: #ea2b2b;
+      --duo-red-light: #ffdfe0;
+      --duo-purple: #ce82ff;
+      --duo-purple-shadow: #a559e0;
+      --duo-purple-light: #f4e5ff;
+      --duo-teal: #00cd9c;
+      --duo-teal-shadow: #00a67d;
+      --duo-teal-light: #d2f9ef;
+      --duo-orange: #ff9600;
+      --duo-orange-shadow: #e58200;
+      --duo-orange-light: #ffe8cc;
+      --duo-gray-100: #f7f7f7;
+      --duo-gray-200: #e5e5e5;
+      --duo-gray-300: #cecece;
+      --duo-gray-400: #afafaf;
+      --duo-gray-700: #4b4b4b;
+      --duo-gray-900: #131f24;
+      --font-duo: 'Nunito', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      font-family: var(--font-duo);
+      background-color: #f4f7f9;
+      color: var(--duo-gray-900);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 16px 40px;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 1040px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Top Navigation Header */
+    .top-header {
+      background: #ffffff;
+      border: 2px solid var(--duo-gray-200);
+      border-bottom: 4px solid var(--duo-gray-300);
+      border-radius: 20px;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mascot-icon {
+      font-size: 2.2rem;
+      animation: bounce 2s infinite ease-in-out;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    .brand-titles h1 {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--duo-green-shadow);
+      letter-spacing: -0.5px;
+    }
+
+    .brand-titles p {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--duo-gray-400);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* Mode Segmented Switcher (Proposta A: Adaptativo Mobile-Smart) */
+    .nav-tabs {
+      display: flex;
+      background: var(--duo-gray-100);
+      padding: 5px;
+      border-radius: 9999px;
+      gap: 6px;
+      border: 2px solid var(--duo-gray-300);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .tab-btn {
+      border: 2px solid transparent;
+      background: transparent;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      font-family: var(--font-duo);
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--duo-gray-700);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover {
+      color: var(--duo-gray-900);
+    }
+
+    .tab-btn.active.tab-tobe {
+      background: #ffffff;
+      color: var(--duo-blue-shadow);
+      border-color: var(--duo-blue);
+      box-shadow: 0 3px 0 var(--duo-blue-shadow);
+      transform: translateY(-1px);
+    }
+
+    .tab-btn.active.tab-do {
+      background: #ffffff;
+      color: var(--duo-purple-shadow);
+      border-color: var(--duo-purple);
+      box-shadow: 0 3px 0 var(--duo-purple-shadow);
+      transform: translateY(-1px);
+    }
+
+    .tab-btn.active.tab-modal {
+      background: #ffffff;
+      color: var(--duo-teal-shadow);
+      border-color: var(--duo-teal);
+      box-shadow: 0 3px 0 var(--duo-teal-shadow);
+      transform: translateY(-1px);
+    }
+
+    .tab-btn .tab-text-mobile {
+      display: none;
+    }
+
+    @media (max-width: 680px) {
+      .header-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .nav-tabs {
+        width: 100%;
+        gap: 3px;
+        padding: 4px;
+      }
+      .tab-btn {
+        flex: 1;
+        padding: 8px 4px;
+        font-size: 0.82rem;
+        gap: 4px;
+      }
+      .tab-btn .tab-text-desktop {
+        display: none;
+      }
+      .tab-btn .tab-text-mobile {
+        display: inline;
+      }
+    }
+
+    .sync-toggle-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--duo-green-light);
+      border: 2px solid var(--duo-green);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--duo-green-shadow);
+      cursor: pointer;
+      transition: transform 0.1s ease;
+    }
+    .sync-toggle-badge:active {
+      transform: scale(0.96);
+    }
+
+    /* Help Toggle Button in Header */
+    .btn-help-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #ffffff;
+      border: 2px solid var(--duo-gray-300);
+      box-shadow: 0 3px 0 var(--duo-gray-300);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-family: var(--font-duo);
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--duo-gray-700);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-help-toggle:hover {
+      border-color: var(--duo-yellow);
+      color: var(--duo-yellow-text);
+      box-shadow: 0 3px 0 var(--duo-yellow-shadow);
+      background: var(--duo-yellow-light);
+    }
+
+    .btn-help-toggle.active {
+      background: var(--duo-yellow-light);
+      border-color: var(--duo-yellow);
+      color: var(--duo-yellow-text);
+      box-shadow: 0 3px 0 var(--duo-yellow-shadow);
+    }
+
+    .btn-help-toggle:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 var(--duo-gray-300);
+    }
+
+    /* Collapsible Help Banner Drawer */
+    .banner-drawer {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease, margin 0.3s ease;
+      margin-top: -10px;
+      margin-bottom: 0;
+    }
+
+    .banner-drawer.open {
+      max-height: 220px;
+      opacity: 1;
+      margin-top: 0;
+      margin-bottom: 4px;
+    }
+
+    .banner-info {
+      background: #ffffff;
+      border: 2px solid var(--duo-yellow);
+      border-radius: 18px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      box-shadow: 0 3px 0 var(--duo-yellow-shadow);
+    }
+
+    .banner-icon {
+      font-size: 1.8rem;
+      flex-shrink: 0;
+    }
+
+    .banner-text {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--duo-gray-700);
+      line-height: 1.4;
+      flex: 1;
+    }
+
+    .banner-text strong {
+      color: var(--duo-blue);
+    }
+
+    .btn-banner-close {
+      border: 2px solid var(--duo-gray-300);
+      background: var(--duo-gray-100);
+      color: var(--duo-gray-700);
+      font-family: var(--font-duo);
+      font-size: 0.82rem;
+      font-weight: 800;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      cursor: pointer;
+      flex-shrink: 0;
+      box-shadow: 0 2px 0 var(--duo-gray-300);
+      transition: all 0.1s ease;
+    }
+
+    .btn-banner-close:hover {
+      background: var(--duo-gray-200);
+      color: var(--duo-gray-900);
+    }
+
+    .btn-banner-close:active {
+      transform: translateY(1px);
+      box-shadow: none;
+    }
+
+    /* Carousel Groups Container */
+    .tables-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .grammar-group-card {
+      background: #ffffff;
+      border: 2px solid var(--duo-gray-200);
+      border-bottom: 5px solid var(--duo-gray-300);
+      border-radius: 24px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      transition: all 0.2s ease;
+    }
+
+    .grammar-group-card.hidden {
+      display: none;
+    }
+
+    .group-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--duo-gray-100);
+      padding-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .group-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .tag-blue {
+      background: var(--duo-blue-light);
+      color: var(--duo-blue-shadow);
+      border: 1.5px solid var(--duo-blue);
+    }
+
+    .tag-purple {
+      background: var(--duo-purple-light);
+      color: var(--duo-purple-shadow);
+      border: 1.5px solid var(--duo-purple);
+    }
+
+    .tag-teal {
+      background: var(--duo-teal-light);
+      color: var(--duo-teal-shadow);
+      border: 1.5px solid var(--duo-teal);
+    }
+
+    .group-rule-summary {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--duo-gray-400);
+    }
+
+    /* Carousels Grid Layout */
+    .carousels-grid {
+      display: grid;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .grid-3-cols {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .grid-4-cols {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    @media (max-width: 820px) {
+      .grid-3-cols, .grid-4-cols {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+    }
+
+    /* Single Carousel Column */
+    .carousel-column {
+      background: var(--duo-gray-100);
+      border: 2px solid var(--duo-gray-200);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 14px 10px;
+      position: relative;
+    }
+
+    .column-header {
+      font-size: 0.78rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--duo-gray-700);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Arrow Controls */
+    .arrow-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 2px solid var(--duo-gray-300);
+      background: #ffffff;
+      color: var(--duo-gray-700);
+      font-size: 1rem;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 0 var(--duo-gray-300);
+      transition: all 0.1s ease;
+      z-index: 2;
+    }
+
+    .arrow-btn:hover {
+      background: var(--duo-blue-light);
+      border-color: var(--duo-blue);
+      color: var(--duo-blue);
+      box-shadow: 0 3px 0 var(--duo-blue);
+    }
+
+    .arrow-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 var(--duo-gray-300);
+    }
+
+    /* Pills Container (Vertical Carousel Track) */
+    .pills-track-window {
+      width: 100%;
+      min-height: 250px;
+      max-height: 270px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 4px;
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: var(--duo-gray-300) transparent;
+    }
+
+    .pills-track-window::-webkit-scrollbar {
+      width: 4px;
+    }
+    .pills-track-window::-webkit-scrollbar-thumb {
+      background: var(--duo-gray-300);
+      border-radius: 4px;
+    }
+
+    /* Pill Items */
+    .pill-item {
+      width: 92%;
+      min-height: 48px;
+      padding: 10px 14px;
+      border-radius: 9999px;
+      font-family: var(--font-duo);
+      font-size: 0.98rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      border: 2px solid var(--duo-gray-300);
+      background: #ffffff;
+      color: var(--duo-gray-700);
+      box-shadow: 0 3px 0 var(--duo-gray-300);
+      position: relative;
+    }
+
+    .pill-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 0 var(--duo-gray-300);
+      border-color: var(--duo-blue);
+      color: var(--duo-blue);
+    }
+
+    .pill-item:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 var(--duo-gray-300);
+    }
+
+    /* Active Pill State */
+    .pill-item.active {
+      background: var(--duo-blue);
+      border-color: var(--duo-blue-shadow);
+      color: #ffffff;
+      box-shadow: 0 4px 0 var(--duo-blue-shadow);
+      transform: scale(1.04);
+      z-index: 3;
+    }
+
+    .group-does .pill-item.active {
+      background: var(--duo-purple);
+      border-color: var(--duo-purple-shadow);
+      box-shadow: 0 4px 0 var(--duo-purple-shadow);
+    }
+
+    .group-modal .pill-item.active {
+      background: var(--duo-teal);
+      border-color: var(--duo-teal-shadow);
+      box-shadow: 0 4px 0 var(--duo-teal-shadow);
+    }
+
+    /* Incompatible Pill (Grammar Rule Enforcement) */
+    .pill-item.incompatible {
+      opacity: 0.35;
+      background: #f0f0f0;
+      border-color: #d8d8d8;
+      color: #999999;
+      box-shadow: 0 2px 0 #d8d8d8;
+      cursor: not-allowed;
+    }
+
+    .pill-item.incompatible::after {
+      content: '✕';
+      position: absolute;
+      right: 12px;
+      font-size: 0.75rem;
+      font-weight: 900;
+      color: var(--duo-red);
+    }
+
+    .pill-item.special-highlight {
+      border-color: var(--duo-red);
+      color: var(--duo-red-text);
+      font-weight: 900;
+    }
+
+    .pill-item.special-highlight.active {
+      background: var(--duo-red);
+      border-color: var(--duo-red-shadow);
+      color: #ffffff;
+      box-shadow: 0 4px 0 var(--duo-red-shadow);
+    }
+
+    /* Live Output Sentence Card */
+    .sentence-output-card {
+      background: #ffffff;
+      border: 2px solid var(--duo-gray-200);
+      border-radius: 20px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 3px 0 var(--duo-gray-200);
+    }
+
+    .output-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+    .status-correct {
+      background: var(--duo-green-light);
+      color: var(--duo-green-shadow);
+      border: 1.5px solid var(--duo-green);
+    }
+
+    .status-warning {
+      background: var(--duo-red-light);
+      color: var(--duo-red-shadow);
+      border: 1.5px solid var(--duo-red);
+    }
+
+    .sentence-display {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .sentence-text {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--duo-gray-900);
+      letter-spacing: -0.3px;
+    }
+
+    .sentence-text .word-highlight {
+      color: var(--duo-blue);
+      text-decoration: underline;
+      text-decoration-color: var(--duo-blue-light);
+      text-underline-offset: 4px;
+    }
+
+    .sentence-text .verb-special {
+      color: var(--duo-red);
+    }
+
+    .sentence-text .word-highlight-teal {
+      color: var(--duo-teal-shadow);
+      text-decoration: underline;
+      text-decoration-color: var(--duo-teal-light);
+      text-underline-offset: 4px;
+    }
+
+    /* Speak Button 3D */
+    .btn-speak {
+      background: var(--duo-green);
+      border: 2px solid var(--duo-green-shadow);
+      border-bottom: 4px solid var(--duo-green-shadow);
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 9999px;
+      font-family: var(--font-duo);
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.1s ease;
+    }
+
+    .btn-speak:hover {
+      filter: brightness(1.05);
+    }
+
+    .btn-speak:active {
+      transform: translateY(2px);
+      border-bottom-width: 2px;
+    }
+
+    .translation-text {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--duo-gray-400);
+      font-style: italic;
+    }
+
+    .rule-explanation-box {
+      background: var(--duo-gray-100);
+      border-left: 4px solid var(--duo-blue);
+      padding: 10px 16px;
+      border-radius: 0 12px 12px 0;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--duo-gray-700);
+      line-height: 1.45;
+    }
+
+    .rule-explanation-box.error {
+      border-left-color: var(--duo-red);
+      background: var(--duo-red-light);
+      color: var(--duo-red-shadow);
+    }
+
+    /* Individual Quick Reference Cards */
+    .reference-table-card {
+      background: #ffffff;
+      border: 2px solid var(--duo-gray-200);
+      border-bottom: 4px solid var(--duo-gray-300);
+      border-radius: 20px;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: 0 2px 0 var(--duo-gray-200);
+      transition: all 0.2s ease;
+    }
+
+    .reference-table-card.hidden {
+      display: none;
+    }
+
+    .reference-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      border-bottom: 2px solid var(--duo-gray-100);
+      padding-bottom: 12px;
+    }
+
+    .reference-title {
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: var(--duo-gray-700);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .reference-points-list {
+      list-style-type: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .reference-point-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.92rem;
+      line-height: 1.5;
+      color: var(--duo-gray-700);
+      font-weight: 700;
+    }
+
+    .point-bullet {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 900;
+    }
+
+    .bullet-blue {
+      background: var(--duo-blue-light);
+      color: var(--duo-blue-shadow);
+      border: 1.5px solid var(--duo-blue);
+    }
+
+    .bullet-purple {
+      background: var(--duo-purple-light);
+      color: var(--duo-purple-shadow);
+      border: 1.5px solid var(--duo-purple);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Top Header -->
+    <header class="top-header">
+      <div class="brand-group">
+        <span class="mascot-icon">🦉</span>
+        <div class="brand-titles">
+          <h1>Linguo • Carrossel Gramatical</h1>
+          <p>Combine as pills para formar perguntas perfeitas em inglês!</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <nav class="nav-tabs" aria-label="Seletor de Tabela">
+          <button class="tab-btn active tab-tobe" id="btnTabToBe" onclick="switchView('tobe')">
+            <span>🔵</span>
+            <span class="tab-text-desktop">1. Verbo To Be</span>
+            <span class="tab-text-mobile">To Be</span>
+          </button>
+          <button class="tab-btn tab-do" id="btnTabDo" onclick="switchView('do')">
+            <span>🟣</span>
+            <span class="tab-text-desktop">2. Auxiliares Do / Does</span>
+            <span class="tab-text-mobile">Do / Does</span>
+          </button>
+          <button class="tab-btn tab-modal" id="btnTabModal" onclick="switchView('modal')">
+            <span>🟢</span>
+            <span class="tab-text-desktop">3. Verbos Modais</span>
+            <span class="tab-text-mobile">Modais</span>
+          </button>
+        </nav>
+
+        <div class="sync-toggle-badge" id="syncBadge" onclick="toggleSmartSync()" title="Garante que as combinações sempre respeitem a gramática">
+          <span>🔒</span>
+          <span id="syncText">Regras: Auto-Harmonizar</span>
+        </div>
+
+        <button class="btn-help-toggle" id="btnHelpToggle" onclick="toggleHelpBanner()" title="Ver instruções de como usar o carrossel">
+          <span>💡</span>
+          <span id="helpToggleText">Como funciona</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Collapsible Help Banner Drawer (Inicia oculta) -->
+    <div class="banner-drawer" id="bannerDrawer">
+      <div class="banner-info">
+        <span class="banner-icon">💡</span>
+        <div class="banner-text">
+          <strong>Como funciona:</strong> Cada coluna abaixo é um <strong>carrossel independente</strong> e cada linha é uma <strong>pill clicável</strong>. Gire com as setas ▲/▼ ou clique em qualquer pill. Ao combinar as palavras, as regras gramaticais da imagem são aplicadas em tempo real!
+        </div>
+        <button class="btn-banner-close" onclick="toggleHelpBanner(false)" title="Fechar dica">
+          ✕ Fechar
+        </button>
+      </div>
+    </div>
+
+    <main class="tables-wrapper">
+
+      <!-- ========================================================
+           GRUPO 1: VERBO TO BE (3 COLUNAS DE CARROSSÉIS)
+           ======================================================== -->
+      <section class="grammar-group-card group-tobe" id="groupToBe">
+        <div class="group-title-row">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="group-tag tag-blue">Tabela 1 • Verbo To Be</span>
+            <span style="font-weight: 800; font-size: 1.05rem;">Perguntas de Identidade & Estado</span>
+          </div>
+          <span class="group-rule-summary">Fórmula: [To Be] + [Sujeito] + [Complemento]?</span>
+        </div>
+
+        <!-- 3 Carrosséis em Colunas -->
+        <div class="carousels-grid grid-3-cols">
+
+          <!-- Coluna 1: To Be -->
+          <div class="carousel-column" data-col="tobe">
+            <span class="column-header">① To Be</span>
+            <button class="arrow-btn" onclick="rotateColumn('tobe', 'toBe', -1)">▲</button>
+            <div class="pills-track-window" id="track-tobe-toBe">
+              <!-- Pills inseridas via JS -->
+            </div>
+            <button class="arrow-btn" onclick="rotateColumn('tobe', 'toBe', 1)">▼</button>
+          </div>
+
+          <!-- Coluna 2: Sujeito -->
+          <div class="carousel-column" data-col="sujeito">
+            <span class="column-header">② Sujeito</span>
+            <button class="arrow-btn" onclick="rotateColumn('tobe', 'subject', -1)">▲</button>
+            <div class="pills-track-window" id="track-tobe-subject">
+              <!-- Pills inseridas via JS -->
+            </div>
+            <button class="arrow-btn" onclick="rotateColumn('tobe', 'subject', 1)">▼</button>
+          </div>
+
+          <!-- Coluna 3: Complemento -->
+          <div class="carousel-column" data-col="complemento">
+            <span class="column-header">③ Complemento</span>
+            <button class="arrow-btn" onclick="rotateColumn('tobe', 'complement', -1)">▲</button>
+            <div class="pills-track-window" id="track-tobe-complement">
+              <!-- Pills inseridas via JS -->
+            </div>
+            <button class="arrow-btn" onclick="rotateColumn('tobe', 'complement', 1)">▼</button>
+          </div>
+
+        </div>
+
+        <!-- Sentence Result Card for To Be -->
+        <div class="sentence-output-card" id="outputCardToBe">
+          <div class="output-header">
+            <span class="status-badge status-correct" id="badgeToBe">✅ Gramática Correta</span>
+            <button class="btn-speak" onclick="speakSentence('tobe')">
+              <span>🔊</span> Ouvir Pronúncia
+            </button>
+          </div>
+          <div class="sentence-display">
+            <span class="sentence-text" id="sentenceTextToBe">Is she from Brazil?</span>
+          </div>
+          <div class="translation-text" id="translationToBe">"Ela é do Brasil?"</div>
+          <div class="rule-explanation-box" id="explanationToBe">
+            💡 <strong>Regra:</strong> Para 3ª pessoa do singular (he/she/it), usamos sempre <strong>Is</strong> no início da pergunta. O verbo To Be não precisa de auxiliar!
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ========================================================
+           GRUPO 2: AUXILIAR DO / DOES (4 COLUNAS DE CARROSSÉIS)
+           ======================================================== -->
+      <section class="grammar-group-card group-does" id="groupDo">
+        <div class="group-title-row">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="group-tag tag-purple">Tabela 2 • Auxiliares Do / Does</span>
+            <span style="font-weight: 800; font-size: 1.05rem;">Perguntas com Verbos de Ação</span>
+          </div>
+          <span class="group-rule-summary">Fórmula: [Auxiliar] + [Sujeito] + [Verbo Base] + [Complemento]?</span>
+        </div>
+
+        <!-- 4 Carrosséis em Colunas -->
+        <div class="carousels-grid grid-4-cols">
+
+          <!-- Coluna 1: Auxiliar -->
+          <div class="carousel-column" data-col="auxiliar">
+            <span class="column-header">① Auxiliar</span>
+            <button class="arrow-btn" onclick="rotateColumn('do', 'auxiliary', -1)">▲</button>
+            <div class="pills-track-window" id="track-do-auxiliary">
+              <!-- Pills inseridas via JS -->
+            </div>
+            <button class="arrow-btn" onclick="rotateColumn('do', 'auxiliary', 1)">▼</button>
+          </div>
+
+          <!-- Coluna 2: Sujeito -->
+          <div class="carousel-column" data-col="sujeito">
+            <span class="column-header">② Sujeito</span>
+            <button class="arrow-btn" onclick="rotateColumn('do', 'subject', -1)">▲</button>
+            <div class="pills-track-window" id="track-do-subject">
+              <!-- Pills inseridas via JS -->
+            </div>
+            <button class="arrow-btn" onclick="rotateColumn('do', 'subject', 1)">▼</button>
+          </div>
+
+          <!-- Coluna 3: Verbo -->
+          <div class="carousel-column" data-col="verbo">
+            <span class="column-header">③ Verbo (Base)</span>
+            <button class="arrow-btn" onclick="rotateColumn('do', 'verb', -1)">▲</button>
+            <div class="pills-track-window" id="track-do-verb">
+              <!-- Pills inseridas via JS -->
+            </div>
+            <button class="arrow-btn" onclick="rotateColumn('do', 'verb', 1)">▼</button>
+          </div>
+
+          <!-- Coluna 4: Complemento -->
+          <div class="carousel-column" data-col="complemento">
+            <span class="column-header">④ Complemento</span>
+            <button class="arrow-btn" onclick="rotateColumn('do', 'complement', -1)">▲</button>
+            <div class="pills-track-window" id="track-do-complement">
+              <!-- Pills inseridas via JS -->
+            </div>
+            <button class="arrow-btn" onclick="rotateColumn('do', 'complement', 1)">▼</button>
+          </div>
+
+        </div>
+
+        <!-- Sentence Result Card for Do/Does -->
+        <div class="sentence-output-card" id="outputCardDo">
+          <div class="output-header">
+            <span class="status-badge status-correct" id="badgeDo">✅ Gramática Correta</span>
+            <button class="btn-speak" onclick="speakSentence('do')">
+              <span>🔊</span> Ouvir Pronúncia
+            </button>
+          </div>
+          <div class="sentence-display">
+            <span class="sentence-text" id="sentenceTextDo">Does he come from Brazil?</span>
+          </div>
+          <div class="translation-text" id="translationDo">"Ele vem do Brasil?"</div>
+          <div class="rule-explanation-box" id="explanationDo">
+            💡 <strong>Regra:</strong> Com a 3ª pessoa do singular (he/she/it), usamos o auxiliar <strong style="color: var(--duo-red);">Does</strong> e o verbo principal na forma base sem alteração (<strong>come</strong>, sem "s").
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           GRUPO 3: VERBOS MODAIS (4 COLUNAS DE CARROSSÉIS)
+           ======================================================== -->
+      <section class="grammar-group-card group-modal hidden" id="groupModal">
+        <div class="group-title-row">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="group-tag tag-teal">Tabela 3 • Verbos Modais</span>
+            <span style="font-weight: 800; font-size: 1.05rem;">Capacidade, Permissão & Hipótese</span>
+          </div>
+          <span class="group-rule-summary">Fórmula: [Modal] + [Sujeito] + [Verbo Base] + [Complemento]?</span>
+        </div>
+
+        <!-- 4 Carrosséis em Colunas -->
+        <div class="carousels-grid grid-4-cols">
+
+          <!-- Coluna 1: Modal -->
+          <div class="carousel-column" data-col="modal">
+            <span class="column-header">① Modal</span>
+            <button class="arrow-btn" onclick="rotateColumn('modal', 'modal', -1)">▲</button>
+            <div class="pills-track-window" id="track-modal-modal">
+              <!-- Pills inseridas via JS -->
+            </div>
+            <button class="arrow-btn" onclick="rotateColumn('modal', 'modal', 1)">▼</button>
+          </div>
+
+          <!-- Coluna 2: Sujeito -->
+          <div class="carousel-column" data-col="sujeito">
+            <span class="column-header">② Sujeito</span>
+            <button class="arrow-btn" onclick="rotateColumn('modal', 'subject', -1)">▲</button>
+            <div class="pills-track-window" id="track-modal-subject">
+              <!-- Pills inseridas via JS -->
+            </div>
+            <button class="arrow-btn" onclick="rotateColumn('modal', 'subject', 1)">▼</button>
+          </div>
+
+          <!-- Coluna 3: Verbo -->
+          <div class="carousel-column" data-col="verbo">
+            <span class="column-header">③ Verbo (Base)</span>
+            <button class="arrow-btn" onclick="rotateColumn('modal', 'verb', -1)">▲</button>
+            <div class="pills-track-window" id="track-modal-verb">
+              <!-- Pills inseridas via JS -->
+            </div>
+            <button class="arrow-btn" onclick="rotateColumn('modal', 'verb', 1)">▼</button>
+          </div>
+
+          <!-- Coluna 4: Complemento -->
+          <div class="carousel-column" data-col="complemento">
+            <span class="column-header">④ Complemento</span>
+            <button class="arrow-btn" onclick="rotateColumn('modal', 'complement', -1)">▲</button>
+            <div class="pills-track-window" id="track-modal-complement">
+              <!-- Pills inseridas via JS -->
+            </div>
+            <button class="arrow-btn" onclick="rotateColumn('modal', 'complement', 1)">▼</button>
+          </div>
+
+        </div>
+
+        <!-- Sentence Result Card for Modal -->
+        <div class="sentence-output-card" id="outputCardModal">
+          <div class="output-header">
+            <span class="status-badge status-correct" id="badgeModal">✅ Gramática Correta</span>
+            <button class="btn-speak" onclick="speakSentence('modal')">
+              <span>🔊</span> Ouvir Pronúncia
+            </button>
+          </div>
+          <div class="sentence-display">
+            <span class="sentence-text" id="sentenceTextModal">Can you come from Brazil?</span>
+          </div>
+          <div class="translation-text" id="translationModal">"Você pode vir do Brasil?"</div>
+          <div class="rule-explanation-box" id="explanationModal">
+            💡 <strong>Regra:</strong> Os verbos modais (Can, Could, Should, Would, Must) iniciam a pergunta por si só, sem precisar de auxiliar e sem flexão de 3ª pessoa.
+          </div>
+        </div>
+      </section>
+
+      <!-- Guia Individual: Verbo To Be -->
+      <section class="reference-table-card" id="guideToBe">
+        <div class="reference-header">
+          <h3 class="reference-title">
+            <span>📖</span> Guia da Regra • Verbo To Be
+          </h3>
+          <span class="group-tag tag-blue">Identidade & Estado</span>
+        </div>
+        <ul class="reference-points-list">
+          <li class="reference-point-item">
+            <span class="point-bullet bullet-blue">1</span>
+            <div><strong>Fórmula da Pergunta:</strong> <code>[To Be] + [Sujeito] + [Complemento]?</code></div>
+          </li>
+          <li class="reference-point-item">
+            <span class="point-bullet bullet-blue">2</span>
+            <div><strong>Am I...?</strong> ➔ Usado exclusivamente com a 1ª pessoa <em>I</em> (ex: <em>Am I from Brazil?</em>).</div>
+          </li>
+          <li class="reference-point-item">
+            <span class="point-bullet bullet-blue">3</span>
+            <div><strong>Is he / she / it...?</strong> ➔ Usado para a 3ª pessoa do singular (ele, ela, isso). Ex: <em>Is she from Brazil?</em></div>
+          </li>
+          <li class="reference-point-item">
+            <span class="point-bullet bullet-blue">4</span>
+            <div><strong>Are you / we / they...?</strong> ➔ Usado para você (singular/plural), nós e eles/elas. Ex: <em>Are they from Brazil?</em></div>
+          </li>
+          <li class="reference-point-item">
+            <span class="point-bullet bullet-blue">★</span>
+            <div><strong style="color: var(--duo-blue-shadow);">Regra de Ouro:</strong> O verbo <em>To Be</em> <strong>nunca</strong> recebe o auxiliar <em>Do</em> ou <em>Does</em>. Ele próprio se inverte de posição com o sujeito para formar a pergunta!</div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Guia Individual: Auxiliares Do / Does -->
+      <section class="reference-table-card hidden" id="guideDo">
+        <div class="reference-header">
+          <h3 class="reference-title">
+            <span>📖</span> Guia da Regra • Auxiliares Do / Does
+          </h3>
+          <span class="group-tag tag-purple">Verbos de Ação & Rotina</span>
+        </div>
+        <ul class="reference-points-list">
+          <li class="reference-point-item">
+            <span class="point-bullet bullet-purple">1</span>
+            <div><strong>Fórmula da Pergunta:</strong> <code>[Auxiliar] + [Sujeito] + [Verbo na Forma Base] + [Complemento]?</code></div>
+          </li>
+          <li class="reference-point-item">
+            <span class="point-bullet bullet-purple">2</span>
+            <div><strong style="color: var(--duo-red);">Does he / she / it...?</strong> ➔ Para a 3ª pessoa do singular, usa-se o auxiliar <strong>Does</strong>. O verbo principal fica na forma base (ex: <em>Does he come from Brazil?</em>).</div>
+          </li>
+          <li class="reference-point-item">
+            <span class="point-bullet bullet-purple">3</span>
+            <div><strong>Do I / you / we / they...?</strong> ➔ Para as outras pessoas, usa-se o auxiliar <strong>Do</strong> (ex: <em>Do you come from Brazil?</em>).</div>
+          </li>
+          <li class="reference-point-item">
+            <span class="point-bullet bullet-purple">4</span>
+            <div><strong>Verbo Principal no Infinitivo:</strong> Nunca acrescente "s" ao verbo principal na pergunta, pois o auxiliar <em>Does</em> já cumpre essa flexão gramatical (diga <em>Does she work?</em>, e nunca <em>Does she works?</em>).</div>
+          </li>
+          <li class="reference-point-item">
+            <span class="point-bullet bullet-purple">★</span>
+            <div><strong style="color: var(--duo-purple-shadow);">Regra de Ouro:</strong> Use <em>Do / Does</em> para qualquer verbo de ação ou estado diferente do <em>To Be</em> (como <em>come, live, work, study, speak</em>).</div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Guia Individual: Verbos Modais -->
+      <section class="reference-table-card hidden" id="guideModal">
+        <div class="reference-header">
+          <h3 class="reference-title">
+            <span>📖</span> Guia da Regra • Verbos Modais
+          </h3>
+          <span class="group-tag tag-teal">Habilidade, Permissão & Conselho</span>
+        </div>
+        <ul class="reference-points-list">
+          <li class="reference-point-item">
+            <span class="point-bullet bullet-teal">1</span>
+            <div><strong>Fórmula da Pergunta:</strong> <code>[Modal] + [Sujeito] + [Verbo na Forma Base] + [Complemento]?</code></div>
+          </li>
+          <li class="reference-point-item">
+            <span class="point-bullet bullet-teal">2</span>
+            <div><strong>Sem Auxiliar Do/Does:</strong> O verbo modal já é o próprio operador da pergunta. <em>Nunca</em> diga <em>"Do you can...?"</em> ❌. O correto é sempre <strong>"Can you...?"</strong> ✅.</div>
+          </li>
+          <li class="reference-point-item">
+            <span class="point-bullet bullet-teal">3</span>
+            <div><strong>Sem Flexão de 3ª Pessoa:</strong> Os modais <strong>não mudam</strong> com <em>he / she / it</em> (diz-se <strong>"Could he come?"</strong> e nunca <em>"Coulds he"</em> nem <em>"Does he could"</em>).</div>
+          </li>
+          <li class="reference-point-item">
+            <span class="point-bullet bullet-teal">4</span>
+            <div><strong>Verbo no Infinitivo Puro (sem "to"):</strong> O verbo seguinte permanece sempre na forma pura básica (ex: <em>Should we speak?</em>, e nunca <em>Should we to speak?</em>).</div>
+          </li>
+          <li class="reference-point-item">
+            <span class="point-bullet bullet-teal">★</span>
+            <div><strong style="color: var(--duo-teal-shadow);">Significados Rápidos:</strong> <strong>Can</strong> (capacidade/permissão informal), <strong>Could</strong> (habilidade passada/pedido educado), <strong>Should</strong> (conselho/recomendação), <strong>Would</strong> (hipótese/pedido cortês), <strong>Must</strong> (obrigação/dever).</div>
+          </li>
+        </ul>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    /* ============================================================
+       DADOS GRAMATICAIS DAS TABELAS (BASEADOS NA IMAGEM)
+       ============================================================ */
+
+    const GRAMMAR_DATA = {
+      tobe: {
+        toBe: ['Am', 'Are', 'Is'],
+        subject: ['I', 'you', 'he', 'she', 'it', 'we', 'they'],
+        complement: ['from Brazil?', 'from Portugal?', 'a student?', 'at home?', 'ready?'],
+        // Regras de concordância legítimas:
+        validPairs: {
+          'Am': ['I'],
+          'Is': ['he', 'she', 'it'],
+          'Are': ['you', 'we', 'they']
+        },
+        // Inverso: de sujeito para To Be
+        subjectToVerb: {
+          'I': 'Am',
+          'he': 'Is',
+          'she': 'Is',
+          'it': 'Is',
+          'you': 'Are',
+          'we': 'Are',
+          'they': 'Are'
+        }
+      },
+
+      do: {
+        auxiliary: ['Do', 'Does'],
+        subject: ['I', 'you', 'he', 'she', 'it', 'we', 'they'],
+        verb: ['come', 'live', 'work', 'speak'],
+        complement: ['from Brazil?', 'in São Paulo?', 'here?', 'English?'],
+        // Regras de concordância legítimas:
+        validPairs: {
+          'Do': ['I', 'you', 'we', 'they'],
+          'Does': ['he', 'she', 'it']
+        },
+        // Inverso: de sujeito para Auxiliar
+        subjectToAux: {
+          'he': 'Does',
+          'she': 'Does',
+          'it': 'Does',
+          'I': 'Do',
+          'you': 'Do',
+          'we': 'Do',
+          'they': 'Do'
+        }
+      },
+
+      modal: {
+        modal: ['Can', 'Could', 'Should', 'Would', 'Must'],
+        subject: ['I', 'you', 'he', 'she', 'it', 'we', 'they'],
+        verb: ['come', 'help', 'speak', 'go', 'stay'],
+        complement: ['from Brazil?', 'here?', 'English?', 'today?', 'with us?']
+      }
+    };
+
+    // Estado ativo selecionado para cada carrossel
+    const state = {
+      smartSync: true, // Garante que ao girar um carrossel as regras gramaticais sejam imediatamente obedecidas
+      currentView: 'tobe', // Exclusivo: 'tobe', 'do' ou 'modal'
+      tobe: {
+        toBe: 'Is',
+        subject: 'she',
+        complement: 'from Brazil?'
+      },
+      do: {
+        auxiliary: 'Does',
+        subject: 'he',
+        verb: 'come',
+        complement: 'from Brazil?'
+      },
+      modal: {
+        modal: 'Can',
+        subject: 'you',
+        verb: 'come',
+        complement: 'from Brazil?'
+      }
+    };
+
+    /* ============================================================
+       INICIALIZAÇÃO E RENDERIZAÇÃO DOS CARROSSÉIS DE PILLS
+       ============================================================ */
+
+    function initCarousels() {
+      // 1. Renderizar Carrosséis do Grupo To Be
+      renderPillsTrack('tobe', 'toBe', GRAMMAR_DATA.tobe.toBe);
+      renderPillsTrack('tobe', 'subject', GRAMMAR_DATA.tobe.subject);
+      renderPillsTrack('tobe', 'complement', GRAMMAR_DATA.tobe.complement);
+
+      // 2. Renderizar Carrosséis do Grupo Do/Does
+      renderPillsTrack('do', 'auxiliary', GRAMMAR_DATA.do.auxiliary);
+      renderPillsTrack('do', 'subject', GRAMMAR_DATA.do.subject);
+      renderPillsTrack('do', 'verb', GRAMMAR_DATA.do.verb);
+      renderPillsTrack('do', 'complement', GRAMMAR_DATA.do.complement);
+
+      // 3. Renderizar Carrosséis do Grupo Modais
+      renderPillsTrack('modal', 'modal', GRAMMAR_DATA.modal.modal);
+      renderPillsTrack('modal', 'subject', GRAMMAR_DATA.modal.subject);
+      renderPillsTrack('modal', 'verb', GRAMMAR_DATA.modal.verb);
+      renderPillsTrack('modal', 'complement', GRAMMAR_DATA.modal.complement);
+
+      // 4. Atualizar estados visuais e frases
+      updateGroupUI('tobe');
+      updateGroupUI('do');
+      updateGroupUI('modal');
+
+      // 5. Exibir exclusivamente a Tabela 1 (To Be) no início
+      switchView('tobe');
+    }
+
+    function renderPillsTrack(groupKey, colKey, items) {
+      const track = document.getElementById(`track-${groupKey}-${colKey}`);
+      if (!track) return;
+      track.innerHTML = '';
+
+      items.forEach((itemText) => {
+        const pill = document.createElement('button');
+        pill.className = 'pill-item';
+        pill.dataset.value = itemText;
+        pill.textContent = itemText;
+
+        // Destaque especial para "Does" em vermelho como na imagem original
+        if (colKey === 'auxiliary' && itemText === 'Does') {
+          pill.classList.add('special-highlight');
+        }
+
+        pill.onclick = () => {
+          selectPill(groupKey, colKey, itemText);
+        };
+
+        track.appendChild(pill);
+      });
+    }
+
+    /* ============================================================
+       LÓGICA DE SELEÇÃO E APLICAÇÃO DAS REGRAS GRAMATICAIS
+       ============================================================ */
+
+    function selectPill(groupKey, colKey, value) {
+      playTapSound();
+
+      if (state.smartSync) {
+        // MODO AUTO-HARMONIZAR: Ajusta as outras colunas para obedecer estritamente à gramática
+        if (groupKey === 'tobe') {
+          if (colKey === 'toBe') {
+            state.tobe.toBe = value;
+            // Se o sujeito atual não for compatível com o To Be escolhido, ajusta o sujeito
+            const allowedSubjects = GRAMMAR_DATA.tobe.validPairs[value];
+            if (!allowedSubjects.includes(state.tobe.subject)) {
+              state.tobe.subject = allowedSubjects[0];
+            }
+          } else if (colKey === 'subject') {
+            state.tobe.subject = value;
+            // Ajusta o verbo To Be para corresponder ao sujeito
+            state.tobe.toBe = GRAMMAR_DATA.tobe.subjectToVerb[value];
+          } else {
+            state.tobe[colKey] = value;
+          }
+        } else if (groupKey === 'do') {
+          if (colKey === 'auxiliary') {
+            state.do.auxiliary = value;
+            // Se o sujeito atual não for compatível com Do/Does, ajusta o sujeito
+            const allowedSubjects = GRAMMAR_DATA.do.validPairs[value];
+            if (!allowedSubjects.includes(state.do.subject)) {
+              state.do.subject = allowedSubjects[0];
+            }
+          } else if (colKey === 'subject') {
+            state.do.subject = value;
+            // Ajusta o auxiliar para corresponder ao sujeito
+            state.do.auxiliary = GRAMMAR_DATA.do.subjectToAux[value];
+          } else {
+            state.do[colKey] = value;
+          }
+        } else if (groupKey === 'modal') {
+          state.modal[colKey] = value;
+        }
+      } else {
+        // MODO MANUAL: Permite qualquer combinação para fins de teste/desafio
+        state[groupKey][colKey] = value;
+      }
+
+      updateGroupUI(groupKey);
+    }
+
+    function rotateColumn(groupKey, colKey, direction) {
+      const items = GRAMMAR_DATA[groupKey][colKey];
+      const currentVal = state[groupKey][colKey];
+      let currentIndex = items.indexOf(currentVal);
+
+      if (currentIndex === -1) currentIndex = 0;
+      let nextIndex = (currentIndex + direction + items.length) % items.length;
+
+      selectPill(groupKey, colKey, items[nextIndex]);
+    }
+
+    /* ============================================================
+       ATUALIZAÇÃO DA INTERFACE & VALIDAÇÃO GRAMATICAL
+       ============================================================ */
+
+    function updateGroupUI(groupKey) {
+      const groupState = state[groupKey];
+
+      // Atualiza as pills ativas e incompatíveis nos carrosséis
+      for (const colKey in groupState) {
+        const track = document.getElementById(`track-${groupKey}-${colKey}`);
+        if (!track) continue;
+
+        const pills = track.querySelectorAll('.pill-item');
+        pills.forEach((pill) => {
+          const val = pill.dataset.value;
+          const isSelected = (val === groupState[colKey]);
+
+          pill.classList.toggle('active', isSelected);
+
+          // Verificar compatibilidade gramatical se o SmartSync estiver ativo
+          let isIncompatible = false;
+          if (groupKey === 'tobe') {
+            if (colKey === 'subject') {
+              const allowed = GRAMMAR_DATA.tobe.validPairs[groupState.toBe] || [];
+              isIncompatible = !allowed.includes(val);
+            } else if (colKey === 'toBe') {
+              const correctVerb = GRAMMAR_DATA.tobe.subjectToVerb[groupState.subject];
+              isIncompatible = (val !== correctVerb);
+            }
+          } else if (groupKey === 'do') {
+            if (colKey === 'subject') {
+              const allowed = GRAMMAR_DATA.do.validPairs[groupState.auxiliary] || [];
+              isIncompatible = !allowed.includes(val);
+            } else if (colKey === 'auxiliary') {
+              const correctAux = GRAMMAR_DATA.do.subjectToAux[groupState.subject];
+              isIncompatible = (val !== correctAux);
+            }
+          }
+
+          pill.classList.toggle('incompatible', !state.smartSync ? false : isIncompatible);
+
+          if (isSelected) {
+            // Rola suavemente para deixar a pill visível no viewport do carrossel
+            pill.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        });
+      }
+
+      // Atualiza a frase combinada e a explicação pedagógica
+      if (groupKey === 'tobe') {
+        updateToBeSentence();
+      } else if (groupKey === 'do') {
+        updateDoSentence();
+      } else if (groupKey === 'modal') {
+        updateModalSentence();
+      }
+    }
+
+    function updateToBeSentence() {
+      const { toBe, subject, complement } = state.tobe;
+      const sentenceElem = document.getElementById('sentenceTextToBe');
+      const badgeElem = document.getElementById('badgeToBe');
+      const transElem = document.getElementById('translationToBe');
+      const explElem = document.getElementById('explanationToBe');
+
+      // Validação gramatical
+      const allowed = GRAMMAR_DATA.tobe.validPairs[toBe] || [];
+      const isCorrect = allowed.includes(subject);
+
+      sentenceElem.innerHTML = `<span class="word-highlight">${toBe}</span> ${subject} ${complement}`;
+
+      if (isCorrect) {
+        badgeElem.className = 'status-badge status-correct';
+        badgeElem.textContent = '✅ Gramática Correta';
+        explElem.className = 'rule-explanation-box';
+
+        let ruleText = '';
+        if (subject === 'I') {
+          ruleText = `💡 <strong>Regra:</strong> Com a 1ª pessoa <strong>I</strong>, usamos unicamente o verbo <strong>Am</strong>.`;
+        } else if (['he', 'she', 'it'].includes(subject)) {
+          ruleText = `💡 <strong>Regra:</strong> Com <strong>${subject}</strong> (3ª pessoa do singular), usamos sempre <strong>Is</strong>. O verbo to be se inverte com o sujeito.`;
+        } else {
+          ruleText = `💡 <strong>Regra:</strong> Com <strong>${subject}</strong> (plural e você), usamos sempre <strong>Are</strong>.`;
+        }
+        explElem.innerHTML = ruleText;
+      } else {
+        badgeElem.className = 'status-badge status-warning';
+        badgeElem.textContent = '❌ Regra Violada';
+        explElem.className = 'rule-explanation-box error';
+        const expected = GRAMMAR_DATA.tobe.subjectToVerb[subject];
+        explElem.innerHTML = `⚠️ <strong>Incompatível:</strong> O sujeito <strong>${subject}</strong> requer o verbo <strong>${expected}</strong>, e não '${toBe}'!`;
+      }
+
+      transElem.textContent = `"${getTranslation('tobe', toBe, subject, complement)}"`;
+    }
+
+    function updateDoSentence() {
+      const { auxiliary, subject, verb, complement } = state.do;
+      const sentenceElem = document.getElementById('sentenceTextDo');
+      const badgeElem = document.getElementById('badgeDo');
+      const transElem = document.getElementById('translationDo');
+      const explElem = document.getElementById('explanationDo');
+
+      // Validação gramatical
+      const allowed = GRAMMAR_DATA.do.validPairs[auxiliary] || [];
+      const isCorrect = allowed.includes(subject);
+
+      const auxClass = auxiliary === 'Does' ? 'verb-special' : 'word-highlight';
+      sentenceElem.innerHTML = `<span class="${auxClass}">${auxiliary}</span> ${subject} <strong>${verb}</strong> ${complement}`;
+
+      if (isCorrect) {
+        badgeElem.className = 'status-badge status-correct';
+        badgeElem.textContent = '✅ Gramática Correta';
+        explElem.className = 'rule-explanation-box';
+
+        if (auxiliary === 'Does') {
+          explElem.innerHTML = `💡 <strong>Regra da Imagem:</strong> Com <strong>${subject}</strong> (3ª pessoa do singular), usamos o auxiliar <strong style="color:var(--duo-red);">Does</strong> e o verbo principal na forma base sem 's' (<strong>${verb}</strong>).`;
+        } else {
+          explElem.innerHTML = `💡 <strong>Regra da Imagem:</strong> Com <strong>${subject}</strong>, usamos o auxiliar <strong>Do</strong> e o verbo na forma base (<strong>${verb}</strong>).`;
+        }
+      } else {
+        badgeElem.className = 'status-badge status-warning';
+        badgeElem.textContent = '❌ Regra Violada';
+        explElem.className = 'rule-explanation-box error';
+        const expected = GRAMMAR_DATA.do.subjectToAux[subject];
+        explElem.innerHTML = `⚠️ <strong>Incompatível:</strong> O sujeito <strong>${subject}</strong> exige o auxiliar <strong>${expected}</strong>, e não '${auxiliary}'!`;
+      }
+
+      transElem.textContent = `"${getTranslation('do', auxiliary, subject, complement, verb)}"`;
+    }
+
+    function updateModalSentence() {
+      const { modal, subject, verb, complement } = state.modal;
+      const sentenceElem = document.getElementById('sentenceTextModal');
+      const badgeElem = document.getElementById('badgeModal');
+      const transElem = document.getElementById('translationModal');
+      const explElem = document.getElementById('explanationModal');
+
+      sentenceElem.innerHTML = `<span class="word-highlight-teal">${modal}</span> ${subject} <strong>${verb}</strong> ${complement}`;
+      badgeElem.className = 'status-badge status-correct';
+      badgeElem.textContent = '✅ Gramática Correta';
+      explElem.className = 'rule-explanation-box';
+
+      const modalMeanings = {
+        'Can': 'capacidade ou permissão informal',
+        'Could': 'pedido educado ou habilidade',
+        'Should': 'conselho ou recomendação',
+        'Would': 'pedido cortês ou hipótese',
+        'Must': 'obrigação ou dever forte'
+      };
+
+      explElem.innerHTML = `💡 <strong>Regra:</strong> O modal <strong>${modal}</strong> expressa <em>${modalMeanings[modal] || 'modalidade'}</em>. Não usa auxiliar Do/Does, não muda com <strong>${subject}</strong> e o verbo (<strong>${verb}</strong>) fica no infinitivo sem "to".`;
+      transElem.textContent = `"${getTranslation('modal', modal, subject, complement, verb)}"`;
+    }
+
+    /* ============================================================
+       DICIONÁRIO DE TRADUÇÃO CONTEXTUALIZADA
+       ============================================================ */
+
+    function getTranslation(type, v1, subj, comp, verb) {
+      if (type === 'tobe') {
+        const subjMap = {
+          'I': 'Eu sou',
+          'you': 'Você é',
+          'he': 'Ele é',
+          'she': 'Ela é',
+          'it': 'Isso é',
+          'we': 'Nós somos',
+          'they': 'Eles são'
+        };
+        const compMap = {
+          'from Brazil?': 'do Brasil?',
+          'from Portugal?': 'de Portugal?',
+          'a student?': 'estudante?',
+          'at home?': 'em casa?',
+          'ready?': 'pronto(a)?'
+        };
+        return `${subjMap[subj] || subj} ${compMap[comp] || comp}`;
+      } else if (type === 'do') {
+        const subjMap = {
+          'I': 'Eu',
+          'you': 'Você',
+          'he': 'Ele',
+          'she': 'Ela',
+          'it': 'Isso',
+          'we': 'Nós',
+          'they': 'Eles'
+        };
+        const verbMap = {
+          'come': {
+            'I': 'venho', 'you': 'vem', 'he': 'vem', 'she': 'vem', 'it': 'vem', 'we': 'viemos', 'they': 'vêm'
+          },
+          'live': {
+            'I': 'moro', 'you': 'mora', 'he': 'mora', 'she': 'mora', 'it': 'mora', 'we': 'moramos', 'they': 'moram'
+          },
+          'work': {
+            'I': 'trabalho', 'you': 'trabalha', 'he': 'trabalha', 'she': 'trabalha', 'it': 'trabalha', 'we': 'trabalhamos', 'they': 'trabalham'
+          },
+          'speak': {
+            'I': 'falo', 'you': 'fala', 'he': 'fala', 'she': 'fala', 'it': 'fala', 'we': 'falamos', 'they': 'falam'
+          }
+        };
+        const compMap = {
+          'from Brazil?': 'do Brasil?',
+          'in São Paulo?': 'em São Paulo?',
+          'here?': 'aqui?',
+          'English?': 'inglês?'
+        };
+
+        const conj = verbMap[verb] ? verbMap[verb][subj] || verb : verb;
+        return `${subjMap[subj] || subj} ${conj} ${compMap[comp] || comp}`;
+      } else if (type === 'modal') {
+        const modalTrans = {
+          'Can': {
+            'I': 'Eu posso', 'you': 'Você pode', 'he': 'Ele pode', 'she': 'Ela pode', 'it': 'Isso pode', 'we': 'Nós podemos', 'they': 'Eles podem'
+          },
+          'Could': {
+            'I': 'Eu poderia', 'you': 'Você poderia', 'he': 'Ele poderia', 'she': 'Ela poderia', 'it': 'Isso poderia', 'we': 'Nós poderíamos', 'they': 'Eles poderiam'
+          },
+          'Should': {
+            'I': 'Eu deveria', 'you': 'Você deveria', 'he': 'Ele deveria', 'she': 'Ela deveria', 'it': 'Isso deveria', 'we': 'Nós deveríamos', 'they': 'Eles deveriam'
+          },
+          'Would': {
+            'I': 'Eu gostaria de', 'you': 'Você gostaria de', 'he': 'Ele gostaria de', 'she': 'Ela gostaria de', 'it': 'Isso iria', 'we': 'Nós gostaríamos de', 'they': 'Eles gostariam de'
+          },
+          'Must': {
+            'I': 'Eu devo', 'you': 'Você deve', 'he': 'Ele deve', 'she': 'Ela deve', 'it': 'Isso deve', 'we': 'Nós devemos', 'they': 'Eles devem'
+          }
+        };
+
+        const modalVerbs = {
+          'come': 'vir',
+          'help': 'ajudar',
+          'speak': 'falar',
+          'go': 'ir',
+          'stay': 'ficar'
+        };
+
+        const modalComps = {
+          'from Brazil?': 'do Brasil?',
+          'here?': 'aqui?',
+          'English?': 'inglês?',
+          'today?': 'hoje?',
+          'with us?': 'conosco?'
+        };
+
+        const mPrefix = modalTrans[v1] ? (modalTrans[v1][subj] || `${v1} ${subj}`) : `${v1} ${subj}`;
+        const vInf = modalVerbs[verb] || verb;
+        const cText = modalComps[comp] || comp;
+
+        return `${mPrefix} ${vInf} ${cText}`;
+      }
+    }
+
+    /* ============================================================
+       ÁUDIO E FALA (WEB SPEECH API & WEB AUDIO API)
+       ============================================================ */
+
+    function speakSentence(groupKey) {
+      playSuccessChime();
+
+      let text = '';
+      if (groupKey === 'tobe') {
+        const { toBe, subject, complement } = state.tobe;
+        text = `${toBe} ${subject} ${complement.replace('?', '')}`;
+      } else if (groupKey === 'do') {
+        const { auxiliary, subject, verb, complement } = state.do;
+        text = `${auxiliary} ${subject} ${verb} ${complement.replace('?', '')}`;
+      } else if (groupKey === 'modal') {
+        const { modal, subject, verb, complement } = state.modal;
+        text = `${modal} ${subject} ${verb} ${complement.replace('?', '')}`;
+      }
+
+      // 1. Tenta usar o duoAudio nativo da biblioteca duo-sfx.js se carregado
+      if (window.duoAudio && typeof window.duoAudio.speak === 'function') {
+        window.duoAudio.speak(text, 'en-US');
+        return;
+      }
+
+      // 2. Fallback direto para Web Speech API nativa do navegador
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.9;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    function playTapSound() {
+      if (window.duoAudio && typeof window.duoAudio.playTap === 'function') {
+        window.duoAudio.playTap();
+        return;
+      }
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.frequency.setValueAtTime(440, ctx.currentTime);
+        gain.gain.setValueAtTime(0.08, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.05);
+      } catch (e) {}
+    }
+
+    function playSuccessChime() {
+      if (window.duoAudio && typeof window.duoAudio.playSuccess === 'function') {
+        window.duoAudio.playSuccess();
+        return;
+      }
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const now = ctx.currentTime;
+        [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.frequency.setValueAtTime(freq, now + i * 0.08);
+          gain.gain.setValueAtTime(0.12, now + i * 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.25);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + i * 0.08);
+          osc.stop(now + i * 0.08 + 0.3);
+        });
+      } catch (e) {}
+    }
+
+    /* ============================================================
+       CONTROLES DE VISUALIZAÇÃO E SMART SYNC
+       ============================================================ */
+
+    function switchView(view) {
+      state.currentView = view;
+      const isToBe = (view === 'tobe');
+      const isDo = (view === 'do');
+      const isModal = (view === 'modal');
+
+      const btnToBe = document.getElementById('btnTabToBe');
+      const btnDo = document.getElementById('btnTabDo');
+      const btnModal = document.getElementById('btnTabModal');
+
+      const tobeCard = document.getElementById('groupToBe');
+      const doCard = document.getElementById('groupDo');
+      const modalCard = document.getElementById('groupModal');
+
+      const guideToBe = document.getElementById('guideToBe');
+      const guideDo = document.getElementById('guideDo');
+      const guideModal = document.getElementById('guideModal');
+
+      if (btnToBe) btnToBe.classList.toggle('active', isToBe);
+      if (btnDo) btnDo.classList.toggle('active', isDo);
+      if (btnModal) btnModal.classList.toggle('active', isModal);
+
+      if (tobeCard) tobeCard.classList.toggle('hidden', !isToBe);
+      if (doCard) doCard.classList.toggle('hidden', !isDo);
+      if (modalCard) modalCard.classList.toggle('hidden', !isModal);
+
+      if (guideToBe) guideToBe.classList.toggle('hidden', !isToBe);
+      if (guideDo) guideDo.classList.toggle('hidden', !isDo);
+      if (guideModal) guideModal.classList.toggle('hidden', !isModal);
+
+      playTapSound();
+    }
+
+    function toggleSmartSync() {
+      state.smartSync = !state.smartSync;
+      const badge = document.getElementById('syncBadge');
+      const text = document.getElementById('syncText');
+
+      if (state.smartSync) {
+        badge.style.background = 'var(--duo-green-light)';
+        badge.style.borderColor = 'var(--duo-green)';
+        badge.style.color = 'var(--duo-green-shadow)';
+        text.textContent = 'Regras: Auto-Harmonizar (Ativo)';
+      } else {
+        badge.style.background = 'var(--duo-yellow-light)';
+        badge.style.borderColor = 'var(--duo-yellow)';
+        badge.style.color = 'var(--duo-yellow-text)';
+        text.textContent = 'Modo Desafio: Livre';
+      }
+
+      updateGroupUI('tobe');
+      updateGroupUI('do');
+    }
+
+    function toggleHelpBanner(forceState) {
+      playTapSound();
+      const drawer = document.getElementById('bannerDrawer');
+      const btn = document.getElementById('btnHelpToggle');
+      const btnText = document.getElementById('helpToggleText');
+      
+      const isOpen = typeof forceState === 'boolean' ? forceState : !drawer.classList.contains('open');
+
+      drawer.classList.toggle('open', isOpen);
+      btn.classList.toggle('active', isOpen);
+      btnText.textContent = isOpen ? 'Ocultar Ajuda' : 'Como funciona';
+    }
+
+    // Inicializa a página no carregamento
+    window.addEventListener('DOMContentLoaded', initCarousels);
+  </script>
+</body>
+</html>
