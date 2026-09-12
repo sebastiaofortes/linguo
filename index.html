@@ -85,6 +85,25 @@
         <button id="vocabSearchClear" class="duo-vocab-search-clear" onclick="clearVocabSearch()" title="Limpar busca">✕</button>
       </div>
 
+      <!-- 2.5. Card de Atalho: Carrossel Gramatical -->
+      <div class="duo-grammar-carousel-card" id="grammarCarouselCard" onclick="openGrammarCarousel()">
+        <div class="duo-grammar-carousel-header">
+          <div class="duo-grammar-carousel-icon">🎰</div>
+          <div class="duo-grammar-carousel-info">
+            <div class="duo-grammar-carousel-title">Carrossel Gramatical</div>
+            <div class="duo-grammar-carousel-subtitle">Monte perguntas combinando pills interativas e aprenda as regras de concordância!</div>
+          </div>
+        </div>
+        <div class="duo-grammar-carousel-tags">
+          <span class="duo-grammar-tag tag-blue">🔵 To Be</span>
+          <span class="duo-grammar-tag tag-purple">🟣 Do / Does</span>
+          <span class="duo-grammar-tag tag-teal">🟢 Modais</span>
+        </div>
+        <button class="btn-duo btn-duo-green" style="width: 100%; justify-content: center; font-size: 15px; padding: 12px 20px;">
+          🎰 ABRIR CARROSSEL ➔
+        </button>
+      </div>
+
       <!-- 3. Grade de Coleções Temáticas (Thematic Decks Grid) -->
       <div class="duo-collections-grid" id="collectionsGridContainer">
         <!-- Renderizado dinamicamente por renderVocabView() -->
@@ -1967,6 +1986,12 @@
       window.location.href = 'practice/deck.html?lang=' + lang + '&mode=due_all';
     }
     window.startSmartDailyReview = startSmartDailyReview;
+
+    function openGrammarCarousel() {
+      if (window.duoAudio) duoAudio.playTap();
+      window.location.href = 'practice/grammar-carousel.html';
+    }
+    window.openGrammarCarousel = openGrammarCarousel;
 
     // Vocab Detail Modal Controller
     function openVocabDetailModal(id) {

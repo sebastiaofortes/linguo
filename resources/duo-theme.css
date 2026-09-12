@@ -3936,6 +3936,106 @@ html, body {
   margin-bottom: 18px;
 }
 
+/* Grammar Carousel Shortcut Card */
+.duo-grammar-carousel-card {
+  background: linear-gradient(135deg, rgba(28, 176, 246, 0.08), rgba(0, 205, 156, 0.08));
+  border: 2px solid var(--duo-blue);
+  border-radius: var(--duo-radius-xl);
+  box-shadow: 0 4px 0 var(--duo-blue-shadow);
+  padding: 18px 22px;
+  margin-bottom: 16px;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.duo-grammar-carousel-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 var(--duo-blue-shadow);
+}
+
+.duo-grammar-carousel-card:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 var(--duo-blue-shadow);
+}
+
+.duo-grammar-carousel-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.duo-grammar-carousel-icon {
+  font-size: 2.2rem;
+  flex-shrink: 0;
+}
+
+.duo-grammar-carousel-info {
+  flex: 1;
+}
+
+.duo-grammar-carousel-title {
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--duo-gray-900);
+  letter-spacing: -0.3px;
+}
+
+.duo-grammar-carousel-subtitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--duo-gray-400);
+  line-height: 1.3;
+  margin-top: 2px;
+}
+
+.duo-grammar-carousel-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.duo-grammar-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+}
+
+.duo-grammar-tag.tag-blue {
+  background: rgba(28, 176, 246, 0.15);
+  color: #1899d6;
+  border: 1.5px solid #1cb0f6;
+}
+
+.duo-grammar-tag.tag-purple {
+  background: rgba(206, 130, 255, 0.15);
+  color: #a559e0;
+  border: 1.5px solid #ce82ff;
+}
+
+.duo-grammar-tag.tag-teal {
+  background: rgba(0, 205, 156, 0.15);
+  color: #00a67d;
+  border: 1.5px solid #00cd9c;
+}
+
+/* Dark mode */
+[data-theme="dark"] .duo-grammar-carousel-card {
+  background: linear-gradient(135deg, rgba(28, 176, 246, 0.12), rgba(0, 205, 156, 0.12));
+  border-color: var(--duo-blue-shadow);
+}
+
+[data-theme="dark"] .duo-grammar-carousel-title {
+  color: #ffffff;
+}
+
 /* Overall Course Mastery Card */
 .duo-mastery-card {
   background: #ffffff;

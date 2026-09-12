@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="resources/duo-theme.css">
-  <script src="resources/duo-sfx.js"></script>
+  <link rel="stylesheet" href="../resources/duo-theme.css">
+  <script src="../resources/duo-sfx.js"></script>
 
   <style>
     :root {
@@ -791,6 +791,37 @@
       color: var(--duo-purple-shadow);
       border: 1.5px solid var(--duo-purple);
     }
+
+    /* Close / Back Button */
+    .btn-carousel-close {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid var(--duo-gray-300);
+      background: #ffffff;
+      color: var(--duo-gray-700);
+      font-size: 1.1rem;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 0 var(--duo-gray-300);
+      transition: all 0.1s ease;
+      flex-shrink: 0;
+    }
+
+    .btn-carousel-close:hover {
+      background: var(--duo-red-light);
+      border-color: var(--duo-red);
+      color: var(--duo-red);
+      box-shadow: 0 3px 0 var(--duo-red-shadow);
+    }
+
+    .btn-carousel-close:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 var(--duo-gray-300);
+    }
   </style>
 </head>
 <body>
@@ -799,6 +830,7 @@
     <!-- Top Header -->
     <header class="top-header">
       <div class="brand-group">
+        <button class="btn-carousel-close" onclick="window.location.href='../index.html#vocab'" title="Voltar ao Linguo">✕</button>
         <span class="mascot-icon">🦉</span>
         <div class="brand-titles">
           <h1>Linguo • Carrossel Gramatical</h1>
