@@ -716,6 +716,104 @@
       transform: translateY(2px);
       box-shadow: 0 1px 0 var(--duo-gray-300);
     }
+
+    /* ============================================================
+       CEFR LEVEL BADGES & FILTER BAR
+       ============================================================ */
+    .level-filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--duo-gray-100);
+      padding: 4px 8px;
+      border-radius: 9999px;
+      border: 2px solid var(--duo-gray-300);
+      flex-wrap: wrap;
+    }
+
+    .level-filter-label {
+      font-size: 0.76rem;
+      font-weight: 900;
+      color: var(--duo-gray-400);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-left: 4px;
+      margin-right: 2px;
+    }
+
+    .level-filter-btn {
+      border: 1.5px solid transparent;
+      background: transparent;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-family: var(--font-duo);
+      font-size: 0.78rem;
+      font-weight: 900;
+      color: var(--duo-gray-700);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.12s ease;
+    }
+
+    .level-filter-btn:hover {
+      background: rgba(0, 0, 0, 0.05);
+      color: var(--duo-gray-900);
+    }
+
+    .level-filter-btn.active {
+      background: #ffffff;
+      border-color: var(--duo-gray-300);
+      color: var(--duo-gray-900);
+      box-shadow: 0 2px 0 var(--duo-gray-300);
+    }
+
+    /* Badges CEFR dentro das abas */
+    .cefr-tag {
+      font-size: 0.68rem;
+      font-weight: 900;
+      padding: 2px 6px;
+      border-radius: 9999px;
+      letter-spacing: 0.3px;
+      display: inline-block;
+      line-height: 1.2;
+    }
+
+    .cefr-a1 {
+      background: var(--duo-green-light, #d7ffb8);
+      color: var(--duo-green-shadow, #58a700);
+      border: 1px solid var(--duo-green, #58cc02);
+    }
+
+    .cefr-a2 {
+      background: var(--duo-blue-light, #ddf4ff);
+      color: var(--duo-blue-shadow, #1899d6);
+      border: 1px solid var(--duo-blue, #1cb0f6);
+    }
+
+    .cefr-b1 {
+      background: var(--duo-purple-light, #f4e5ff);
+      color: var(--duo-purple-shadow, #a559e0);
+      border: 1px solid var(--duo-purple, #ce82ff);
+    }
+
+    /* Pill de Nível no Card de Resultado */
+    .status-level-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.3px;
+    }
+
+    /* Ocultar abas filtradas */
+    .tab-btn.level-filtered-out {
+      display: none !important;
+    }
   </style>
 </head>
 <body>
@@ -733,13 +831,22 @@
       </div>
 
       <div class="header-actions">
+        <!-- Barra de Filtro por Nível CEFR -->
+        <div class="level-filter-bar" aria-label="Filtrar por nível">
+          <span class="level-filter-label">Nível:</span>
+          <button class="level-filter-btn active" id="filter-all" onclick="filterByLevel('all')">Todos</button>
+          <button class="level-filter-btn" id="filter-a2" onclick="filterByLevel('a2')">🔵 A2</button>
+        </div>
+
         <nav class="nav-tabs" aria-label="Seletor de Regras">
-          <button class="tab-btn active tab-did" id="btnTabDid" onclick="switchView('did')">
+          <button class="tab-btn active tab-did" id="btnTabDid" data-level="a2" data-view="did" onclick="switchView('did')">
+            <span class="cefr-tag cefr-a2">A2</span>
             <span>🟠</span>
             <span class="tab-text-desktop">Past Simple (Did)</span>
             <span class="tab-text-mobile">Did</span>
           </button>
-          <button class="tab-btn tab-pastToBe" id="btnTabPastToBe" onclick="switchView('pastToBe')">
+          <button class="tab-btn tab-pastToBe" id="btnTabPastToBe" data-level="a2" data-view="pastToBe" onclick="switchView('pastToBe')">
+            <span class="cefr-tag cefr-a2">A2</span>
             <span>🔴</span>
             <span class="tab-text-desktop">Was / Were</span>
             <span class="tab-text-mobile">Was/Were</span>
@@ -829,6 +936,7 @@
         <div class="sentence-output-card" id="outputCardDid">
           <div class="output-header">
             <span class="status-badge status-correct" id="badgeDid">✅ Gramática Correta</span>
+            <span class="status-level-pill cefr-a2">🔵 Nível A2 • Elementar</span>
             <button class="btn-speak" onclick="speakSentence('did')">
               <span>🔊</span> Ouvir Pronúncia
             </button>
@@ -882,6 +990,7 @@
         <div class="sentence-output-card" id="outputCardPastToBe">
           <div class="output-header">
             <span class="status-badge status-correct" id="badgePastToBe">✅ Gramática Correta</span>
+            <span class="status-level-pill cefr-a2">🔵 Nível A2 • Elementar</span>
             <button class="btn-speak" onclick="speakSentence('pastToBe')">
               <span>🔊</span> Ouvir Pronúncia
             </button>
@@ -1338,6 +1447,51 @@
       btn.classList.toggle('active', isOpen);
       btnText.textContent = isOpen ? 'Ocultar Ajuda' : 'Como funciona';
     }
+
+    /* ============================================================
+       FILTRAGEM POR NÍVEL CEFR
+       ============================================================ */
+    let currentLevelFilter = 'all';
+
+    function filterByLevel(level) {
+      if (typeof playTapSound === 'function') {
+        playTapSound();
+      } else if (window.duoAudio && duoAudio.playTap) {
+        duoAudio.playTap();
+      }
+      currentLevelFilter = level;
+
+      // Atualizar botões de filtro
+      document.querySelectorAll('.level-filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      const activeFilterBtn = document.getElementById('filter-' + level);
+      if (activeFilterBtn) activeFilterBtn.classList.add('active');
+
+      // Filtrar as abas
+      const tabButtons = document.querySelectorAll('.nav-tabs .tab-btn');
+      let firstVisibleView = null;
+      let currentViewIsVisible = false;
+
+      tabButtons.forEach(btn => {
+        const btnLevel = btn.getAttribute('data-level');
+        const btnView = btn.getAttribute('data-view');
+        const shouldShow = (level === 'all' || btnLevel === level);
+
+        btn.classList.toggle('level-filtered-out', !shouldShow);
+
+        if (shouldShow) {
+          if (!firstVisibleView) firstVisibleView = btnView;
+          if (btnView === state.currentView) currentViewIsVisible = true;
+        }
+      });
+
+      // Se o tópico atualmente ativo foi ocultado pelo filtro, muda para o primeiro visível
+      if (!currentViewIsVisible && firstVisibleView) {
+        switchView(firstVisibleView);
+      }
+    }
+    window.filterByLevel = filterByLevel;
 
     window.addEventListener('DOMContentLoaded', initCarousels);
   </script>
