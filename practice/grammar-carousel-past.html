@@ -432,15 +432,18 @@
     /* Track containing the pills */
     .pills-track-window {
       width: 100%;
-      min-height: 130px;
-      max-height: 190px;
+      min-height: 250px;
+      max-height: 270px;
       overflow-y: auto;
+      overflow-x: hidden;
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      padding: 4px;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 4px;
       scroll-behavior: smooth;
       scrollbar-width: thin;
+      scrollbar-color: var(--duo-gray-300) transparent;
     }
 
     .pills-track-window::-webkit-scrollbar {
@@ -453,27 +456,31 @@
 
     /* Interactive Pill */
     .pill-item {
-      width: 100%;
-      background: #ffffff;
-      border: 2px solid var(--duo-gray-200);
-      border-radius: var(--duo-radius-md, 12px);
-      padding: 8px 10px;
+      width: 92%;
+      min-height: 48px;
+      padding: 10px 14px;
+      border-radius: 9999px;
       font-family: var(--font-duo);
-      font-size: 0.92rem;
+      font-size: 0.98rem;
       font-weight: 800;
-      color: var(--duo-gray-900);
-      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       text-align: center;
-      box-shadow: 0 3px 0 var(--duo-gray-200);
-      transition: all 0.12s ease;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      border: 2px solid var(--duo-gray-300);
+      background: #ffffff;
+      color: var(--duo-gray-700);
+      box-shadow: 0 3px 0 var(--duo-gray-300);
+      position: relative;
     }
 
     .pill-item:hover {
-      background: var(--duo-gray-100);
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 0 var(--duo-gray-300);
+      border-color: var(--duo-orange);
+      color: var(--duo-orange);
     }
 
     .pill-item:active {
