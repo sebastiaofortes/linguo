@@ -176,6 +176,20 @@
       transform: translateY(-1px);
     }
 
+    .tab-btn.active.tab-continuous {
+      background: #ffffff;
+      color: var(--duo-yellow-shadow);
+      border-color: var(--duo-yellow);
+      box-shadow: 0 3px 0 var(--duo-yellow-shadow);
+      transform: translateY(-1px);
+    }
+
+    .group-continuous .pill-item.active {
+      background: var(--duo-yellow);
+      border-color: var(--duo-yellow-shadow);
+      box-shadow: 0 4px 0 var(--duo-yellow-shadow);
+    }
+
     .tab-btn .tab-text-mobile {
       display: none;
     }
@@ -855,6 +869,11 @@
             <span class="tab-text-desktop">Verbos Modais</span>
             <span class="tab-text-mobile">Modais</span>
           </button>
+          <button class="tab-btn tab-continuous" id="btnTabContinuous" onclick="switchView('continuous')">
+            <span>🟡</span>
+            <span class="tab-text-desktop">Present Continuous</span>
+            <span class="tab-text-mobile">-ing</span>
+          </button>
         </nav>
 
         <div class="sync-toggle-badge" id="syncBadge" onclick="toggleSmartSync()" title="Garante que as combinações sempre respeitem a gramática">
@@ -1091,6 +1110,67 @@
         </div>
       </section>
 
+      <!-- ========================================================
+           GRUPO 4: PRESENT CONTINUOUS (4 COLUNAS DE CARROSSÉIS)
+           ======================================================== -->
+      <section class="grammar-group-card group-continuous hidden" id="groupContinuous">
+        <div class="group-title-row">
+          <span style="font-weight: 800; font-size: 1.05rem;">Ações Acontecendo Agora</span>
+          <span class="group-rule-summary">Fórmula: [Am/Is/Are] + [Sujeito] + [Verbo-ing] + [Complemento]?</span>
+        </div>
+
+        <div class="carousels-grid grid-4-cols">
+          <!-- Coluna 1: Am/Is/Are -->
+          <div class="carousel-column" data-col="auxiliar">
+            <span class="column-header">① Am/Is/Are</span>
+            <button class="arrow-btn" onclick="rotateColumn('continuous', 'auxiliary', -1)">▲</button>
+            <div class="pills-track-window" id="track-continuous-auxiliary"></div>
+            <button class="arrow-btn" onclick="rotateColumn('continuous', 'auxiliary', 1)">▼</button>
+          </div>
+
+          <!-- Coluna 2: Sujeito -->
+          <div class="carousel-column" data-col="sujeito">
+            <span class="column-header">② Sujeito</span>
+            <button class="arrow-btn" onclick="rotateColumn('continuous', 'subject', -1)">▲</button>
+            <div class="pills-track-window" id="track-continuous-subject"></div>
+            <button class="arrow-btn" onclick="rotateColumn('continuous', 'subject', 1)">▼</button>
+          </div>
+
+          <!-- Coluna 3: Verbo (-ing) -->
+          <div class="carousel-column" data-col="verbo">
+            <span class="column-header">③ Verbo (-ing)</span>
+            <button class="arrow-btn" onclick="rotateColumn('continuous', 'verb', -1)">▲</button>
+            <div class="pills-track-window" id="track-continuous-verb"></div>
+            <button class="arrow-btn" onclick="rotateColumn('continuous', 'verb', 1)">▼</button>
+          </div>
+
+          <!-- Coluna 4: Complemento -->
+          <div class="carousel-column" data-col="complemento">
+            <span class="column-header">④ Complemento</span>
+            <button class="arrow-btn" onclick="rotateColumn('continuous', 'complement', -1)">▲</button>
+            <div class="pills-track-window" id="track-continuous-complement"></div>
+            <button class="arrow-btn" onclick="rotateColumn('continuous', 'complement', 1)">▼</button>
+          </div>
+        </div>
+
+        <!-- Sentence Result Card for Continuous -->
+        <div class="sentence-output-card" id="outputCardContinuous">
+          <div class="output-header">
+            <span class="status-badge status-correct" id="badgeContinuous">✅ Gramática Correta</span>
+            <button class="btn-speak" onclick="speakSentence('continuous')">
+              <span>🔊</span> Ouvir Pronúncia
+            </button>
+          </div>
+          <div class="sentence-display">
+            <span class="sentence-text" id="sentenceTextContinuous">Is she working right now?</span>
+          </div>
+          <div class="translation-text" id="translationContinuous">"Ela está trabalhando agora?"</div>
+          <div class="rule-explanation-box" id="explanationContinuous">
+            💡 <strong>Regra:</strong> Com <strong>she</strong> (3ª pessoa do singular), usamos <strong>Is</strong> + verbo com <strong>-ing</strong>.
+          </div>
+        </div>
+      </section>
+
       <!-- Guia Individual: Verbo To Be -->
       <section class="reference-table-card" id="guideToBe">
         <div class="reference-header">
@@ -1187,6 +1267,38 @@
         </ul>
       </section>
 
+      <!-- Guia Individual: Present Continuous -->
+      <section class="reference-table-card hidden" id="guideContinuous">
+        <div class="reference-header">
+          <h3 class="reference-title">
+            <span>📖</span> Guia da Regra • Present Continuous
+          </h3>
+          <span class="group-tag tag-yellow" style="background: var(--duo-yellow-light); color: var(--duo-yellow-shadow); border: 1.5px solid var(--duo-yellow);">Ações em Progresso</span>
+        </div>
+        <ul class="reference-points-list">
+          <li class="reference-point-item">
+            <span class="point-bullet" style="background: var(--duo-yellow-light); color: var(--duo-yellow-shadow); border: 1.5px solid var(--duo-yellow);">1</span>
+            <div><strong>Fórmula da Pergunta:</strong> <code>[Am/Is/Are] + [Sujeito] + [Verbo-ing] + [Complemento]?</code></div>
+          </li>
+          <li class="reference-point-item">
+            <span class="point-bullet" style="background: var(--duo-yellow-light); color: var(--duo-yellow-shadow); border: 1.5px solid var(--duo-yellow);">2</span>
+            <div><strong>Mesma concordância do To Be:</strong> <strong>Am I</strong>, <strong>Is he/she/it</strong>, <strong>Are you/we/they</strong>. A diferença é que o verbo principal aparece com <strong>-ing</strong>.</div>
+          </li>
+          <li class="reference-point-item">
+            <span class="point-bullet" style="background: var(--duo-yellow-light); color: var(--duo-yellow-shadow); border: 1.5px solid var(--duo-yellow);">3</span>
+            <div><strong>Sempre com -ing:</strong> O verbo principal <em>nunca</em> aparece na forma base. Diga <em>"Is she <strong>working</strong>?"</em> ✅ e nunca <em>"Is she work?"</em> ❌.</div>
+          </li>
+          <li class="reference-point-item">
+            <span class="point-bullet" style="background: var(--duo-yellow-light); color: var(--duo-yellow-shadow); border: 1.5px solid var(--duo-yellow);">4</span>
+            <div><strong>Sem auxiliar Do/Does:</strong> Assim como o To Be simples, o Present Continuous <em>não</em> usa Do/Does. Nunca diga <em>"Does she working?"</em> ❌.</div>
+          </li>
+          <li class="reference-point-item">
+            <span class="point-bullet" style="background: var(--duo-yellow-light); color: var(--duo-yellow-shadow); border: 1.5px solid var(--duo-yellow);">★</span>
+            <div><strong style="color: var(--duo-yellow-shadow);">Quando usar:</strong> Para ações que estão acontecendo <strong>agora</strong> ou <strong>neste momento</strong> (right now, at the moment, today).</div>
+          </li>
+        </ul>
+      </section>
+
     </main>
   </div>
 
@@ -1245,13 +1357,34 @@
         subject: ['I', 'you', 'he', 'she', 'it', 'we', 'they'],
         verb: ['come', 'help', 'speak', 'go', 'stay'],
         complement: ['from Brazil?', 'here?', 'English?', 'today?', 'with us?']
+      },
+
+      continuous: {
+        auxiliary: ['Am', 'Is', 'Are'],
+        subject: ['I', 'you', 'he', 'she', 'it', 'we', 'they'],
+        verb: ['working', 'studying', 'eating', 'going', 'speaking'],
+        complement: ['right now?', 'today?', 'at home?', 'English?', 'to school?'],
+        validPairs: {
+          'Am': ['I'],
+          'Is': ['he', 'she', 'it'],
+          'Are': ['you', 'we', 'they']
+        },
+        subjectToAux: {
+          'I': 'Am',
+          'he': 'Is',
+          'she': 'Is',
+          'it': 'Is',
+          'you': 'Are',
+          'we': 'Are',
+          'they': 'Are'
+        }
       }
     };
 
     // Estado ativo selecionado para cada carrossel
     const state = {
       smartSync: true, // Garante que ao girar um carrossel as regras gramaticais sejam imediatamente obedecidas
-      currentView: 'tobe', // Exclusivo: 'tobe', 'do' ou 'modal'
+      currentView: 'tobe', // Exclusivo: 'tobe', 'do', 'modal' ou 'continuous'
       tobe: {
         toBe: 'Is',
         subject: 'she',
@@ -1268,6 +1401,12 @@
         subject: 'you',
         verb: 'come',
         complement: 'from Brazil?'
+      },
+      continuous: {
+        auxiliary: 'Is',
+        subject: 'she',
+        verb: 'working',
+        complement: 'right now?'
       }
     };
 
@@ -1293,12 +1432,19 @@
       renderPillsTrack('modal', 'verb', GRAMMAR_DATA.modal.verb);
       renderPillsTrack('modal', 'complement', GRAMMAR_DATA.modal.complement);
 
-      // 4. Atualizar estados visuais e frases
+      // 4. Renderizar Carrosséis do Grupo Present Continuous
+      renderPillsTrack('continuous', 'auxiliary', GRAMMAR_DATA.continuous.auxiliary);
+      renderPillsTrack('continuous', 'subject', GRAMMAR_DATA.continuous.subject);
+      renderPillsTrack('continuous', 'verb', GRAMMAR_DATA.continuous.verb);
+      renderPillsTrack('continuous', 'complement', GRAMMAR_DATA.continuous.complement);
+
+      // 5. Atualizar estados visuais e frases
       updateGroupUI('tobe');
       updateGroupUI('do');
       updateGroupUI('modal');
+      updateGroupUI('continuous');
 
-      // 5. Exibir exclusivamente a Tabela 1 (To Be) no início
+      // 6. Exibir exclusivamente a Tabela 1 (To Be) no início
       switchView('tobe');
     }
 
@@ -1367,6 +1513,19 @@
           }
         } else if (groupKey === 'modal') {
           state.modal[colKey] = value;
+        } else if (groupKey === 'continuous') {
+          if (colKey === 'auxiliary') {
+            state.continuous.auxiliary = value;
+            const allowedSubjects = GRAMMAR_DATA.continuous.validPairs[value];
+            if (!allowedSubjects.includes(state.continuous.subject)) {
+              state.continuous.subject = allowedSubjects[0];
+            }
+          } else if (colKey === 'subject') {
+            state.continuous.subject = value;
+            state.continuous.auxiliary = GRAMMAR_DATA.continuous.subjectToAux[value];
+          } else {
+            state.continuous[colKey] = value;
+          }
         }
       } else {
         // MODO MANUAL: Permite qualquer combinação para fins de teste/desafio
@@ -1424,6 +1583,14 @@
               const correctAux = GRAMMAR_DATA.do.subjectToAux[groupState.subject];
               isIncompatible = (val !== correctAux);
             }
+          } else if (groupKey === 'continuous') {
+            if (colKey === 'subject') {
+              const allowed = GRAMMAR_DATA.continuous.validPairs[groupState.auxiliary] || [];
+              isIncompatible = !allowed.includes(val);
+            } else if (colKey === 'auxiliary') {
+              const correctAux = GRAMMAR_DATA.continuous.subjectToAux[groupState.subject];
+              isIncompatible = (val !== correctAux);
+            }
           }
 
           pill.classList.toggle('incompatible', !state.smartSync ? false : isIncompatible);
@@ -1442,6 +1609,8 @@
         updateDoSentence();
       } else if (groupKey === 'modal') {
         updateModalSentence();
+      } else if (groupKey === 'continuous') {
+        updateContinuousSentence();
       }
     }
 
@@ -1540,6 +1709,54 @@
 
       explElem.innerHTML = `💡 <strong>Regra:</strong> O modal <strong>${modal}</strong> expressa <em>${modalMeanings[modal] || 'modalidade'}</em>. Não usa auxiliar Do/Does, não muda com <strong>${subject}</strong> e o verbo (<strong>${verb}</strong>) fica no infinitivo sem "to".`;
       transElem.textContent = `"${getTranslation('modal', modal, subject, complement, verb)}"`;
+    }
+
+    function updateContinuousSentence() {
+      const { auxiliary, subject, verb, complement } = state.continuous;
+      const sentenceElem = document.getElementById('sentenceTextContinuous');
+      const badgeElem = document.getElementById('badgeContinuous');
+      const transElem = document.getElementById('translationContinuous');
+      const explElem = document.getElementById('explanationContinuous');
+
+      const allowed = GRAMMAR_DATA.continuous.validPairs[auxiliary] || [];
+      const isCorrect = allowed.includes(subject);
+
+      sentenceElem.innerHTML = `<span class="word-highlight" style="color: var(--duo-yellow-shadow);">${auxiliary}</span> ${subject} <strong>${verb}</strong> ${complement}`;
+
+      if (isCorrect) {
+        badgeElem.className = 'status-badge status-correct';
+        badgeElem.textContent = '✅ Gramática Correta';
+        explElem.className = 'rule-explanation-box';
+
+        if (subject === 'I') {
+          explElem.innerHTML = `💡 <strong>Regra:</strong> Com <strong>I</strong>, usamos <strong>Am</strong> + verbo com <strong>-ing</strong> (${verb}).`;
+        } else if (['he', 'she', 'it'].includes(subject)) {
+          explElem.innerHTML = `💡 <strong>Regra:</strong> Com <strong>${subject}</strong> (3ª pessoa), usamos <strong>Is</strong> + verbo com <strong>-ing</strong> (${verb}).`;
+        } else {
+          explElem.innerHTML = `💡 <strong>Regra:</strong> Com <strong>${subject}</strong>, usamos <strong>Are</strong> + verbo com <strong>-ing</strong> (${verb}).`;
+        }
+      } else {
+        badgeElem.className = 'status-badge status-warning';
+        badgeElem.textContent = '❌ Regra Violada';
+        explElem.className = 'rule-explanation-box error';
+        const expected = GRAMMAR_DATA.continuous.subjectToAux[subject];
+        explElem.innerHTML = `⚠️ <strong>Incompatível:</strong> O sujeito <strong>${subject}</strong> requer o auxiliar <strong>${expected}</strong>, e não '${auxiliary}'!`;
+      }
+
+      // Tradução
+      const subjMap = {
+        'I': 'Eu estou', 'you': 'Você está', 'he': 'Ele está', 'she': 'Ela está',
+        'it': 'Isso está', 'we': 'Nós estamos', 'they': 'Eles estão'
+      };
+      const verbMap = {
+        'working': 'trabalhando', 'studying': 'estudando', 'eating': 'comendo',
+        'going': 'indo', 'speaking': 'falando'
+      };
+      const compMap = {
+        'right now?': 'agora?', 'today?': 'hoje?', 'at home?': 'em casa?',
+        'English?': 'inglês?', 'to school?': 'para a escola?'
+      };
+      transElem.textContent = `"${subjMap[subject] || subject} ${verbMap[verb] || verb} ${compMap[complement] || complement}"`;
     }
 
     /* ============================================================
@@ -1658,6 +1875,9 @@
       } else if (groupKey === 'modal') {
         const { modal, subject, verb, complement } = state.modal;
         text = `${modal} ${subject} ${verb} ${complement.replace('?', '')}`;
+      } else if (groupKey === 'continuous') {
+        const { auxiliary, subject, verb, complement } = state.continuous;
+        text = `${auxiliary} ${subject} ${verb} ${complement.replace('?', '')}`;
       }
 
       // 1. Tenta usar o duoAudio nativo da biblioteca duo-sfx.js se carregado
@@ -1730,30 +1950,37 @@
       const isToBe = (view === 'tobe');
       const isDo = (view === 'do');
       const isModal = (view === 'modal');
+      const isContinuous = (view === 'continuous');
 
       const btnToBe = document.getElementById('btnTabToBe');
       const btnDo = document.getElementById('btnTabDo');
       const btnModal = document.getElementById('btnTabModal');
+      const btnContinuous = document.getElementById('btnTabContinuous');
 
       const tobeCard = document.getElementById('groupToBe');
       const doCard = document.getElementById('groupDo');
       const modalCard = document.getElementById('groupModal');
+      const continuousCard = document.getElementById('groupContinuous');
 
       const guideToBe = document.getElementById('guideToBe');
       const guideDo = document.getElementById('guideDo');
       const guideModal = document.getElementById('guideModal');
+      const guideContinuous = document.getElementById('guideContinuous');
 
       if (btnToBe) btnToBe.classList.toggle('active', isToBe);
       if (btnDo) btnDo.classList.toggle('active', isDo);
       if (btnModal) btnModal.classList.toggle('active', isModal);
+      if (btnContinuous) btnContinuous.classList.toggle('active', isContinuous);
 
       if (tobeCard) tobeCard.classList.toggle('hidden', !isToBe);
       if (doCard) doCard.classList.toggle('hidden', !isDo);
       if (modalCard) modalCard.classList.toggle('hidden', !isModal);
+      if (continuousCard) continuousCard.classList.toggle('hidden', !isContinuous);
 
       if (guideToBe) guideToBe.classList.toggle('hidden', !isToBe);
       if (guideDo) guideDo.classList.toggle('hidden', !isDo);
       if (guideModal) guideModal.classList.toggle('hidden', !isModal);
+      if (guideContinuous) guideContinuous.classList.toggle('hidden', !isContinuous);
 
       playTapSound();
     }
@@ -1777,6 +2004,7 @@
 
       updateGroupUI('tobe');
       updateGroupUI('do');
+      updateGroupUI('continuous');
     }
 
     function toggleHelpBanner(forceState) {
